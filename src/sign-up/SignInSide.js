@@ -30,7 +30,7 @@ export default function SignInSide() {
   const toggleColorMode = () => {
     const newMode = mode === 'dark' ? 'light' : 'dark';
     setMode(newMode);
-    localStorage.setItem('themeMode', newMode); 
+    localStorage.setItem('themeMode', newMode);
   };
 
   const toggleCustomTheme = () => {
