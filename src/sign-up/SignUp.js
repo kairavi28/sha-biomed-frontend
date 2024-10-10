@@ -16,7 +16,6 @@ import logo from '../assets/images/logo.png';
 import TemplateFrame from './TemplateFrame';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 
-
 const Card = styled(MuiCard)(({ theme }) => ({
   display: 'flex',
   flexDirection: 'column',

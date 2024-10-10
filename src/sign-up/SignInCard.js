@@ -1,19 +1,17 @@
-import * as React from 'react';
+import React, { useState } from 'react';
+import axios from 'axios';
+import { FormControl, Button, FormControlLabel, FormLabel, TextField, IconButton, InputAdornment } from '@mui/material';
 import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
 import MuiCard from '@mui/material/Card';
 import Checkbox from '@mui/material/Checkbox';
 import Divider from '@mui/material/Divider';
-import FormLabel from '@mui/material/FormLabel';
-import FormControl from '@mui/material/FormControl';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import { Link } from 'react-router-dom';
-import TextField from '@mui/material/TextField';
+import { Link, useNavigate } from 'react-router-dom';
 import Typography from '@mui/material/Typography';
 import logo from '../assets/images/logo.png';
 import { styled } from '@mui/material/styles';
 import ForgotPassword from './ForgotPassword';
 import { GoogleIcon, FacebookIcon } from './CustomIcons';
+import { Visibility, VisibilityOff } from '@mui/icons-material';
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: 'flex',
@@ -36,9 +34,13 @@ const Card = styled(MuiCard)(({ theme }) => ({
 export default function SignInCard() {
   const [emailError, setEmailError] = React.useState(false);
   const [emailErrorMessage, setEmailErrorMessage] = React.useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [passwordError, setPasswordError] = React.useState(false);
+  const [password, setPassword] = useState('');
   const [passwordErrorMessage, setPasswordErrorMessage] = React.useState('');
   const [open, setOpen] = React.useState(false);
+
+  const navigate = useNavigate();
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -48,22 +50,46 @@ export default function SignInCard() {
     setOpen(false);
   };
 
-  const handleSubmit = (event) => {
+  const handlePasswordChange = (event) => {
+    setPassword(event.target.value);
+  };
+
+  const togglePasswordVisibility = () => {
+    setShowPassword((prev) => !prev);
+  };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
     if (emailError || passwordError) {
-      event.preventDefault();
+      console.log("Error popped up");
       return;
     }
     const data = new FormData(event.currentTarget);
-    console.log({
+    const formData = {
       email: data.get('email'),
       password: data.get('password'),
-    });
+    }
+    console.log('Form Data:', formData);
+    try {
+      const response = await axios.post('http://localhost:5000/api/login', formData, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      console.log('Login successful:', response.data);
+      navigate('/home');
+    } catch (error) {
+      if (error.status === 400) {
+        console.log(error.status);
+        alert("Invalid Password or Email");
+      }
+    }
   };
 
   const validateInputs = () => {
     const email = document.getElementById('email');
     const password = document.getElementById('password');
-
+    console.log(email, password);
     let isValid = true;
 
     if (!email.value || !/\S+@\S+\.\S+/.test(email.value)) {
@@ -94,8 +120,7 @@ export default function SignInCard() {
       </Box>
       <Typography
         component="h1"
-        variant="h4"
-        sx={{ width: '100%', fontSize: 'clamp(1.8rem, 10vw, 1.8rem)' }}
+        sx={{ width: '100%', fontSize: 'clamp(1.8rem, 10vw, 1.8r1em)' }}
       >
         Sign in
       </Typography>
@@ -136,21 +161,38 @@ export default function SignInCard() {
               Forgot your password?
             </Link>
           </Box>
-          <TextField
-            error={passwordError}
-            helperText={passwordErrorMessage}
-            name="password"
-            placeholder="••••••"
-            type="password"
-            id="password"
-            autoComplete="current-password"
-            autoFocus
+
+           <TextField
             required
             fullWidth
+            name="password"
+            placeholder="••••••"
+            type={showPassword ? 'text' : 'password'} 
+            id="password"
+            autoComplete="current-password"
             variant="outlined"
+            error={passwordError}
+            helperText={passwordErrorMessage}
             color={passwordError ? 'error' : 'primary'}
+            value={password}
+            autoFocus
+            onChange={handlePasswordChange}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton
+                    aria-label="toggle password visibility"
+                    onClick={togglePasswordVisibility}
+                    edge="end"
+                  >
+                    {showPassword ? <Visibility /> : <VisibilityOff />}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
           />
         </FormControl>
+  
         <FormControlLabel
           control={<Checkbox value="remember" color="primary" />}
           label="Remember me"
