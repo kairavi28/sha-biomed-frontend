@@ -6,7 +6,7 @@ import Button from '@mui/material/Button';
 import Checkbox from '@mui/material/Checkbox';
 import CssBaseline from '@mui/material/CssBaseline';
 import Divider from '@mui/material/Divider';
-import { FormControl, FormControlLabel, FormLabel, TextField, Select, MenuItem, IconButton, InputAdornment } from '@mui/material';
+import { FormControl, FormControlLabel, FormLabel, TextField, Select, MenuItem, IconButton, InputAdornment, Snackbar, Alert } from '@mui/material';
 import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
 import MuiCard from '@mui/material/Card';
@@ -15,6 +15,7 @@ import { GoogleIcon, FacebookIcon } from './CustomIcons';
 import logo from '../assets/images/logo.png';
 import TemplateFrame from './TemplateFrame';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
+import facilitiesData from '../facilities.json';
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: 'flex',
@@ -51,6 +52,7 @@ const SignUpContainer = styled(Stack)(({ theme }) => ({
 }));
 
 export default function SignUp() {
+  const [facilities, setFacilities] = useState([]);
   const [mode, setMode] = React.useState('light');
   const defaultTheme = createTheme({ palette: { mode } });
   const [nameError, setNameError] = React.useState(false);
@@ -65,9 +67,15 @@ export default function SignUp() {
   const [passwordErrorMessage, setPasswordErrorMessage] = React.useState('');
   const [facilityErrorMessage, setFacilityErrorMessage] = React.useState('');
 
+  //snackbar - notifications
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState('');
+  const [snackbarSeverity, setSnackbarSeverity] = useState('success');
+
   React.useEffect(() => {
     // Check if there is a preferred mode in localStorage
     const savedMode = localStorage.getItem('themeMode');
+    setFacilities(facilitiesData);
     if (savedMode) {
       setMode(savedMode);
     } else {
@@ -119,7 +127,7 @@ export default function SignUp() {
       setNameError(false);
       setNameErrorMessage('');
     }
-    
+
     if (!facility.value || facility.value.length < 1) {
       setFacilityError(true);
       setFacilityErrorMessage('Facility is required');
@@ -157,17 +165,22 @@ export default function SignUp() {
     try {
       const response = await axios.post('http://localhost:5000/api/register', formData, {
         headers: {
-          'Content-Type': 'application/json', 
+          'Content-Type': 'application/json',
         },
       });
       console.log('Registration successful:', response.data);
+      setSnackbarMessage('Registration Successful! Please log in');
+      setSnackbarSeverity('success');
+      setSnackbarOpen(true);
     } catch (error) {
-      console.error('Error during registration:', error);
+      setSnackbarMessage('Please fill all required fields.');
+      setSnackbarSeverity('error');
+      setSnackbarOpen(true);
     }
   };
 
   const handleFacilityChange = (event) => {
-    const { value } = event.target;
+    const { value } = event.target.value;
     setSelectedFacility(value);
     console.log('Selected Facility:', value);
     if (value === '') {
@@ -177,6 +190,10 @@ export default function SignUp() {
       setFacilityError(false);
       setFacilityErrorMessage('');
     }
+  };
+
+  const handleSnackbarClose = () => {
+    setSnackbarOpen(false);
   };
 
   return (
@@ -230,64 +247,21 @@ export default function SignUp() {
                   color={passwordError ? 'error' : 'primary'}
                 />
               </FormControl>
-              <FormControl fullWidth required>
+              <FormControl fullWidth required variant="outlined" error={facilityErrorMessage}>
                 <FormLabel htmlFor="facility">Facility</FormLabel>
                 <Select
-                  labelId="facility-label"
+                  labelId="facility"
                   id="facility"
                   name="facility"
                   value={selectedFacility}
                   onChange={handleFacilityChange}
-                  variant="outlined"
-                  error={facilityErrorMessage}
-                  color={facilityError ? 'error' : 'primary'}
+                  error={facilityError}
                 >
-                  <MenuItem value="rgh">Regina General Hospital</MenuItem>
-                  <MenuItem value="a1">Access Place</MenuItem>
-                  <MenuItem value="a2">Al Ritchie Heritage Community Health Centre</MenuItem>
-                  <MenuItem value="a3">Alex Ositis Foundation</MenuItem>
-                  <MenuItem value="a4">All Nations' Healing Hospital</MenuItem>
-                  <MenuItem value="a5">Angelique Canada Health Centre</MenuItem>
-                  <MenuItem value="a6">Arborfield and District Health Care Centre</MenuItem>
-                  <MenuItem value="a7">Arcola Health Centre</MenuItem>
-                  <MenuItem value="a8">Assiniboia Union Hospital Integrated Facility</MenuItem>
-                  <MenuItem value="a9">Athabasca Health Facility</MenuItem>
-                  <MenuItem value="b1">Balcarres Integrated Care Centre</MenuItem>
-                  <MenuItem value="b2">Battleford District Care Centre</MenuItem>
-                  <MenuItem value="b3">Battlefords Family Health Centre</MenuItem>
-                  <MenuItem value="b4">Battlefords Union Hospital</MenuItem>
-                  <MenuItem value="b5">Beauval Health Centre</MenuItem>
-                  <MenuItem value="b6">Beechy Health Centre</MenuItem>
-                  <MenuItem value="b7">Bengough Health Centre</MenuItem>
-                  <MenuItem value="b8">Bernice Sayese Centre</MenuItem>
-                  <MenuItem value="b9">Bethany Pioneer Village</MenuItem>
-                  <MenuItem value="b10">Big River Health Centre</MenuItem>
-                  <MenuItem value="b11">Biggar & District Health Centre</MenuItem>
-                  <MenuItem value="b12">Biggar & District Health Services Foundation Inc.</MenuItem>
-                  <MenuItem value="b13">Birch Hills Health Facility</MenuItem>
-                  <MenuItem value="b14">Birch View Home</MenuItem>
-                  <MenuItem value="b15">Black Lake Clinic (Athabasca Health Authority)</MenuItem>
-                  <MenuItem value="b16">Blaine Lake Primary Health Care Clinic</MenuItem>
-                  <MenuItem value="b17">Borden Primary Health Centre</MenuItem>
-                  <MenuItem value="b18">Border Health Centre</MenuItem>
-                  <MenuItem value="b19">Broadview Centennial Lodge</MenuItem>
-                  <MenuItem value="b20">Broadview Union Hospital</MenuItem>
-                  <MenuItem value="b21">Buffalo Narrows Health Centre</MenuItem>
-                  <MenuItem value="c1">Candle Lake Health Centre</MenuItem>
-                  <MenuItem value="c2">Canora Gateway Lodge</MenuItem>
-                  <MenuItem value="c3">Canora Hospital</MenuItem>
-                  <MenuItem value="c4">Carlyle Primary Health Care Centre</MenuItem>
-                  <MenuItem value="c4">Carrot River Health Centre</MenuItem>
-                  <MenuItem value="c6">Carrot River Medical Clinic</MenuItem>
-                  <MenuItem value="c7">Centennial Special Care Home</MenuItem>
-                  <MenuItem value="c8">Central Butte and District Health Care Foundation</MenuItem>
-                  <MenuItem value="c9">Central Haven Special Care Home</MenuItem>
-                  <MenuItem value="c10">Central Parkland Lodge</MenuItem>
-                  <MenuItem value="c11">Chateau Providence</MenuItem>
-                  <MenuItem value="c12">Circle Drive Special Care Home</MenuItem>
-                  <MenuItem value="c13">Community Health Centre at Market Mall</MenuItem>
-                  <MenuItem value="c14">Coronach Health Centre</MenuItem>
-                  <MenuItem value="c15">Cozy Nest Care Home</MenuItem>
+                  {facilities.map((facility) => (
+                    <MenuItem key={facility.id} value={facility.name}>
+                      {facility.name}
+                    </MenuItem>
+                  ))}
                 </Select>
               </FormControl>
               <FormControl fullWidth required>
@@ -370,6 +344,12 @@ export default function SignUp() {
           </Card>
         </SignUpContainer>
       </ThemeProvider>
+      {/* Snackbar for notifications */}
+      <Snackbar open={snackbarOpen} autoHideDuration={6000} onClose={handleSnackbarClose}>
+        <Alert onClose={handleSnackbarClose} severity={snackbarSeverity} sx={{ width: '100%' }}>
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
     </TemplateFrame>
   );
 }

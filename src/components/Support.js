@@ -3,7 +3,6 @@ import { styled } from '@mui/material/styles';
 import { Box, Typography, TextField, Button, MenuItem, Container, Grid, Paper, Snackbar, Alert } from "@mui/material";
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 
-// Visually hidden input for file upload
 const VisuallyHiddenInput = styled('input')({
     clip: 'rect(0 0 0 0)',
     clipPath: 'inset(50%)',
@@ -16,7 +15,6 @@ const VisuallyHiddenInput = styled('input')({
     width: 1,
 });
 
-// Dropdown options for the department
 const departments = [
     { value: 'facilityA', label: 'Facility A' },
     { value: 'facilityB', label: 'Facility B' },
@@ -45,15 +43,13 @@ function Support() {
     };
 
     const handleImageUpload = (event) => {
-        const file = event.target.files[0]; // Get the first file
+        const file = event.target.files[0]; 
 
         if (file) {
             setFormData({
                 ...formData,
                 image: file,
             });
-
-            // Generate a URL for the image preview
             setImagePreview(URL.createObjectURL(file));
         }
     };
@@ -61,7 +57,6 @@ function Support() {
     const handleSubmit = (event) => {
         event.preventDefault();
         
-        // Validate form inputs
         if (formData.department && formData.containerType && formData.issueDescription && formData.image) {
             console.log("Form Data Submitted: ", formData);
             setSnackbarMessage('Form submitted successfully!');

@@ -12,7 +12,8 @@ import 'react-awesome-slider/dist/styles.css';
 
 const services = [
     {
-        title: "Residential Waste Pickup",
+        title: "Improperly Packaged Waste",
+        date: "12-June-2024",
         description: "WM's curbside trash and recycling pickup is the best choice for your home, and for the environment.",
         image: "/path-to-your-image/residential-waste.png",
     },
@@ -66,7 +67,7 @@ function Dashboard() {
                 </Box>
             </Box>
 
-            {/* Find Services Section */}
+            {/* Section */}
             <Container sx={{ mt: 4 }}>
                 <Paper elevation={3} sx={{ p: 3 }}>
                     <Grid container spacing={2} alignItems="center">
