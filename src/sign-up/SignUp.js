@@ -16,6 +16,8 @@ import logo from '../assets/images/logo.png';
 import TemplateFrame from './TemplateFrame';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import facilitiesData from '../facilities.json';
+import facilityTypeData from '../facilityTypes.json';
+
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: 'flex',
@@ -52,21 +54,26 @@ const SignUpContainer = styled(Stack)(({ theme }) => ({
 }));
 
 export default function SignUp() {
-  const [facilities, setFacilities] = useState([]);
   const [mode, setMode] = React.useState('light');
   const defaultTheme = createTheme({ palette: { mode } });
   const [nameError, setNameError] = React.useState(false);
-  const [selectedFacility, setSelectedFacility] = React.useState('rgh');
   const [nameErrorMessage, setNameErrorMessage] = React.useState('');
   const [emailError, setEmailError] = React.useState(false);
   const [emailErrorMessage, setEmailErrorMessage] = React.useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [passwordError, setPasswordError] = React.useState(false);
+  //facility
+  const [facilities, setFacilities] = useState([]);
+  const [selectedFacility, setSelectedFacility] = React.useState('');
   const [facilityError, setFacilityError] = React.useState(false);
   const [passwordErrorMessage, setPasswordErrorMessage] = React.useState('');
   const [facilityErrorMessage, setFacilityErrorMessage] = React.useState('');
-
+  //facility type
+  const [facilityType, setFacilityType] = useState([]);
+  const [selectedFacilityType, setSelectedFacilityType] = React.useState('');
+  const [facilityTypeError, setFacilityTypeError] = React.useState(false);
+  const [facilityTypeErrorMessage, setFacilityTypeErrorMessage] = React.useState('');
   //snackbar - notifications
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
@@ -76,6 +83,8 @@ export default function SignUp() {
     // Check if there is a preferred mode in localStorage
     const savedMode = localStorage.getItem('themeMode');
     setFacilities(facilitiesData);
+    setFacilityType(facilityTypeData);
+
     if (savedMode) {
       setMode(savedMode);
     } else {
@@ -97,6 +106,7 @@ export default function SignUp() {
     const email = document.getElementById('email');
     const password = document.getElementById('password');
     const name = document.getElementById('name');
+    const facility_type = document.getElementById('facilityType'); 
     const facility = document.getElementById('facility');
 
     let isValid = true;
@@ -135,6 +145,15 @@ export default function SignUp() {
     } else {
       setFacilityError(false);
       setFacilityErrorMessage('');
+    }
+
+    if (!facility_type.value || facility_type.value.length < 1) {
+      setFacilityTypeError(true);
+      setFacilityTypeErrorMessage('Facility is required');
+      isValid = false;
+    } else {
+      setFacilityTypeError(false);
+      setFacilityTypeErrorMessage('');
     }
     return isValid;
   };
@@ -189,6 +208,19 @@ export default function SignUp() {
     } else {
       setFacilityError(false);
       setFacilityErrorMessage('');
+    }
+  };
+
+  const handleFacilityTypeChange = (event) => {
+    const { value } = event.target.value;
+    setSelectedFacilityType(value);
+    console.log('Selected Facility Type:', value);
+    if (value === '') {
+      setFacilityTypeError(true);
+      setFacilityTypeErrorMessage('Facility is required');
+    } else {
+      setFacilityTypeError(false);
+      setFacilityTypeErrorMessage('');
     }
   };
 
@@ -247,6 +279,31 @@ export default function SignUp() {
                   color={passwordError ? 'error' : 'primary'}
                 />
               </FormControl>
+              <FormControl fullWidth required variant="outlined" error={facilityTypeErrorMessage}>
+                <FormLabel htmlFor="facility">Facility Type</FormLabel>
+                <Select
+                  labelId="facilityType"
+                  id="facilityType"
+                  name="facilityType"
+                  value={selectedFacilityType}
+                  onChange={handleFacilityTypeChange}
+                  error={facilityTypeError}
+                  MenuProps={{
+                    PaperProps: {
+                      style: {
+                        maxHeight: 200,  
+                        maxWidth: 150,  
+                      },
+                    },
+                  }}
+                >
+                  {facilityType.map((facility) => (
+                    <MenuItem key={facility.id} value={facility.name}>
+                      {facility.name}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
               <FormControl fullWidth required variant="outlined" error={facilityErrorMessage}>
                 <FormLabel htmlFor="facility">Facility</FormLabel>
                 <Select
@@ -256,6 +313,14 @@ export default function SignUp() {
                   value={selectedFacility}
                   onChange={handleFacilityChange}
                   error={facilityError}
+                  MenuProps={{
+                    PaperProps: {
+                      style: {
+                        maxHeight: 200,  
+                        maxWidth: 150,  
+                      },
+                    },
+                  }}
                 >
                   {facilities.map((facility) => (
                     <MenuItem key={facility.id} value={facility.name}>
@@ -271,7 +336,7 @@ export default function SignUp() {
                   fullWidth
                   name="password"
                   placeholder="••••••"
-                  type={showPassword ? 'text' : 'password'} // Toggle between 'text' and 'password'
+                  type={showPassword ? 'text' : 'password'} 
                   id="password"
                   autoComplete="new-password"
                   variant="outlined"
@@ -288,6 +353,7 @@ export default function SignUp() {
                           onClick={togglePasswordVisibility}
                           edge="end"
                         >
+                          
                           {showPassword ? <Visibility /> : <VisibilityOff />}
                         </IconButton>
                       </InputAdornment>

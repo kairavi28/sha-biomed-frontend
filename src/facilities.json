@@ -1,5 +1,9 @@
 [
     {
+        "id": "default",
+        "name": "Choose Facility"
+    },
+    {
         "id": "1",
         "name": "Cypress Regional Hospital(Swift Current Hospital)"
     },
