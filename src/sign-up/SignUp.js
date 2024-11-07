@@ -106,8 +106,6 @@ export default function SignUp() {
     const email = document.getElementById('email');
     const password = document.getElementById('password');
     const name = document.getElementById('name');
-    const facility_type = document.getElementById('facilityType'); 
-    const facility = document.getElementById('facility');
 
     let isValid = true;
 
@@ -129,32 +127,24 @@ export default function SignUp() {
       setPasswordErrorMessage('');
     }
 
-    if (!name.value || name.value.length < 1) {
+    if (!name) {
       setNameError(true);
       setNameErrorMessage('Name is required.');
       isValid = false;
-    } else {
-      setNameError(false);
-      setNameErrorMessage('');
     }
 
-    if (!facility.value || facility.value.length < 1) {
+    if (!selectedFacilityType) {
+      setFacilityTypeError(true);
+      setFacilityTypeErrorMessage('Facility type is required');
+      isValid = false;
+    }
+  
+    if (!selectedFacility) {
       setFacilityError(true);
       setFacilityErrorMessage('Facility is required');
       isValid = false;
-    } else {
-      setFacilityError(false);
-      setFacilityErrorMessage('');
     }
 
-    if (!facility_type.value || facility_type.value.length < 1) {
-      setFacilityTypeError(true);
-      setFacilityTypeErrorMessage('Facility is required');
-      isValid = false;
-    } else {
-      setFacilityTypeError(false);
-      setFacilityTypeErrorMessage('');
-    }
     return isValid;
   };
 
@@ -199,7 +189,7 @@ export default function SignUp() {
   };
 
   const handleFacilityChange = (event) => {
-    const { value } = event.target.value;
+    const value = event.target.value; 
     setSelectedFacility(value);
     console.log('Selected Facility:', value);
     if (value === '') {
@@ -212,12 +202,12 @@ export default function SignUp() {
   };
 
   const handleFacilityTypeChange = (event) => {
-    const { value } = event.target.value;
+    const value = event.target.value; 
     setSelectedFacilityType(value);
     console.log('Selected Facility Type:', value);
     if (value === '') {
       setFacilityTypeError(true);
-      setFacilityTypeErrorMessage('Facility is required');
+      setFacilityTypeErrorMessage('Facility Type is required');
     } else {
       setFacilityTypeError(false);
       setFacilityTypeErrorMessage('');
@@ -229,7 +219,7 @@ export default function SignUp() {
   };
 
   return (
-    <TemplateFrame
+    <TemplateFrame 
       mode={mode}
       toggleColorMode={toggleColorMode}
     >
@@ -243,7 +233,7 @@ export default function SignUp() {
               variant="h4"
               sx={{ width: '100%', fontSize: 'clamp(1.8rem, 10vw, 1.8rem)' }}
             >
-              Sign up
+              Sign up 
             </Typography>
             <Box
               component="form"
@@ -285,9 +275,11 @@ export default function SignUp() {
                   labelId="facilityType"
                   id="facilityType"
                   name="facilityType"
+                  placeholder="facility type"
                   value={selectedFacilityType}
                   onChange={handleFacilityTypeChange}
                   error={facilityTypeError}
+                  autoComplete="facilityType"
                   MenuProps={{
                     PaperProps: {
                       style: {
@@ -310,6 +302,7 @@ export default function SignUp() {
                   labelId="facility"
                   id="facility"
                   name="facility"
+                  placeholder="facility"
                   value={selectedFacility}
                   onChange={handleFacilityChange}
                   error={facilityError}

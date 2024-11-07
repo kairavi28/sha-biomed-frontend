@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
@@ -9,6 +9,9 @@ import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import AwesomeSlider from 'react-awesome-slider';
 import 'react-awesome-slider/dist/styles.css';
+import image1 from '../assets/images/biomed_team_1.jpg';
+// import image2 from '../assets/images/biomed_team_2.jpg';
+// import image3 from '../assets/images/biomed_team_3.jpg';
 
 const services = [
     {
@@ -30,15 +33,20 @@ const services = [
 ];
 
 function Dashboard() {
+    const [serviceType, setServiceType] = useState('home');
+
+    const handleSelectChange = (event) => {
+        setServiceType(event.target.value);
+    };
+
     return (
         <Box>
             {/* Slider Section */}
             <Box position="relative" sx={{ height: '400px' }}>
                 <AwesomeSlider style={{ height: '100%' }}>
-                    <div>Image 1</div>
-                    <div>Image 2</div>
-                    <div>Image 3</div>
-                    <div>Image 4</div>
+                    <div><img src={image1} alt="team member 1" /></div>
+                    {/* <div><img src={image2} alt="team member 2" /></div>
+                    <div><img src={image3} alt="team member 3" /></div> */}
                 </AwesomeSlider>
 
                 {/* Overlay with text */}
@@ -84,6 +92,8 @@ function Dashboard() {
                                 label="For home or business?"
                                 fullWidth
                                 variant="outlined"
+                                value={serviceType}
+                                onChange={handleSelectChange}
                             >
                                 <MenuItem value="home">Home</MenuItem>
                                 <MenuItem value="business">Business</MenuItem>
