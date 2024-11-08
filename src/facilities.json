@@ -1,179 +1,175 @@
 [
     {
-        "id": "default",
-        "name": "Choose Facility"
-    },
-    {
         "id": "1",
-        "name": "Cypress Regional Hospital(Swift Current Hospital)"
+        "name": "Main Street Dental Clinic"
     },
     {
         "id": "2",
-        "name": "Cyrpess HR Enviro Services"
+        "name": "Regina Dental Group"
     },
     {
         "id": "3",
-        "name": "Cyrpess HR Enviro Services - Border Community Health Centre"
+        "name": "Regina Dental Group (Southland Mall)"
     },
     {
         "id": "4",
-        "name": "Cyrpess HR Enviro Services - Gull Lake Special Care Centre"
+        "name": "Regina Lakeview Dental"
     },
     {
         "id": "5",
-        "name": "Cyrpess HR Enviro Services-Leader Hospital"
+        "name": "12th Ave Clinic"
     },
     {
         "id": "6",
-        "name": "Cyrpess HR Enviro Services-Prairie Health Care Centre, Cabri"
+        "name": "13th Avenue Pharmacy"
     },
     {
         "id": "7",
-        "name": "Cyrpess HR Enviro Services-Shaunavon Hospital & Care Centre"
+        "name": "24 Hr Animal Care Centre"
     },
     {
         "id": "8",
-        "name": "Cyrpess HR Enviro Services-Southwest Integrated Health Facility(Maple Creek Hospital)"
+        "name": "2nd Avenue Dental Clinic"
     },
     {
         "id": "9",
-        "name": "Cyrpess HR Enviro Services-Wolf Willow Health Centre"
+        "name": "3sH_ Population/Public Health Taylor"
     },
     {
         "id": "10",
-        "name": "Herbert Hospital"
+        "name": "Absolute Fire &Flood Restoration"
     },
     {
         "id": "11",
-        "name": "Ponteix Health Centre"
+        "name": "Acadia Dental"
     },
     {
         "id": "12",
-        "name": "Prairie View Health Centre(Mankota)"
+        "name": "Adult Outreach (Coast)"
     },
     {
         "id": "13",
-        "name": "Assiniboia Union Hospital"
+        "name": "Advanced Medical Solutions"
     },
     {
         "id": "14",
-        "name": "Craik & District Health Centre"
+        "name": "Ahtahkakoop Cree Nation Treatment Haven"
     },
     {
         "id": "15",
-        "name": "Dr. F.H. Wigmore Hospital"
+        "name": "Albert North Veterinary Clinic"
     },
     {
         "id": "16",
-        "name": "Five Hills HR Enviro Services"
+        "name": "Albert & Parliament Primary Health Care"
     },
     {
         "id": "17",
-        "name": "Five Hills HR Enviro Services-Central Butte Regency Hospital"
+        "name": "All About Smiles Family Dentistry"
     },
     {
         "id": "18",
-        "name": "Five Hills HR Enviro Services-Crescent View Urgent Care Clinic"
+        "name": "Alliance Health Pharmacy (Medical Center)LTD"
     },
     {
         "id": "19",
-        "name": "Five Hills HR Enviro Services-Moose Jaw Union Hospital - Terra"
+        "name": "All Nations Healing Hospital"
     },
     {
         "id": "20",
-        "name": "Five Hills HR Enviro Services-Pioneer Lodge (Moose Jaw)"
+        "name": "All Smiles Dental Clinic Dentists"
     },
     {
         "id": "21",
-        "name": "Grasslands Health Centre"
+        "name": "All West Veterinary Clinic"
     },
     {
         "id": "22",
-        "name": "Kincaid Primary Health Care Centre"
+        "name": "Altima Dental Services"
     },
     {
         "id": "23",
-        "name": "Lafleche & District Health Centre"
+        "name": "Animal Clinic of Regina"
     },
     {
         "id": "24",
-        "name": "Moose Jaw Special Care Home"
+        "name": "Animal Control Agency"
     },
     {
         "id": "25",
-        "name": "Pioneer Lodge"
+        "name": "Animal Control Agency:City of Saskatoon - City Hall"
     },
     {
         "id": "26",
-        "name": "Red Coat Primary Health Care Clinic(Assiniboia Public Health)"
+        "name": "Animal Control Agency:City of Saskatoon - Facilities & Fleet Management"
     },
     {
         "id": "27",
-        "name": "St. Joseph's Hospital(Gravelbourg Hospital)"
+        "name": "Animal Control Agency:City of Saskatoon - Secure-A-Sharp Service Program"
     },
     {
         "id": "28",
-        "name": "Beechy Health Centre"
+        "name": "Animal Control Agency:Cosmo Civic Centre"
     },
     {
         "id": "29",
-        "name": "Biggar Hospital"
+        "name": "Animal Control Agency:Frances Morrison Library"
     },
     {
         "id": "30",
-        "name": "Davidson Health Centre"
+        "name": "Animal Control Agency:Lakewood Civic Centre"
     },
     {
         "id": "31",
-        "name": "Dinsmore Health Care Centre"
+        "name": "Animal Control Agency:Saskatoon Police Service (Exhibits  & Lost and Found)"
     },
     {
         "id": "32",
-        "name": "Eatonia Health Center"
+        "name": "Animal Control Agency:Saskatoon Police Service (Garage / Fleet Service)"
     },
     {
         "id": "33",
-        "name": "Elrose Health Centre"
+        "name": "Animal Control Agency:Saskatoon Police Service (Quarter Master Stores)"
     },
     {
         "id": "34",
-        "name": "Kerrobert Hospital"
+        "name": "Animal Control Agency:Shaw Centre"
     },
     {
         "id": "35",
-        "name": "Kindersley Hospital"
+        "name": "Animal Hospital Of Assiniboia"
     },
     {
         "id": "36",
-        "name": "Kyle & District Health Centre"
+        "name": "Arcola Physio & Acupuncture Clinic"
     },
     {
         "id": "37",
-        "name": "Lucky Lake Health Centre"
+        "name": "Arlington Animal Hospital"
     },
     {
         "id": "38",
-        "name": "Outlook Health Centre"
+        "name": "Army, Navy & Air Force Veterans"
     },
     {
         "id": "39",
-        "name": "Outlook Union Hospital"
+        "name": "Artisan Prosthodontics"
     },
     {
         "id": "40",
-        "name": "Rosetown & District Health Centre (Rosetown Hospital)"
+        "name": "Assiniboia Public Health"
     },
     {
         "id": "41",
-        "name": "St. Joseph's Health Centre (Macklin)"
+        "name": "Assiniboia Veterinary Clinic"
     },
     {
         "id": "42",
-        "name": "Unity Hospital"
+        "name": "Associate Family Physicians Clinic"
     },
     {
         "id": "43",
-        "name": "Wilkie Health Centre"
+        "name": "Associate Medical Clinic"
     },
     {
         "id": "44",
@@ -181,27 +177,27 @@
     },
     {
         "id": "45",
-        "name": "Beauval Health Centre"
+        "name": "Athabasca Health Authority"
     },
     {
         "id": "46",
-        "name": "Buffalo Narrows Health Centre"
+        "name": "Atlas Hotel"
     },
     {
         "id": "47",
-        "name": "Carrot River Health Centre"
+        "name": "Aura Dental"
     },
     {
         "id": "48",
-        "name": "Chateau Providence"
+        "name": "Aurora Reproductive Care"
     },
     {
         "id": "49",
-        "name": "Connected to care on Railway"
+        "name": "Avalon Dental Clinic"
     },
     {
         "id": "50",
-        "name": "Cumberland House Health Centre"
+        "name": "Avon Medical Clinic"
     },
     {
         "id": "51",

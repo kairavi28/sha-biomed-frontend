@@ -22,7 +22,6 @@ import logo from '../assets/images/logo.png';
 import SettingsIcon from '@mui/icons-material/Settings';
 
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
-const pages = ['Home', 'Expenses', 'Stats'];
 
 const Navbar = () => {
   const [anchorElUser, setAnchorElUser] = React.useState(null);
@@ -47,43 +46,11 @@ const Navbar = () => {
     setDrawerOpen(open);
   };
 
-  const list = () => (
-    <div
-      role="presentation"
-      onClick={toggleDrawer(false)}
-      onKeyDown={toggleDrawer(false)}
-      style={{ width: 250 }}
-    >
-      <Divider />
-      <List>
-        {pages.map((text) => (
-          <ListItem button key={text} component={Link} to={`/${text.toLowerCase()}`}>
-            <ListItemText primary={text} />
-          </ListItem>
-        ))}
-      </List>
-      <Divider />
-      <List>
-        {settings.map((setting) => (
-          <ListItem
-            button
-            key={setting}
-            onClick={setting === 'Logout' ? handleLogout : handleCloseUserMenu}
-          >
-            <ListItemText primary={setting} />
-          </ListItem>
-        ))}
-      </List>
-    </div>
-  );
-
   return (
     <>
       <AppBar position="static" sx={{ backgroundColor: "white", color: "navy" }}>
         <Toolbar sx={{ minHeight: 45 }}>
-          <IconButton edge="start" color="inherit" aria-label="menu" onClick={toggleDrawer(true)}>
-            <MenuIcon sx={{ color: "navy" }} />
-          </IconButton>
+          
           <Typography variant="h6" sx={{ flexGrow: 1, color: "navy" }}>
             <img src={logo} alt="Logo" style={{ width: '90px', height: 'auto' }} />
           </Typography>
@@ -129,15 +96,6 @@ const Navbar = () => {
           </Box>
         </Toolbar>
       </AppBar>
-
-      {/* Drawer Component */}
-      <Drawer
-        anchor="left"
-        open={drawerOpen}
-        onClose={toggleDrawer(false)}
-      >
-        {list()}
-      </Drawer>
     </>
   );
 };

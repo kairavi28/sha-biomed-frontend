@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { styled } from '@mui/material/styles';
-import { Box, Typography, TextField, Button, MenuItem, Container, Grid, Paper, Snackbar, Alert } from "@mui/material";
+import { Box, Typography, TextField, Button, MenuItem, Container, Grid, Paper, Snackbar, Alert, Slider } from "@mui/material";
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 
 const VisuallyHiddenInput = styled('input')({
@@ -29,8 +29,8 @@ function Support() {
         image: null,
         comments: '',
     });
-
-    const [imagePreview, setImagePreview] = useState(null);
+    const [imagePreview, setImagePreview] = useState([]);
+    const [imageIndex, setImageIndex] = useState(0);
     const [snackbarOpen, setSnackbarOpen] = useState(false);
     const [snackbarMessage, setSnackbarMessage] = useState('');
     const [snackbarSeverity, setSnackbarSeverity] = useState('success');
@@ -43,14 +43,14 @@ function Support() {
     };
 
     const handleImageUpload = (event) => {
-        const file = event.target.files[0]; 
+        const files = Array.from(event.target.files); 
 
-        if (file) {
+        if (files.length > 0) {
             setFormData({
                 ...formData,
-                image: file,
+                image: files,
             });
-            setImagePreview(URL.createObjectURL(file));
+            setImagePreview(files.map(file => URL.createObjectURL(file)));
         }
     };
 
@@ -62,7 +62,6 @@ function Support() {
             setSnackbarMessage('Form submitted successfully!');
             setSnackbarSeverity('success');
             setSnackbarOpen(true);
-            // You can add your form submission logic here
         } else {
             setSnackbarMessage('Please fill all required fields.');
             setSnackbarSeverity('error');
@@ -74,106 +73,142 @@ function Support() {
         setSnackbarOpen(false);
     };
 
+    const handleSliderChange = (event, newValue) => {
+        setImageIndex(newValue);
+    };
+
     return (
-        <Container sx={{ mt: 6 }}>
-            <Grid container justifyContent="center">
-                <Grid item xs={12} md={6}>
-                    <Paper elevation={3} sx={{ p: 4 }}>
-                        <Typography variant="h5" gutterBottom align="center">
-                            Report an Issue
-                        </Typography>
-                        <form onSubmit={handleSubmit}>
-                            <TextField
-                                fullWidth
-                                select
-                                label="Department of the Facility"
-                                name="department"
-                                value={formData.department}
-                                onChange={handleChange}
-                                margin="normal"
-                                required
-                            >
-                                {departments.map((option) => (
-                                    <MenuItem key={option.value} value={option.value}>
-                                        {option.label}
-                                    </MenuItem>
-                                ))}
-                            </TextField>
+        <Box sx={{
+            background: 'linear-gradient(to bottom, #ffffff, #e0f7fa, #b3e0ff)',
+            minHeight: '100vh', 
+            pb: 4,
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'center',
+            alignItems: 'center',
+        }}>
+            <Container sx={{ mt: 6, display: 'flex' }}>
+                <Grid container spacing={10}>
+                     {/* Right Side - Image Preview with Slider */}
+                     <Grid item xs={12} md={6}>
+                        <Paper elevation={3} sx={{ p: 4, height: '100%', display: 'flex', flexDirection: 'column', borderRadius: '2em', alignItems: 'center' }}>
+                            <Typography variant="h6" gutterBottom align="center">
+                                Image Preview
+                            </Typography>
+                            {/* Image Slider */}
+                            {imagePreview.length > 0 && (
+                                <>
+                                    <Box sx={{ textAlign: 'center', mb: 2, maxWidth: '100%' }}>
+                                        <img
+                                            src={imagePreview[imageIndex]}
+                                            alt="Preview"
+                                            style={{ maxWidth: '100%', height: 'auto' }}
+                                        />
+                                    </Box>
 
-                            <TextField
-                                fullWidth
-                                label="Container Type"
-                                name="containerType"
-                                value={formData.containerType}
-                                onChange={handleChange}
-                                margin="normal"
-                                required
-                            />
+                                    <Slider
+                                        value={imageIndex}
+                                        onChange={handleSliderChange}
+                                        min={0}
+                                        max={imagePreview.length - 1}
+                                        step={1}
+                                        marks
+                                        valueLabelDisplay="auto"
+                                        sx={{ width: '100%' }}
+                                    />
+                                </>
+                            )}
+                        </Paper>
+                    </Grid>
+                    <Grid item xs={12} md={6}>
+                        <Paper elevation={3} sx={{ p: 4, display: 'flex', flexDirection: 'column', borderRadius: '2em', height: '100%' }}>
+                            <Typography variant="h5" gutterBottom align="center" sx={{ mb: 4 }}>
+                                Report an Issue
+                            </Typography>
+                            <form onSubmit={handleSubmit}>
+                                <TextField
+                                    fullWidth
+                                    select
+                                    label="Department of the Facility"
+                                    name="department"
+                                    value={formData.department}
+                                    onChange={handleChange}
+                                    margin="normal"
+                                    required
+                                >
+                                    {departments.map((option) => (
+                                        <MenuItem key={option.value} value={option.value}>
+                                            {option.label}
+                                        </MenuItem>
+                                    ))}
+                                </TextField>
 
-                            <TextField
-                                fullWidth
-                                label="Issue Description"
-                                name="issueDescription"
-                                value={formData.issueDescription}
-                                onChange={handleChange}
-                                margin="normal"
-                                required
-                                multiline
-                                rows={3}
-                            />
-
-                            <Button
-                                component="label"
-                                variant="outlined"
-                                color="secondary"
-                                startIcon={<CloudUploadIcon />}
-                                fullWidth
-                                sx={{ mt: 4 }}
-                            >
-                                <b>Upload Image</b>
-                                <VisuallyHiddenInput
-                                    type="file"
-                                    accept="image/*"
-                                    onChange={handleImageUpload}
+                                <TextField
+                                    fullWidth
+                                    label="Container Type"
+                                    name="containerType"
+                                    value={formData.containerType}
+                                    onChange={handleChange}
+                                    margin="normal"
                                     required
                                 />
-                            </Button>
 
-                            {/* Display image preview */}
-                            {imagePreview && (
-                                <Box sx={{ mt: 2, textAlign: 'center' }}>
-                                    <img
-                                        src={imagePreview}
-                                        alt="Image Preview"
-                                        style={{ maxWidth: '100%', height: 'auto' }}
+                                <TextField
+                                    fullWidth
+                                    label="Issue Description"
+                                    name="issueDescription"
+                                    value={formData.issueDescription}
+                                    onChange={handleChange}
+                                    margin="normal"
+                                    required
+                                    multiline
+                                    rows={3}
+                                />
+
+                                <Button
+                                    component="label"
+                                    variant="outlined"
+                                    color="secondary"
+                                    startIcon={<CloudUploadIcon />}
+                                    fullWidth
+                                    sx={{ mt: 4 }}
+                                >
+                                    <b>Upload Image</b>
+                                    <VisuallyHiddenInput
+                                        type="file"
+                                        accept="image/*"
+                                        onChange={handleImageUpload}
+                                        multiple
                                     />
-                                </Box>
-                            )}
+                                </Button>
 
-                            <TextField
-                                fullWidth
-                                label="Any Comments"
-                                name="comments"
-                                value={formData.comments}
-                                onChange={handleChange}
-                                margin="normal"
-                                multiline
-                                rows={2}
-                            />
+                                <TextField
+                                    fullWidth
+                                    label="Any Comments"
+                                    name="comments"
+                                    value={formData.comments}
+                                    onChange={handleChange}
+                                    margin="normal"
+                                    multiline
+                                    rows={2}
+                                />
 
-                            <Button
-                                type="submit"
-                                variant="contained"
-                                color="success"
-                                fullWidth
-                                sx={{ mt: 3 }}
-                            >
-                                <b>Submit</b>
-                            </Button>
-                        </form>
-                    </Paper>
+                                <Button
+                                    type="submit"
+                                    variant="contained"
+                                    color="success"
+                                    fullWidth
+                                    sx={{ mt: 3 }}
+                                >
+                                    <b>Submit</b>
+                                </Button>
+                            </form>
+                        </Paper>
+                    </Grid>
+
+                   
                 </Grid>
-            </Grid>
+            </Container>
 
             {/* Snackbar for notifications */}
             <Snackbar open={snackbarOpen} autoHideDuration={6000} onClose={handleSnackbarClose}>
@@ -181,7 +216,7 @@ function Support() {
                     {snackbarMessage}
                 </Alert>
             </Snackbar>
-        </Container>
+        </Box>
     );
 }
 
