@@ -9,15 +9,9 @@ import {
   MenuItem,
   Avatar,
   Tooltip,
-  Drawer,
-  List,
-  ListItem,
-  ListItemText,
-  Divider,
   Box
 } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
-import MenuIcon from "@mui/icons-material/Menu";
 import logo from '../assets/images/logo.png';
 import SettingsIcon from '@mui/icons-material/Settings';
 
@@ -25,7 +19,6 @@ const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
 const Navbar = () => {
   const [anchorElUser, setAnchorElUser] = React.useState(null);
-  const [drawerOpen, setDrawerOpen] = React.useState(false);
   const navigate = useNavigate(); 
 
   const handleOpenUserMenu = (event) => {
@@ -40,10 +33,6 @@ const Navbar = () => {
     localStorage.removeItem('authToken');
     handleCloseUserMenu();
     navigate('/');
-  };
-
-  const toggleDrawer = (open) => () => {
-    setDrawerOpen(open);
   };
 
   return (
