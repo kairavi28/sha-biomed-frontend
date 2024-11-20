@@ -6,6 +6,7 @@ import SignUp from './sign-up/SignUp';
 import Navbar from './components/Navbar';
 import Dashboard from './components/Dashboard';
 import Support from './components/Support';
+import BlogPage from './components/BlogPage';
 
 function App() {
   return (
@@ -14,7 +15,8 @@ function App() {
       <Route path="/sign-up" element={<SignUp />} />
       <Route element={<LayoutWithNavbar />}>
         <Route path="/home" element={<Dashboard />} />
-        <Route path="/support" element={<Support />} />
+        <Route path="/services" element={<Support />} />
+        <Route path="/solutions" element={<BlogPage />} />
       </Route>
     </Routes>
   );
@@ -26,7 +28,8 @@ function LayoutWithNavbar() {
       <Navbar />
       <Routes>
         <Route path="/home" element={<Dashboard />} />
-        <Route path="/support" element={<Support />} />
+        <Route path="/services" element={<Support />} />
+        <Route path="/solutions" element={<BlogPage />} />
       </Routes>
     </>
   );

@@ -1,221 +1,133 @@
-import React, { useState } from "react";
-import { styled } from '@mui/material/styles';
-import { Box, Typography, TextField, Button, MenuItem, Container, Grid, Paper, Snackbar, Alert, Slider } from "@mui/material";
-import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import React, { useState, useEffect } from "react";
+import { Box, Typography, Container, Grid, Paper } from "@mui/material";
+import { keyframes } from '@emotion/react';
+import AwesomeSlider from 'react-awesome-slider';
+import 'react-awesome-slider/dist/styles.css';
 
-const VisuallyHiddenInput = styled('input')({
-    clip: 'rect(0 0 0 0)',
-    clipPath: 'inset(50%)',
-    height: 1,
-    overflow: 'hidden',
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    whiteSpace: 'nowrap',
-    width: 1,
-});
-
-const departments = [
-    { value: 'facilityA', label: 'Facility A' },
-    { value: 'facilityB', label: 'Facility B' },
-    { value: 'facilityC', label: 'Facility C' },
-];
+const cardHoverAnimation = keyframes`
+    from {
+        transform: scale(1) rotateY(0deg);
+    }
+    to {
+        transform: scale(1.05) rotateY(10deg);
+    }
+`;
 
 function Support() {
-    const [formData, setFormData] = useState({
-        department: '',
-        containerType: '',
-        issueDescription: '',
-        image: null,
-        comments: '',
-    });
-    const [imagePreview, setImagePreview] = useState([]);
-    const [imageIndex, setImageIndex] = useState(0);
-    const [snackbarOpen, setSnackbarOpen] = useState(false);
-    const [snackbarMessage, setSnackbarMessage] = useState('');
-    const [snackbarSeverity, setSnackbarSeverity] = useState('success');
+    const [slackData, setSlackData] = useState([]);
 
-    const handleChange = (event) => {
-        setFormData({
-            ...formData,
-            [event.target.name]: event.target.value,
-        });
-    };
-
-    const handleImageUpload = (event) => {
-        const files = Array.from(event.target.files); 
-
-        if (files.length > 0) {
-            setFormData({
-                ...formData,
-                image: files,
-            });
-            setImagePreview(files.map(file => URL.createObjectURL(file)));
-        }
-    };
-
-    const handleSubmit = (event) => {
-        event.preventDefault();
-        
-        if (formData.department && formData.containerType && formData.issueDescription && formData.image) {
-            console.log("Form Data Submitted: ", formData);
-            setSnackbarMessage('Form submitted successfully!');
-            setSnackbarSeverity('success');
-            setSnackbarOpen(true);
-        } else {
-            setSnackbarMessage('Please fill all required fields.');
-            setSnackbarSeverity('error');
-            setSnackbarOpen(true);
-        }
-    };
-
-    const handleSnackbarClose = () => {
-        setSnackbarOpen(false);
-    };
-
-    const handleSliderChange = (event, newValue) => {
-        setImageIndex(newValue);
-    };
+    useEffect(() => {
+        fetch('http://localhost:5000/api/messages/images')
+            .then(response => response.json())
+            .then(data => {
+                console.log('here is the data');
+                console.log(data[0].images[0].imageUrl);
+                setSlackData(data);
+            })
+            .catch(error => console.error("Error fetching Slack data:", error));
+    }, []);
 
     return (
         <Box sx={{
-            background: 'linear-gradient(to bottom, #ffffff, #e0f7fa, #b3e0ff)',
-            minHeight: '100vh', 
+            background: 'linear-gradient(to bottom, white, #b3e0ff, #b3e6b3)',
+            minHeight: '100vh',
             pb: 4,
-            display: 'flex',
-            flexDirection: 'row',
-            justifyContent: 'center',
-            alignItems: 'center',
+            overflowX: 'hidden'
         }}>
-            <Container sx={{ mt: 6, display: 'flex' }}>
-                <Grid container spacing={10}>
-                     {/* Right Side - Image Preview with Slider */}
-                     <Grid item xs={12} md={6}>
-                        <Paper elevation={3} sx={{ p: 4, height: '100%', display: 'flex', flexDirection: 'column', borderRadius: '2em', alignItems: 'center' }}>
-                            <Typography variant="h6" gutterBottom align="center">
-                                Image Preview
-                            </Typography>
-                            {/* Image Slider */}
-                            {imagePreview.length > 0 && (
-                                <>
-                                    <Box sx={{ textAlign: 'center', mb: 2, maxWidth: '100%' }}>
+            <Box display="flex" justifyContent="center" sx={{ pt: 4 }}>
+                <Box
+                    display="flex"
+                    justifyContent="space-between"
+                    sx={{
+                        width: { xs: '90%', md: '60%' },
+                        height: '380px',
+                        borderRadius: 2,
+                        overflow: 'hidden',
+                        boxShadow: 3,
+                        background: 'linear-gradient(to bottom, #ffffff, #a7d8e8, #d4f7d1)',
+                        transform: 'translateY(-10px)'
+                    }}
+                >
+                    <Box sx={{ flex: 1 }}>
+                        <AwesomeSlider style={{ height: '100%', borderRadius: 2 }} animation="cubeAnimation">
+                            {slackData.map((item, index) => (
+                                <div key={index} style={{ marginBottom: '20px' }}>
+                                    <p><strong>{item.username}</strong>: {item.text}</p>
+                                    <p><small>{new Date(item.timestamp).toLocaleString()}</small></p>
+                                    {item.images.map((image, imgIndex) => (
+                                        // <img
+                                        //     src={image.imageUrl}
+                                        //     key={imgIndex}
+                                        //     alt={image.title}
+                                        //     style={{ width: '100%', height: 'auto', objectFit: 'cover' }}
+                                        // />
                                         <img
-                                            src={imagePreview[imageIndex]}
-                                            alt="Preview"
-                                            style={{ maxWidth: '100%', height: 'auto' }}
+                                            src="https://files.slack.com/files-pri/T07LNU99Q1F-F081NL52NDS/ss-web4.png"
+                                            alt="Slack Image"
+                                            crossOrigin="use-credentials"
+                                            style={{ width: '100%', height: 'auto', objectFit: 'cover' }}
                                         />
-                                    </Box>
-
-                                    <Slider
-                                        value={imageIndex}
-                                        onChange={handleSliderChange}
-                                        min={0}
-                                        max={imagePreview.length - 1}
-                                        step={1}
-                                        marks
-                                        valueLabelDisplay="auto"
-                                        sx={{ width: '100%' }}
-                                    />
-                                </>
-                            )}
-                        </Paper>
-                    </Grid>
-                    <Grid item xs={12} md={6}>
-                        <Paper elevation={3} sx={{ p: 4, display: 'flex', flexDirection: 'column', borderRadius: '2em', height: '100%' }}>
-                            <Typography variant="h5" gutterBottom align="center" sx={{ mb: 4 }}>
-                                Report an Issue
-                            </Typography>
-                            <form onSubmit={handleSubmit}>
-                                <TextField
-                                    fullWidth
-                                    select
-                                    label="Department of the Facility"
-                                    name="department"
-                                    value={formData.department}
-                                    onChange={handleChange}
-                                    margin="normal"
-                                    required
-                                >
-                                    {departments.map((option) => (
-                                        <MenuItem key={option.value} value={option.value}>
-                                            {option.label}
-                                        </MenuItem>
                                     ))}
-                                </TextField>
+                                </div>
+                            ))}
+                        </AwesomeSlider>
+                    </Box>
+                    <Box
+                        sx={{
+                            flex: 1,
+                            p: 2,
+                            display: 'flex',
+                            flexDirection: 'column',
+                            justifyContent: 'center',
+                            bgcolor: 'rgba(255, 255, 255, 0.85)',
+                            textAlign: 'center',
+                            color: 'black',
+                        }}
+                    >
+                        <Typography variant="h5" fontWeight="bold">
+                            Slack Data
+                        </Typography>
+                        <Typography variant="body1" sx={{ mt: 2 }}>
+                            Latest updates from Slack.
+                        </Typography>
+                    </Box>
+                </Box>
+            </Box>
 
-                                <TextField
-                                    fullWidth
-                                    label="Container Type"
-                                    name="containerType"
-                                    value={formData.containerType}
-                                    onChange={handleChange}
-                                    margin="normal"
-                                    required
-                                />
-
-                                <TextField
-                                    fullWidth
-                                    label="Issue Description"
-                                    name="issueDescription"
-                                    value={formData.issueDescription}
-                                    onChange={handleChange}
-                                    margin="normal"
-                                    required
-                                    multiline
-                                    rows={3}
-                                />
-
-                                <Button
-                                    component="label"
-                                    variant="outlined"
-                                    color="secondary"
-                                    startIcon={<CloudUploadIcon />}
-                                    fullWidth
-                                    sx={{ mt: 4 }}
-                                >
-                                    <b>Upload Image</b>
-                                    <VisuallyHiddenInput
-                                        type="file"
-                                        accept="image/*"
-                                        onChange={handleImageUpload}
-                                        multiple
-                                    />
-                                </Button>
-
-                                <TextField
-                                    fullWidth
-                                    label="Any Comments"
-                                    name="comments"
-                                    value={formData.comments}
-                                    onChange={handleChange}
-                                    margin="normal"
-                                    multiline
-                                    rows={2}
-                                />
-
-                                <Button
-                                    type="submit"
-                                    variant="contained"
-                                    color="success"
-                                    fullWidth
-                                    sx={{ mt: 3 }}
-                                >
-                                    <b>Submit</b>
-                                </Button>
-                            </form>
-                        </Paper>
-                    </Grid>
-
-                   
+            {/* Display Slack Data in Cards */}
+            <Container sx={{ mt: 6 }}>
+                <Grid container spacing={4}>
+                    {slackData.map((item, index) => (
+                        <Grid item xs={12} md={4} key={index}>
+                            <Paper
+                                elevation={3}
+                                sx={{
+                                    p: 2,
+                                    textAlign: 'center',
+                                    backgroundColor: 'white',
+                                    borderRadius: 2,
+                                    boxShadow: 3,
+                                    cursor: 'pointer',
+                                    '&:hover': {
+                                        animation: `${cardHoverAnimation} 0.6s ease-in-out forwards`,
+                                        boxShadow: '0px 8px 15px rgba(0, 0, 0, 0.3)'
+                                    }
+                                }}
+                            >
+                                <Box sx={{ height: '200px', overflow: 'hidden', borderRadius: 2 }}>
+                                    {/* {item.images.map((image, index) => (
+                                        <img key={index} src={image.imageUrl} alt={item.text} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                                    ))} */}
+                                    <img src={item.images[0].imageUrl} alt={item.text} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                                </Box>
+                                <Typography variant="h6" sx={{ mt: 2, fontWeight: 'bold' }}>
+                                    {item.text}
+                                </Typography>
+                            </Paper>
+                        </Grid>
+                    ))}
                 </Grid>
             </Container>
-
-            {/* Snackbar for notifications */}
-            <Snackbar open={snackbarOpen} autoHideDuration={6000} onClose={handleSnackbarClose}>
-                <Alert onClose={handleSnackbarClose} severity={snackbarSeverity} sx={{ width: '100%' }}>
-                    {snackbarMessage}
-                </Alert>
-            </Snackbar>
         </Box>
     );
 }

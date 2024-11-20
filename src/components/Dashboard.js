@@ -9,6 +9,7 @@ import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import AwesomeSlider from 'react-awesome-slider';
 import 'react-awesome-slider/dist/styles.css';
+import { keyframes } from '@emotion/react';
 import image1 from '../assets/images/biomed_team_1.jpg';
 import image_1 from '../assets/images/1.jpg';
 import image_2 from '../assets/images/2.jpg';
@@ -29,51 +30,67 @@ function Copyright() {
 }
 
 const services = [
-    {
-        title: "Sunrise health region - Melville",
-        description: "WM's curbside trash and recycling pickup is the best choice for your home, and for the environment.",
-        image: image_1,
-    },
-    {
-        title: "Commercial Waste Pickup",
-        description: "WM's business trash and recycling pickup is the best choice for your organization, and for the environment.",
-        image: image_2,
-    },
-    {
-        title: "Roll-Off Dumpster Rental",
-        description: "From quick cleanouts to major renovations, WM has a dumpster that's perfect for your project.",
-        image: image_3
-    }
+    { title: "Sunrise health region - Melville", description: "WM's curbside trash and recycling pickup is the best choice for your home, and for the environment.", image: image_1 },
+    { title: "Commercial Waste Pickup", description: "WM's business trash and recycling pickup is the best choice for your organization, and for the environment.", image: image_2 },
+    { title: "Roll-Off Dumpster Rental", description: "From quick cleanouts to major renovations, WM has a dumpster that's perfect for your project.", image: image_3 }
 ];
 
+// 3D Hover Effect Animation for Services Cards
+const cardHoverAnimation = keyframes`
+    from {
+        transform: scale(1) rotateY(0deg);
+    }
+    to {
+        transform: scale(1.05) rotateY(10deg);
+    }
+`;
+
 function Dashboard() {
-    const [serviceType, setServiceType] = useState('home');
-    const handleSelectChange = (event) => {
-        setServiceType(event.target.value);
+    const [quoteData, setQuoteData] = useState({
+        name: '',
+        email: '',
+        phone: '',
+        serviceType: 'home'
+    });
+
+    const handleInputChange = (event) => {
+        const { name, value } = event.target;
+        setQuoteData(prevState => ({
+            ...prevState,
+            [name]: value
+        }));
+    };
+
+    const handleSubmit = () => {
+        alert(`Thank you, ${quoteData.name}! We will contact you soon with a quote.`);
+        // Here you would typically send quoteData to your backend for processing
     };
 
     return (
         <Box sx={{
             background: 'linear-gradient(to bottom, white, #b3e0ff, #b3e6b3)',
             minHeight: '100vh',
-            pb: 4
+            pb: 4,
+            overflowX: 'hidden'
         }}>
-            {/* Slider Section */}
+            {/* Slider Section with Animation */}
             <Box display="flex" justifyContent="center" sx={{ pt: 4 }}>
                 <Box
                     display="flex"
                     justifyContent="space-between"
                     sx={{
-                        width: { xs: '90%', md: '80%' },
-                        height: '400px',
+                        width: { xs: '90%', md: '60%' },
+                        height: '380px',
                         borderRadius: 2,
                         overflow: 'hidden',
                         boxShadow: 3,
                         background: 'linear-gradient(to bottom, #ffffff, #a7d8e8, #d4f7d1)',
+                        transform: 'translateY(-10px)',
+                        animation: `${keyframes`from { opacity: 0; transform: translateY(-30px); } to { opacity: 1; transform: translateY(0); }`} 1s ease-out`
                     }}
                 >
                     <Box sx={{ flex: 2 }}>
-                        <AwesomeSlider style={{ height: '100%', borderRadius: 2 }}>
+                        <AwesomeSlider style={{ height: '100%', borderRadius: 2 }} animation="cubeAnimation">
                             <div><img src={image1} alt="team member 1" style={{ width: '100%', height: '100%', objectFit: 'cover' }} /></div>
                         </AwesomeSlider>
                     </Box>
@@ -84,67 +101,44 @@ function Dashboard() {
                             display: 'flex',
                             flexDirection: 'column',
                             justifyContent: 'center',
-                            bgcolor: 'rgba(255, 255, 255, 0.8)',  // White background with opacity
+                            bgcolor: 'rgba(255, 255, 255, 0.85)',
                             textAlign: 'center',
                             color: 'black',
                         }}
                     >
                         <Typography variant="h5" fontWeight="bold">
-                            Welcome to Biomed Waste Management
+                            Welcome to Biomed Recovery & Disposal Ltd.
                         </Typography>
                         <Typography variant="body1" sx={{ mt: 2 }}>
-                            Our mission is to create sustainable waste management solutions for all.
+                            We are the Biohazard Professionals! Serving Saskatchewan, Canada.
                         </Typography>
-                        <Button
-                            variant="outlined"
-                            color="primary"
-                            sx={{ mt: 2 }}
-                        >
+                        <Button variant="outlined" color="primary" sx={{ mt: 2 }}>
                             Learn More
                         </Button>
                     </Box>
                 </Box>
             </Box>
 
-            {/* Service Finder Section */}
-            <Container sx={{ mt: 4, backgroundColor: 'white', borderRadius: 2, p: 3, boxShadow: 3 }}>
-                <Grid container spacing={2} alignItems="center">
-                    <Grid item xs={12} md={8}>
-                        <TextField
-                            label="Find Waste Management Services"
-                            fullWidth
-                            variant="outlined"
-                            sx={{ backgroundColor: '#f9f9f9' }}
-                        />
-                    </Grid>
-                    <Grid item xs={12} md={2}>
-                        <TextField
-                            select
-                            label="For home or business?"
-                            fullWidth
-                            variant="outlined"
-                            value={serviceType}
-                            onChange={handleSelectChange}
-                            sx={{ backgroundColor: '#f9f9f9' }}
-                        >
-                            <MenuItem value="home">Home</MenuItem>
-                            <MenuItem value="business">Business</MenuItem>
-                        </TextField>
-                    </Grid>
-                    <Grid item xs={12} md={2}>
-                        <Button variant="contained" color="success" fullWidth>
-                            Get Started
-                        </Button>
-                    </Grid>
-                </Grid>
-            </Container>
-
-            {/* Services Section */}
+            {/* Services Section with 3D Animation */}
             <Container sx={{ mt: 6 }}>
                 <Grid container spacing={4}>
                     {services.map((service, index) => (
                         <Grid item xs={12} md={4} key={index}>
-                            <Paper elevation={3} sx={{ p: 2, textAlign: 'center', backgroundColor: 'white', borderRadius: 2, boxShadow: 3 }}>
+                            <Paper
+                                elevation={3}
+                                sx={{
+                                    p: 2,
+                                    textAlign: 'center',
+                                    backgroundColor: 'white',
+                                    borderRadius: 2,
+                                    boxShadow: 3,
+                                    cursor: 'pointer',
+                                    '&:hover': {
+                                        animation: `${cardHoverAnimation} 0.6s ease-in-out forwards`,
+                                        boxShadow: '0px 8px 15px rgba(0, 0, 0, 0.3)'
+                                    }
+                                }}
+                            >
                                 <Box sx={{ height: '200px', overflow: 'hidden', borderRadius: 2 }}>
                                     <img src={service.image} alt={service.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                                 </Box>
@@ -160,8 +154,79 @@ function Dashboard() {
                 </Grid>
             </Container>
 
-            <Box sx={{ mt: 4, py: 2, textAlign: 'center', backgroundColor: '#f1f1f1' }}>
-                <Copyright />
+            {/* Footer with Get a Free Quote Section */}
+            <Box sx={{
+                mt: 6,
+                py: 4,
+                backgroundColor: '#f1f1f1',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                textAlign: 'center',
+            }}>
+                <Typography variant="h6" sx={{ mb: 2, fontWeight: 'bold' }}>
+                    Get a Free Quote
+                </Typography>
+                <Container sx={{ backgroundColor: 'white', borderRadius: 2, p: 3, boxShadow: 3 }}>
+                    <Grid container spacing={2}>
+                        <Grid item xs={12} md={6}>
+                            <TextField
+                                label="Name"
+                                fullWidth
+                                variant="outlined"
+                                name="name"
+                                value={quoteData.name}
+                                onChange={handleInputChange}
+                                sx={{ backgroundColor: '#f9f9f9' }}
+                            />
+                        </Grid>
+                        <Grid item xs={12} md={6}>
+                            <TextField
+                                label="Email"
+                                fullWidth
+                                variant="outlined"
+                                name="email"
+                                value={quoteData.email}
+                                onChange={handleInputChange}
+                                sx={{ backgroundColor: '#f9f9f9' }}
+                            />
+                        </Grid>
+                        <Grid item xs={12} md={6}>
+                            <TextField
+                                label="Phone"
+                                fullWidth
+                                variant="outlined"
+                                name="phone"
+                                value={quoteData.phone}
+                                onChange={handleInputChange}
+                                sx={{ backgroundColor: '#f9f9f9' }}
+                            />
+                        </Grid>
+                        <Grid item xs={12} md={6}>
+                            <TextField
+                                select
+                                label="Service Type"
+                                fullWidth
+                                variant="outlined"
+                                name="serviceType"
+                                value={quoteData.serviceType}
+                                onChange={handleInputChange}
+                                sx={{ backgroundColor: '#f9f9f9' }}
+                            >
+                                <MenuItem value="home">Home</MenuItem>
+                                <MenuItem value="business">Business</MenuItem>
+                            </TextField>
+                        </Grid>
+                        <Grid item xs={12}>
+                            <Button variant="contained" color="success" fullWidth onClick={handleSubmit}>
+                                Get Free Quote
+                            </Button>
+                        </Grid>
+                    </Grid>
+                </Container>
+                <Box sx={{ mt: 4 }}>
+                    <Copyright />
+                </Box>
             </Box>
         </Box>
     );
