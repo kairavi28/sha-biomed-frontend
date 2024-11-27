@@ -32,21 +32,6 @@ const Navbar = () => {
         {/* Menu Items */}
         <Box display="flex" alignItems="center" gap={4}>
           {/* Individual Menu Items without Dropdowns */}
-          <Button
-            onClick={() => navigate("/solutions")}
-            sx={{
-              color: "#003366",
-              fontWeight: "bold",
-              textTransform: "none",
-              fontSize: "16px",
-              "&:hover": {
-                color: "#ffffff",
-                backgroundColor: "#0066cc",
-              },
-            }}
-          >
-            Blog Posts
-          </Button>
           {/* <Button
             onClick={() => navigate("/industries")}
             sx={{
@@ -76,6 +61,21 @@ const Navbar = () => {
             }}
           >
             Complaint Services
+          </Button>
+          <Button
+            onClick={() => navigate("/solutions")}
+            sx={{
+              color: "#003366",
+              fontWeight: "bold",
+              textTransform: "none",
+              fontSize: "16px",
+              "&:hover": {
+                color: "#ffffff",
+                backgroundColor: "#0066cc",
+              },
+            }}
+          >
+            Our Blog
           </Button>
           {/* Settings Icon */}
           <IconButton

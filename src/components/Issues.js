@@ -12,12 +12,48 @@ import {
     Dialog,
     DialogContent,
     DialogActions,
+    TextField,
+    MenuItem,
 } from "@mui/material";
+import Link from "@mui/material/Link";
+
+
+function Copyright() {
+    return (
+        <Typography variant="body2" color="textSecondary">
+            {"Copyright © "}
+            <Link color="inherit" href="https://material-ui.com/">
+                Biomed Waste Communication Channel
+            </Link>{" "}
+            {new Date().getFullYear()}
+            {"."}
+        </Typography>
+    );
+}
 
 function Issues() {
     const [issues, setIssues] = useState([]);
     const [selectedIssue, setSelectedIssue] = useState(null); // For popup details
     const [isDialogOpen, setIsDialogOpen] = useState(false); // Controls dialog visibility
+    const [quoteData, setQuoteData] = useState({
+        name: '',
+        email: '',
+        phone: '',
+        serviceType: 'home'
+    });
+
+    const handleInputChange = (event) => {
+        const { name, value } = event.target;
+        setQuoteData(prevState => ({
+            ...prevState,
+            [name]: value
+        }));
+    };
+
+    const handleSubmit = () => {
+        alert(`Thank you, ${quoteData.name}! We will contact you soon with a quote.`);
+        // Here you would typically send quoteData to your backend for processing
+    };
 
     useEffect(() => {
         fetch("http://localhost:5000/api/complaints")
@@ -29,8 +65,8 @@ function Issues() {
     }, []);
 
     const handleViewDetails = (issue) => {
-        setSelectedIssue(issue); 
-        setIsDialogOpen(true); 
+        setSelectedIssue(issue);
+        setIsDialogOpen(true);
     };
 
     const handleCloseDialog = () => {
@@ -41,11 +77,9 @@ function Issues() {
     return (
         <Box
             sx={{
-                background: "linear-gradient(to bottom right, #e0f7fa, #b2ebf2)",
+                background: "linear-gradient(to bottom, white, #b3e0ff, #b3e6b3)",
                 minHeight: "100vh",
-                py: 6,
-                px: 2,
-                display: "flex",
+                pb: 4,
                 justifyContent: "center",
                 alignItems: "center",
             }}
@@ -60,14 +94,16 @@ function Issues() {
                     px: 3,
                 }}
             >
+
                 <Typography
                     variant="h5"
-                    fontWeight="bold"
                     align="center"
+                    fontWeight="bold"
                     sx={{
-                        mb: 4,
+                        mb: 6,
                         color: "#333",
-                        textShadow: "1px 1px 2px rgba(0, 0, 0, 0.3)",
+                        textTransform: "uppercase",
+                        letterSpacing: 1.5,
                     }}
                 >
                     Issues Dashboard
@@ -117,12 +153,12 @@ function Issues() {
                                         variant="body2"
                                         color="text.secondary"
                                         sx={{
-                                            height: "50px",
+                                            height: "20px",
                                             overflow: "hidden",
                                             textOverflow: "ellipsis",
                                         }}
                                     >
-                                        {issue.complaintDescription}
+                                        {issue.description}
                                     </Typography>
                                     <Typography
                                         variant="caption"
@@ -204,7 +240,82 @@ function Issues() {
                     </Button>
                 </DialogActions>
             </Dialog>
-        </Box>
+
+             {/* Footer with Get a Free Quote Section */}
+             <Box sx={{
+                mt: 6,
+                py: 4,
+                backgroundColor: '#f1f1f1',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                textAlign: 'center',
+            }}>
+                <Typography variant="h6" sx={{ mb: 2, fontWeight: 'bold' }}>
+                    Get a Free Quote
+                </Typography>
+                <Container sx={{ backgroundColor: 'white', borderRadius: 2, p: 3, boxShadow: 3 }}>
+                    <Grid container spacing={2}>
+                        <Grid item xs={12} md={6}>
+                            <TextField
+                                label="Name"
+                                fullWidth
+                                variant="outlined"
+                                name="name"
+                                value={quoteData.name}
+                                onChange={handleInputChange}
+                                sx={{ backgroundColor: '#f9f9f9' }}
+                            />
+                        </Grid>
+                        <Grid item xs={12} md={6}>
+                            <TextField
+                                label="Email"
+                                fullWidth
+                                variant="outlined"
+                                name="email"
+                                value={quoteData.email}
+                                onChange={handleInputChange}
+                                sx={{ backgroundColor: '#f9f9f9' }}
+                            />
+                        </Grid>
+                        <Grid item xs={12} md={6}>
+                            <TextField
+                                label="Phone"
+                                fullWidth
+                                variant="outlined"
+                                name="phone"
+                                value={quoteData.phone}
+                                onChange={handleInputChange}
+                                sx={{ backgroundColor: '#f9f9f9' }}
+                            />
+                        </Grid>
+                        <Grid item xs={12} md={6}>
+                            <TextField
+                                select
+                                label="Service Type"
+                                fullWidth
+                                variant="outlined"
+                                name="serviceType"
+                                value={quoteData.serviceType}
+                                onChange={handleInputChange}
+                                sx={{ backgroundColor: '#f9f9f9' }}
+                            >
+                                <MenuItem value="home">Home</MenuItem>
+                                <MenuItem value="business">Business</MenuItem>
+                            </TextField>
+                        </Grid>
+                        <Grid item xs={12}>
+                            <Button variant="contained" color="success" fullWidth onClick={handleSubmit}>
+                                Get Free Quote
+                            </Button>
+                        </Grid>
+                    </Grid>
+                </Container>
+                <Box sx={{ mt: 4 }}>
+                    <Copyright />
+                </Box>
+            </Box>
+        </Box >
     );
 }
 
