@@ -1,135 +1,144 @@
 import React, { useState, useEffect } from "react";
-import { Box, Typography, Container, Grid, Paper } from "@mui/material";
-import { keyframes } from '@emotion/react';
-import AwesomeSlider from 'react-awesome-slider';
-import 'react-awesome-slider/dist/styles.css';
+import {
+  Box,
+  Typography,
+  Container,
+  Grid,
+  Card,
+  CardContent,
+  CardMedia,
+  CardActions,
+  Button,
+} from "@mui/material";
 
-const cardHoverAnimation = keyframes`
-    from {
-        transform: scale(1) rotateY(0deg);
-    }
-    to {
-        transform: scale(1.05) rotateY(10deg);
-    }
-`;
+function Issues() {
+  const [issues, setIssues] = useState([]);
 
-function Support() {
-    const [slackData, setSlackData] = useState([]);
+  useEffect(() => {
+    fetch("http://localhost:5000/api/complaints")
+      .then((response) => response.json())
+      .then((data) => {
+        setIssues(data);
+      })
+      .catch((err) => console.error("Error fetching issues:", err));
+  }, []);
 
-    useEffect(() => {
-        fetch('http://localhost:5000/api/messages/images')
-            .then(response => response.json())
-            .then(data => {
-                console.log('here is the data');
-                console.log(data[0].images[0].imageUrl);
-                setSlackData(data);
-            })
-            .catch(error => console.error("Error fetching Slack data:", error));
-    }, []);
-
-    return (
-        <Box sx={{
-            background: 'linear-gradient(to bottom, white, #b3e0ff, #b3e6b3)',
-            minHeight: '100vh',
-            pb: 4,
-            overflowX: 'hidden'
-        }}>
-            <Box display="flex" justifyContent="center" sx={{ pt: 4 }}>
-                <Box
-                    display="flex"
-                    justifyContent="space-between"
-                    sx={{
-                        width: { xs: '90%', md: '60%' },
-                        height: '380px',
-                        borderRadius: 2,
-                        overflow: 'hidden',
-                        boxShadow: 3,
-                        background: 'linear-gradient(to bottom, #ffffff, #a7d8e8, #d4f7d1)',
-                        transform: 'translateY(-10px)'
-                    }}
+  return (
+    <Box
+      sx={{
+        background: "linear-gradient(to bottom right, #e0f7fa, #b2ebf2)",
+        minHeight: "100vh",
+        py: 6,
+        px: 2,
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+    >
+      <Container
+        maxWidth="lg"
+        sx={{
+          background: "rgba(255, 255, 255, 0.85)",
+          borderRadius: 4,
+          boxShadow: "0px 10px 20px rgba(0, 0, 0, 0.1)",
+          py: 4,
+          px: 3,
+        }}
+      >
+        <Typography
+          variant="h5"
+          fontWeight="bold"
+          align="center"
+          sx={{
+            mb: 4,
+            color: "#333",
+            textShadow: "1px 1px 2px rgba(0, 0, 0, 0.3)",
+          }}
+        >
+          Issues Dashboard
+        </Typography>
+        <Grid container spacing={4}>
+          {issues.map((issue, index) => (
+            <Grid item xs={12} sm={6} md={4} key={index}>
+              <Card
+                sx={{
+                  maxWidth: 345,
+                  backdropFilter: "blur(10px)",
+                  background: "rgba(255, 255, 255, 0.7)",
+                  borderRadius: 4,
+                  overflow: "hidden",
+                  transition: "transform 0.3s, box-shadow 0.3s",
+                  boxShadow: "0px 6px 12px rgba(0, 0, 0, 0.1)",
+                  "&:hover": {
+                    transform: "scale(1.1)",
+                    boxShadow: "0px 10px 25px rgba(0, 0, 0, 0.2)",
+                  },
+                }}
+              >
+                <CardMedia
+                  component="img"
+                  height="180"
+                  image={issue.image}
+                  alt="Issue Image"
+                  sx={{
+                    objectFit: "cover",
+                  }}
+                />
+                <CardContent
+                  sx={{
+                    p: 3,
+                    textAlign: "center",
+                  }}
                 >
-                    <Box sx={{ flex: 1 }}>
-                        <AwesomeSlider style={{ height: '100%', borderRadius: 2 }} animation="cubeAnimation">
-                            {slackData.map((item, index) => (
-                                <div key={index} style={{ marginBottom: '20px' }}>
-                                    <p><strong>{item.username}</strong>: {item.text}</p>
-                                    <p><small>{new Date(item.timestamp).toLocaleString()}</small></p>
-                                    {item.images.map((image, imgIndex) => (
-                                        // <img
-                                        //     src={image.imageUrl}
-                                        //     key={imgIndex}
-                                        //     alt={image.title}
-                                        //     style={{ width: '100%', height: 'auto', objectFit: 'cover' }}
-                                        // />
-                                        <img
-                                            src="https://files.slack.com/files-pri/T07LNU99Q1F-F081NL52NDS/ss-web4.png"
-                                            alt="Slack Image"
-                                            crossOrigin="use-credentials"
-                                            style={{ width: '100%', height: 'auto', objectFit: 'cover' }}
-                                        />
-                                    ))}
-                                </div>
-                            ))}
-                        </AwesomeSlider>
-                    </Box>
-                    <Box
-                        sx={{
-                            flex: 1,
-                            p: 2,
-                            display: 'flex',
-                            flexDirection: 'column',
-                            justifyContent: 'center',
-                            bgcolor: 'rgba(255, 255, 255, 0.85)',
-                            textAlign: 'center',
-                            color: 'black',
-                        }}
-                    >
-                        <Typography variant="h5" fontWeight="bold">
-                            Slack Data
-                        </Typography>
-                        <Typography variant="body1" sx={{ mt: 2 }}>
-                            Latest updates from Slack.
-                        </Typography>
-                    </Box>
-                </Box>
-            </Box>
-
-            {/* Display Slack Data in Cards */}
-            <Container sx={{ mt: 6 }}>
-                <Grid container spacing={4}>
-                    {slackData.map((item, index) => (
-                        <Grid item xs={12} md={4} key={index}>
-                            <Paper
-                                elevation={3}
-                                sx={{
-                                    p: 2,
-                                    textAlign: 'center',
-                                    backgroundColor: 'white',
-                                    borderRadius: 2,
-                                    boxShadow: 3,
-                                    cursor: 'pointer',
-                                    '&:hover': {
-                                        animation: `${cardHoverAnimation} 0.6s ease-in-out forwards`,
-                                        boxShadow: '0px 8px 15px rgba(0, 0, 0, 0.3)'
-                                    }
-                                }}
-                            >
-                                <Box sx={{ height: '200px', overflow: 'hidden', borderRadius: 2 }}>
-                                    {/* {item.images.map((image, index) => (
-                                        <img key={index} src={image.imageUrl} alt={item.text} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                                    ))} */}
-                                    <img src={item.images[0].imageUrl} alt={item.text} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                                </Box>
-                                <Typography variant="h6" sx={{ mt: 2, fontWeight: 'bold' }}>
-                                    {item.text}
-                                </Typography>
-                            </Paper>
-                        </Grid>
-                    ))}
-                </Grid>
-            </Container>
-        </Box>
-    );
+                  <Typography
+                    variant="h6"
+                    component="div"
+                    fontWeight="bold"
+                    sx={{ mb: 1, color: "#00796b" }}
+                  >
+                    {issue.facility}
+                  </Typography>
+                  <Typography
+                    variant="body2"
+                    color="text.secondary"
+                    sx={{
+                      height: "50px",
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                    }}
+                  >
+                    {issue.complaintDescription}
+                  </Typography>
+                  <Typography
+                    variant="caption"
+                    display="block"
+                    sx={{ mt: 1, color: "#757575" }}
+                  >
+                    {new Date(issue.createdAt).toLocaleString()}
+                  </Typography>
+                </CardContent>
+                <CardActions sx={{ justifyContent: "center", pb: 2 }}>
+                  <Button
+                    size="small"
+                    variant="contained"
+                    sx={{
+                      background: "linear-gradient(to right, #00796b, #48a999)",
+                      color: "#fff",
+                      "&:hover": {
+                        background: "linear-gradient(to right, #00574b, #327e67)",
+                      },
+                    }}
+                  >
+                    View Details
+                  </Button>
+                </CardActions>
+              </Card>
+            </Grid>
+          ))}
+        </Grid>
+      </Container>
+    </Box>
+  );
 }
 
-export default Support;
+export default Issues;

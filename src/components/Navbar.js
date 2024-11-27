@@ -6,7 +6,7 @@ import {
   Box,
   IconButton,
 } from "@mui/material";
-import { Settings } from "@mui/icons-material"; 
+import { Settings } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import logo from "../assets/images/logo.png";
 
@@ -45,7 +45,7 @@ const Navbar = () => {
               },
             }}
           >
-            Our Solutions
+            Blog Posts
           </Button>
           {/* <Button
             onClick={() => navigate("/industries")}
@@ -77,7 +77,6 @@ const Navbar = () => {
           >
             Complaint Services
           </Button>
-
           {/* Settings Icon */}
           <IconButton
             sx={{
