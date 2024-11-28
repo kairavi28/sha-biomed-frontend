@@ -127,7 +127,7 @@ function BlogPage() {
         >
           Explore Our Blogs
         </Typography>
-        <Grid container spacing={4}>
+        <Grid container spacing={6}>
           {blogs.map((blog) => (
             <Grid item xs={12} sm={6} md={4} key={blog.id}>
               <Paper
@@ -155,7 +155,7 @@ function BlogPage() {
                     mb: 2,
                   }}
                 >
-                  <img
+                  <img   
                     src={blog.image}
                     alt={blog.title}
                     style={{ width: "100%", height: "100%", objectFit: "cover" }}
