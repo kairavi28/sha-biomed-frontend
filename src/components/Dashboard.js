@@ -142,7 +142,7 @@ function Dashboard() {
         <Box sx={{
             background: 'linear-gradient(to bottom, white, #b3e0ff, #b3e6b3)',
             minHeight: '100vh',
-            pb: 4,
+            pb: 1,
             overflowX: 'hidden'
         }}>
             {/* Slider Section with Animation */}
@@ -314,7 +314,7 @@ function Dashboard() {
                         </Grid>
                     </Grid>
                 </Container>
-                <Box sx={{ mt: 4 }}>
+                <Box sx={{ mt: 4 } }>
                     <Copyright />
                 </Box>
             </Box>

@@ -140,7 +140,7 @@ function Issues() {
             sx={{
                 background: "linear-gradient(to bottom, white, #b3e0ff, #b3e6b3)",
                 minHeight: "100vh",
-                pb: 4,
+                pb: 1,
                 justifyContent: "center",
                 alignItems: "center",
             }}

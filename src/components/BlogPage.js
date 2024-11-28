@@ -134,7 +134,7 @@ function BlogPage() {
   }
 
   return (
-    <Box sx={{ background: 'linear-gradient(to bottom, white, #b3e0ff, #b3e6b3)', minHeight: "100vh", pb: 4, overflowX: 'hidden' }}>
+    <Box sx={{ background: 'linear-gradient(to bottom, white, #b3e0ff, #b3e6b3)', minHeight: "100vh", pb: 1, overflowX: 'hidden' }}>
       <Container>
         <Typography
           variant="h5"
