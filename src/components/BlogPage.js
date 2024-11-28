@@ -71,26 +71,26 @@ function BlogPage() {
   useEffect(() => {
     let intervalId;
     if (autoReload) {
-      setLoading(true); 
+      setLoading(true);
       axios
         .get("http://localhost:5000/api/blogs")
         .then((response) => {
           setBlogs(response.data);
-          setLoading(false); 
+          setLoading(false);
         })
         .catch(() => {
           setError("Failed to load blogs. Please try again.");
-          setLoading(false); 
+          setLoading(false);
         });
-      
+
       intervalId = setInterval(() => {
         window.location.reload();
       }, 10000);
     }
-  
+
     return () => clearInterval(intervalId);
   }, [autoReload]);
-  
+
 
   const handleOpen = (blog) => {
     setSelectedBlog(blog);
@@ -116,7 +116,7 @@ function BlogPage() {
     );
   }
 
-  
+
   if (error) {
     return (
       <Box
@@ -190,7 +190,7 @@ function BlogPage() {
                     sx={{
                       fontWeight: "bold",
                       mb: 1,
-                      color: "#444",
+                      color: "#00796b",
                       textOverflow: "ellipsis",
                       overflow: "hidden",
                       whiteSpace: "nowrap",
@@ -221,9 +221,11 @@ function BlogPage() {
                   variant="contained"
                   fullWidth
                   sx={{
-                    background: "#3f51b5",
+                    background: "linear-gradient(to right, #00796b, #48a999)",
                     color: "#fff",
-                    "&:hover": { background: "#2c387e" },
+                    "&:hover": {
+                      background: "linear-gradient(to right, #00574b, #327e67)",
+                    },
                   }}
                   onClick={() => handleOpen(blog)}
                 >
@@ -278,7 +280,13 @@ function BlogPage() {
               <Button
                 onClick={handleClose}
                 variant="contained"
-                sx={{ background: "#3f51b5", "&:hover": { background: "#2c387e" } }}
+                sx={{
+                  background: "linear-gradient(to right, #00796b, #48a999)",
+                  color: "#fff",
+                  "&:hover": {
+                    background: "linear-gradient(to right, #00574b, #327e67)",
+                  },
+                }}
               >
                 Close
               </Button>
@@ -352,7 +360,18 @@ function BlogPage() {
               </TextField>
             </Grid>
             <Grid item xs={12}>
-              <Button variant="contained" color="success" fullWidth onClick={handleSubmit}>
+              <Button
+                variant="contained"
+                fullWidth
+                onClick={handleSubmit}
+                sx={{
+                  background: "linear-gradient(to right, #00796b, #48a999)",
+                  color: "#fff",
+                  "&:hover": {
+                    background: "linear-gradient(to right, #00574b, #327e67)",
+                  },
+                }}
+              >
                 Get Free Quote
               </Button>
             </Grid>

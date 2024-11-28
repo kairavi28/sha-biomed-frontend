@@ -9,7 +9,7 @@ import {
     Button,
     TextField,
     MenuItem
-  } from "@mui/material";
+} from "@mui/material";
 import AwesomeSlider from 'react-awesome-slider';
 import 'react-awesome-slider/dist/styles.css';
 import { keyframes } from '@emotion/react';
@@ -184,7 +184,13 @@ function Dashboard() {
                         <Typography variant="body1" sx={{ mt: 2 }}>
                             We are the Biohazard Professionals! Serving Saskatchewan, Canada.
                         </Typography>
-                        <Button variant="outlined" color="primary" sx={{ mt: 2 }}>
+                        <Button variant="outlined" color="primary" sx={{
+                            background: "linear-gradient(to right, #00796b, #48a999)",
+                            color: "#fff",
+                            "&:hover": {
+                                background: "linear-gradient(to right, #00574b, #327e67)",
+                            },
+                        }}>
                             Learn More
                         </Button>
                     </Box>
@@ -290,7 +296,19 @@ function Dashboard() {
                             </TextField>
                         </Grid>
                         <Grid item xs={12}>
-                            <Button variant="contained" color="success" fullWidth onClick={handleSubmit}>
+
+                            <Button
+                                variant="contained"
+                                fullWidth
+                                onClick={handleSubmit}
+                                sx={{
+                                    background: "linear-gradient(to right, #00796b, #48a999)",
+                                    color: "#fff",
+                                    "&:hover": {
+                                        background: "linear-gradient(to right, #00574b, #327e67)",
+                                    },
+                                }}
+                            >
                                 Get Free Quote
                             </Button>
                         </Grid>

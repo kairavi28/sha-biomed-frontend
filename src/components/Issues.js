@@ -148,11 +148,11 @@ function Issues() {
             <Container
                 maxWidth="lg"
                 sx={{
-                    background: "rgba(255, 255, 255, 0.85)",
+                   // background: "",
                     borderRadius: 4,
                     boxShadow: "0px 10px 20px rgba(0, 0, 0, 0.1)",
                     py: 4,
-                    px: 3,
+                    px: 4,
                 }}
             >
 
@@ -366,7 +366,18 @@ function Issues() {
                             </TextField>
                         </Grid>
                         <Grid item xs={12}>
-                            <Button variant="contained" color="success" fullWidth onClick={handleSubmit}>
+                        <Button
+                                variant="contained"
+                                fullWidth
+                                onClick={handleSubmit}
+                                sx={{
+                                    background: "linear-gradient(to right, #00796b, #48a999)",
+                                    color: "#fff",
+                                    "&:hover": {
+                                        background: "linear-gradient(to right, #00574b, #327e67)",
+                                    },
+                                }}
+                            >
                                 Get Free Quote
                             </Button>
                         </Grid>
