@@ -63,7 +63,7 @@ const Navbar = () => {
             Complaint Services
           </Button>
           <Button
-            onClick={() => navigate("/solutions")}
+            onClick={() => navigate("/blogs")}
             sx={{
               color: "#003366",
               fontWeight: "bold",
