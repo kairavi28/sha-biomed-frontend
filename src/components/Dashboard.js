@@ -1,12 +1,15 @@
-import React, { useState } from "react";
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
-import TextField from '@mui/material/TextField';
-import MenuItem from '@mui/material/MenuItem';
-import Container from '@mui/material/Container';
-import Grid from '@mui/material/Grid';
-import Paper from '@mui/material/Paper';
+import React, { useState, useEffect } from "react";
+import {
+    Box,
+    Typography,
+    Container,
+    Grid,
+    Paper,
+    CircularProgress,
+    Button,
+    TextField,
+    MenuItem
+  } from "@mui/material";
 import AwesomeSlider from 'react-awesome-slider';
 import 'react-awesome-slider/dist/styles.css';
 import { keyframes } from '@emotion/react';
@@ -15,6 +18,7 @@ import image_1 from '../assets/images/1.jpg';
 import image_2 from '../assets/images/2.jpg';
 import image_3 from '../assets/images/3.jpg';
 import Link from "@mui/material/Link";
+import axios from "axios";
 
 function Copyright() {
     return (
@@ -52,6 +56,10 @@ function Dashboard() {
         phone: '',
         serviceType: 'home'
     });
+    const [loading, setLoading] = useState(true);  // eslint-disable-line no-unused-vars
+    const [autoReload, setAutoReload] = useState(true);
+
+    const [error, setError] = useState("");
 
     const handleInputChange = (event) => {
         const { name, value } = event.target;
@@ -62,9 +70,73 @@ function Dashboard() {
     };
 
     const handleSubmit = () => {
-        alert(`Thank you, ${quoteData.name}! We will contact you soon with a quote.`);
-        // Here you would typically send quoteData to your backend for processing
+        if (!quoteData.name || !quoteData.email || !quoteData.phone) {
+            alert("Please fill in all fields.");
+            return;
+        }
+
+        axios.post("http://localhost:5000/api/quotes", quoteData)
+            .then(() => {
+                alert(`Thank you, ${quoteData.name}! We will contact you soon.`);
+                setQuoteData({ name: '', email: '', phone: '', serviceType: 'home' });
+            })
+            .catch(() => {
+                alert("There was an error submitting your quote. Please try again.");
+            });
     };
+
+    useEffect(() => {
+        let intervalId;
+        if (autoReload) {
+            setLoading(true);
+            axios
+                .get("http://localhost:5000/api/blogs")
+                .then((response) => {
+                    //setBlogs(response.data);
+                    setLoading(false);
+                })
+                .catch(() => {
+                    setError("Failed to load blogs. Please try again.");
+                    setLoading(false);
+                });
+
+            intervalId = setInterval(() => {
+                window.location.reload();
+            }, 10000);
+        }
+
+        return () => clearInterval(intervalId);
+    }, [autoReload]);
+
+    if (loading) {
+        return (
+            <Box
+                display="flex"
+                justifyContent="center"
+                alignItems="center"
+                height="100vh"
+                sx={{ background: "#f3f4f6" }}
+            >
+                <CircularProgress />
+            </Box>
+        );
+    }
+
+    if (error) {
+        return (
+            <Box
+                display="flex"
+                justifyContent="center"
+                alignItems="center"
+                height="100vh"
+                sx={{ background: "#f8d7da" }}
+            >
+                <Typography variant="h6" color="error">
+                    {error}
+                </Typography>
+            </Box>
+        );
+    }
 
     return (
         <Box sx={{
@@ -228,6 +300,9 @@ function Dashboard() {
                     <Copyright />
                 </Box>
             </Box>
+            <button onClick={() => setAutoReload(!autoReload)}>
+                {autoReload ? "Pause Auto-Reload" : "Resume Auto-Reload"}
+            </button>
         </Box>
     );
 }

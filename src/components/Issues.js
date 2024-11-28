@@ -6,6 +6,7 @@ import {
     Grid,
     Card,
     CardContent,
+    CircularProgress,
     CardMedia,
     CardActions,
     Button,
@@ -15,6 +16,7 @@ import {
     TextField,
     MenuItem,
 } from "@mui/material";
+import axios from "axios";
 import Link from "@mui/material/Link";
 
 
@@ -33,6 +35,9 @@ function Copyright() {
 
 function Issues() {
     const [issues, setIssues] = useState([]);
+    const [autoReload, setAutoReload] = useState(true);
+    const [error, setError] = useState("");
+    const [loading, setLoading] = useState(true);   // eslint-disable-line no-unused-vars
     const [selectedIssue, setSelectedIssue] = useState(null); // For popup details
     const [isDialogOpen, setIsDialogOpen] = useState(false); // Controls dialog visibility
     const [quoteData, setQuoteData] = useState({
@@ -51,18 +56,44 @@ function Issues() {
     };
 
     const handleSubmit = () => {
-        alert(`Thank you, ${quoteData.name}! We will contact you soon with a quote.`);
-        // Here you would typically send quoteData to your backend for processing
+        if (!quoteData.name || !quoteData.email || !quoteData.phone) {
+            alert("Please fill in all fields.");
+            return;
+        }
+
+        axios.post("http://localhost:5000/api/quotes", quoteData)
+            .then(() => {
+                alert(`Thank you, ${quoteData.name}! We will contact you soon.`);
+                setQuoteData({ name: '', email: '', phone: '', serviceType: 'home' });
+            })
+            .catch(() => {
+                alert("There was an error submitting your quote. Please try again.");
+            });
     };
 
+
     useEffect(() => {
-        fetch("http://localhost:5000/api/complaints")
-            .then((response) => response.json())
-            .then((data) => {
-                setIssues(data);
-            })
-            .catch((err) => console.error("Error fetching issues:", err));
-    }, []);
+        let intervalId;
+        if (autoReload) {
+            setLoading(true);
+            axios
+                .get("http://localhost:5000/api/complaints")
+                .then((response) => {
+                    setIssues(response.data);
+                    setLoading(false);
+                })
+                .catch(() => {
+                    setError("Failed to load blogs. Please try again.");
+                    setLoading(false);
+                });
+
+            intervalId = setInterval(() => {
+                window.location.reload();
+            }, 10000);
+        }
+
+        return () => clearInterval(intervalId);
+    }, [autoReload]);
 
     const handleViewDetails = (issue) => {
         setSelectedIssue(issue);
@@ -73,6 +104,36 @@ function Issues() {
         setIsDialogOpen(false);
         setSelectedIssue(null);
     };
+
+    if (loading) {
+        return (
+          <Box
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+            height="100vh"
+            sx={{ background: "#f3f4f6" }}
+          >
+            <CircularProgress />
+          </Box>
+        );
+      }
+    
+      if (error) {
+        return (
+          <Box
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+            height="100vh"
+            sx={{ background: "#f8d7da" }}
+          >
+            <Typography variant="h6" color="error">
+              {error}
+            </Typography>
+          </Box>
+        );
+      }
 
     return (
         <Box
@@ -241,8 +302,8 @@ function Issues() {
                 </DialogActions>
             </Dialog>
 
-             {/* Footer with Get a Free Quote Section */}
-             <Box sx={{
+            {/* Footer with Get a Free Quote Section */}
+            <Box sx={{
                 mt: 6,
                 py: 4,
                 backgroundColor: '#f1f1f1',
@@ -315,6 +376,9 @@ function Issues() {
                     <Copyright />
                 </Box>
             </Box>
+            <button onClick={() => setAutoReload(!autoReload)}>
+                {autoReload ? "Pause Auto-Reload" : "Resume Auto-Reload"}
+            </button>
         </Box >
     );
 }

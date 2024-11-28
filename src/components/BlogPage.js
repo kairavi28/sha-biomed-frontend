@@ -32,7 +32,8 @@ function Copyright() {
 
 function BlogPage() {
   const [blogs, setBlogs] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [autoReload, setAutoReload] = useState(true);
+  const [loading, setLoading] = useState(true);  // eslint-disable-line no-unused-vars
   const [error, setError] = useState("");
   const [open, setOpen] = useState(false);
   const [selectedBlog, setSelectedBlog] = useState(null);
@@ -52,24 +53,44 @@ function BlogPage() {
   };
 
   const handleSubmit = () => {
-    alert(`Thank you, ${quoteData.name}! We will contact you soon with a quote.`);
-    // Here you would typically send quoteData to your backend for processing
-  };
+    if (!quoteData.name || !quoteData.email || !quoteData.phone) {
+      alert("Please fill in all fields.");
+      return;
+    }
 
-
-  useEffect(() => {
-    // Fetch blog data from the backend
-    axios
-      .get("http://localhost:5000/api/blogs")
-      .then((response) => {
-        setBlogs(response.data);
-        setLoading(false);
+    axios.post("http://localhost:5000/api/quotes", quoteData)
+      .then(() => {
+        alert(`Thank you, ${quoteData.name}! We will contact you soon.`);
+        setQuoteData({ name: '', email: '', phone: '', serviceType: 'home' });
       })
       .catch(() => {
-        setError("Failed to load blogs. Please try again.");
-        setLoading(false);
+        alert("There was an error submitting your quote. Please try again.");
       });
-  }, []);
+  };
+
+  useEffect(() => {
+    let intervalId;
+    if (autoReload) {
+      setLoading(true); 
+      axios
+        .get("http://localhost:5000/api/blogs")
+        .then((response) => {
+          setBlogs(response.data);
+          setLoading(false); 
+        })
+        .catch(() => {
+          setError("Failed to load blogs. Please try again.");
+          setLoading(false); 
+        });
+      
+      intervalId = setInterval(() => {
+        window.location.reload();
+      }, 10000);
+    }
+  
+    return () => clearInterval(intervalId);
+  }, [autoReload]);
+  
 
   const handleOpen = (blog) => {
     setSelectedBlog(blog);
@@ -95,6 +116,7 @@ function BlogPage() {
     );
   }
 
+  
   if (error) {
     return (
       <Box
@@ -155,10 +177,11 @@ function BlogPage() {
                     mb: 2,
                   }}
                 >
-                  <img   
+                  <img
                     src={blog.image}
                     alt={blog.title}
                     style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                    loading="lazy"
                   />
                 </Box>
                 <Box sx={{ flexGrow: 1 }}>
@@ -218,18 +241,11 @@ function BlogPage() {
             onClose={handleClose}
             maxWidth="md"
             fullWidth
-            sx={{ "& .MuiDialog-paper": { borderRadius: 3 } }}
+            aria-labelledby="blog-dialog-title"
+            aria-describedby="blog-dialog-description"
           >
-            <DialogTitle
-              sx={{
-                fontWeight: "bold",
-                color: "#333",
-                textAlign: "center",
-              }}
-            >
-              {selectedBlog.title}
-            </DialogTitle>
-            <DialogContent dividers>
+            <DialogTitle id="blog-dialog-title">{selectedBlog.title}</DialogTitle>
+            <DialogContent id="blog-dialog-description">
               <Box
                 sx={{
                   mb: 3,
@@ -346,6 +362,9 @@ function BlogPage() {
           <Copyright />
         </Box>
       </Box>
+      <button onClick={() => setAutoReload(!autoReload)}>
+        {autoReload ? "Pause Auto-Reload" : "Resume Auto-Reload"}
+      </button>
     </Box>
   );
 }
