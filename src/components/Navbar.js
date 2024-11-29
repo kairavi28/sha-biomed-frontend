@@ -56,7 +56,7 @@ const Navbar = () => {
               fontSize: "16px",
               "&:hover": {
                 color: "#ffffff",
-                backgroundColor: "#0066cc",
+                backgroundColor: "#C9CC3F",
               },
             }}
           >
@@ -71,7 +71,7 @@ const Navbar = () => {
               fontSize: "16px",
               "&:hover": {
                 color: "#ffffff",
-                backgroundColor: "#0066cc",
+                backgroundColor: "#C9CC3F",
               },
             }}
           >
@@ -83,7 +83,7 @@ const Navbar = () => {
               color: "#003366",
               "&:hover": {
                 color: "#ffffff",
-                backgroundColor: "#0066cc",
+                backgroundColor: "#C9CC3F",
               },
             }}
             onClick={() => navigate("/settings")}
