@@ -23,6 +23,14 @@ function Issues() {
     const [error, setError] = useState("");
     const [selectedIssue, setSelectedIssue] = useState(null);
     const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+    const [imageFile, setImageFile] = useState(null); // For image file in edit
+    const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
+    const [newIssue, setNewIssue] = useState({
+        facility: "",
+        description: "",
+        image: "",
+    });
+    const [newImageFile, setNewImageFile] = useState(null); // For image file in add
 
     useEffect(() => {
         fetchIssues();
@@ -34,7 +42,6 @@ function Issues() {
             .get("http://localhost:5000/api/complaints")
             .then((response) => {
                 setIssues(response.data);
-                console.log(response.data);
                 setLoading(false);
             })
             .catch(() => {
@@ -43,8 +50,10 @@ function Issues() {
             });
     };
 
+    // Handle edit dialog open/close
     const handleEdit = (issue) => {
         setSelectedIssue(issue);
+        setImageFile(null); 
         setIsEditDialogOpen(true);
     };
 
@@ -61,20 +70,108 @@ function Issues() {
         }));
     };
 
-    const handleSaveEdit = () => {
+    const handleEditImageChange = (event) => {
+        const file = event.target.files[0];
+        setImageFile(file);
+    };
+
+    const handleSaveEdit = async () => {
         if (!selectedIssue.facility || !selectedIssue.description) {
             alert("Please fill in all required fields.");
             return;
         }
+
+        let imageUrl = selectedIssue.image;
+
+        if (imageFile) {
+            const formData = new FormData();
+            formData.append("image", imageFile);
+
+            try {
+                const uploadResponse = await axios.post(
+                    "http://localhost:5000/api/upload",
+                    formData,
+                    { headers: { "Content-Type": "multipart/form-data" } }
+                );
+                imageUrl = uploadResponse.data.imageUrl;
+            } catch (err) {
+                alert("Error uploading image. Please try again.");
+                return;
+            }
+        }
+
+        const updatedIssue = { ...selectedIssue, image: imageUrl };
         axios
-            .put(`http://localhost:5000/api/complaints/${selectedIssue._id}`, selectedIssue)
+            .put(`http://localhost:5000/api/complaints/${selectedIssue._id}`, updatedIssue)
             .then(() => {
                 alert("Issue updated successfully!");
                 fetchIssues();
                 handleCloseEditDialog();
             })
             .catch(() => {
-                alert("There was an error updating the issue. Please try again.");
+                alert("Error updating the issue. Please try again.");
+            });
+    };
+
+    // Handle add new issue
+    const handleOpenAddDialog = () => {
+        setIsAddDialogOpen(true);
+    };
+
+    const handleCloseAddDialog = () => {
+        setIsAddDialogOpen(false);
+        setNewIssue({ facility: "", description: "", image: "" });
+        setNewImageFile(null);
+    };
+
+    const handleAddInputChange = (event) => {
+        const { name, value } = event.target;
+        setNewIssue((prev) => ({
+            ...prev,
+            [name]: value,
+        }));
+    };
+
+    const handleAddImageChange = (event) => {
+        const file = event.target.files[0];
+        setNewImageFile(file);
+    };
+
+    const handleAddNewIssue = async () => {
+        if (!newIssue.facility || !newIssue.description) {
+            alert("Please fill in all required fields.");
+            return;
+        }
+
+        let imageUrl = "";
+
+        if (newImageFile) {
+            const formData = new FormData();
+            formData.append("image", newImageFile);
+
+            try {
+                const uploadResponse = await axios.post(
+                    "http://localhost:5000/api/upload",
+                    formData,
+                    { headers: { "Content-Type": "multipart/form-data" } }
+                );
+                imageUrl = uploadResponse.data.imageUrl;
+            } catch (err) {
+                alert("Error uploading image. Please try again.");
+                return;
+            }
+        }
+
+        const newIssueData = { ...newIssue, image: imageUrl };
+        axios
+            .post("http://localhost:5000/api/complaints", newIssueData)
+            .then(() => {
+                alert("New issue added successfully!");
+                fetchIssues();
+                handleCloseAddDialog();
+            })
+            .catch(() => {
+                alert("Error adding new issue. Please try again.");
             });
     };
 
@@ -85,7 +182,6 @@ function Issues() {
                 justifyContent="center"
                 alignItems="center"
                 height="100vh"
-                sx={{ background: "#f3f4f6" }}
             >
                 <CircularProgress />
             </Box>
@@ -99,7 +195,6 @@ function Issues() {
                 justifyContent="center"
                 alignItems="center"
                 height="100vh"
-                sx={{ background: "#f8d7da" }}
             >
                 <Typography variant="h6" color="error">
                     {error}
@@ -109,26 +204,22 @@ function Issues() {
     }
 
     return (
-        <Box
-            sx={{
-                background: "linear-gradient(to bottom, white, #b3e0ff, #b3e6b3)",
-                minHeight: "100vh",
-                pb: 1,
-            }}
-        >
+        <Box sx={{ background: "#f3f4f6", minHeight: "100vh" }}>
             <Container maxWidth="lg" sx={{ py: 4 }}>
-                <Typography
-                    variant="h5"
-                    align="center"
-                    fontWeight="bold"
-                    sx={{ mb: 6, color: "#333" }}
-                >
+                <Typography variant="h5" align="center" sx={{ mb: 4 }}>
                     Admin Issues Dashboard
                 </Typography>
+                <Button
+                    variant="contained"
+                    onClick={handleOpenAddDialog}
+                    sx={{ mb: 4 }}
+                >
+                    Add New Issue
+                </Button>
                 <Grid container spacing={4}>
                     {issues.map((issue, index) => (
                         <Grid item xs={12} sm={6} md={4} key={index}>
-                            <Card sx={{ maxWidth: 345, borderRadius: 4 }}>
+                            <Card>
                                 <CardMedia
                                     component="img"
                                     height="180"
@@ -136,34 +227,11 @@ function Issues() {
                                     alt="Issue Image"
                                 />
                                 <CardContent>
-                                    <Typography
-                                        variant="h6"
-                                        component="div"
-                                        fontWeight="bold"
-                                    >
-                                        {issue.facility}
-                                    </Typography>
-                                    <Typography
-                                        variant="body2"
-                                        color="text.secondary"
-                                    >
-                                        {issue.description}
-                                    </Typography>
+                                    <Typography variant="h6">{issue.facility}</Typography>
+                                    <Typography>{issue.description}</Typography>
                                 </CardContent>
                                 <CardActions>
-                                    <Button
-                                        size="small"
-                                        variant="contained"
-                                        onClick={() => handleEdit(issue)}
-                                        sx={{
-                                            background: "linear-gradient(to right, #00796b, #48a999)",
-                                            color: "#fff",
-                                            "&:hover": {
-                                                background:
-                                                    "linear-gradient(to right, #00574b, #327e67)",
-                                            },
-                                        }}
-                                    >
+                                    <Button onClick={() => handleEdit(issue)}>
                                         Edit
                                     </Button>
                                 </CardActions>
@@ -182,16 +250,9 @@ function Issues() {
                     <DialogContent>
                         {selectedIssue && (
                             <>
-                                <Typography
-                                    variant="h6"
-                                    sx={{ fontWeight: "bold", mb: 2 }}
-                                >
-                                    Edit Issue
-                                </Typography>
                                 <TextField
                                     label="Facility"
                                     fullWidth
-                                    variant="outlined"
                                     name="facility"
                                     value={selectedIssue.facility}
                                     onChange={handleEditInputChange}
@@ -200,44 +261,60 @@ function Issues() {
                                 <TextField
                                     label="Description"
                                     fullWidth
-                                    variant="outlined"
                                     name="description"
                                     value={selectedIssue.description}
                                     onChange={handleEditInputChange}
                                     sx={{ mb: 2 }}
                                 />
-                                <TextField
-                                    label="Image URL"
-                                    fullWidth
-                                    variant="outlined"
-                                    name="image"
-                                    value={selectedIssue.image}
-                                    onChange={handleEditInputChange}
-                                    sx={{ mb: 2 }}
+                                <Typography sx={{ mb: 1 }}>Upload New Image:</Typography>
+                                <input
+                                    type="file"
+                                    accept="image/*"
+                                    onChange={handleEditImageChange}
                                 />
                             </>
                         )}
                     </DialogContent>
                     <DialogActions>
-                        <Button
-                            onClick={handleCloseEditDialog}
-                            sx={{ color: "#757575" }}
-                        >
-                            Cancel
-                        </Button>
-                        <Button
-                            onClick={handleSaveEdit}
-                            sx={{
-                                background: "linear-gradient(to right, #00796b, #48a999)",
-                                color: "#fff",
-                                "&:hover": {
-                                    background:
-                                        "linear-gradient(to right, #00574b, #327e67)",
-                                },
-                            }}
-                        >
-                            Save
-                        </Button>
+                        <Button onClick={handleCloseEditDialog}>Cancel</Button>
+                        <Button onClick={handleSaveEdit}>Save</Button>
+                    </DialogActions>
+                </Dialog>
+
+                {/* Add Dialog */}
+                <Dialog
+                    open={isAddDialogOpen}
+                    onClose={handleCloseAddDialog}
+                    maxWidth="sm"
+                    fullWidth
+                >
+                    <DialogContent>
+                        <TextField
+                            label="Facility"
+                            fullWidth
+                            name="facility"
+                            value={newIssue.facility}
+                            onChange={handleAddInputChange}
+                            sx={{ mb: 2 }}
+                        />
+                        <TextField
+                            label="Description"
+                            fullWidth
+                            name="description"
+                            value={newIssue.description}
+                            onChange={handleAddInputChange}
+                            sx={{ mb: 2 }}
+                        />
+                        <Typography sx={{ mb: 1 }}>Upload Image:</Typography>
+                        <input
+                            type="file"
+                            accept="image/*"
+                            onChange={handleAddImageChange}
+                        />
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={handleCloseAddDialog}>Cancel</Button>
+                        <Button onClick={handleAddNewIssue}>Add</Button>
                     </DialogActions>
                 </Dialog>
             </Container>

@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Checkbox from '@mui/material/Checkbox';
 import CssBaseline from '@mui/material/CssBaseline';
 import Divider from '@mui/material/Divider';
-import { FormControl, FormControlLabel, FormLabel, TextField, Select, MenuItem, IconButton, InputAdornment, Snackbar, Alert } from '@mui/material';
+import { FormControl, FormControlLabel, FormLabel, TextField, IconButton, InputAdornment, Snackbar, Alert } from '@mui/material';
 import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
 import MuiCard from '@mui/material/Card';
@@ -15,9 +14,7 @@ import { GoogleIcon, FacebookIcon } from './CustomIcons';
 import logo from '../assets/images/logo.png';
 import TemplateFrame from './TemplateFrame';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
-import facilitiesData from '../facilities.json';
-import facilityTypeData from '../facilityTypes.json';
-
+import { Link, useNavigate } from 'react-router-dom';
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: 'flex',
@@ -64,26 +61,17 @@ export default function SignUp() {
   const [showPassword, setShowPassword] = useState(false);
   const [passwordError, setPasswordError] = React.useState(false);
   //facility
-  const [facilities, setFacilities] = useState([]);
-  const [selectedFacility, setSelectedFacility] = React.useState('');
-  const [facilityError, setFacilityError] = React.useState(false);
   const [passwordErrorMessage, setPasswordErrorMessage] = React.useState('');
-  const [facilityErrorMessage, setFacilityErrorMessage] = React.useState('');
-  //facility type
-  const [facilityType, setFacilityType] = useState([]);
-  const [selectedFacilityType, setSelectedFacilityType] = React.useState('');
-  const [facilityTypeError, setFacilityTypeError] = React.useState(false);
-  const [facilityTypeErrorMessage, setFacilityTypeErrorMessage] = React.useState('');
   //snackbar - notifications
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
   const [snackbarSeverity, setSnackbarSeverity] = useState('success');
 
+  const navigate = useNavigate();
+
   React.useEffect(() => {
     // Check if there is a preferred mode in localStorage
     const savedMode = localStorage.getItem('themeMode');
-    setFacilities(facilitiesData);
-    setFacilityType(facilityTypeData);
 
     if (savedMode) {
       setMode(savedMode);
@@ -132,19 +120,6 @@ export default function SignUp() {
       setNameErrorMessage('Name is required.');
       isValid = false;
     }
-
-    if (!selectedFacilityType) {
-      setFacilityTypeError(true);
-      setFacilityTypeErrorMessage('Facility type is required');
-      isValid = false;
-    }
-  
-    if (!selectedFacility) {
-      setFacilityError(true);
-      setFacilityErrorMessage('Facility is required');
-      isValid = false;
-    }
-
     return isValid;
   };
 
@@ -159,67 +134,74 @@ export default function SignUp() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     console.log('submit clicked');
+
+    // Validate form errors
     if (nameError || emailError || passwordError) {
       console.log('Error popped up');
       return;
     }
+
+    // Extract form data
     const data = new FormData(event.currentTarget);
     const formData = {
       name: data.get('name'),
       email: data.get('email'),
-      password: data.get('password'),
-      facility: data.get('facility')
+      password: data.get('password')
     };
     console.log('Form Data:', formData);
+
     try {
-      const response = await axios.post('http://localhost:5000/api/register', formData, {
+      // Make API request
+      const response = await axios.post('http://localhost:5000/api/admin/register', formData, {
         headers: {
           'Content-Type': 'application/json',
         },
       });
       console.log('Registration successful:', response.data);
+
+      // Display success message
       setSnackbarMessage('Registration Successful! Please log in');
       setSnackbarSeverity('success');
       setSnackbarOpen(true);
+      setTimeout(() => {
+        navigate('/login');
+      }, 3000);
     } catch (error) {
-      setSnackbarMessage('Please fill all required fields.');
+      console.error('Error during registration:', error);
+
+      // Check for API-specific errors
+      if (error.response) {
+        const { status, data } = error.response;
+
+        // Handle "existing admin" error
+        if (status === 409 && data.message === 'Admin already exists') {
+          setSnackbarMessage('Admin already exists. Please try logging in.');
+        } else if (status === 400) {
+          setSnackbarMessage('Invalid input. Please check your details.');
+        } else {
+          setSnackbarMessage(data.message || 'An error occurred. Please try again.');
+        }
+      } else if (error.request) {
+        // Handle network or server errors
+        setSnackbarMessage('Unable to reach the server. Please try again later.');
+      } else {
+        // Handle unknown errors
+        setSnackbarMessage('An unexpected error occurred.');
+      }
+
+      // Display error message
       setSnackbarSeverity('error');
       setSnackbarOpen(true);
     }
   };
 
-  const handleFacilityChange = (event) => {
-    const value = event.target.value; 
-    setSelectedFacility(value);
-    console.log('Selected Facility:', value);
-    if (value === '') {
-      setFacilityError(true);
-      setFacilityErrorMessage('Facility is required');
-    } else {
-      setFacilityError(false);
-      setFacilityErrorMessage('');
-    }
-  };
-
-  const handleFacilityTypeChange = (event) => {
-    const value = event.target.value; 
-    setSelectedFacilityType(value);
-    console.log('Selected Facility Type:', value);
-    if (value === '') {
-      setFacilityTypeError(true);
-      setFacilityTypeErrorMessage('Facility Type is required');
-    } else {
-      setFacilityTypeError(false);
-      setFacilityTypeErrorMessage('');
-    }
-  };
 
   const handleSnackbarClose = () => {
     setSnackbarOpen(false);
   };
 
   return (
-    <TemplateFrame 
+    <TemplateFrame
       mode={mode}
       toggleColorMode={toggleColorMode}
     >
@@ -233,7 +215,7 @@ export default function SignUp() {
               variant="h4"
               sx={{ width: '100%', fontSize: 'clamp(1.8rem, 10vw, 1.8rem)' }}
             >
-              Sign up 
+              Sign up
             </Typography>
             <Box
               component="form"
@@ -269,59 +251,7 @@ export default function SignUp() {
                   color={passwordError ? 'error' : 'primary'}
                 />
               </FormControl>
-              <FormControl fullWidth required variant="outlined" error={facilityTypeErrorMessage}>
-                <FormLabel htmlFor="facility">Facility Type</FormLabel>
-                <Select
-                  labelId="facilityType"
-                  id="facilityType"
-                  name="facilityType"
-                  placeholder="facility type"
-                  value={selectedFacilityType}
-                  onChange={handleFacilityTypeChange}
-                  error={facilityTypeError}
-                  autoComplete="facilityType"
-                  MenuProps={{
-                    PaperProps: {
-                      style: {
-                        maxHeight: 200,  
-                        maxWidth: 150,  
-                      },
-                    },
-                  }}
-                >
-                  {facilityType.map((facility) => (
-                    <MenuItem key={facility.id} value={facility.name}>
-                      {facility.name}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-              <FormControl fullWidth required variant="outlined" error={facilityErrorMessage}>
-                <FormLabel htmlFor="facility">Facility</FormLabel>
-                <Select
-                  labelId="facility"
-                  id="facility"
-                  name="facility"
-                  placeholder="facility"
-                  value={selectedFacility}
-                  onChange={handleFacilityChange}
-                  error={facilityError}
-                  MenuProps={{
-                    PaperProps: {
-                      style: {
-                        maxHeight: 200,  
-                        maxWidth: 150,  
-                      },
-                    },
-                  }}
-                >
-                  {facilities.map((facility) => (
-                    <MenuItem key={facility.id} value={facility.name}>
-                      {facility.name}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
+
               <FormControl fullWidth required>
                 <FormLabel htmlFor="password">Password</FormLabel>
                 <TextField
@@ -329,7 +259,7 @@ export default function SignUp() {
                   fullWidth
                   name="password"
                   placeholder="••••••"
-                  type={showPassword ? 'text' : 'password'} 
+                  type={showPassword ? 'text' : 'password'}
                   id="password"
                   autoComplete="new-password"
                   variant="outlined"
@@ -346,7 +276,7 @@ export default function SignUp() {
                           onClick={togglePasswordVisibility}
                           edge="end"
                         >
-                          
+
                           {showPassword ? <Visibility /> : <VisibilityOff />}
                         </IconButton>
                       </InputAdornment>

@@ -60,31 +60,54 @@ export default function SignInCard() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    // Check for validation errors
     if (emailError || passwordError) {
       console.log("Error popped up");
       return;
     }
+    // Extract form data
     const data = new FormData(event.currentTarget);
     const formData = {
       email: data.get('email'),
       password: data.get('password'),
-    }
+    };
     console.log('Form Data:', formData);
+
     try {
-      const response = await axios.post('http://localhost:5000/api/login', formData, {
+      // Make API request for login
+      const response = await axios.post('http://localhost:5000/api/admin/login', JSON.stringify(formData), {
         headers: {
           'Content-Type': 'application/json',
         },
       });
       console.log('Login successful:', response.data);
+
+      // Navigate to the home page
       navigate('/home');
     } catch (error) {
-      if (error.status === 400) {
-        console.log(error.status);
-        alert("Invalid Password or Email");
+      console.error('Error during login:', error);
+
+      // Handle specific error cases
+      if (error.response) {
+        const { status, data } = error.response;
+
+        if (status === 400) {
+          alert("Invalid Password or Email");
+        } else if (status === 401) {
+          alert("Unauthorized access. Please check your credentials.");
+        } else {
+          alert(data.message || "An unexpected error occurred. Please try again.");
+        }
+      } else if (error.request) {
+        // Network or server not reachable
+        alert("Unable to reach the server. Please check your internet connection.");
+      } else {
+        // Other unexpected errors
+        alert("An error occurred. Please try again later.");
       }
     }
   };
+
 
   const validateInputs = () => {
     const email = document.getElementById('email');
@@ -162,12 +185,12 @@ export default function SignInCard() {
             </Link>
           </Box>
 
-           <TextField
+          <TextField
             required
             fullWidth
             name="password"
             placeholder="••••••"
-            type={showPassword ? 'text' : 'password'} 
+            type={showPassword ? 'text' : 'password'}
             id="password"
             autoComplete="current-password"
             variant="outlined"
@@ -192,7 +215,7 @@ export default function SignInCard() {
             }}
           />
         </FormControl>
-  
+
         <FormControlLabel
           control={<Checkbox value="remember" color="primary" />}
           label="Remember me"

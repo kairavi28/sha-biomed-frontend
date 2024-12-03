@@ -37,7 +37,7 @@ function BlogPage() {
   const [error, setError] = useState("");
   const [open, setOpen] = useState(false);
   const [selectedBlog, setSelectedBlog] = useState(null);
-  const [editMode, setEditMode] = useState(false); // Tracks if editing or creating a blog
+  const [editMode, setEditMode] = useState(false); 
   const [blogForm, setBlogForm] = useState({
     title: "",
     description: "",
