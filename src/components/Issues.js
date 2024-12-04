@@ -46,6 +46,45 @@ function Issues() {
         phone: '',
         serviceType: 'home'
     });
+    const [formData, setFormData] = useState({
+        productType: "",
+        description: "",
+        photo: null,
+    });
+
+    const [isSubmitting, setIsSubmitting] = useState(false);
+
+    const handleFileChange = (event) => {
+        setFormData((prev) => ({
+            ...prev,
+            photo: event.target.files[0],
+        }));
+    };
+
+    const handleFormSubmit = async (event) => {
+        event.preventDefault();
+        const formDataToSubmit = new FormData();
+        alert(formData.productType);
+        formDataToSubmit.append("productType", formData.productType);
+        formDataToSubmit.append("description", formData.description);
+        if (formData.photo) {
+            formDataToSubmit.append("photo", formData.photo);
+        }
+
+        try {
+            setIsSubmitting(true);
+            await axios.post("http://localhost:5000/api/complaints", formDataToSubmit, {
+                headers: { "Content-Type": "multipart/form-data" },
+            });
+            alert("Complaint submitted successfully.");
+            setFormData({ productType: "", description: "", photo: null });
+        } catch (error) {
+            console.error("Error submitting complaint:", error);
+            alert("Failed to submit complaint.");
+        } finally {
+            setIsSubmitting(false);
+        }
+    };
 
     const handleInputChange = (event) => {
         const { name, value } = event.target;
@@ -71,10 +110,11 @@ function Issues() {
             });
     };
 
-
     useEffect(() => {
         let intervalId;
-        if (autoReload) {
+
+        // Auto-reload only if autoReload is true and dialog is closed
+        if (autoReload && !isDialogOpen) {
             setLoading(true);
             axios
                 .get("http://localhost:5000/api/complaints")
@@ -92,8 +132,9 @@ function Issues() {
             }, 10000);
         }
 
+        // Clear the interval on cleanup
         return () => clearInterval(intervalId);
-    }, [autoReload]);
+    }, [autoReload, isDialogOpen]);
 
     const handleViewDetails = (issue) => {
         setSelectedIssue(issue);
@@ -107,33 +148,33 @@ function Issues() {
 
     if (loading) {
         return (
-          <Box
-            display="flex"
-            justifyContent="center"
-            alignItems="center"
-            height="100vh"
-            sx={{ background: "#f3f4f6" }}
-          >
-            <CircularProgress />
-          </Box>
+            <Box
+                display="flex"
+                justifyContent="center"
+                alignItems="center"
+                height="100vh"
+                sx={{ background: "#f3f4f6" }}
+            >
+                <CircularProgress />
+            </Box>
         );
-      }
-    
-      if (error) {
+    }
+
+    if (error) {
         return (
-          <Box
-            display="flex"
-            justifyContent="center"
-            alignItems="center"
-            height="100vh"
-            sx={{ background: "#f8d7da" }}
-          >
-            <Typography variant="h6" color="error">
-              {error}
-            </Typography>
-          </Box>
+            <Box
+                display="flex"
+                justifyContent="center"
+                alignItems="center"
+                height="100vh"
+                sx={{ background: "#f8d7da" }}
+            >
+                <Typography variant="h6" color="error">
+                    {error}
+                </Typography>
+            </Box>
         );
-      }
+    }
 
     return (
         <Box
@@ -148,7 +189,7 @@ function Issues() {
             <Container
                 maxWidth="lg"
                 sx={{
-                   // background: "",
+                    // background: "",
                     borderRadius: 4,
                     boxShadow: "0px 10px 20px rgba(0, 0, 0, 0.1)",
                     py: 4,
@@ -301,7 +342,72 @@ function Issues() {
                     </Button>
                 </DialogActions>
             </Dialog>
-
+            <Box sx={{ py: 4, px: 4 }}>
+                <Container maxWidth="md">
+                    <Typography variant="h6" sx={{ mb: 2, fontWeight: "bold" }}>
+                        File a Complaint for Damaged Products
+                    </Typography>
+                    <form onSubmit={handleFormSubmit}>
+                        <Grid container spacing={2}>
+                            <Grid item xs={12}>
+                                <TextField
+                                    select
+                                    label="Product Type"
+                                    name="productType"
+                                    value={formData.productType}
+                                    onChange={handleInputChange}
+                                    fullWidth
+                                    required
+                                >
+                                    <MenuItem value="Carsons">Carsons</MenuItem>
+                                    <MenuItem value="General waste bio box">
+                                        General waste bio box
+                                    </MenuItem>
+                                    <MenuItem value="Blue bins">Blue bins</MenuItem>
+                                </TextField>
+                            </Grid>
+                            <Grid item xs={12}>
+                                <TextField
+                                    label="Description"
+                                    name="description"
+                                    value={formData.description}
+                                    onChange={handleInputChange}
+                                    fullWidth
+                                    multiline
+                                    rows={4}
+                                    required
+                                />
+                            </Grid>
+                            <Grid item xs={12}>
+                                <Button
+                                    variant="outlined"
+                                    component="label"
+                                    fullWidth
+                                >
+                                    Upload Photo (Optional)
+                                    <input
+                                        type="file"
+                                        hidden
+                                        accept="image/*"
+                                        onChange={handleFileChange}
+                                    />
+                                </Button>
+                            </Grid>
+                            <Grid item xs={12}>
+                                <Button
+                                    type="submit"
+                                    variant="contained"
+                                    color="primary"
+                                    fullWidth
+                                    disabled={isSubmitting}
+                                >
+                                    {isSubmitting ? "Submitting..." : "Submit"}
+                                </Button>
+                            </Grid>
+                        </Grid>
+                    </form>
+                </Container>
+            </Box>
             {/* Footer with Get a Free Quote Section */}
             <Box sx={{
                 mt: 6,
@@ -366,7 +472,7 @@ function Issues() {
                             </TextField>
                         </Grid>
                         <Grid item xs={12}>
-                        <Button
+                            <Button
                                 variant="contained"
                                 fullWidth
                                 onClick={handleSubmit}

@@ -35,8 +35,8 @@ function BlogPage() {
   const [autoReload, setAutoReload] = useState(true);
   const [loading, setLoading] = useState(true);  // eslint-disable-line no-unused-vars
   const [error, setError] = useState("");
-  const [open, setOpen] = useState(false);
   const [selectedBlog, setSelectedBlog] = useState(null);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [quoteData, setQuoteData] = useState({
     name: '',
     email: '',
@@ -68,9 +68,12 @@ function BlogPage() {
       });
   };
 
+
   useEffect(() => {
     let intervalId;
-    if (autoReload) {
+
+    // Auto-reload only if autoReload is true and dialog is closed
+    if (autoReload && !isDialogOpen) {
       setLoading(true);
       axios
         .get("http://localhost:5000/api/blogs")
@@ -88,17 +91,17 @@ function BlogPage() {
       }, 10000);
     }
 
+    // Clear the interval on cleanup
     return () => clearInterval(intervalId);
-  }, [autoReload]);
-
+  }, [autoReload, isDialogOpen]);
 
   const handleOpen = (blog) => {
     setSelectedBlog(blog);
-    setOpen(true);
+    setIsDialogOpen(true);
   };
 
   const handleClose = () => {
-    setOpen(false);
+    setIsDialogOpen(false);
     setSelectedBlog(null);
   };
 
@@ -239,7 +242,7 @@ function BlogPage() {
         {/* Dialog for Blog Details */}
         {selectedBlog && (
           <Dialog
-            open={open}
+            open={isDialogOpen}
             onClose={handleClose}
             maxWidth="md"
             fullWidth
