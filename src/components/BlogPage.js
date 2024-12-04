@@ -12,7 +12,7 @@ import {
   DialogContent,
   DialogActions,
   TextField,
-  MenuItem
+  MenuItem,
 } from "@mui/material";
 import axios from "axios";
 import Link from "@mui/material/Link";
@@ -33,7 +33,7 @@ function Copyright() {
 function BlogPage() {
   const [blogs, setBlogs] = useState([]);
   const [autoReload, setAutoReload] = useState(true);
-  const [loading, setLoading] = useState(true);  // eslint-disable-line no-unused-vars
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [selectedBlog, setSelectedBlog] = useState(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -44,27 +44,23 @@ function BlogPage() {
     serviceType: 'home'
   });
 
-  const handleInputChange = (event) => {
-    const { name, value } = event.target;
-    setQuoteData(prevState => ({
-      ...prevState,
-      [name]: value
-    }));
-  };
+  // Fetch Blogs
+  useEffect(() => {
+      fetchBlogs();
 
-  const handleSubmit = () => {
-    if (!quoteData.name || !quoteData.email || !quoteData.phone) {
-      alert("Please fill in all fields.");
-      return;
-    }
+  }, []);
 
-    axios.post("http://localhost:5000/api/quotes", quoteData)
-      .then(() => {
-        alert(`Thank you, ${quoteData.name}! We will contact you soon.`);
-        setQuoteData({ name: '', email: '', phone: '', serviceType: 'home' });
+  const fetchBlogs = () => {
+    setLoading(true);
+    axios
+      .get("http://localhost:5000/api/blogs")
+      .then((response) => {
+        setBlogs(response.data);
+        setLoading(false);
       })
       .catch(() => {
-        alert("There was an error submitting your quote. Please try again.");
+        setError("Failed to load blogs. Please try again.");
+        setLoading(false);
       });
   };
 
@@ -86,9 +82,18 @@ function BlogPage() {
           setLoading(false);
         });
 
-      intervalId = setInterval(() => {
-        window.location.reload();
-      }, 10000);
+  // Open Create/Edit Dialog
+  const openBlogDialog = (blog = null) => {
+    if (blog) {
+      setEditMode(true);
+      setBlogForm({
+        title: blog.title,
+        description: blog.description,
+        image: blog.image,
+      });
+    } else {
+      setEditMode(false);
+      setBlogForm({ title: "", description: "", image: "" });
     }
 
     // Clear the interval on cleanup
@@ -105,6 +110,22 @@ function BlogPage() {
     setSelectedBlog(null);
   };
 
+  // Delete Blog
+  const deleteBlog = (blogId) => {
+    if (window.confirm("Are you sure you want to delete this blog?")) {
+      axios
+        .delete(`http://localhost:5000/api/blogs/${blogId}`)
+        .then(() => {
+          alert("Blog deleted successfully!");
+          fetchBlogs();
+        })
+        .catch(() => {
+          alert("Error deleting the blog. Please try again.");
+        });
+    }
+  };
+
+  // Loading State
   if (loading) {
     return (
       <Box
@@ -119,7 +140,7 @@ function BlogPage() {
     );
   }
 
-
+  // Error State
   if (error) {
     return (
       <Box
@@ -137,102 +158,57 @@ function BlogPage() {
   }
 
   return (
-    <Box sx={{ background: 'linear-gradient(to bottom, white, #b3e0ff, #b3e6b3)', minHeight: "100vh", pb: 1, overflowX: 'hidden' }}>
+    <Box sx={{ background: "#f9f9f9", minHeight: "100vh", pb: 4 }}>
       <Container>
         <Typography
           variant="h5"
           align="center"
           fontWeight="bold"
-          sx={{
-            mb: 6,
-            color: "#333",
-            textTransform: "uppercase",
-            letterSpacing: 1.5,
-          }}
+          sx={{ mb: 6 }}
         >
-          Explore Our Blogs
+          Admin Blog Management
         </Typography>
-        <Grid container spacing={6}>
+        <Button
+          variant="contained"
+          sx={{ mb: 4 }}
+          onClick={() => openBlogDialog()}
+        >
+          Create New Blog
+        </Button>
+        <Grid container spacing={4}>
           {blogs.map((blog) => (
             <Grid item xs={12} sm={6} md={4} key={blog.id}>
-              <Paper
-                elevation={5}
-                sx={{
-                  p: 2,
-                  borderRadius: 3,
-                  height: "100%",
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "space-between",
-                  background: "linear-gradient(135deg, #ffffff, #f3f4f6)",
-                  transition: "transform 0.3s, box-shadow 0.3s",
-                  "&:hover": {
-                    transform: "translateY(-5px)",
-                    boxShadow: "0px 10px 20px rgba(0, 0, 0, 0.15)",
-                  },
-                }}
-              >
-                <Box
-                  sx={{
-                    height: "200px",
-                    overflow: "hidden",
-                    borderRadius: 2,
-                    mb: 2,
-                  }}
-                >
-                  <img
-                    src={blog.image}
-                    alt={blog.title}
-                    style={{ width: "100%", height: "100%", objectFit: "cover" }}
-                    loading="lazy"
-                  />
-                </Box>
-                <Box sx={{ flexGrow: 1 }}>
-                  <Typography
-                    variant="h6"
-                    sx={{
-                      fontWeight: "bold",
-                      mb: 1,
-                      color: "#00796b",
-                      textOverflow: "ellipsis",
-                      overflow: "hidden",
-                      whiteSpace: "nowrap",
-                    }}
-                  >
-                    {blog.title}
-                  </Typography>
-                  <Typography
-                    variant="body2"
-                    sx={{ color: "#666", lineHeight: 1.6 }}
-                  >
-                    {blog.description.length > 100
-                      ? `${blog.description.slice(0, 100)}...`
-                      : blog.description}
-                  </Typography>
-                </Box>
-                <Typography
-                  variant="body2"
-                  sx={{
-                    color: "#888",
-                    fontStyle: "italic",
-                    mb: 2,
-                  }}
-                >
-                  Posted on: {new Date(blog.createdAt).toLocaleDateString()}
+              <Paper elevation={3} sx={{ p: 3 }}>
+                <Typography variant="h6" fontWeight="bold">
+                  {blog.title}
                 </Typography>
-                <Button
-                  variant="contained"
-                  fullWidth
-                  sx={{
-                    background: "linear-gradient(to right, #00796b, #48a999)",
-                    color: "#fff",
-                    "&:hover": {
-                      background: "linear-gradient(to right, #00574b, #327e67)",
-                    },
+                <Typography variant="body2" sx={{ mb: 2 }}>
+                  {blog.description}
+                </Typography>
+                <img
+                  src={blog.image}
+                  alt={blog.title}
+                  style={{
+                    width: "100%",
+                    height: "150px",
+                    objectFit: "cover",
+                    marginBottom: "16px",
                   }}
-                  onClick={() => handleOpen(blog)}
+                />
+                <Button
+                  variant="outlined"
+                  color="primary"
+                  onClick={() => openBlogDialog(blog)}
+                  sx={{ mr: 1 }}
                 >
-                  Read More
+                  Edit
+                </Button>
+                <Button
+                  variant="outlined"
+                  color="error"
+                  onClick={() => deleteBlog(blog.id)}
+                >
+                  Delete
                 </Button>
               </Paper>
             </Grid>
@@ -298,95 +274,49 @@ function BlogPage() {
         )}
       </Container>
 
-
-      {/* Footer with Get a Free Quote Section */}
-      <Box sx={{
-        mt: 6,
-        py: 4,
-        backgroundColor: '#f1f1f1',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        textAlign: 'center',
-      }}>
-        <Typography variant="h6" sx={{ mb: 2, fontWeight: 'bold' }}>
-          Get a Free Quote
-        </Typography>
-        <Container sx={{ backgroundColor: 'white', borderRadius: 2, p: 3, boxShadow: 3 }}>
-          <Grid container spacing={2}>
-            <Grid item xs={12} md={6}>
-              <TextField
-                label="Name"
-                fullWidth
-                variant="outlined"
-                name="name"
-                value={quoteData.name}
-                onChange={handleInputChange}
-                sx={{ backgroundColor: '#f9f9f9' }}
-              />
-            </Grid>
-            <Grid item xs={12} md={6}>
-              <TextField
-                label="Email"
-                fullWidth
-                variant="outlined"
-                name="email"
-                value={quoteData.email}
-                onChange={handleInputChange}
-                sx={{ backgroundColor: '#f9f9f9' }}
-              />
-            </Grid>
-            <Grid item xs={12} md={6}>
-              <TextField
-                label="Phone"
-                fullWidth
-                variant="outlined"
-                name="phone"
-                value={quoteData.phone}
-                onChange={handleInputChange}
-                sx={{ backgroundColor: '#f9f9f9' }}
-              />
-            </Grid>
-            <Grid item xs={12} md={6}>
-              <TextField
-                select
-                label="Service Type"
-                fullWidth
-                variant="outlined"
-                name="serviceType"
-                value={quoteData.serviceType}
-                onChange={handleInputChange}
-                sx={{ backgroundColor: '#f9f9f9' }}
-              >
-                <MenuItem value="home">Home</MenuItem>
-                <MenuItem value="business">Business</MenuItem>
-              </TextField>
-            </Grid>
-            <Grid item xs={12}>
-              <Button
-                variant="contained"
-                fullWidth
-                onClick={handleSubmit}
-                sx={{
-                  background: "linear-gradient(to right, #00796b, #48a999)",
-                  color: "#fff",
-                  "&:hover": {
-                    background: "linear-gradient(to right, #00574b, #327e67)",
-                  },
-                }}
-              >
-                Get Free Quote
-              </Button>
-            </Grid>
-          </Grid>
-        </Container>
-        <Box sx={{ mt: 4 }}>
-          <Copyright />
-        </Box>
-      </Box>
-      <button onClick={() => setAutoReload(!autoReload)}>
-        {autoReload ? "Pause Auto-Reload" : "Resume Auto-Reload"}
-      </button>
+      {/* Create/Edit Blog Dialog */}
+      <Dialog open={open} onClose={() => setOpen(false)}>
+        <DialogTitle>
+          {editMode ? "Edit Blog" : "Create New Blog"}
+        </DialogTitle>
+        <DialogContent>
+          <TextField
+            name="title"
+            label="Title"
+            fullWidth
+            variant="outlined"
+            value={blogForm.title}
+            onChange={handleFormChange}
+            sx={{ mb: 2 }}
+          />
+          <TextField
+            name="description"
+            label="Description"
+            fullWidth
+            variant="outlined"
+            value={blogForm.description}
+            onChange={handleFormChange}
+            sx={{ mb: 2 }}
+            multiline
+            rows={4}
+          />
+          <TextField
+            name="image"
+            label="Image URL"
+            fullWidth
+            variant="outlined"
+            value={blogForm.image}
+            onChange={handleFormChange}
+            sx={{ mb: 2 }}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setOpen(false)}>Cancel</Button>
+          <Button variant="contained" onClick={handleBlogSubmit}>
+            Save
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 }

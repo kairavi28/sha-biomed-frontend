@@ -17,6 +17,7 @@ function App() {
         <Route path="/home" element={<Dashboard />} />
         <Route path="/services" element={<Issues />} />
         <Route path="/blogs" element={<BlogPage />} />
+        <Route path="/login" element={<SignInSide/>} />
       </Route>
     </Routes>
   );
@@ -30,6 +31,7 @@ function LayoutWithNavbar() {
         <Route path="/home" element={<Dashboard />} />
         <Route path="/services" element={<Issues />} />
         <Route path="/blogs" element={<BlogPage />} />
+        <Route path="/login" element={<SignInSide/>} />
       </Routes>
     </>
   );
