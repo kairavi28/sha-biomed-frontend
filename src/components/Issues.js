@@ -25,12 +25,14 @@ function Issues() {
     const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
     const [imageFile, setImageFile] = useState(null);
     const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
+    const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
     const [newIssue, setNewIssue] = useState({
         facility: "",
         description: "",
         image: "",
     });
-    const [newImageFile, setNewImageFile] = useState(null); 
+    const [deleteIssueId, setDeleteIssueId] = useState(null);
+    const [newImageFile, setNewImageFile] = useState(null);
 
     useEffect(() => {
         fetchIssues();
@@ -53,7 +55,7 @@ function Issues() {
     // Handle edit dialog open/close
     const handleEdit = (issue) => {
         setSelectedIssue(issue);
-        setImageFile(null); 
+        setImageFile(null);
         setIsEditDialogOpen(true);
     };
 
@@ -113,6 +115,19 @@ function Issues() {
             });
     };
 
+    const handleRemoveIssue = () => {
+        axios
+            .delete(`http://localhost:5000/api/complaints/remove/${deleteIssueId}`)
+            .then(() => {
+                alert("Issue deleted successfully!");
+                fetchIssues();
+                handleCloseDeleteDialog();
+            })
+            .catch(() => {
+                alert("Error deleting the issue. Please try again.");
+            });
+    };
+
     // Handle add new issue
     const handleOpenAddDialog = () => {
         setIsAddDialogOpen(true);
@@ -135,6 +150,16 @@ function Issues() {
     const handleAddImageChange = (event) => {
         const file = event.target.files[0];
         setNewImageFile(file);
+    };
+    // Handle remove functionality
+    const handleOpenDeleteDialog = (id) => {
+        setDeleteIssueId(id);
+        setIsDeleteDialogOpen(true);
+    };
+
+    const handleCloseDeleteDialog = () => {
+        setIsDeleteDialogOpen(false);
+        setDeleteIssueId(null);
     };
 
     const handleAddNewIssue = async () => {
@@ -231,6 +256,12 @@ function Issues() {
                                     <Button onClick={() => handleEdit(issue)}>
                                         Edit
                                     </Button>
+                                    <Button
+                                        color="error"
+                                        onClick={() => handleOpenDeleteDialog(issue._id)}
+                                    >
+                                        Delete
+                                    </Button>
                                 </CardActions>
                             </Card>
                         </Grid>
@@ -312,6 +343,25 @@ function Issues() {
                     <DialogActions>
                         <Button onClick={handleCloseAddDialog}>Cancel</Button>
                         <Button onClick={handleAddNewIssue}>Add</Button>
+                    </DialogActions>
+                </Dialog>
+
+                
+                {/* Delete Confirmation Dialog */}
+                <Dialog
+                    open={isDeleteDialogOpen}
+                    onClose={handleCloseDeleteDialog}
+                >
+                    <DialogContent>
+                        <Typography>
+                            Are you sure you want to delete this issue?
+                        </Typography>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={handleCloseDeleteDialog}>Cancel</Button>
+                        <Button color="error" onClick={handleRemoveIssue}>
+                            Delete
+                        </Button>
                     </DialogActions>
                 </Dialog>
             </Container>
