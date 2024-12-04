@@ -23,14 +23,14 @@ function Issues() {
     const [error, setError] = useState("");
     const [selectedIssue, setSelectedIssue] = useState(null);
     const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
-    const [imageFile, setImageFile] = useState(null); // For image file in edit
+    const [imageFile, setImageFile] = useState(null);
     const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
     const [newIssue, setNewIssue] = useState({
         facility: "",
         description: "",
         image: "",
     });
-    const [newImageFile, setNewImageFile] = useState(null); // For image file in add
+    const [newImageFile, setNewImageFile] = useState(null); 
 
     useEffect(() => {
         fetchIssues();
@@ -89,7 +89,7 @@ function Issues() {
 
             try {
                 const uploadResponse = await axios.post(
-                    "http://localhost:5000/api/upload",
+                    "http://localhost:5000/api/complaint/upload",
                     formData,
                     { headers: { "Content-Type": "multipart/form-data" } }
                 );
@@ -142,16 +142,13 @@ function Issues() {
             alert("Please fill in all required fields.");
             return;
         }
-
         let imageUrl = "";
-
         if (newImageFile) {
             const formData = new FormData();
             formData.append("image", newImageFile);
-
             try {
                 const uploadResponse = await axios.post(
-                    "http://localhost:5000/api/upload",
+                    "http://localhost:5000/api/complaints/upload",
                     formData,
                     { headers: { "Content-Type": "multipart/form-data" } }
                 );
@@ -161,10 +158,10 @@ function Issues() {
                 return;
             }
         }
-
         const newIssueData = { ...newIssue, image: imageUrl };
+        console.log(newIssueData);
         axios
-            .post("http://localhost:5000/api/complaints", newIssueData)
+            .post("http://localhost:5000/api/complaints/add", newIssueData)
             .then(() => {
                 alert("New issue added successfully!");
                 fetchIssues();
