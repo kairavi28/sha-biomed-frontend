@@ -14,22 +14,37 @@ import {
     DialogContent,
     DialogActions,
     TextField,
+    MenuItem,
 } from "@mui/material";
 import axios from "axios";
+import Link from "@mui/material/Link";
+
+
+function Copyright() {
+    return (
+        <Typography variant="body2" color="textSecondary">
+            {"Copyright © "}
+            <Link color="inherit" href="https://material-ui.com/">
+                Biomed Waste Communication Channel
+            </Link>{" "}
+            {new Date().getFullYear()}
+            {"."}
+        </Typography>
+    );
+}
 
 function Issues() {
     const [issues, setIssues] = useState([]);
-    const [loading, setLoading] = useState(true);
+    const [autoReload, setAutoReload] = useState(true);
     const [error, setError] = useState("");
-    const [selectedIssue, setSelectedIssue] = useState(null);
-    const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
-    const [imageFile, setImageFile] = useState(null);
-    const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
-    const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
-    const [newIssue, setNewIssue] = useState({
-        facility: "",
-        description: "",
-        image: "",
+    const [loading, setLoading] = useState(true);   // eslint-disable-line no-unused-vars
+    const [selectedIssue, setSelectedIssue] = useState(null); // For popup details
+    const [isDialogOpen, setIsDialogOpen] = useState(false); // Controls dialog visibility
+    const [quoteData, setQuoteData] = useState({
+        name: '',
+        email: '',
+        phone: '',
+        serviceType: 'home'
     });
     const [formData, setFormData] = useState({
         productType: "",
@@ -71,21 +86,27 @@ function Issues() {
         }
     };
 
-    useEffect(() => {
-        fetchIssues();
-    }, []);
+    const handleInputChange = (event) => {
+        const { name, value } = event.target;
+        setQuoteData(prevState => ({
+            ...prevState,
+            [name]: value
+        }));
+    };
 
-    const fetchIssues = () => {
-        setLoading(true);
-        axios
-            .get("http://localhost:5000/api/complaints")
-            .then((response) => {
-                setIssues(response.data);
-                setLoading(false);
+    const handleSubmit = () => {
+        if (!quoteData.name || !quoteData.email || !quoteData.phone) {
+            alert("Please fill in all fields.");
+            return;
+        }
+
+        axios.post("http://localhost:5000/api/quotes", quoteData)
+            .then(() => {
+                alert(`Thank you, ${quoteData.name}! We will contact you soon.`);
+                setQuoteData({ name: '', email: '', phone: '', serviceType: 'home' });
             })
             .catch(() => {
-                setError("Failed to load issues. Please try again.");
-                setLoading(false);
+                alert("There was an error submitting your quote. Please try again.");
             });
     };
 
@@ -117,146 +138,12 @@ function Issues() {
 
     const handleViewDetails = (issue) => {
         setSelectedIssue(issue);
-        setImageFile(null);
-        setIsEditDialogOpen(true);
+        setIsDialogOpen(true);
     };
 
-    const handleCloseEditDialog = () => {
-        setIsEditDialogOpen(false);
+    const handleCloseDialog = () => {
+        setIsDialogOpen(false);
         setSelectedIssue(null);
-    };
-
-    const handleEditInputChange = (event) => {
-        const { name, value } = event.target;
-        setSelectedIssue((prev) => ({
-            ...prev,
-            [name]: value,
-        }));
-    };
-
-    const handleEditImageChange = (event) => {
-        const file = event.target.files[0];
-        setImageFile(file);
-    };
-
-    const handleSaveEdit = async () => {
-        if (!selectedIssue.facility || !selectedIssue.description) {
-            alert("Please fill in all required fields.");
-            return;
-        }
-
-        let imageUrl = selectedIssue.image;
-
-        if (imageFile) {
-            const formData = new FormData();
-            formData.append("image", imageFile);
-
-            try {
-                const uploadResponse = await axios.post(
-                    "http://localhost:5000/api/complaint/upload",
-                    formData,
-                    { headers: { "Content-Type": "multipart/form-data" } }
-                );
-                imageUrl = uploadResponse.data.imageUrl;
-            } catch (err) {
-                alert("Error uploading image. Please try again.");
-                return;
-            }
-        }
-
-        const updatedIssue = { ...selectedIssue, image: imageUrl };
-        axios
-            .put(`http://localhost:5000/api/complaints/${selectedIssue._id}`, updatedIssue)
-            .then(() => {
-                alert("Issue updated successfully!");
-                fetchIssues();
-                handleCloseEditDialog();
-            })
-            .catch(() => {
-                alert("Error updating the issue. Please try again.");
-            });
-    };
-
-    const handleRemoveIssue = () => {
-        axios
-            .delete(`http://localhost:5000/api/complaints/remove/${deleteIssueId}`)
-            .then(() => {
-                alert("Issue deleted successfully!");
-                fetchIssues();
-                handleCloseDeleteDialog();
-            })
-            .catch(() => {
-                alert("Error deleting the issue. Please try again.");
-            });
-    };
-
-    // Handle add new issue
-    const handleOpenAddDialog = () => {
-        setIsAddDialogOpen(true);
-    };
-
-    const handleCloseAddDialog = () => {
-        setIsAddDialogOpen(false);
-        setNewIssue({ facility: "", description: "", image: "" });
-        setNewImageFile(null);
-    };
-
-    const handleAddInputChange = (event) => {
-        const { name, value } = event.target;
-        setNewIssue((prev) => ({
-            ...prev,
-            [name]: value,
-        }));
-    };
-
-    const handleAddImageChange = (event) => {
-        const file = event.target.files[0];
-        setNewImageFile(file);
-    };
-    // Handle remove functionality
-    const handleOpenDeleteDialog = (id) => {
-        setDeleteIssueId(id);
-        setIsDeleteDialogOpen(true);
-    };
-
-    const handleCloseDeleteDialog = () => {
-        setIsDeleteDialogOpen(false);
-        setDeleteIssueId(null);
-    };
-
-    const handleAddNewIssue = async () => {
-        if (!newIssue.facility || !newIssue.description) {
-            alert("Please fill in all required fields.");
-            return;
-        }
-        let imageUrl = "";
-        if (newImageFile) {
-            const formData = new FormData();
-            formData.append("image", newImageFile);
-            try {
-                const uploadResponse = await axios.post(
-                    "http://localhost:5000/api/complaints/upload",
-                    formData,
-                    { headers: { "Content-Type": "multipart/form-data" } }
-                );
-                imageUrl = uploadResponse.data.imageUrl;
-            } catch (err) {
-                alert("Error uploading image. Please try again.");
-                return;
-            }
-        }
-        const newIssueData = { ...newIssue, image: imageUrl };
-        console.log(newIssueData);
-        axios
-            .post("http://localhost:5000/api/complaints/add", newIssueData)
-            .then(() => {
-                alert("New issue added successfully!");
-                fetchIssues();
-                handleCloseAddDialog();
-            })
-            .catch(() => {
-                alert("Error adding new issue. Please try again.");
-            });
     };
 
     if (loading) {
@@ -323,139 +210,86 @@ function Issues() {
                 >
                     Issues Dashboard
                 </Typography>
-                <Button
-                    variant="contained"
-                    onClick={handleOpenAddDialog}
-                    sx={{ mb: 4 }}
-                >
-                    Add New Issue
-                </Button>
                 <Grid container spacing={4}>
                     {issues.map((issue, index) => (
                         <Grid item xs={12} sm={6} md={4} key={index}>
-                            <Card>
+                            <Card
+                                sx={{
+                                    maxWidth: 345,
+                                    backdropFilter: "blur(10px)",
+                                    background: "rgba(255, 255, 255, 0.7)",
+                                    borderRadius: 4,
+                                    overflow: "hidden",
+                                    transition: "transform 0.3s, box-shadow 0.3s",
+                                    boxShadow: "0px 6px 12px rgba(0, 0, 0, 0.1)",
+                                    "&:hover": {
+                                        transform: "scale(1.1)",
+                                        boxShadow: "0px 10px 25px rgba(0, 0, 0, 0.2)",
+                                    },
+                                }}
+                            >
                                 <CardMedia
                                     component="img"
                                     height="180"
                                     image={issue.image}
                                     alt="Issue Image"
+                                    sx={{
+                                        objectFit: "cover",
+                                    }}
                                 />
-                                <CardContent>
-                                    <Typography variant="h6">{issue.facility}</Typography>
-                                    <Typography>{issue.description}</Typography>
-                                </CardContent>
-                                <CardActions>
-                                    <Button onClick={() => handleEdit(issue)}>
-                                        Edit
-                                    </Button>
-                                    <Button
-                                        color="error"
-                                        onClick={() => handleOpenDeleteDialog(issue._id)}
+                                <CardContent
+                                    sx={{
+                                        p: 3,
+                                        textAlign: "center",
+                                    }}
+                                >
+                                    <Typography
+                                        variant="h6"
+                                        component="div"
+                                        fontWeight="bold"
+                                        sx={{ mb: 1, color: "#00796b" }}
                                     >
-                                        Delete
+                                        {issue.facility}
+                                    </Typography>
+                                    <Typography
+                                        variant="body2"
+                                        color="text.secondary"
+                                        sx={{
+                                            height: "20px",
+                                            overflow: "hidden",
+                                            textOverflow: "ellipsis",
+                                        }}
+                                    >
+                                        {issue.description}
+                                    </Typography>
+                                    <Typography
+                                        variant="caption"
+                                        display="block"
+                                        sx={{ mt: 1, color: "#757575" }}
+                                    >
+                                        {new Date(issue.createdAt).toLocaleString()}
+                                    </Typography>
+                                </CardContent>
+                                <CardActions sx={{ justifyContent: "center", pb: 2 }}>
+                                    <Button
+                                        size="small"
+                                        variant="contained"
+                                        onClick={() => handleViewDetails(issue)}
+                                        sx={{
+                                            background: "linear-gradient(to right, #00796b, #48a999)",
+                                            color: "#fff",
+                                            "&:hover": {
+                                                background: "linear-gradient(to right, #00574b, #327e67)",
+                                            },
+                                        }}
+                                    >
+                                        View Details
                                     </Button>
                                 </CardActions>
                             </Card>
                         </Grid>
                     ))}
                 </Grid>
-
-                {/* Edit Dialog */}
-                <Dialog
-                    open={isEditDialogOpen}
-                    onClose={handleCloseEditDialog}
-                    maxWidth="sm"
-                    fullWidth
-                >
-                    <DialogContent>
-                        {selectedIssue && (
-                            <>
-                                <TextField
-                                    label="Facility"
-                                    fullWidth
-                                    name="facility"
-                                    value={selectedIssue.facility}
-                                    onChange={handleEditInputChange}
-                                    sx={{ mb: 2 }}
-                                />
-                                <TextField
-                                    label="Description"
-                                    fullWidth
-                                    name="description"
-                                    value={selectedIssue.description}
-                                    onChange={handleEditInputChange}
-                                    sx={{ mb: 2 }}
-                                />
-                                <Typography sx={{ mb: 1 }}>Upload New Image:</Typography>
-                                <input
-                                    type="file"
-                                    accept="image/*"
-                                    onChange={handleEditImageChange}
-                                />
-                            </>
-                        )}
-                    </DialogContent>
-                    <DialogActions>
-                        <Button onClick={handleCloseEditDialog}>Cancel</Button>
-                        <Button onClick={handleSaveEdit}>Save</Button>
-                    </DialogActions>
-                </Dialog>
-
-                {/* Add Dialog */}
-                <Dialog
-                    open={isAddDialogOpen}
-                    onClose={handleCloseAddDialog}
-                    maxWidth="sm"
-                    fullWidth
-                >
-                    <DialogContent>
-                        <TextField
-                            label="Facility"
-                            fullWidth
-                            name="facility"
-                            value={newIssue.facility}
-                            onChange={handleAddInputChange}
-                            sx={{ mb: 2 }}
-                        />
-                        <TextField
-                            label="Description"
-                            fullWidth
-                            name="description"
-                            value={newIssue.description}
-                            onChange={handleAddInputChange}
-                            sx={{ mb: 2 }}
-                        />
-                        <Typography sx={{ mb: 1 }}>Upload Image:</Typography>
-                        <input
-                            type="file"
-                            accept="image/*"
-                            onChange={handleAddImageChange}
-                        />
-                    </DialogContent>
-                    <DialogActions>
-                        <Button onClick={handleCloseAddDialog}>Cancel</Button>
-                        <Button onClick={handleAddNewIssue}>Add</Button>
-                    </DialogActions>
-                </Dialog>
-
-                
-                {/* Delete Confirmation Dialog */}
-                <Dialog
-                    open={isDeleteDialogOpen}
-                    onClose={handleCloseDeleteDialog}
-                >
-                    <DialogContent>
-                        <Typography>
-                            Are you sure you want to delete this issue?
-                        </Typography>
-                    </DialogContent>
-                    <DialogActions>
-                        <Button onClick={handleCloseDeleteDialog}>Cancel</Button>
-                        <Button color="error" onClick={handleRemoveIssue}>
-                            Delete
-                        </Button>
-                    </DialogActions>
-                </Dialog>
             </Container>
 
             {/* Popup Dialog for Viewing Full Complaint */}
