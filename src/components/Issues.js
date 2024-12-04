@@ -37,14 +37,15 @@ function Issues() {
     const [issues, setIssues] = useState([]);
     const [autoReload, setAutoReload] = useState(true);
     const [error, setError] = useState("");
-    const [loading, setLoading] = useState(true);   // eslint-disable-line no-unused-vars
-    const [selectedIssue, setSelectedIssue] = useState(null); // For popup details
-    const [isDialogOpen, setIsDialogOpen] = useState(false); // Controls dialog visibility
+    const [loading, setLoading] = useState(true);
+    const [selectedIssue, setSelectedIssue] = useState(null);
+    const [isDialogOpen, setIsDialogOpen] = useState(false);
+    const [isFormActive, setIsFormActive] = useState(false);
     const [quoteData, setQuoteData] = useState({
         name: '',
         email: '',
         phone: '',
-        serviceType: 'home'
+        serviceType: 'home',
     });
     const [formData, setFormData] = useState({
         productType: "",
@@ -55,16 +56,17 @@ function Issues() {
     const [isSubmitting, setIsSubmitting] = useState(false);
 
     const handleFileChange = (event) => {
-        setFormData((prev) => ({
-            ...prev,
-            photo: event.target.files[0],
-        }));
+        const file = event.target.files[0];
+        setFormData((prev) => {
+            const updatedForm = { ...prev, photo: file };
+            localStorage.setItem("formData", JSON.stringify(updatedForm));
+            return updatedForm;
+        });
     };
 
     const handleFormSubmit = async (event) => {
         event.preventDefault();
         const formDataToSubmit = new FormData();
-        alert(formData.productType);
         formDataToSubmit.append("productType", formData.productType);
         formDataToSubmit.append("description", formData.description);
         if (formData.photo) {
@@ -78,6 +80,7 @@ function Issues() {
             });
             alert("Complaint submitted successfully.");
             setFormData({ productType: "", description: "", photo: null });
+            localStorage.removeItem("formData"); // Clear data
         } catch (error) {
             console.error("Error submitting complaint:", error);
             alert("Failed to submit complaint.");
@@ -88,10 +91,11 @@ function Issues() {
 
     const handleInputChange = (event) => {
         const { name, value } = event.target;
-        setQuoteData(prevState => ({
-            ...prevState,
-            [name]: value
-        }));
+        setFormData((prev) => {
+            const updatedForm = { ...prev, [name]: value };
+            localStorage.setItem("formData", JSON.stringify(updatedForm));
+            return updatedForm;
+        });
     };
 
     const handleSubmit = () => {
@@ -113,8 +117,7 @@ function Issues() {
     useEffect(() => {
         let intervalId;
 
-        // Auto-reload only if autoReload is true and dialog is closed
-        if (autoReload && !isDialogOpen) {
+        if (autoReload && !isDialogOpen && !isFormActive) {
             setLoading(true);
             axios
                 .get("http://localhost:5000/api/complaints")
@@ -123,18 +126,23 @@ function Issues() {
                     setLoading(false);
                 })
                 .catch(() => {
-                    setError("Failed to load blogs. Please try again.");
+                    setError("Failed to load issues. Please try again.");
                     setLoading(false);
                 });
 
             intervalId = setInterval(() => {
                 window.location.reload();
-            }, 10000);
+            }, 20000);
         }
-
-        // Clear the interval on cleanup
         return () => clearInterval(intervalId);
-    }, [autoReload, isDialogOpen]);
+    }, [autoReload, isDialogOpen, isFormActive]);
+
+    useEffect(() => {
+        const savedFormData = JSON.parse(localStorage.getItem("formData"));
+        if (savedFormData) {
+            setFormData(savedFormData);
+        }
+    }, []);
 
     const handleViewDetails = (issue) => {
         setSelectedIssue(issue);
@@ -145,6 +153,9 @@ function Issues() {
         setIsDialogOpen(false);
         setSelectedIssue(null);
     };
+
+    const handleFormFocus = () => setIsFormActive(true);
+    const handleFormBlur = () => setIsFormActive(false);
 
     if (loading) {
         return (
@@ -175,7 +186,6 @@ function Issues() {
             </Box>
         );
     }
-
     return (
         <Box
             sx={{
@@ -342,12 +352,21 @@ function Issues() {
                     </Button>
                 </DialogActions>
             </Dialog>
-            <Box sx={{ py: 4, px: 4 }}>
-                <Container maxWidth="md">
-                    <Typography variant="h6" sx={{ mb: 2, fontWeight: "bold" }}>
-                        File a Complaint for Damaged Products
+            <Box sx={{
+                mt: 6,
+                py: 4,
+                backgroundColor: '#f1f1f1',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                textAlign: 'center',
+            }}>
+                <Container maxWidth="md" sx={{ mt: 4 }}>
+                    <Typography variant="h6" sx={{ mb: 2, fontWeight: "bold", textAlign: "center" }}>
+                        Report an Issue for Damaged Container (if any)
                     </Typography>
-                    <form onSubmit={handleFormSubmit}>
+
+                    <form onFocus={handleFormBlur} onBlur={handleFormBlur} onSubmit={handleFormSubmit}>
                         <Grid container spacing={2}>
                             <Grid item xs={12}>
                                 <TextField
@@ -360,10 +379,8 @@ function Issues() {
                                     required
                                 >
                                     <MenuItem value="Carsons">Carsons</MenuItem>
-                                    <MenuItem value="General waste bio box">
-                                        General waste bio box
-                                    </MenuItem>
-                                    <MenuItem value="Blue bins">Blue bins</MenuItem>
+                                    <MenuItem value="General waste bio box">General Waste Bio Box</MenuItem>
+                                    <MenuItem value="Blue bins">Blue Bins</MenuItem>
                                 </TextField>
                             </Grid>
                             <Grid item xs={12}>
@@ -379,18 +396,9 @@ function Issues() {
                                 />
                             </Grid>
                             <Grid item xs={12}>
-                                <Button
-                                    variant="outlined"
-                                    component="label"
-                                    fullWidth
-                                >
+                                <Button variant="outlined" component="label" fullWidth>
                                     Upload Photo (Optional)
-                                    <input
-                                        type="file"
-                                        hidden
-                                        accept="image/*"
-                                        onChange={handleFileChange}
-                                    />
+                                    <input type="file" hidden accept="image/*" onChange={handleFileChange} />
                                 </Button>
                             </Grid>
                             <Grid item xs={12}>
@@ -410,7 +418,7 @@ function Issues() {
             </Box>
             {/* Footer with Get a Free Quote Section */}
             <Box sx={{
-                mt: 6,
+                mt: 10,
                 py: 4,
                 backgroundColor: '#f1f1f1',
                 display: 'flex',
