@@ -57,11 +57,16 @@ export default function SignUp() {
   const [nameErrorMessage, setNameErrorMessage] = React.useState('');
   const [emailError, setEmailError] = React.useState(false);
   const [emailErrorMessage, setEmailErrorMessage] = React.useState('');
+  //password
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [passwordError, setPasswordError] = React.useState(false);
-  //facility
   const [passwordErrorMessage, setPasswordErrorMessage] = React.useState('');
+  //facility
+  const [facilityType, setFacilityType] = React.useState('');
+  const [facilityError, setFacilityError] = React.useState(false);
+  const [facilityErrorMessage, setFacilityErrorMessage] = React.useState('');
+  const [facilityTypeError, setFacilityTypeError] = useState(false);
   //snackbar - notifications
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
@@ -94,7 +99,7 @@ export default function SignUp() {
     const email = document.getElementById('email');
     const password = document.getElementById('password');
     const name = document.getElementById('name');
-
+    
     let isValid = true;
 
     if (!email.value || !/\S+@\S+\.\S+/.test(email.value)) {
@@ -119,6 +124,15 @@ export default function SignUp() {
       setNameError(true);
       setNameErrorMessage('Name is required.');
       isValid = false;
+    }
+
+    if (!facilityType) {
+      setFacilityError(true);
+      setFacilityErrorMessage('Please select a facility type.');
+      isValid = false;
+    } else {
+      setFacilityError(false);
+      setFacilityErrorMessage('');
     }
     return isValid;
   };
@@ -146,13 +160,14 @@ export default function SignUp() {
     const formData = {
       name: data.get('name'),
       email: data.get('email'),
-      password: data.get('password')
+      password: data.get('password'),
+      facilityType: facilityType
     };
     console.log('Form Data:', formData);
 
     try {
       // Make API request
-      const response = await axios.post('http://localhost:5000/api/admin/register', formData, {
+      const response = await axios.post('http://localhost:5000/api/register', formData, {
         headers: {
           'Content-Type': 'application/json',
         },
@@ -284,6 +299,29 @@ export default function SignUp() {
                   }}
                 />
               </FormControl>
+              <FormControl fullWidth required>
+                <FormLabel htmlFor="facilityType">Facility Type</FormLabel>
+                <TextField
+                  select
+                  fullWidth
+                  id="facilityType"
+                  name="facilityType"
+                  value={facilityType}
+                  onChange={(e) => setFacilityType(e.target.value)}
+                  error={facilityError}
+                  helperText={facilityErrorMessage}
+                  variant="outlined"
+                >
+                  <option value="" disabled>
+                    Select a Facility Type
+                  </option>
+                  <option value="hospital">Hospital</option>
+                  <option value="clinic">Clinic</option>
+                  <option value="laboratory">Laboratory</option>
+                  <option value="other">Other</option>
+                </TextField>
+              </FormControl>
+
               <FormControlLabel
                 control={<Checkbox value="allowExtraEmails" color="primary" />}
                 label="I want to receive updates via email."

@@ -19,7 +19,6 @@ import {
 import axios from "axios";
 import Link from "@mui/material/Link";
 
-
 function Copyright() {
     return (
         <Typography variant="body2" color="textSecondary">
@@ -32,6 +31,18 @@ function Copyright() {
         </Typography>
     );
 }
+
+// Helper function to convert base64 to a File object
+const dataURLToFile = (dataURL, filename) => {
+    const [header, base64String] = dataURL.split(",");
+    const mime = header.match(/:(.*?);/)[1];
+    const binary = atob(base64String);
+    const array = [];
+    for (let i = 0; i < binary.length; i++) {
+        array.push(binary.charCodeAt(i));
+    }
+    return new File([new Uint8Array(array)], filename, { type: mime });
+};
 
 function Issues() {
     const [issues, setIssues] = useState([]);
@@ -47,18 +58,41 @@ function Issues() {
         phone: '',
         serviceType: 'home',
     });
-    const [formData, setFormData] = useState({
-        productType: "",
-        description: "",
-        photo: null,
-    });
 
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [formData, setFormData] = useState({
+        productType: "",
+        description: "", photos: []
+    });
+
 
     const handleFileChange = (event) => {
-        const file = event.target.files[0];
+        const files = Array.from(event.target.files); 
+        const previews = files.map((file) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            return new Promise((resolve) => {
+                reader.onloadend = () => resolve({ file, preview: reader.result });
+            });
+        });
+
+        Promise.all(previews).then((uploadedImages) => {
+            setFormData((prev) => {
+                const updatedForm = {
+                    ...prev,
+                    photos: [...(prev.photos || []), ...uploadedImages],
+                };
+                localStorage.setItem("formData", JSON.stringify(updatedForm));
+                return updatedForm;
+            });
+        });
+    };
+
+    const handleRemoveImage = (index) => {
         setFormData((prev) => {
-            const updatedForm = { ...prev, photo: file };
+            const updatedPhotos = [...prev.photos];
+            updatedPhotos.splice(index, 1);
+            const updatedForm = { ...prev, photos: updatedPhotos };
             localStorage.setItem("formData", JSON.stringify(updatedForm));
             return updatedForm;
         });
@@ -69,25 +103,65 @@ function Issues() {
         const formDataToSubmit = new FormData();
         formDataToSubmit.append("productType", formData.productType);
         formDataToSubmit.append("description", formData.description);
-        if (formData.photo) {
-            formDataToSubmit.append("photo", formData.photo);
+    
+        if (formData.photos && formData.photos.length > 0) {
+            formData.photos.forEach((photo, index) => {
+                // Convert base64 to File if necessary
+                const photoFile = photo.file instanceof File 
+                    ? photo.file 
+                    : dataURLToFile(photo.preview, `photo-${index}.jpg`);
+                formDataToSubmit.append("photos", photoFile);
+            });
         }
-
+    
+        // Log FormData contents
+        for (let pair of formDataToSubmit.entries()) {
+            console.log(`${pair[0]}:`, pair[1]);
+        }
+    
         try {
             setIsSubmitting(true);
-            await axios.post("http://localhost:5000/api/complaints", formDataToSubmit, {
+            await axios.post("http://localhost:5000/api/issues/add", formDataToSubmit, {
                 headers: { "Content-Type": "multipart/form-data" },
             });
-            alert("Complaint submitted successfully.");
-            setFormData({ productType: "", description: "", photo: null });
-            localStorage.removeItem("formData"); // Clear data
+            alert("Issue submitted successfully.");
+            setFormData({ productType: "", description: "", photos: [] });
+            localStorage.removeItem("formData");
         } catch (error) {
-            console.error("Error submitting complaint:", error);
+            console.error("Error submitting issue:", error);
             alert("Failed to submit complaint.");
         } finally {
             setIsSubmitting(false);
         }
     };
+    
+
+    // const handleFormSubmit = async (event) => {
+    //     event.preventDefault();
+    //     const formDataToSubmit = new FormData();
+    //     formDataToSubmit.append("productType", formData.productType);
+    //     formDataToSubmit.append("description", formData.description);
+
+    //     console.log('form data', formData);
+    //     if (formData.photos) {
+    //         console.log(formData.photo);
+    //         formDataToSubmit.append("photo", formData.photo);
+    //     }
+    //     try {
+    //         setIsSubmitting(true);
+    //         await axios.post("http://localhost:5000/api/issues/add", formDataToSubmit, {
+    //             headers: { "Content-Type": "multipart/form-data" },
+    //         });
+    //         alert("Complaint submitted successfully.");
+    //         setFormData({ productType: "", description: "", photo: null });
+    //         localStorage.removeItem("formData"); 
+    //     } catch (error) {
+    //         console.error("Error submitting complaint:", error);
+    //         alert("Failed to submit complaint.");
+    //     } finally {
+    //         setIsSubmitting(false);
+    //     }
+    // };
 
     const handleInputChange = (event) => {
         const { name, value } = event.target;
@@ -132,7 +206,7 @@ function Issues() {
 
             intervalId = setInterval(() => {
                 window.location.reload();
-            }, 20000);
+            }, 200000);
         }
         return () => clearInterval(intervalId);
     }, [autoReload, isDialogOpen, isFormActive]);
@@ -153,9 +227,6 @@ function Issues() {
         setIsDialogOpen(false);
         setSelectedIssue(null);
     };
-
-    const handleFormFocus = () => setIsFormActive(true);
-    const handleFormBlur = () => setIsFormActive(false);
 
     if (loading) {
         return (
@@ -366,7 +437,7 @@ function Issues() {
                         Report an Issue for Damaged Container (if any)
                     </Typography>
 
-                    <form onFocus={handleFormBlur} onBlur={handleFormBlur} onSubmit={handleFormSubmit}>
+                    <form onSubmit={handleFormSubmit}>
                         <Grid container spacing={2}>
                             <Grid item xs={12}>
                                 <TextField
@@ -397,16 +468,77 @@ function Issues() {
                             </Grid>
                             <Grid item xs={12}>
                                 <Button variant="outlined" component="label" fullWidth>
-                                    Upload Photo (Optional)
-                                    <input type="file" hidden accept="image/*" onChange={handleFileChange} />
+                                    Upload Photos 
+                                    <input
+                                        type="file"
+                                        hidden
+                                        accept="image/*"
+                                        multiple
+                                        onChange={handleFileChange}
+                                    />
                                 </Button>
+                            </Grid>
+                            <Grid item xs={12}>
+                                <div
+                                    style={{
+                                        display: "flex",
+                                        gap: "10px",
+                                        flexWrap: "wrap",
+                                        justifyContent: "center", // Center images horizontally
+                                        alignItems: "center",    // Center images vertically
+                                    }}
+                                >
+                                    {formData.photos.map((photo, index) => (
+                                        <div
+                                            key={index}
+                                            style={{
+                                                position: "relative",
+                                                display: "flex",
+                                                flexDirection: "column",
+                                                alignItems: "center",
+                                            }}
+                                        >
+                                            <img
+                                                src={photo.preview}
+                                                alt={`Preview ${index}`}
+                                                style={{
+                                                    width: "100px",
+                                                    height: "100px",
+                                                    objectFit: "cover",
+                                                    borderRadius: "8px",
+                                                }}
+                                            />
+                                            <button
+                                                onClick={() => handleRemoveImage(index)}
+                                                style={{
+                                                    position: "absolute",
+                                                    top: "-5px",
+                                                    right: "-5px",
+                                                    background: "red",
+                                                    color: "white",
+                                                    border: "none",
+                                                    borderRadius: "50%",
+                                                    cursor: "pointer",
+                                                }}
+                                            >
+                                                &times;
+                                            </button>
+                                        </div>
+                                    ))}
+                                </div>
                             </Grid>
                             <Grid item xs={12}>
                                 <Button
                                     type="submit"
                                     variant="contained"
-                                    color="primary"
                                     fullWidth
+                                    sx={{
+                                        background: "linear-gradient(to right, #00796b, #48a999)",
+                                        color: "#fff",
+                                        "&:hover": {
+                                            background: "linear-gradient(to right, #00574b, #327e67)",
+                                        },
+                                    }}
                                     disabled={isSubmitting}
                                 >
                                     {isSubmitting ? "Submitting..." : "Submit"}
