@@ -81,7 +81,11 @@ export default function SignInCard() {
         },
       });
       console.log('Login successful:', response.data);
+      console.log(response.data);
+      sessionStorage.setItem('userData', JSON.stringify(response.data));
 
+      // Optionally check the stored data
+      console.log('Data stored in session:', sessionStorage.getItem('userData'));
       // Navigate to the home page
       navigate('/home');
     } catch (error) {

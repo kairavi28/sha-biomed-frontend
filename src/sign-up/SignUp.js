@@ -63,16 +63,41 @@ export default function SignUp() {
   const [passwordError, setPasswordError] = React.useState(false);
   const [passwordErrorMessage, setPasswordErrorMessage] = React.useState('');
   //facility
-  const [facilityType, setFacilityType] = React.useState('');
-  const [facilityError, setFacilityError] = React.useState(false);
-  const [facilityErrorMessage, setFacilityErrorMessage] = React.useState('');
+  const [facilities, setFacilities] = React.useState([]);
+  const [facilityTypes, setFacilityTypes] = React.useState([]);
+  const [selectedFacility, setSelectedFacility] = React.useState('');
+  const [selectedFacilityType, setSelectedFacilityType] = React.useState('');
+  const [facilityError, setFacilityError] = useState(false);
+  const [facilityErrorMessage, setFacilityErrorMessage] = useState('');
   const [facilityTypeError, setFacilityTypeError] = useState(false);
+  const [facilityTypeErrorMessage, setFacilityTypeErrorMessage] = useState('');
+
   //snackbar - notifications
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
   const [snackbarSeverity, setSnackbarSeverity] = useState('success');
 
   const navigate = useNavigate();
+
+  React.useEffect(() => {
+    // Fetch facility options
+    axios.get('/data/facilities.json')
+      .then((response) => {
+        setFacilities(response.data);
+      })
+      .catch((error) => {
+        console.error('Error fetching facilities:', error);
+      });
+
+    // Fetch facility type options
+    axios.get('/data/facilityTypes.json')
+      .then((response) => {
+        setFacilityTypes(response.data);
+      })
+      .catch((error) => {
+        console.error('Error fetching facility types:', error);
+      });
+  }, []);
 
   React.useEffect(() => {
     // Check if there is a preferred mode in localStorage
@@ -99,7 +124,7 @@ export default function SignUp() {
     const email = document.getElementById('email');
     const password = document.getElementById('password');
     const name = document.getElementById('name');
-    
+
     let isValid = true;
 
     if (!email.value || !/\S+@\S+\.\S+/.test(email.value)) {
@@ -126,14 +151,24 @@ export default function SignUp() {
       isValid = false;
     }
 
-    if (!facilityType) {
+    if (!selectedFacility) {
       setFacilityError(true);
-      setFacilityErrorMessage('Please select a facility type.');
+      setFacilityErrorMessage('Please select a facility.');
       isValid = false;
     } else {
       setFacilityError(false);
       setFacilityErrorMessage('');
     }
+
+    if (!selectedFacilityType) {
+      setFacilityTypeError(true);
+      setFacilityTypeErrorMessage('Please select a facility type.');
+      isValid = false;
+    } else {
+      setFacilityTypeError(false);
+      setFacilityTypeErrorMessage('');
+    }
+
     return isValid;
   };
 
@@ -148,33 +183,29 @@ export default function SignUp() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     console.log('submit clicked');
-
     // Validate form errors
     if (nameError || emailError || passwordError) {
       console.log('Error popped up');
       return;
     }
-
     // Extract form data
     const data = new FormData(event.currentTarget);
     const formData = {
       name: data.get('name'),
       email: data.get('email'),
       password: data.get('password'),
-      facilityType: facilityType
+      facilityType: selectedFacilityType,
+      facility: selectedFacility,
     };
     console.log('Form Data:', formData);
 
     try {
-      // Make API request
       const response = await axios.post('http://localhost:5000/api/register', formData, {
         headers: {
           'Content-Type': 'application/json',
         },
       });
       console.log('Registration successful:', response.data);
-
-      // Display success message
       setSnackbarMessage('Registration Successful! Please log in');
       setSnackbarSeverity('success');
       setSnackbarOpen(true);
@@ -203,7 +234,6 @@ export default function SignUp() {
         // Handle unknown errors
         setSnackbarMessage('An unexpected error occurred.');
       }
-
       // Display error message
       setSnackbarSeverity('error');
       setSnackbarOpen(true);
@@ -299,26 +329,54 @@ export default function SignUp() {
                   }}
                 />
               </FormControl>
-              <FormControl fullWidth required>
+
+              {/* <FormControl fullWidth>
                 <FormLabel htmlFor="facilityType">Facility Type</FormLabel>
                 <TextField
                   select
-                  fullWidth
                   id="facilityType"
-                  name="facilityType"
-                  value={facilityType}
-                  onChange={(e) => setFacilityType(e.target.value)}
+                  value={selectedFacilityType}
+                  onChange={(event) => setSelectedFacilityType(event.target.value)}
+                  SelectProps={{
+                    native: true,
+                    width: '300px'
+                  }}
+                  variant="outlined"
+                  error={facilityTypeError}
+                  helperText={facilityTypeError ? 'Please select a facility type' : ''}
+                  color={facilityTypeError ? 'error' : 'primary'}
+                >
+                  <option value="">Select a Facility Type</option>
+                  {facilityTypes.map((type) => (
+                    <option key={type.id} value={type.id}>
+                      {type.name}
+                    </option>
+                  ))}
+                </TextField>
+              </FormControl> */}
+
+              <FormControl fullWidth>
+                <FormLabel htmlFor="facility">Facility</FormLabel>
+                <TextField
+                  select
+                  id="facility"
+                  value={selectedFacility}
+                  onChange={(event) => setSelectedFacility(event.target.value)}
+                  SelectProps={{
+                    native: true,
+                    width: '300px'
+                  }}
+                  variant="outlined"
                   error={facilityError}
                   helperText={facilityErrorMessage}
-                  variant="outlined"
+                  color={facilityError ? 'error' : 'primary'}
                 >
-                  <option value="" disabled>
-                    Select a Facility Type
-                  </option>
-                  <option value="hospital">Hospital</option>
-                  <option value="clinic">Clinic</option>
-                  <option value="laboratory">Laboratory</option>
-                  <option value="other">Other</option>
+                  <option value="">Select a Facility</option>
+                  {facilities.map((facility) => (
+                    <option key={facility.id} value={facility.name}>
+                      {facility.name}
+                    </option>
+                  ))}
                 </TextField>
               </FormControl>
 

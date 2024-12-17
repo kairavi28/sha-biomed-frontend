@@ -33,7 +33,7 @@ function Copyright() {
 function BlogPage() {
   const [blogs, setBlogs] = useState([]);
   const [autoReload, setAutoReload] = useState(true);
-  const [loading, setLoading] = useState(true);  // eslint-disable-line no-unused-vars
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [open, setOpen] = useState(false);
   const [selectedBlog, setSelectedBlog] = useState(null);
@@ -85,9 +85,8 @@ function BlogPage() {
 
       intervalId = setInterval(() => {
         window.location.reload();
-      }, 10000);
+      }, 100000);
     }
-
     return () => clearInterval(intervalId);
   }, [autoReload]);
 
@@ -116,7 +115,6 @@ function BlogPage() {
     );
   }
 
-
   if (error) {
     return (
       <Box
@@ -134,8 +132,21 @@ function BlogPage() {
   }
 
   return (
-    <Box sx={{ background: 'linear-gradient(to bottom, white, #b3e0ff, #b3e6b3)', minHeight: "100vh", pb: 1, overflowX: 'hidden' }}>
-      <Container>
+    <Box sx={{
+      background: "linear-gradient(to bottom, white, #b3e0ff, #b3e6b3)",
+      minHeight: "100vh",
+      pb: 1,
+      justifyContent: "center",
+      alignItems: "center",
+      overflowX: 'hidden'
+    }}>
+      <Container maxWidth="lg"
+        sx={{
+          borderRadius: 4,
+          boxShadow: "0px 10px 20px rgba(0, 0, 0, 0.1)",
+          py: 8,
+          px: 4,
+        }}>
         <Typography
           variant="h5"
           align="center"
@@ -149,7 +160,7 @@ function BlogPage() {
         >
           Explore Our Blogs
         </Typography>
-        <Grid container spacing={6}>
+        <Grid container spacing={4}>
           {blogs.map((blog) => (
             <Grid item xs={12} sm={6} md={4} key={blog.id}>
               <Paper
@@ -184,7 +195,7 @@ function BlogPage() {
                     loading="lazy"
                   />
                 </Box>
-                <Box sx={{ flexGrow: 1 }}>
+                <Box sx={{ flexGrow: 0.5 }}>
                   <Typography
                     variant="h6"
                     sx={{
@@ -200,7 +211,7 @@ function BlogPage() {
                   </Typography>
                   <Typography
                     variant="body2"
-                    sx={{ color: "#666", lineHeight: 1.6 }}
+                    sx={{ color: "#666", lineHeight: 1 }}
                   >
                     {blog.description.length > 100
                       ? `${blog.description.slice(0, 100)}...`
@@ -294,7 +305,6 @@ function BlogPage() {
           </Dialog>
         )}
       </Container>
-
 
       {/* Footer with Get a Free Quote Section */}
       <Box sx={{

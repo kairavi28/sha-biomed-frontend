@@ -102,7 +102,7 @@ function Dashboard() {
 
             intervalId = setInterval(() => {
                 window.location.reload();
-            }, 10000);
+            }, 100000);
         }
 
         return () => clearInterval(intervalId);

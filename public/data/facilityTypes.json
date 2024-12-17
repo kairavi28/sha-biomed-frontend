@@ -1,9 +1,5 @@
 [
     {
-        "id": "default",
-        "name": "Choose Facility Type"
-    },
-    {
         "id": "1",
         "name": "Cancer Centre"
     }, 

@@ -206,7 +206,7 @@ function Issues() {
 
             intervalId = setInterval(() => {
                 window.location.reload();
-            }, 200000);
+            }, 10000);
         }
         return () => clearInterval(intervalId);
     }, [autoReload, isDialogOpen, isFormActive]);
@@ -265,6 +265,7 @@ function Issues() {
                 pb: 1,
                 justifyContent: "center",
                 alignItems: "center",
+                overflowX: 'hidden'
             }}
         >
             <Container

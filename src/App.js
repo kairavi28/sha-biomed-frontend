@@ -7,6 +7,8 @@ import Navbar from './components/Navbar';
 import Dashboard from './components/Dashboard';
 import Issues from './components/Issues';
 import BlogPage from './components/BlogPage';
+import Blog from './components/Blog';
+import ProfilePage from './components/ProfilePage';
 
 
 function App() {
@@ -19,6 +21,8 @@ function App() {
         <Route path="/services" element={<Issues />} />
         <Route path="/blogs" element={<BlogPage />} />
         <Route path="/login" element={<SignInSide/>} />
+        <Route path="/blog" element={<Blog />} />
+        <Route path="/profile" element={<ProfilePage/>} />
       </Route>
     </Routes>
   );
@@ -33,6 +37,8 @@ function LayoutWithNavbar() {
         <Route path="/services" element={<Issues />} />
         <Route path="/blogs" element={<BlogPage />} />
         <Route path="/login" element={<SignInSide/>} />
+        <Route path="/blog" element={<Blog />} />
+        <Route path="/profile" element={<ProfilePage/>} />
       </Routes>
     </>
   );
