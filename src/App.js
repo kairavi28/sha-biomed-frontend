@@ -36,7 +36,7 @@ function LayoutWithNavbar() {
         <Route path="/home" element={<Dashboard />} />
         <Route path="/services" element={<Issues />} />
         <Route path="/blogs" element={<BlogPage />} />
-        <Route path="/login" element={<SignInSide/>} />
+        <Route path="/" element={<SignInSide/>} />
         <Route path="/blog" element={<Blog />} />
         <Route path="/profile" element={<ProfilePage/>} />
       </Routes>

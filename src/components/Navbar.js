@@ -132,7 +132,7 @@ const Navbar = () => {
                 console.log("Logout clicked");
                 axios.post("http://localhost:5000/logout")
                 .then(() => {
-                  navigate("/login");  
+                  navigate("/");  
                 })
                 .catch(() => {
                   alert("There was an error logging out.");

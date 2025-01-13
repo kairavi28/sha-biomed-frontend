@@ -485,8 +485,8 @@ function Issues() {
                                         display: "flex",
                                         gap: "10px",
                                         flexWrap: "wrap",
-                                        justifyContent: "center", // Center images horizontally
-                                        alignItems: "center",    // Center images vertically
+                                        justifyContent: "center", 
+                                        alignItems: "center",    
                                     }}
                                 >
                                     {formData.photos.map((photo, index) => (

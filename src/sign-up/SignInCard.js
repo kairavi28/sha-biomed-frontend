@@ -75,13 +75,12 @@ export default function SignInCard() {
 
     try {
       // Make API request for login
-      const response = await axios.post('http://localhost:5000/api/login', JSON.stringify(formData), {
+      const response = await axios.post('http://localhost:5000/api/user/login', JSON.stringify(formData), {
         headers: {
           'Content-Type': 'application/json',
         },
       });
       console.log('Login successful:', response.data);
-      console.log(response.data);
       sessionStorage.setItem('userData', JSON.stringify(response.data));
 
       // Optionally check the stored data
