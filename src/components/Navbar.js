@@ -9,11 +9,12 @@ import {
   MenuItem,
   Typography,
   Divider,
+  Container,
 } from "@mui/material";
 import { Settings, AccountCircle, Logout, Person } from "@mui/icons-material";
 import { useNavigate, useLocation } from "react-router-dom";
 import logo from "../assets/images/logo.png";
-import axios from 'axios';
+import axios from "axios";
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -40,11 +41,63 @@ const Navbar = () => {
         backgroundColor: "#ffffff",
         color: "#003366",
         boxShadow: "0 4px 10px rgba(0, 0, 0, 0.1)",
-        padding: "10px 0",
         borderBottom: "3px solid #C9CC3F",
       }}
     >
-      <Toolbar sx={{ display: "flex", justifyContent: "space-between", paddingX: 2 }}>
+      {/* Contact Info Row */}
+      <Box
+        sx={{
+          backgroundColor: "#F3F4F6",
+          padding: "8px 0",
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          paddingX: 2,
+        }}
+      >
+        <Typography
+          variant="body2"
+          sx={{ color: "#003366", fontWeight: "bold", display: "flex", alignItems: "center", gap: 1 }}
+        >
+          <span>📞</span> +1-866-288-3298
+        </Typography>
+        <Typography
+          variant="body2"
+          sx={{
+            color: "#003366",
+            fontWeight: "bold",
+            display: "flex",
+            alignItems: "center",
+            gap: 1,
+          }}
+        >
+          <span>📧</span> support@biomedwaste.com
+        </Typography>
+        <Button
+          onClick={() => navigate("/quote")}
+          variant="contained"
+          sx={{
+            backgroundColor: "#C9CC3F",
+            color: "#003366",
+            fontWeight: "bold",
+            textTransform: "none",
+            "&:hover": {
+              backgroundColor: "#A9AC2B",
+            },
+          }}
+        >
+          Request Free Quote
+        </Button>
+      </Box>
+
+      {/* Main Navbar Row */}
+      <Toolbar
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          paddingX: 2,
+        }}
+      >
         {/* Logo */}
         <Box component="div" sx={{ cursor: "pointer" }} onClick={() => navigate("/home")}>
           <img src={logo} alt="Logo" style={{ width: "120px", height: "auto" }} />
@@ -129,14 +182,14 @@ const Navbar = () => {
             <MenuItem
               onClick={() => {
                 handleMenuClose();
-                console.log("Logout clicked");
-                axios.post("http://localhost:5000/logout")
-                .then(() => {
-                  navigate("/");  
-                })
-                .catch(() => {
-                  alert("There was an error logging out.");
-                });
+                axios
+                  .post("http://localhost:5000/logout")
+                  .then(() => {
+                    navigate("/");
+                  })
+                  .catch(() => {
+                    alert("There was an error logging out.");
+                  });
               }}
               sx={{ display: "flex", gap: 1 }}
             >

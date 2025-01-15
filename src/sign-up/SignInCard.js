@@ -142,13 +142,14 @@ export default function SignInCard() {
   return (
     <Card variant="outlined">
       <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
-        <img src={logo} alt="Logo" style={{ width: '150px', height: 'auto' }} />
+        <img src={logo} alt="Logo" style={{ width: '500px', height: 'auto' }}/>
       </Box>
       <Typography
         component="h1"
+        variant="h5"
         sx={{ width: '100%', fontSize: 'clamp(1.8rem, 10vw, 1.8r1em)' }}
       >
-        Sign in
+        Sign In
       </Typography>
       <Box
         component="form"
@@ -249,14 +250,6 @@ export default function SignInCard() {
           startIcon={<GoogleIcon />}
         >
           Sign in with Google
-        </Button>
-        <Button
-          fullWidth
-          variant="outlined"
-          onClick={() => alert('Sign in with Facebook')}
-          startIcon={<FacebookIcon />}
-        >
-          Sign in with Facebook
         </Button>
       </Box>
     </Card>

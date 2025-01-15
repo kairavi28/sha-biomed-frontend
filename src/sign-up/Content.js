@@ -2,7 +2,6 @@ import * as React from 'react';
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
-
 import AutoFixHighRoundedIcon from '@mui/icons-material/AutoFixHighRounded';
 import ConstructionRoundedIcon from '@mui/icons-material/ConstructionRounded';
 import SettingsSuggestRoundedIcon from '@mui/icons-material/SettingsSuggestRounded';
@@ -11,25 +10,19 @@ import logo from '../assets/images/logo.png'
 
 const items = [
   {
-    icon: <SettingsSuggestRoundedIcon sx={{ color: 'text.secondary' }} />,
-    title: 'Adaptable performance',
+    icon: <ConstructionRoundedIcon sx={{ color: '#D4ED31' }} />,
+    title: 'Services',
     description:
-      'Our product effortlessly adjusts to your needs, boosting efficiency and simplifying your tasks.',
+      'We are a medical waste transport and medical waste disposal service company proudly serving the Province of Saskatchewan, Canada.',
   },
   {
-    icon: <ConstructionRoundedIcon sx={{ color: 'text.secondary' }} />,
-    title: 'Built to last',
+    icon: <ThumbUpAltRoundedIcon sx={{ color: '#D4ED31' }} />,
+    title: 'Great Customer Reviews',
     description:
-      'Experience unmatched durability that goes above and beyond with lasting investment.',
+      `Don't be fooled by foreign competitors who haul the waste but cannot process it. At Biomed, our experience, expertise and excellent customer service otuclasses any of our challengers, regardless of their pomp, circumstance and industry buzzwords.`,
   },
   {
-    icon: <ThumbUpAltRoundedIcon sx={{ color: 'text.secondary' }} />,
-    title: 'Great user experience',
-    description:
-      'Integrate our product into your routine with an intuitive and easy-to-use interface.',
-  },
-  {
-    icon: <AutoFixHighRoundedIcon sx={{ color: 'text.secondary' }} />,
+    icon: <AutoFixHighRoundedIcon sx={{ color: '#D4ED31' }} />,
     title: 'Innovative functionality',
     description:
       'Stay ahead with features that set new standards, addressing your evolving needs better than the rest.',
@@ -42,7 +35,7 @@ export default function Content() {
       sx={{ flexDirection: 'column', alignSelf: 'center', gap: 4, maxWidth: 450 }}
     >
       <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-      <img src={logo} alt="Logo" style={{ width: '100px', height: 'auto' }} />
+      <img src={logo} alt="Logo" style={{ width: '200px', height: 'auto' }} />
       </Box>
       {items.map((item, index) => (
         <Stack key={index} direction="row" sx={{ gap: 2 }}>
