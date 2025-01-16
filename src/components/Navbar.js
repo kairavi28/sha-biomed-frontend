@@ -128,7 +128,7 @@ const Navbar = () => {
             <span>📧</span> support@biomedwaste.com
           </Typography>
           <Button
-            onClick={() => navigate("/quote")}
+            onClick={() => handleModalOpen()}
             variant="contained"
             sx={{
               backgroundColor: "#C9CC3F",
