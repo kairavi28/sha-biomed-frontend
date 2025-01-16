@@ -1,13 +1,17 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
-    Box,
-    Typography,
-    Container,
-    Grid,
-    Paper,
-    Button,
-    TextField,
-    MenuItem,
+  Box,
+  Typography,
+  Container,
+  Grid,
+  Paper,
+  Button,
+  TextField,
+  MenuItem,
+  Modal,
+  Card,
+  CardContent,
+  CardMedia,
 } from "@mui/material";
 import AwesomeSlider from "react-awesome-slider";
 import "react-awesome-slider/dist/styles.css";
@@ -28,141 +32,194 @@ const newCardHoverAnimation = keyframes`
 `;
 
 const updates = [
-    { title: "New Waste Guidelines", description: "Updated policies for 2025.", date: "Jan 10, 2025" },
-    { title: "Expanded Services", description: "Now operating in additional locations!", date: "Jan 5, 2025" },
+  { title: "New Waste Guidelines", description: "Updated policies for 2025.", date: "Jan 10, 2025" },
+  { title: "Expanded Services", description: "Now operating in additional locations!", date: "Jan 5, 2025" },
+];
+
+const testimonials = [
+  { name: "John Doe", feedback: "Biomed’s services exceeded our expectations!" },
+  { name: "Jane Smith", feedback: "Highly reliable and professional team!" },
 ];
 
 function Dashboard() {
-    const [autoReload, setAutoReload] = useState(true);
+  const [formOpen, setFormOpen] = useState(false);
 
-    return (
-        <Box sx={{ background: "linear-gradient(to bottom, white, #b3e0ff)", minHeight: "100vh" }}>
-            {/* Hero Section */}
-            <Box
-                sx={{
-                    position: "relative",
-                    textAlign: "center",
-                    pt: 4,
-                    background: "linear-gradient(to bottom, white, #b3e0ff)",
-                    overflow: "hidden",
+  const handleFormOpen = () => setFormOpen(true);
+  const handleFormClose = () => setFormOpen(false);
+
+  return (
+    <Box sx={{ background: "linear-gradient(to bottom, white, #f0f8ff)", minHeight: "100vh" }}>
+      {/* Hero Section */}
+      <Box
+        sx={{
+          position: "relative",
+          textAlign: "center",
+          background: "linear-gradient(to bottom, #003366, rgba(0, 51, 102, 0.8))",
+          color: "white",
+          pb: 6,
+          pt: 4,
+        }}
+      >
+        <AwesomeSlider
+          style={{
+            height: "500px",
+            borderRadius: "10px",
+          }}
+          bullets={false}
+          play={true}
+          interval={4000}
+        >
+          {[image1, image3].map((img, index) => (
+            <div key={index}>
+              <img
+                src={img}
+                alt={`Slide ${index + 1}`}
+                style={{
+                  width: "100%",
+                  objectFit: "cover",
+                  display: "block",
                 }}
-            >
-                <Box
-                    sx={{
-                        width: { xs: "100%", md: "70%" },
-                        height: { xs: "300px", md: "550px" }, // Adjust height for mobile devices
-                        margin: "0 auto",
-                        borderRadius: 2,
-                        overflow: "hidden",
-                        boxShadow: 3,
-                        backgroundColor: "transparent",
-                    }}
-                >
-                    <AwesomeSlider
-                        style={{
-                            height: "100%",
-                            borderRadius: "10px",
-                            backgroundColor: "transparent",
-                        }}
-                        bullets={false}
-                    >
-                        {[image1, image3].map((img, index) => (
-                            <div key={index}>
-                                <img
-                                    src={img}
-                                    alt={`Slide ${index + 1}`}
-                                    style={{
-                                        width: "100%",
-                                        objectFit: "cover", // Ensure the image covers the entire slider area
-                                        display: "block",
-                                    }}
-                                />
-                            </div>
-                        ))}
-                    </AwesomeSlider>
-                </Box>
-                <Typography variant="h4" sx={{ mt: 2, fontWeight: "bold", color: "#003366" }}>
-                    Leading Biohazard Waste Disposal
+              />
+            </div>
+          ))}
+        </AwesomeSlider>
+        <Typography variant="h3" sx={{ mt: 3, fontWeight: "bold" }}>
+          Leading Biohazard Waste Disposal
+        </Typography>
+        <Button
+          variant="contained"
+          sx={{
+            mt: 2,
+            backgroundColor: "#C9CC3F",
+            px: 4,
+            "&:hover": { backgroundColor: "#A9AC2B" },
+          }}
+          onClick={handleFormOpen}
+        >
+          Request Free Quote
+        </Button>
+        <Button
+          variant="outlined"
+          sx={{
+            mt: 2,
+            ml: 2,
+            color: "white",
+            borderColor: "white",
+            "&:hover": { borderColor: "#A9AC2B", color: "#A9AC2B" },
+          }}
+        >
+          Explore Services
+        </Button>
+      </Box>
+
+      {/* About Section */}
+      <Container sx={{ mt: 8 }}>
+        <Typography variant="h4" sx={{ mb: 4, textAlign: "center", fontWeight: "bold", color: "#003366" }}>
+          About Biomed 
+        </Typography>
+        <Grid container spacing={4}>
+          {[
+            {
+              title: "30+ Years of Expertise",
+              description: "Trusted leaders in biohazard waste recovery since 1992.",
+            },
+            {
+              title: "Certified & Compliant",
+              description: "Fully licensed to handle all types of biohazardous waste.",
+            },
+            {
+              title: "Sustainable Solutions",
+              description: "Innovative systems that prioritize the environment.",
+            },
+          ].map((item, index) => (
+            <Grid item xs={12} md={4} key={index}>
+              <Card sx={{ textAlign: "center", boxShadow: 3 }}>
+                <CardContent>
+                  <Typography variant="h6" sx={{ fontWeight: "bold", color: "#003366" }}>
+                    {item.title}
+                  </Typography>
+                  <Typography variant="body2" sx={{ mt: 2, color: "#555" }}>
+                    {item.description}
+                  </Typography>
+                </CardContent>
+              </Card>
+            </Grid>
+          ))}
+        </Grid>
+      </Container>
+
+      {/* Improperly Packaged Waste Section */}
+      <Container sx={{ mt: 6 }}>
+        <Typography variant="h4" sx={{ mb: 4, textAlign: "center", fontWeight: "bold", color: "#003366" }}>
+          Importance of Proper Waste Packaging
+        </Typography>
+        <Typography variant="body1" sx={{ textAlign: "center", mb: 4 }}>
+          Improperly packaged waste can lead to contamination, legal issues, and harm to the environment. This portal is
+          designed to educate users on the best practices for properly packaging waste to ensure safety and compliance
+          with regulations.
+        </Typography>
+      </Container>
+
+      {/* Services Section */}
+      <Container sx={{ mt: 6 }}>
+        <Typography variant="h4" sx={{ mb: 4, textAlign: "center", fontWeight: "bold", color: "#003366" }}>
+          Our Services
+        </Typography>
+        <Grid container spacing={4}>
+          {[image_1, image_2, image_3].map((image, index) => (
+            <Grid item xs={12} md={4} key={index}>
+              <Paper
+                elevation={4}
+                sx={{
+                  p: 2,
+                  borderRadius: 2,
+                  textAlign: "center",
+                  "&:hover": { animation: `${newCardHoverAnimation} 0.5s ease-in-out forwards` },
+                }}
+              >
+                <img src={image} alt={`Service ${index}`} style={{ width: "100%", borderRadius: "8px" }} />
+                <Typography variant="h6" sx={{ mt: 2, fontWeight: "bold" }}>
+                  Service {index + 1}
                 </Typography>
-                <Button
-                    variant="contained"
-                    sx={{
-                        mt: 3,
-                        backgroundColor: "#00796b",
-                        color: "white",
-                        px: 4,
-                        py: 1,
-                        "&:hover": { backgroundColor: "#00574b" },
-                    }}
-                >
-                    Register Issue
+                <Button variant="contained" sx={{ mt: 2 }}>
+                  Learn More
                 </Button>
-            </Box>
+              </Paper>
+            </Grid>
+          ))}
+        </Grid>
+      </Container>
 
-
-
-            {/* Services Section */}
-            <Container sx={{ mt: 6 }}>
-                <Typography variant="h5" sx={{ mb: 4, fontWeight: "bold", textAlign: "center" }}>
-                    Our Services
+      {/* Testimonials Section */}
+      <Container sx={{ mt: 6, mb: 6 }}>
+        <Typography variant="h4" sx={{ mb: 4, textAlign: "center", fontWeight: "bold", color: "#003366" }}>
+          What Our Clients Say
+        </Typography>
+        <Grid container spacing={4}>
+          {testimonials.map((testimonial, index) => (
+            <Grid item xs={12} md={6} key={index}>
+              <Paper
+                elevation={3}
+                sx={{ p: 3, backgroundColor: "#f9f9f9", borderRadius: 2, textAlign: "center" }}
+              >
+                <Typography variant="body1" sx={{ fontStyle: "italic" }}>
+                  "{testimonial.feedback}"
                 </Typography>
-                <Grid container spacing={4}>
-                    {[image_1, image_2, image_3].map((image, index) => (
-                        <Grid item xs={12} md={4} key={index}>
-                            <Paper
-                                elevation={4}
-                                sx={{
-                                    p: 2,
-                                    borderRadius: 2,
-                                    textAlign: "center",
-                                    "&:hover": { animation: `${newCardHoverAnimation} 0.5s ease-in-out forwards` },
-                                }}
-                            >
-                                <img src={image} alt={`Service ${index}`} style={{ width: "100%", borderRadius: "8px" }} />
-                                <Typography variant="h6" sx={{ mt: 2, fontWeight: "bold" }}>
-                                    Service {index + 1}
-                                </Typography>
-                                <Typography variant="body2" sx={{ mt: 1 }}>
-                                    Detailed description of Service {index + 1}.
-                                </Typography>
-                            </Paper>
-                        </Grid>
-                    ))}
-                </Grid>
-            </Container>
+                <Typography variant="h6" sx={{ mt: 2, fontWeight: "bold" }}>
+                  - {testimonial.name}
+                </Typography>
+              </Paper>
+            </Grid>
+          ))}
+        </Grid>
+      </Container>
 
-            {/* Updates Section */}
-            <Box sx={{ mt: 6, backgroundColor: "#f4f4f4", py: 4 }}>
-                <Container>
-                    <Typography variant="h5" sx={{ mb: 4, fontWeight: "bold", textAlign: "center" }}>
-                        Latest Updates
-                    </Typography>
-                    <Grid container spacing={4}>
-                        {updates.map((update, index) => (
-                            <Grid item xs={12} md={6} key={index}>
-                                <Paper elevation={3} sx={{ p: 2, borderRadius: 2 }}>
-                                    <Typography variant="h6" sx={{ fontWeight: "bold", mb: 1 }}>
-                                        {update.title}
-                                    </Typography>
-                                    <Typography variant="body2" sx={{ mb: 1 }}>
-                                        {update.description}
-                                    </Typography>
-                                    <Typography variant="caption" color="textSecondary">
-                                        {update.date}
-                                    </Typography>
-                                </Paper>
-                            </Grid>
-                        ))}
-                    </Grid>
-                </Container>
-            </Box>
-
-            {/* Footer */}
-            <Box sx={{ backgroundColor: "#333", color: "#fff", textAlign: "center", py: 4 }}>
-                <Typography variant="body2">© 2025 Biomed Waste Communication Channel. All rights reserved.</Typography>
-            </Box>
-        </Box>
-    );
+      {/* Footer */}
+      <Box sx={{ backgroundColor: "#333", color: "#fff", textAlign: "center", py: 4 }}>
+        <Typography variant="body2">© 2025 Biomed Waste Recovery and Disposal Ltd. All rights reserved.</Typography>
+      </Box>
+    </Box>
+  );
 }
 
 export default Dashboard;

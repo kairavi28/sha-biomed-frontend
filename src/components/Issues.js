@@ -67,7 +67,7 @@ function Issues() {
 
 
     const handleFileChange = (event) => {
-        const files = Array.from(event.target.files); 
+        const files = Array.from(event.target.files);
         const previews = files.map((file) => {
             const reader = new FileReader();
             reader.readAsDataURL(file);
@@ -103,22 +103,22 @@ function Issues() {
         const formDataToSubmit = new FormData();
         formDataToSubmit.append("productType", formData.productType);
         formDataToSubmit.append("description", formData.description);
-    
+
         if (formData.photos && formData.photos.length > 0) {
             formData.photos.forEach((photo, index) => {
                 // Convert base64 to File if necessary
-                const photoFile = photo.file instanceof File 
-                    ? photo.file 
+                const photoFile = photo.file instanceof File
+                    ? photo.file
                     : dataURLToFile(photo.preview, `photo-${index}.jpg`);
                 formDataToSubmit.append("photos", photoFile);
             });
         }
-    
+
         // Log FormData contents
         for (let pair of formDataToSubmit.entries()) {
             console.log(`${pair[0]}:`, pair[1]);
         }
-    
+
         try {
             setIsSubmitting(true);
             await axios.post("http://localhost:5000/api/issues/add", formDataToSubmit, {
@@ -134,7 +134,7 @@ function Issues() {
             setIsSubmitting(false);
         }
     };
-    
+
 
     // const handleFormSubmit = async (event) => {
     //     event.preventDefault();
@@ -260,120 +260,151 @@ function Issues() {
     return (
         <Box
             sx={{
-                background: "linear-gradient(to bottom, white, #b3e0ff, #b3e6b3)",
+                display: "flex",
+                flexDirection: "column",
                 minHeight: "100vh",
-                pb: 1,
-                justifyContent: "center",
-                alignItems: "center",
-                overflowX: 'hidden'
+                background: "#f9f9f9",
             }}
         >
-            <Container
-                maxWidth="lg"
+            {/* Hero Section */}
+            <Box
                 sx={{
-                    // background: "",
-                    borderRadius: 4,
-                    boxShadow: "0px 10px 20px rgba(0, 0, 0, 0.1)",
-                    py: 4,
-                    px: 4,
-                }}
-            >
+                    height: "60vh",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    backgroundImage: "url('/images/complaint.jpg')",
+                    backgroundSize: "cover",
+                    backgroundPosition: "center",
+                    textAlign: "center",
+                    color: "#fff",
+                }}>
+                <Container>
+                    <Typography variant="h3" fontWeight="bold">
+                        Welcome to Our Complaint Platform
+                    </Typography>
+                    <Typography variant="h6" sx={{ mt: 2, mb: 4 }}>
+                        Stay updated with the latest insights, stories, and trends.
+                    </Typography>
+                    {/* <Button
+                                  variant="contained"
+                                  sx={{
+                                    background: "#00796b",
+                                    "&:hover": { background: "#00574b" },
+                                  }}
+                                >
+                                  Learn More
+                                </Button> */}
+                </Container>
+            </Box>
 
-                <Typography
-                    variant="h5"
-                    align="center"
-                    fontWeight="bold"
-                    sx={{
-                        mb: 6,
-                        color: "#333",
-                        textTransform: "uppercase",
-                        letterSpacing: 1.5,
-                    }}
-                >
-                    Issues Dashboard
-                </Typography>
-                <Grid container spacing={4}>
-                    {issues.map((issue, index) => (
-                        <Grid item xs={12} sm={6} md={4} key={index}>
-                            <Card
-                                sx={{
-                                    maxWidth: 345,
-                                    backdropFilter: "blur(10px)",
-                                    background: "rgba(255, 255, 255, 0.7)",
-                                    borderRadius: 4,
-                                    overflow: "hidden",
-                                    transition: "transform 0.3s, box-shadow 0.3s",
-                                    boxShadow: "0px 6px 12px rgba(0, 0, 0, 0.1)",
-                                    "&:hover": {
-                                        transform: "scale(1.1)",
-                                        boxShadow: "0px 10px 25px rgba(0, 0, 0, 0.2)",
-                                    },
-                                }}
-                            >
-                                <CardMedia
-                                    component="img"
-                                    height="180"
-                                    image={issue.image}
-                                    alt="Issue Image"
+            {/* About Us Section */}
+            <Box sx={{ py: 8, background: "#ffffff" }}>
+                <Container>
+                    <Typography variant="h4" align="center" sx={{ fontWeight: "bold", mb: 4 }}>
+                        About Us
+                    </Typography>
+                    <Typography align="center" sx={{ color: "#555", mb: 4 }}>
+                        We are dedicated to providing valuable insights and fostering community engagement through our blog platform. Our mission is to empower individuals and businesses with the information they need to succeed.
+                    </Typography>
+                </Container>
+            </Box>
+            <Box sx={{ py: 8 }}>
+                <Container>
+
+                    <Typography
+                        variant="h5"
+                        align="center"
+                        fontWeight="bold"
+                        sx={{
+                            mb: 6,
+                            color: "#333"
+                        }}
+                    >
+                        Issues Dashboard
+                    </Typography>
+                    <Grid container spacing={4}>
+                        {issues.map((issue, index) => (
+                            <Grid item xs={12} sm={6} md={4} key={index}>
+                                <Card
                                     sx={{
-                                        objectFit: "cover",
-                                    }}
-                                />
-                                <CardContent
-                                    sx={{
-                                        p: 3,
-                                        textAlign: "center",
+                                        maxWidth: 345,
+                                        backdropFilter: "blur(10px)",
+                                        background: "rgba(255, 255, 255, 0.7)",
+                                        borderRadius: 4,
+                                        overflow: "hidden",
+                                        transition: "transform 0.3s, box-shadow 0.3s",
+                                        boxShadow: "0px 6px 12px rgba(0, 0, 0, 0.1)",
+                                        "&:hover": {
+                                            transform: "scale(1.1)",
+                                            boxShadow: "0px 10px 25px rgba(0, 0, 0, 0.2)",
+                                        },
                                     }}
                                 >
-                                    <Typography
-                                        variant="h6"
-                                        component="div"
-                                        fontWeight="bold"
-                                        sx={{ mb: 1, color: "#00796b" }}
-                                    >
-                                        {issue.facility}
-                                    </Typography>
-                                    <Typography
-                                        variant="body2"
-                                        color="text.secondary"
+                                    <CardMedia
+                                        component="img"
+                                        height="180"
+                                        image={issue.image}
+                                        alt="Issue Image"
                                         sx={{
-                                            height: "20px",
-                                            overflow: "hidden",
-                                            textOverflow: "ellipsis",
+                                            objectFit: "cover",
+                                        }}
+                                    />
+                                    <CardContent
+                                        sx={{
+                                            p: 3,
+                                            textAlign: "center",
                                         }}
                                     >
-                                        {issue.description}
-                                    </Typography>
-                                    <Typography
-                                        variant="caption"
-                                        display="block"
-                                        sx={{ mt: 1, color: "#757575" }}
-                                    >
-                                        {new Date(issue.createdAt).toLocaleString()}
-                                    </Typography>
-                                </CardContent>
-                                <CardActions sx={{ justifyContent: "center", pb: 2 }}>
-                                    <Button
-                                        size="small"
-                                        variant="contained"
-                                        onClick={() => handleViewDetails(issue)}
-                                        sx={{
-                                            background: "linear-gradient(to right, #00796b, #48a999)",
-                                            color: "#fff",
-                                            "&:hover": {
-                                                background: "linear-gradient(to right, #00574b, #327e67)",
-                                            },
-                                        }}
-                                    >
-                                        View Details
-                                    </Button>
-                                </CardActions>
-                            </Card>
-                        </Grid>
-                    ))}
-                </Grid>
-            </Container>
-
+                                        <Typography
+                                            variant="h6"
+                                            component="div"
+                                            fontWeight="bold"
+                                            sx={{ mb: 1, color: "#00796b" }}
+                                        >
+                                            {issue.facility}
+                                        </Typography>
+                                        <Typography
+                                            variant="body2"
+                                            color="text.secondary"
+                                            sx={{
+                                                height: "20px",
+                                                overflow: "hidden",
+                                                textOverflow: "ellipsis",
+                                            }}
+                                        >
+                                            {issue.description}
+                                        </Typography>
+                                        <Typography
+                                            variant="caption"
+                                            display="block"
+                                            sx={{ mt: 1, color: "#757575" }}
+                                        >
+                                            {new Date(issue.createdAt).toLocaleString()}
+                                        </Typography>
+                                    </CardContent>
+                                    <CardActions sx={{ justifyContent: "center", pb: 2 }}>
+                                        <Button
+                                            size="small"
+                                            variant="contained"
+                                            onClick={() => handleViewDetails(issue)}
+                                            sx={{
+                                                background: "linear-gradient(to right, #00796b, #48a999)",
+                                                color: "#fff",
+                                                "&:hover": {
+                                                    background: "linear-gradient(to right, #00574b, #327e67)",
+                                                },
+                                            }}
+                                        >
+                                            View Details
+                                        </Button>
+                                    </CardActions>
+                                </Card>
+                            </Grid>
+                        ))}
+                    </Grid>
+                </Container>
+            </Box>
             {/* Popup Dialog for Viewing Full Complaint */}
             <Dialog
                 open={isDialogOpen}
@@ -469,7 +500,7 @@ function Issues() {
                             </Grid>
                             <Grid item xs={12}>
                                 <Button variant="outlined" component="label" fullWidth>
-                                    Upload Photos 
+                                    Upload Photos
                                     <input
                                         type="file"
                                         hidden
@@ -485,8 +516,8 @@ function Issues() {
                                         display: "flex",
                                         gap: "10px",
                                         flexWrap: "wrap",
-                                        justifyContent: "center", 
-                                        alignItems: "center",    
+                                        justifyContent: "center",
+                                        alignItems: "center",
                                     }}
                                 >
                                     {formData.photos.map((photo, index) => (
@@ -549,94 +580,13 @@ function Issues() {
                     </form>
                 </Container>
             </Box>
-            {/* Footer with Get a Free Quote Section */}
-            <Box sx={{
-                mt: 10,
-                py: 4,
-                backgroundColor: '#f1f1f1',
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                textAlign: 'center',
-            }}>
-                <Typography variant="h6" sx={{ mb: 2, fontWeight: 'bold' }}>
-                    Get a Free Quote
-                </Typography>
-                <Container sx={{ backgroundColor: 'white', borderRadius: 2, p: 3, boxShadow: 3 }}>
-                    <Grid container spacing={2}>
-                        <Grid item xs={12} md={6}>
-                            <TextField
-                                label="Name"
-                                fullWidth
-                                variant="outlined"
-                                name="name"
-                                value={quoteData.name}
-                                onChange={handleInputChange}
-                                sx={{ backgroundColor: '#f9f9f9' }}
-                            />
-                        </Grid>
-                        <Grid item xs={12} md={6}>
-                            <TextField
-                                label="Email"
-                                fullWidth
-                                variant="outlined"
-                                name="email"
-                                value={quoteData.email}
-                                onChange={handleInputChange}
-                                sx={{ backgroundColor: '#f9f9f9' }}
-                            />
-                        </Grid>
-                        <Grid item xs={12} md={6}>
-                            <TextField
-                                label="Phone"
-                                fullWidth
-                                variant="outlined"
-                                name="phone"
-                                value={quoteData.phone}
-                                onChange={handleInputChange}
-                                sx={{ backgroundColor: '#f9f9f9' }}
-                            />
-                        </Grid>
-                        <Grid item xs={12} md={6}>
-                            <TextField
-                                select
-                                label="Service Type"
-                                fullWidth
-                                variant="outlined"
-                                name="serviceType"
-                                value={quoteData.serviceType}
-                                onChange={handleInputChange}
-                                sx={{ backgroundColor: '#f9f9f9' }}
-                            >
-                                <MenuItem value="home">Home</MenuItem>
-                                <MenuItem value="business">Business</MenuItem>
-                            </TextField>
-                        </Grid>
-                        <Grid item xs={12}>
-                            <Button
-                                variant="contained"
-                                fullWidth
-                                onClick={handleSubmit}
-                                sx={{
-                                    background: "linear-gradient(to right, #00796b, #48a999)",
-                                    color: "#fff",
-                                    "&:hover": {
-                                        background: "linear-gradient(to right, #00574b, #327e67)",
-                                    },
-                                }}
-                            >
-                                Get Free Quote
-                            </Button>
-                        </Grid>
-                    </Grid>
-                </Container>
-                <Box sx={{ mt: 4 }}>
-                    <Copyright />
-                </Box>
-            </Box>
             <button onClick={() => setAutoReload(!autoReload)}>
                 {autoReload ? "Pause Auto-Reload" : "Resume Auto-Reload"}
             </button>
+            {/* Footer */}
+            <Box sx={{ backgroundColor: "#333", color: "#fff", textAlign: "center", py: 4 }}>
+                <Typography variant="body2">© 2025 Biomed Waste Recovery and Disposal Ltd. All rights reserved.</Typography>
+            </Box>
         </Box >
     );
 }

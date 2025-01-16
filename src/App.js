@@ -9,7 +9,7 @@ import Issues from './components/Issues';
 import BlogPage from './components/BlogPage';
 import Blog from './components/Blog';
 import ProfilePage from './components/ProfilePage';
-
+import InstructionPage from './components/InstructionPage';
 
 function App() {
   return (
@@ -19,6 +19,7 @@ function App() {
       <Route element={<LayoutWithNavbar />}>
         <Route path="/home" element={<Dashboard />} />
         <Route path="/services" element={<Issues />} />
+        <Route path="/instruction" element={<InstructionPage />} />
         <Route path="/blogs" element={<BlogPage />} />
         <Route path="/login" element={<SignInSide/>} />
         <Route path="/blog" element={<Blog />} />
@@ -38,6 +39,7 @@ function LayoutWithNavbar() {
         <Route path="/blogs" element={<BlogPage />} />
         <Route path="/" element={<SignInSide/>} />
         <Route path="/blog" element={<Blog />} />
+        <Route path="/instruction" element={<InstructionPage />} />
         <Route path="/profile" element={<ProfilePage/>} />
       </Routes>
     </>

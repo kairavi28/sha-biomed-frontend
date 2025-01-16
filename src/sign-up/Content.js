@@ -19,7 +19,7 @@ const items = [
     icon: <ThumbUpAltRoundedIcon sx={{ color: '#D4ED31' }} />,
     title: 'Great Customer Reviews',
     description:
-      `Don't be fooled by foreign competitors who haul the waste but cannot process it. At Biomed, our experience, expertise and excellent customer service otuclasses any of our challengers, regardless of their pomp, circumstance and industry buzzwords.`,
+      `Don't be fooled by foreign competitors who haul the waste but cannot process it. At Biomed, our experience, expertise and excellent customer service outclasses any of our challengers, regardless of their pomp, circumstance and industry buzzwords.`,
   },
   {
     icon: <AutoFixHighRoundedIcon sx={{ color: '#D4ED31' }} />,
