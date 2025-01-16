@@ -585,7 +585,17 @@ function Issues() {
             </button>
             {/* Footer */}
             <Box sx={{ backgroundColor: "#333", color: "#fff", textAlign: "center", py: 4 }}>
-                <Typography variant="body2">© 2025 Biomed Waste Recovery and Disposal Ltd. All rights reserved.</Typography>
+                <Typography variant="body2">
+                    © 2025 Biomed Waste Recovery and Disposal Ltd. All rights reserved.
+                </Typography>
+                <Box sx={{ mt: 2 }}>
+                    <Link href="/privacy-policy" color="inherit" sx={{ mx: 2 }}>
+                        Privacy Policy
+                    </Link>
+                    <Link href="/terms-and-conditions" color="inherit" sx={{ mx: 2 }}>
+                        Terms & Conditions
+                    </Link>
+                </Box>
             </Box>
         </Box >
     );

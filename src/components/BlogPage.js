@@ -147,7 +147,7 @@ function BlogPage() {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          backgroundImage: "url('/images/hero-image.jpg')",
+          backgroundImage: "url('/images/library.png')",
           backgroundSize: "cover",
           backgroundPosition: "center",
           textAlign: "center",
@@ -155,20 +155,17 @@ function BlogPage() {
         }}>
         <Container>
           <Typography variant="h3" fontWeight="bold">
-            Welcome to Our Blog Platform
+            Welcome to Our Information Platform
           </Typography>
           <Typography variant="h6" sx={{ mt: 2, mb: 4 }}>
             Stay updated with the latest insights, stories, and trends.
           </Typography>
-          {/* <Button
-                                                variant="contained"
-                                                sx={{
-                                                  background: "#00796b",
-                                                  "&:hover": { background: "#00574b" },
-                                                }}
-                                              >
-                                                Learn More
-                                              </Button> */}
+          {/* <Button variant="contained" sx={{
+          background: "#00796b",
+          "&:hover": { background: "#00574b" },
+          }}>
+          Learn More
+          </Button> */}
         </Container>
       </Box>
 
@@ -349,9 +346,18 @@ function BlogPage() {
       </button>
       {/* Footer */}
       <Box sx={{ backgroundColor: "#333", color: "#fff", textAlign: "center", py: 4 }}>
-        <Typography variant="body2">© 2025 Biomed Waste Recovery and Disposal Ltd. All rights reserved.</Typography>
+        <Typography variant="body2">
+          © 2025 Biomed Waste Recovery and Disposal Ltd. All rights reserved.
+        </Typography>
+        <Box sx={{ mt: 2 }}>
+          <Link href="/privacy-policy" color="inherit" sx={{ mx: 2 }}>
+            Privacy Policy
+          </Link>
+          <Link href="/terms-and-conditions" color="inherit" sx={{ mx: 2 }}>
+            Terms & Conditions
+          </Link>
+        </Box>
       </Box>
-
     </Box>
   );
 }

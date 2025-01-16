@@ -87,6 +87,7 @@ const Navbar = () => {
 
   // Helper function to check if the route is active
   const isActive = (path) => location.pathname === path;
+
   return (
     <>
       <AppBar
@@ -111,7 +112,13 @@ const Navbar = () => {
         >
           <Typography
             variant="body2"
-            sx={{ color: "#003366", fontWeight: "bold", display: "flex", alignItems: "center", gap: 1 }}
+            sx={{
+              color: "#003366",
+              fontWeight: "bold",
+              display: "flex",
+              alignItems: "center",
+              gap: 1,
+            }}
           >
             <span>📞</span> +1-866-288-3298
           </Typography>
@@ -128,7 +135,7 @@ const Navbar = () => {
             <span>📧</span> support@biomedwaste.com
           </Typography>
           <Button
-            onClick={() => navigate("/quote")}
+            onClick={handleModalOpen}
             variant="contained"
             sx={{
               backgroundColor: "#C9CC3F",
@@ -211,63 +218,63 @@ const Navbar = () => {
             >
               Waste Packaging Guide
             </Button>
-            {/* Profile Icon with Dropdown Menu */}
-            <IconButton
-              onClick={handleMenuOpen}
-              sx={{
-                color: "#003366",
-                "&:hover": {
-                  color: "#ffffff",
-                  backgroundColor: "#C9CC3F",
-                  borderRadius: "50%",
-                },
-              }}
-            >
-              <AccountCircle fontSize="large" />
-            </IconButton>
-            <Menu
-              anchorEl={anchorEl}
-              open={Boolean(anchorEl)}
-              onClose={handleMenuClose}
-              sx={{
-                mt: "5px",
-                "& .MuiPaper-root": {
-                  borderRadius: "8px",
-                  boxShadow: "0 4px 8px rgba(0,0,0,0.2)",
-                  minWidth: "180px",
-                },
-              }}
-            >
-              <MenuItem
-                onClick={() => {
-                  handleMenuClose();
-                  navigate("/profile");
-                }}
-                sx={{ display: "flex", gap: 1 }}
-              >
-                <Person fontSize="small" />
-                <Typography variant="inherit">Profile</Typography>
-              </MenuItem>
-              <Divider />
-              <MenuItem
-                onClick={() => {
-                  handleMenuClose();
-                  axios
-                    .post("http://localhost:5000/logout")
-                    .then(() => {
-                      navigate("/");
-                    })
-                    .catch(() => {
-                      alert("There was an error logging out.");
-                    });
-                }}
-                sx={{ display: "flex", gap: 1 }}
-              >
-                <Logout fontSize="small" />
-                <Typography variant="inherit">Logout</Typography>
-              </MenuItem>
-            </Menu>
           </Box>
+           {/* Profile Icon with Dropdown Menu */}
+           <IconButton
+            onClick={handleMenuOpen}
+            sx={{
+              color: "#003366",
+              "&:hover": {
+                color: "#ffffff",
+                backgroundColor: "#C9CC3F",
+                borderRadius: "50%",
+              },
+            }}
+          >
+            <AccountCircle fontSize="large" />
+          </IconButton>
+          <Menu
+            anchorEl={anchorEl}
+            open={Boolean(anchorEl)}
+            onClose={handleMenuClose}
+            sx={{
+              mt: "5px",
+              "& .MuiPaper-root": {
+                borderRadius: "8px",
+                boxShadow: "0 4px 8px rgba(0,0,0,0.2)",
+                minWidth: "180px",
+              },
+            }}
+          >
+            <MenuItem
+              onClick={() => {
+                handleMenuClose();
+                navigate("/profile");
+              }}
+              sx={{ display: "flex", gap: 1 }}
+            >
+              <Person fontSize="small" />
+              <Typography variant="inherit">Profile</Typography>
+            </MenuItem>
+            <Divider />
+            <MenuItem
+              onClick={() => {
+                handleMenuClose();
+                axios
+                  .post("http://localhost:5000/logout")
+                  .then(() => {
+                    navigate("/");
+                  })
+                  .catch(() => {
+                    alert("There was an error logging out.");
+                  });
+              }}
+              sx={{ display: "flex", gap: 1 }}
+            >
+              <Logout fontSize="small" />
+              <Typography variant="inherit">Logout</Typography>
+            </MenuItem>
+          </Menu>
         </Toolbar>
       </AppBar>
 
@@ -330,12 +337,12 @@ const Navbar = () => {
               <DropdownItem value="Nova Scotia">Nova Scotia</DropdownItem>
               <DropdownItem value="Ontario">Ontario</DropdownItem>
               <DropdownItem value="Prince Edward Island">Prince Edward Island</DropdownItem>
-              <DropdownItem value="Quebec">Quebec</DropdownItem>
+              <DropdownItem value="Quebec">Quebec</DropdownItem>              
               <DropdownItem value="Saskatchewan">Saskatchewan</DropdownItem>
               <DropdownItem value="Northwest Territories">Northwest Territories</DropdownItem>
               <DropdownItem value="Nunavut">Nunavut</DropdownItem>
               <DropdownItem value="Yukon">Yukon</DropdownItem>
-
+              
               {/* Add all Canadian provinces */}
             </Select>
           </FormControl>
