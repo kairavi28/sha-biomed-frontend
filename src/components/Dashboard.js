@@ -84,20 +84,20 @@ function Dashboard() {
             </div>
           ))}
         </AwesomeSlider>
-        <Typography variant="h3" sx={{ mt: 3, fontWeight: "bold" }}>
+        <Typography variant="h5" sx={{ mt: 3, fontWeight: "bold" }}>
           Leading Biohazard Waste Disposal
         </Typography>
         <Button
-          variant="contained"
+          variant="outlined"
           sx={{
             mt: 2,
-            backgroundColor: "#C9CC3F",
-            px: 4,
-            "&:hover": { backgroundColor: "#A9AC2B" },
+            ml: 2,
+            color: "white",
+            borderColor: "white",
+            "&:hover": { backgroundColor: "#A9AC2B", color: "white", fontSize: "bold" },
           }}
-          onClick={handleFormOpen}
         >
-          Request Free Quote
+          Make a complaint
         </Button>
         <Button
           variant="outlined"
@@ -106,10 +106,22 @@ function Dashboard() {
             ml: 2,
             color: "white",
             borderColor: "white",
-            "&:hover": { borderColor: "#A9AC2B", color: "#A9AC2B" },
+            "&:hover": { backgroundColor: "#A9AC2B", color: "white", fontSize: "bold" },
           }}
         >
-          Explore Services
+          Read a blog
+        </Button>
+        <Button
+          variant="outlined"
+          sx={{
+            mt: 2,
+            ml: 2,
+            color: "white",
+            borderColor: "white",
+            "&:hover": { backgroundColor: "#A9AC2B", color: "white", fontSize: "bold" },
+          }}
+        >
+          Ask a Question
         </Button>
       </Box>
 
@@ -150,7 +162,8 @@ function Dashboard() {
       </Container>
 
       {/* Improperly Packaged Waste Section */}
-      <Container sx={{ mt: 6 }}>
+      <Box sx={{ py: 8, backgroundColor: "#ffffff" }}>
+      <Container sx={{ mt: 6, mb: 6 }}>
         <Typography variant="h4" sx={{ mb: 4, textAlign: "center", fontWeight: "bold", color: "#003366" }}>
           Importance of Proper Waste Packaging
         </Typography>
@@ -159,7 +172,24 @@ function Dashboard() {
           designed to educate users on the best practices for properly packaging waste to ensure safety and compliance
           with regulations.
         </Typography>
-      </Container>
+        <Grid container spacing={4}>
+          {testimonials.map((testimonial, index) => (
+            <Grid item xs={12} md={6} key={index}>
+              <Paper
+                elevation={3}
+                sx={{ p: 3, backgroundColor: "#f9f9f9", borderRadius: 2, textAlign: "center" }}
+              >
+                <Typography variant="body1" sx={{ fontStyle: "italic" }}>
+                  "{testimonial.feedback}"
+                </Typography>
+                <Typography variant="h6" sx={{ mt: 2, fontWeight: "bold" }}>
+                  - {testimonial.name}
+                </Typography>
+              </Paper>
+            </Grid>
+          ))}
+        </Grid>
+      </Container></Box>
 
       {/* Services Section */}
       <Container sx={{ mt: 6 }}>

@@ -159,7 +159,7 @@ function InstructionPage() {
             </Box>
 
             {/* Waste Management Tips Section */}
-            <Box sx={{ py: 8, backgroundColor: "#ffffff" }}>
+            <Box sx={{ py: 4, backgroundColor: "#ffffff" }}>
                 <Container>
                     <Typography variant="h4" align="center" fontWeight="bold" sx={{ mb: 4 }}>
                         Use of Biomed Products
@@ -167,19 +167,19 @@ function InstructionPage() {
                     <Grid container spacing={4}>
                         {[
                             {
-                                title: "Step 1: Choose the Right Container",
+                                title: "The Terra Program",
                                 description:
-                                    "Select a sturdy container suitable for the type of waste you are disposing of. Ensure it is leak-proof and easy to seal.",
+                                    "TYSC4, TYSC8, TYTL8, TYLL8",
                             },
                             {
-                                title: "Step 2: Secure the Waste Properly",
+                                title: "Secure A Sharp Program",
                                 description:
-                                    "Wrap waste material in plastic or other suitable materials to prevent contamination. Use double bags if necessary for added protection.",
+                                    "",
                             },
                             {
-                                title: "Step 3: Label the Container",
+                                title: "Barcode Scanner",
                                 description:
-                                    "Clearly label the container with waste details (e.g., hazardous, biological, etc.) to ensure safe handling during disposal.",
+                                    "",
                             },
                         ].map((step, index) => (
                             <Grid item xs={12} sm={6} md={4} key={index}>
