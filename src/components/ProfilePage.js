@@ -75,15 +75,15 @@ function ProfilePage() {
       justifyContent: "center",
       alignItems: "center",
       overflowX: 'hidden'
-  }}>
+    }}>
       <Container maxWidth="lg"
-                sx={{
-                    // background: "",
-                    borderRadius: 4,
-                    boxShadow: "0px 10px 20px rgba(0, 0, 0, 0.1)",
-                    py: 4,
-                    px: 4,
-                }}>
+        sx={{
+          // background: "",
+          borderRadius: 4,
+          boxShadow: "0px 10px 20px rgba(0, 0, 0, 0.1)",
+          py: 4,
+          px: 4,
+        }}>
         <Typography
           variant="h5"
           align="center"

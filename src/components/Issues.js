@@ -4,11 +4,8 @@ import {
     Typography,
     Container,
     Grid,
-    Card,
-    CardContent,
+    Paper,
     CircularProgress,
-    CardMedia,
-    CardActions,
     Button,
     Dialog,
     DialogContent,
@@ -62,7 +59,7 @@ function Issues() {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [formData, setFormData] = useState({
         productType: "",
-        description: "", photos: [] 
+        description: "", photos: []
     });
 
 
@@ -196,7 +193,7 @@ function Issues() {
                 .get("http://localhost:5000/api/complaints")
                 .then((response) => {
                     setIssues(response.data);
-                    console.log('here',response.data);
+                    console.log('here', response.data);
                     setLoading(false);
                 })
                 .catch(() => {
@@ -281,7 +278,7 @@ function Issues() {
                 }}>
                 <Container>
                     <Typography variant="h3" fontWeight="bold">
-                        Welcome to Our Complaint Platform
+                        Welcome to Our Complaint Portal
                     </Typography>
                     <Typography variant="h6" sx={{ mt: 2, mb: 4 }}>
                         Stay updated with the latest insights, stories, and trends.
@@ -321,85 +318,89 @@ function Issues() {
                             color: "#333"
                         }}
                     >
-                        Issues Dashboard
+                        Queries
                     </Typography>
                     <Grid container spacing={4}>
-                        {issues.map((issue, index) => (
-                            <Grid item xs={12} sm={6} md={4} key={index}>
-                                <Card
+                        {issues.map((issue) => (
+                            <Grid item xs={12} sm={6} md={4} key={issue.id}>
+                                <Paper
+                                    elevation={5}
                                     sx={{
-                                        maxWidth: 345,
-                                        backdropFilter: "blur(10px)",
-                                        background: "rgba(255, 255, 255, 0.7)",
-                                        borderRadius: 4,
-                                        overflow: "hidden",
+                                        p: 2,
+                                        borderRadius: 3,
+                                        height: "100%",
+                                        display: "flex",
+                                        flexDirection: "column",
+                                        justifyContent: "space-between",
+                                        background: "linear-gradient(135deg, #ffffff, #f3f4f6)",
                                         transition: "transform 0.3s, box-shadow 0.3s",
-                                        boxShadow: "0px 6px 12px rgba(0, 0, 0, 0.1)",
                                         "&:hover": {
-                                            transform: "scale(1.1)",
-                                            boxShadow: "0px 10px 25px rgba(0, 0, 0, 0.2)",
+                                            transform: "translateY(-5px)",
+                                            boxShadow: "0px 10px 20px rgba(0, 0, 0, 0.15)",
                                         },
                                     }}
                                 >
-                                    <CardMedia
-                                        component="img"
-                                        height="180"
-                                        image={issue.photos}
-                                        alt="Issue Image"
+                                    <Box
                                         sx={{
-                                            objectFit: "cover",
-                                        }}
-                                    />
-                                    <CardContent
-                                        sx={{
-                                            p: 3,
-                                            textAlign: "center",
+                                            height: "200px",
+                                            overflow: "hidden",
+                                            borderRadius: 2,
+                                            mb: 2,
                                         }}
                                     >
+
+                                        <img
+                                            src={issue.photos}
+                                            alt="Complaint Image"
+                                            style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                                            loading="lazy"
+                                        />
+                                    </Box>
+                                    <Box sx={{ flexGrow: 0.5 }}>
                                         <Typography
                                             variant="h6"
-                                            component="div"
-                                            fontWeight="bold"
-                                            sx={{ mb: 1, color: "#00796b" }}
+                                            sx={{
+                                                fontWeight: "bold",
+                                                mb: 1,
+                                                color: "#00796b",
+                                                textOverflow: "ellipsis",
+                                                overflow: "hidden",
+                                                whiteSpace: "nowrap",
+                                            }}
                                         >
                                             {issue.facility}
                                         </Typography>
                                         <Typography
                                             variant="body2"
-                                            color="text.secondary"
-                                            sx={{
-                                                height: "20px",
-                                                overflow: "hidden",
-                                                textOverflow: "ellipsis",
-                                            }}
+                                            sx={{ color: "#666", lineHeight: 1 }}
                                         >
-                                            {issue.description}
+                                            {issue.description.length > 100
+                                                ? `${issue.description.slice(0, 100)}...`
+                                                : issue.description}
                                         </Typography>
-                                        <Typography
-                                            variant="caption"
-                                            display="block"
-                                            sx={{ mt: 1, color: "#757575" }}
-                                        >
-                                            {new Date(issue.createdAt).toLocaleString()}
-                                        </Typography>
-                                    </CardContent>
-                                    <CardActions sx={{ justifyContent: "center", pb: 2 }}>
-                                        <Button
-                                            size="small"
-                                            variant="contained"
-                                            onClick={() => handleViewDetails(issue)}
-                                            sx={{
-                                                background: "linear-gradient(to right, #00796b, #48a999)",
-                                                color: "#fff",
-                                                "&:hover": {
-                                                    background: "linear-gradient(to right, #00574b, #327e67)",
-                                                },
-                                            }}
-                                        >
-                                            View Details
-                                        </Button>
-                                    </CardActions>
-                                </Card>
+                                    </Box>
+                                    <Typography
+                                        variant="body2"
+                                        display="block"
+                                        sx={{ mt: 1, color: "#757575" }}
+                                    >
+                                        {new Date(issue.createdAt).toLocaleString()}
+                                    </Typography>
+                                    <Button
+                                        variant="contained"
+                                        fullWidth
+                                        sx={{
+                                            background: "linear-gradient(to right, #00796b, #48a999)",
+                                            color: "#fff",
+                                            "&:hover": {
+                                                background: "linear-gradient(to right, #00574b, #327e67)",
+                                            },
+                                        }}
+                                        onClick={() => handleViewDetails(issue)}
+                                    >
+                                        Read More
+                                    </Button>
+                                </Paper>
                             </Grid>
                         ))}
                     </Grid>
@@ -433,7 +434,7 @@ function Issues() {
                             <Typography variant="body1" sx={{ mb: 1 }}>
                                 {selectedIssue.description}
                             </Typography>
-                            <Typography variant="caption" color="text.secondary">
+                            <Typography variant="body1" color="text.secondary">
                                 Submitted on:{" "}
                                 {new Date(selectedIssue.createdAt).toLocaleString()}
                             </Typography>

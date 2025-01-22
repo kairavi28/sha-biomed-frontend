@@ -21,7 +21,7 @@ import {
   DialogActions,
   Alert,
 } from "@mui/material";
-import { AccountCircle, Logout, Person } from "@mui/icons-material";
+import { Settings, AccountCircle, Logout, Person } from "@mui/icons-material";
 import { useNavigate, useLocation } from "react-router-dom";
 import logo from "../assets/images/logo.png";
 import axios from "axios";
@@ -46,6 +46,7 @@ const Navbar = () => {
     message: "",
     severity: "success", // can be "success", "error", "warning", "info"
   });
+
   // Handle menu open
   const handleMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -70,11 +71,11 @@ const Navbar = () => {
   const handleSnackbarClose = () => {
     setSnackbar({ ...snackbar, open: false });
   };
+
   // Handle form submission
   const handleSubmit = () => {
-    console.log(formData);
     axios
-      .post("http://localhost:5000/api/quote/add", formData)
+      .post("http://localhost:5000/api/quote", formData)
       .then((res) => {
         setSnackbar({
           open: true,
@@ -104,6 +105,7 @@ const Navbar = () => {
 
   // Helper function to check if the route is active
   const isActive = (path) => location.pathname === path;
+
   return (
     <>
       <AppBar
@@ -176,12 +178,11 @@ const Navbar = () => {
 
           {/* Menu Items */}
           <Box display="flex" alignItems="center" gap={4}>
-            {/* Buttons */}
             <Button
               onClick={() => navigate("/services")}
               sx={{
                 color: isActive("/services") ? "#C9CC3F" : "#003366",
-                fontWeight: isActive("/services") ? "bold" : "bold",
+                fontWeight: "bold",
                 textTransform: "none",
                 fontSize: "16px",
                 borderBottom: isActive("/services") ? "2px solid #C9CC3F" : "none",
@@ -193,40 +194,6 @@ const Navbar = () => {
               }}
             >
               Complaint Services
-            </Button>
-            <Button
-              onClick={() => navigate("/blogs")}
-              sx={{
-                color: isActive("/blogs") ? "#C9CC3F" : "#003366",
-                fontWeight: isActive("/blogs") ? "bold" : "bold",
-                textTransform: "none",
-                fontSize: "16px",
-                borderBottom: isActive("/blogs") ? "2px solid #C9CC3F" : "none",
-                "&:hover": {
-                  color: "#ffffff",
-                  backgroundColor: "#C9CC3F",
-                  borderRadius: "8px",
-                },
-              }}
-            >
-              Our Blog
-            </Button>
-            <Button
-              onClick={() => navigate("/instruction")}
-              sx={{
-                color: isActive("/instruction") ? "#C9CC3F" : "#003366",
-                fontWeight: isActive("/instruction") ? "bold" : "bold",
-                textTransform: "none",
-                fontSize: "16px",
-                borderBottom: isActive("/instruction") ? "2px solid #C9CC3F" : "none",
-                "&:hover": {
-                  color: "#ffffff",
-                  backgroundColor: "#C9CC3F",
-                  borderRadius: "8px",
-                },
-              }}
-            >
-              Waste Packaging Guide
             </Button>
             {/* Profile Icon with Dropdown Menu */}
             <IconButton
@@ -289,159 +256,38 @@ const Navbar = () => {
       </AppBar>
 
       {/* Modal for Request Quote */}
-      <Dialog
-        open={openModal}
-        onClose={handleModalClose}
-        fullWidth
-        maxWidth="sm"
-        sx={{
-          "& .MuiPaper-root": {
-            borderRadius: "12px",
-            boxShadow: "0 8px 16px rgba(0, 0, 0, 0.2)",
-            padding: "16px",
-          },
-        }}
-      >
-        <DialogTitle
-          sx={{
-            fontSize: "1.5rem",
-            fontWeight: "bold",
-            color: "#003366",
-            textAlign: "center",
-            borderBottom: "1px solid #f0f0f0",
-            marginBottom: "16px",
-          }}
-        >
-          Request Free Quote
-        </DialogTitle>
+      <Dialog open={openModal} onClose={handleModalClose} fullWidth maxWidth="sm">
+        <DialogTitle>Request Free Quote</DialogTitle>
         <DialogContent>
-          <Box
-            component="form"
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              gap: "16px",
-              paddingX: "8px",
-            }}
-          >
-            <TextField
-              label="First Name"
-              name="firstname"
-              value={formData.firstname}
-              onChange={handleChange}
-              fullWidth
-              variant="outlined"
-            />
-            <TextField
-              label="Last Name"
-              name="lastname"
-              value={formData.lastname}
-              onChange={handleChange}
-              fullWidth
-              variant="outlined"
-            />
-            <TextField
-              label="Company"
-              name="company"
-              value={formData.company}
-              onChange={handleChange}
-              fullWidth
-              variant="outlined"
-            />
-            <TextField
-              label="Phone"
-              name="phone"
-              value={formData.phone}
-              onChange={handleChange}
-              fullWidth
-              variant="outlined"
-            />
-            <TextField
-              label="Email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              fullWidth
-              variant="outlined"
-            />
+          {/* Form Fields */}
+          <Box component="form" sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+            <TextField name="firstname" label="First Name" value={formData.firstname} onChange={handleChange} fullWidth />
+            <TextField name="lastname" label="Last Name" value={formData.lastname} onChange={handleChange} fullWidth />
+            <TextField name="company" label="Company" value={formData.company} onChange={handleChange} fullWidth />
+            <TextField name="phone" label="Phone" value={formData.phone} onChange={handleChange} fullWidth />
+            <TextField name="email" label="Email" value={formData.email} onChange={handleChange} fullWidth />
             <FormControl fullWidth>
               <InputLabel>Province</InputLabel>
-              <Select
-                name="province"
-                value={formData.province}
-                onChange={handleChange}
-                variant="outlined"
-              >
-                <DropdownItem value="Alberta">Alberta</DropdownItem>
-                <DropdownItem value="British Columbia">British Columbia</DropdownItem>
-                <DropdownItem value="Manitoba">Manitoba</DropdownItem>
-                <DropdownItem value="New Brunswick">New Brunswick</DropdownItem>
-                <DropdownItem value="Newfoundland and Labrador">Newfoundland and Labrador</DropdownItem>
-                <DropdownItem value="Nova Scotia">Nova Scotia</DropdownItem>
+              <Select name="province" value={formData.province} onChange={handleChange}>
                 <DropdownItem value="Ontario">Ontario</DropdownItem>
-                <DropdownItem value="Prince Edward Island">Prince Edward Island</DropdownItem>
-                <DropdownItem value="Quebec">Quebec</DropdownItem>
-                <DropdownItem value="Saskatchewan">Saskatchewan</DropdownItem>
-                <DropdownItem value="Northwest Territories">Northwest Territories</DropdownItem>
-                <DropdownItem value="Nunavut">Nunavut</DropdownItem>
-                <DropdownItem value="Yukon">Yukon</DropdownItem>
+                {/* Add other provinces */}
               </Select>
             </FormControl>
+            <TextField name="postalCode" label="Postal Code" value={formData.postalCode} onChange={handleChange} fullWidth />
             <TextField
-              label="Postal Code"
-              name="postalCode"
-              value={formData.postalCode}
-              onChange={handleChange}
-              fullWidth
-              variant="outlined"
-            />
-            <TextField
-              label="Tell us about your service needs"
               name="description"
+              label="Tell us about your service needs"
               value={formData.description}
               onChange={handleChange}
               fullWidth
               multiline
               rows={4}
-              variant="outlined"
             />
           </Box>
         </DialogContent>
-        <DialogActions
-          sx={{
-            display: "flex",
-            justifyContent: "space-between",
-            padding: "16px",
-            borderTop: "1px solid #f0f0f0",
-          }}
-        >
-          <Button
-            onClick={handleModalClose}
-            variant="outlined"
-            sx={{
-              borderColor: "#C9CC3F",
-              color: "#003366",
-              textTransform: "none",
-              "&:hover": {
-                backgroundColor: "#F3F4F6",
-                borderColor: "#A9AC2B",
-              },
-            }}
-          >
-            Cancel
-          </Button>
-          <Button
-            onClick={handleSubmit}
-            variant="contained"
-            sx={{
-              backgroundColor: "#C9CC3F",
-              color: "#ffffff",
-              textTransform: "none",
-              "&:hover": {
-                backgroundColor: "#A9AC2B",
-              },
-            }}
-          >
+        <DialogActions>
+          <Button onClick={handleModalClose}>Cancel</Button>
+          <Button onClick={handleSubmit} variant="contained" color="primary">
             Submit
           </Button>
         </DialogActions>

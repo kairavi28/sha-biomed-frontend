@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { PhoneInput } from "react-international-phone";
 import {
   Box,
@@ -60,11 +60,23 @@ function Dashboard() {
   const [formOpen, setFormOpen] = useState(false);
   const handleFormOpen = () => setFormOpen(true);
   const handleFormClose = () => setFormOpen(false);
+  const [loading, setLoading] = useState(true);
+  const [facility, setFacility] = useState();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const userSession = JSON.parse(sessionStorage.getItem('userData'));
+  console.log('Profile-page', userSession); 
+  const userId = userSession ? userSession.id : null;
   const [formData, setFormData] = useState({
     contactNumber: "",
     description: "", photos: []
   });
+
+  useEffect(() => {
+    const userData = JSON.parse(sessionStorage.getItem('userData'));
+    if(userData) {
+      setFacility(userData.facility);
+    }
+  }, [userId]);
 
   const handleFileChange = (event) => {
     const files = Array.from(event.target.files);
@@ -91,11 +103,10 @@ function Dashboard() {
 
   const handleFormSubmit = async (event) => {
     event.preventDefault();
-    console.log('hello- on dashboard page', console.log('Data stored in session:', sessionStorage.getItem('userData')));
     const formDataToSubmit = new FormData();
     formDataToSubmit.append("contactNumber", formData.contactNumber);
     formDataToSubmit.append("description", formData.description);
-
+    formDataToSubmit.append("facility", facility);
     if (formData.photos && formData.photos.length > 0) {
       formData.photos.forEach((photo, index) => {
         // Convert base64 to File if necessary
@@ -137,16 +148,13 @@ function Dashboard() {
     });
   };
 
-  const handleInputChange = (event) => {
-    console.log(event.target);
-    const { value } = event.target;
-
-    // setFormData((prev) => {
-    //   const updatedForm = { ...prev, [name]: value };
-    //   localStorage.setItem("formData", JSON.stringify(updatedForm));
-    //   return updatedForm;
-    // });
-  };
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({
+        ...prevData,
+        [name]: value,
+    }));
+};
 
   return (
     <Box sx={{ background: "linear-gradient(to bottom, white, #f0f8ff)", minHeight: "100vh" }}>
@@ -244,7 +252,7 @@ function Dashboard() {
                 defaultCountry="ca"
                 placeholder="Enter your phone number"
                 value={formData.contactNumber}
-          
+
                 style={{
                   width: "95%",
                   marginBottom: "16px",
@@ -256,21 +264,21 @@ function Dashboard() {
 
               {/* Complaint Description */}
               <TextField
-                fullWidth
-                multiline
-                rows={4}
-                label="Description of Problem"
-                name="description"
-                variant="outlined"
-                sx={{
-                  mb: 3,
-                  "& .MuiOutlinedInput-root": {
-                    borderRadius: "8px",
-                  },
-                }}
-                value={formData.description}
-                onChange={handleInputChange}
-              />
+               fullWidth
+               multiline
+               rows={4}
+               label="Description of Problem"
+               name="description"
+               variant="outlined"
+               sx={{
+                   mb: 3,
+                   "& .MuiOutlinedInput-root": {
+                       borderRadius: "8px",
+                   },
+               }}
+               value={formData.description || ""}
+               onChange={handleInputChange}
+           />
 
               {/* File Upload */}
               <Button
