@@ -272,98 +272,160 @@ const Navbar = () => {
       </AppBar>
 
       {/* Modal for Request Quote */}
-      <Dialog open={openModal} onClose={handleModalClose} fullWidth maxWidth="sm">
-        <DialogTitle>Request Free Quote</DialogTitle>
+      <Dialog
+        open={openModal}
+        onClose={handleModalClose}
+        fullWidth
+        maxWidth="sm"
+        sx={{
+          "& .MuiPaper-root": {
+            borderRadius: "12px",
+            boxShadow: "0 8px 16px rgba(0, 0, 0, 0.2)",
+            padding: "16px",
+          },
+        }}
+      >
+        <DialogTitle
+          sx={{
+            fontSize: "1.5rem",
+            fontWeight: "bold",
+            color: "#003366",
+            textAlign: "center",
+            borderBottom: "1px solid #f0f0f0",
+            marginBottom: "16px",
+          }}
+        >
+          Request Free Quote
+        </DialogTitle>
         <DialogContent>
-          <TextField
-            label="First Name"
-            name="firstname"
-            value={formData.firstname}
-            onChange={handleChange}
-            fullWidth
-            margin="dense"
-          />
-          <TextField
-            label="Last Name"
-            name="lastname"
-            value={formData.lastname}
-            onChange={handleChange}
-            fullWidth
-            margin="dense"
-          />
-          <TextField
-            label="Company"
-            name="company"
-            value={formData.company}
-            onChange={handleChange}
-            fullWidth
-            margin="dense"
-          />
-          <TextField
-            label="Phone"
-            name="phone"
-            value={formData.phone}
-            onChange={handleChange}
-            fullWidth
-            margin="dense"
-          />
-          <TextField
-            label="Email"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-            fullWidth
-            margin="dense"
-          />
-          <FormControl fullWidth margin="dense">
-            <InputLabel>Province</InputLabel>
-            <Select
-              name="province"
-              value={formData.province}
+          <Box
+            component="form"
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              gap: "16px",
+              paddingX: "8px",
+            }}
+          >
+            <TextField
+              label="First Name"
+              name="firstname"
+              value={formData.firstname}
               onChange={handleChange}
-            >
-              <DropdownItem value="Alberta">Alberta</DropdownItem>
-              <DropdownItem value="British Columbia">British Columbia</DropdownItem>
-              <DropdownItem value="Manitoba">Manitoba</DropdownItem>
-              <DropdownItem value="New Brunswick">New Brunswick</DropdownItem>
-              <DropdownItem value="Newfoundland and Labrador">New Foundland and Labrador</DropdownItem>
-              <DropdownItem value="Nova Scotia">Nova Scotia</DropdownItem>
-              <DropdownItem value="Ontario">Ontario</DropdownItem>
-              <DropdownItem value="Prince Edward Island">Prince Edward Island</DropdownItem>
-              <DropdownItem value="Quebec">Quebec</DropdownItem>
-              <DropdownItem value="Saskatchewan">Saskatchewan</DropdownItem>
-              <DropdownItem value="Northwest Territories">Northwest Territories</DropdownItem>
-              <DropdownItem value="Nunavut">Nunavut</DropdownItem>
-              <DropdownItem value="Yukon">Yukon</DropdownItem>
-
-              {/* Add all Canadian provinces */}
-            </Select>
-          </FormControl>
-          <TextField
-            label="Postal Code"
-            name="postalCode"
-            value={formData.postalCode}
-            onChange={handleChange}
-            fullWidth
-            margin="dense"
-          />
-          <TextField
-            label="Tell us about your service needs"
-            name="description"
-            value={formData.description}
-            onChange={handleChange}
-            fullWidth
-            margin="dense"
-            multiline
-            rows={4}
-          />
+              fullWidth
+              variant="outlined"
+            />
+            <TextField
+              label="Last Name"
+              name="lastname"
+              value={formData.lastname}
+              onChange={handleChange}
+              fullWidth
+              variant="outlined"
+            />
+            <TextField
+              label="Company"
+              name="company"
+              value={formData.company}
+              onChange={handleChange}
+              fullWidth
+              variant="outlined"
+            />
+            <TextField
+              label="Phone"
+              name="phone"
+              value={formData.phone}
+              onChange={handleChange}
+              fullWidth
+              variant="outlined"
+            />
+            <TextField
+              label="Email"
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
+              fullWidth
+              variant="outlined"
+            />
+            <FormControl fullWidth>
+              <InputLabel>Province</InputLabel>
+              <Select
+                name="province"
+                value={formData.province}
+                onChange={handleChange}
+                variant="outlined"
+              >
+                <DropdownItem value="Alberta">Alberta</DropdownItem>
+                <DropdownItem value="British Columbia">British Columbia</DropdownItem>
+                <DropdownItem value="Manitoba">Manitoba</DropdownItem>
+                <DropdownItem value="New Brunswick">New Brunswick</DropdownItem>
+                <DropdownItem value="Newfoundland and Labrador">Newfoundland and Labrador</DropdownItem>
+                <DropdownItem value="Nova Scotia">Nova Scotia</DropdownItem>
+                <DropdownItem value="Ontario">Ontario</DropdownItem>
+                <DropdownItem value="Prince Edward Island">Prince Edward Island</DropdownItem>
+                <DropdownItem value="Quebec">Quebec</DropdownItem>
+                <DropdownItem value="Saskatchewan">Saskatchewan</DropdownItem>
+                <DropdownItem value="Northwest Territories">Northwest Territories</DropdownItem>
+                <DropdownItem value="Nunavut">Nunavut</DropdownItem>
+                <DropdownItem value="Yukon">Yukon</DropdownItem>
+              </Select>
+            </FormControl>
+            <TextField
+              label="Postal Code"
+              name="postalCode"
+              value={formData.postalCode}
+              onChange={handleChange}
+              fullWidth
+              variant="outlined"
+            />
+            <TextField
+              label="Tell us about your service needs"
+              name="description"
+              value={formData.description}
+              onChange={handleChange}
+              fullWidth
+              multiline
+              rows={4}
+              variant="outlined"
+            />
+          </Box>
         </DialogContent>
-        <DialogActions>
-          <Button onClick={handleModalClose} color="secondary">
+        <DialogActions
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            padding: "16px",
+            borderTop: "1px solid #f0f0f0",
+          }}
+        >
+          <Button
+            onClick={handleModalClose}
+            variant="outlined"
+            sx={{
+              borderColor: "#C9CC3F",
+              color: "#003366",
+              textTransform: "none",
+              "&:hover": {
+                backgroundColor: "#F3F4F6",
+                borderColor: "#A9AC2B",
+              },
+            }}
+          >
             Cancel
           </Button>
-          <Button onClick={handleSubmit} color="primary" variant="contained">
-            Submit Request
+          <Button
+            onClick={handleSubmit}
+            variant="contained"
+            sx={{
+              backgroundColor: "#C9CC3F",
+              color: "#ffffff",
+              textTransform: "none",
+              "&:hover": {
+                backgroundColor: "#A9AC2B",
+              },
+            }}
+          >
+            Submit
           </Button>
         </DialogActions>
       </Dialog>

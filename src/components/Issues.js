@@ -62,7 +62,7 @@ function Issues() {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [formData, setFormData] = useState({
         productType: "",
-        description: "", photos: []
+        description: "", photos: [] 
     });
 
 
@@ -190,13 +190,13 @@ function Issues() {
 
     useEffect(() => {
         let intervalId;
-
         if (autoReload && !isDialogOpen && !isFormActive) {
             setLoading(true);
             axios
                 .get("http://localhost:5000/api/complaints")
                 .then((response) => {
                     setIssues(response.data);
+                    console.log('here',response.data);
                     setLoading(false);
                 })
                 .catch(() => {
@@ -344,7 +344,7 @@ function Issues() {
                                     <CardMedia
                                         component="img"
                                         height="180"
-                                        image={issue.image}
+                                        image={issue.photos}
                                         alt="Issue Image"
                                         sx={{
                                             objectFit: "cover",
@@ -419,7 +419,7 @@ function Issues() {
                     {selectedIssue && (
                         <Box>
                             <img
-                                src={selectedIssue.image}
+                                src={selectedIssue.photos}
                                 alt={selectedIssue.facility}
                                 style={{
                                     width: "100%",
