@@ -9,6 +9,7 @@ import {
   Button,
   TextField,
   MenuItem,
+  CircularProgress,
   Modal,
   Card,
   CardContent,
@@ -60,21 +61,20 @@ function Dashboard() {
   const [formOpen, setFormOpen] = useState(false);
   const handleFormOpen = () => setFormOpen(true);
   const handleFormClose = () => setFormOpen(false);
+  const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
-  const [facility, setFacility] = useState();
+  const [facilityName, setFacilityName] = useState();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const userSession = JSON.parse(sessionStorage.getItem('userData'));
-  console.log('Profile-page', userSession); 
   const userId = userSession ? userSession.id : null;
-  const [formData, setFormData] = useState({
-    contactNumber: "",
-    description: "", photos: []
+  const [formData, setFormData] = useState({contactNumber: "", description: "", photos: []
   });
 
   useEffect(() => {
     const userData = JSON.parse(sessionStorage.getItem('userData'));
-    if(userData) {
-      setFacility(userData.facility);
+    if (userData) {
+      setLoading(false);
+      setFacilityName(userData.facility);
     }
   }, [userId]);
 
@@ -100,44 +100,63 @@ function Dashboard() {
     });
   };
 
+  if (loading) {
+    return (
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        height="100vh"
+        sx={{ background: "#f3f4f6" }}
+      >
+        <CircularProgress />
+      </Box>
+    );
+  }
 
   const handleFormSubmit = async (event) => {
     event.preventDefault();
-    const formDataToSubmit = new FormData();
-    formDataToSubmit.append("contactNumber", formData.contactNumber);
-    formDataToSubmit.append("description", formData.description);
-    formDataToSubmit.append("facility", facility);
-    if (formData.photos && formData.photos.length > 0) {
-      formData.photos.forEach((photo, index) => {
-        // Convert base64 to File if necessary
-        const photoFile = photo.file instanceof File
-          ? photo.file
-          : dataURLToFile(photo.preview, `photo-${index}.jpg`);
-        formDataToSubmit.append("photos", photoFile);
-      });
+    setIsSubmitting(true);
+  
+    // Check for required fields
+    if (!formData.contactNumber || !formData.description) {
+      setError("Please fill out all required fields.");
+      setIsSubmitting(false);
+      return;
     }
-
-    // Log FormData contents
-    for (let pair of formDataToSubmit.entries()) {
-      console.log(`${pair[0]}:`, pair[1]);
-    }
-
+  
     try {
-      setIsSubmitting(true);
-      await axios.post("http://localhost:5000/api/client-complaint/add", formDataToSubmit, {
-        headers: { "Content-Type": "multipart/form-data" },
+      // Prepare form data for multipart/form-data
+      const formDataToSend = new FormData();
+      formDataToSend.append("facility", facilityName);
+      formDataToSend.append("contactNumber", formData.contactNumber);
+      formDataToSend.append("description", formData.description);
+  
+      // Append photos
+      formData.photos.forEach((photo) => {
+        formDataToSend.append("photos", photo.file); // Append file directly
       });
-      alert("Issue submitted successfully.");
+  
+      // Send POST request
+      const response = await axios.post(
+        "http://localhost:5000/api/client-complaint/add",
+        formDataToSend,
+        {
+          headers: { "Content-Type": "multipart/form-data" }, // Important for file upload
+        }
+      );
+  
+      alert("Complaint submitted successfully.");
       setFormData({ contactNumber: "", description: "", photos: [] });
       localStorage.removeItem("formData");
-    } catch (error) {
-      console.error("Error submitting issue:", error);
-      alert("Failed to submit complaint.");
+    } catch (err) {
+      console.error("Failed to add complaint:", err);
+      setError("Failed to add complaint. Please try again.");
     } finally {
       setIsSubmitting(false);
     }
   };
-
+  
   const handleRemoveImage = (index) => {
     setFormData((prev) => {
       const updatedPhotos = [...prev.photos];
@@ -151,10 +170,11 @@ function Dashboard() {
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
-        ...prevData,
-        [name]: value,
+      ...prevData,
+      [name]: value,
     }));
-};
+  };
+
 
   return (
     <Box sx={{ background: "linear-gradient(to bottom, white, #f0f8ff)", minHeight: "100vh" }}>
@@ -251,8 +271,13 @@ function Dashboard() {
                 name="contactNumber"
                 defaultCountry="ca"
                 placeholder="Enter your phone number"
-                value={formData.contactNumber}
-
+                value={formData.contactNumber || ""}
+                onChange={(value) =>
+                  setFormData((prev) => ({
+                    ...prev,
+                    contactNumber: value,
+                  }))
+                }
                 style={{
                   width: "95%",
                   marginBottom: "16px",
@@ -264,21 +289,21 @@ function Dashboard() {
 
               {/* Complaint Description */}
               <TextField
-               fullWidth
-               multiline
-               rows={4}
-               label="Description of Problem"
-               name="description"
-               variant="outlined"
-               sx={{
-                   mb: 3,
-                   "& .MuiOutlinedInput-root": {
-                       borderRadius: "8px",
-                   },
-               }}
-               value={formData.description || ""}
-               onChange={handleInputChange}
-           />
+                fullWidth
+                multiline
+                rows={4}
+                label="Description of Problem"
+                name="description"
+                variant="outlined"
+                sx={{
+                  mb: 3,
+                  "& .MuiOutlinedInput-root": {
+                    borderRadius: "8px",
+                  },
+                }}
+                value={formData.description || ""}
+                onChange={handleInputChange}
+              />
 
               {/* File Upload */}
               <Button

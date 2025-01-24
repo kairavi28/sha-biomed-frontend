@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import YouTube from "react-youtube";
 import {
     Box,
     Typography,
@@ -14,6 +15,8 @@ import {
     Link,
 } from "@mui/material";
 import axios from "axios";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import WarningAmberIcon from "@mui/icons-material/WarningAmber";
 import { motion } from "framer-motion";
 
 function InstructionPage() {
@@ -161,28 +164,122 @@ function InstructionPage() {
             {/* Waste Management Tips Section */}
             <Box sx={{ py: 4, backgroundColor: "#ffffff" }}>
                 <Container>
-                    <Typography variant="h4" align="center" fontWeight="bold" sx={{ mb: 4 }}>
+                    <Typography
+                        variant="h4"
+                        align="center"
+                        fontWeight="bold"
+                        sx={{ mb: 4 }}
+                    >
                         Use of Biomed Products
                     </Typography>
-                    <Grid container spacing={4}>
+                    <Grid container spacing={4} direction="column">
                         {[
                             {
                                 title: "The Terra Program",
-                                description:
-                                    "TYSC4, TYSC8, TYTL8, TYLL8",
-                            },
-                            {
-                                title: "Secure A Sharp Program",
-                                description:
-                                    "",
-                            },
-                            {
-                                title: "Barcode Scanner",
-                                description:
-                                    "",
+                                description: (
+                                    <>
+                                        <Typography variant="body1" paragraph>
+                                            Our Terra Program provides a range of containers specifically designed for the safe disposal of sharps. This program is ideal for:
+                                        </Typography>
+                                        <Box component="ul" sx={{ listStyle: "none", paddingLeft: 0 }}>
+                                            <li>
+                                                <Typography variant="body1" sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                                                    <CheckCircleIcon color="primary" />
+                                                    Healthcare facilities
+                                                </Typography>
+                                            </li>
+                                            <li>
+                                                <Typography variant="body1" sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                                                    <CheckCircleIcon color="primary" />
+                                                    Veterinary clinics
+                                                </Typography>
+                                            </li>
+                                            <li>
+                                                <Typography variant="body1" sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                                                    <CheckCircleIcon color="primary" />
+                                                    Medical and dental practices
+                                                </Typography>
+                                            </li>
+                                        </Box>
+                                        <Typography variant="body1" paragraph>
+                                            Members benefit from a convenient monthly flat-rate fee that covers both products and services. In compliance with the Transportation of Dangerous Goods Act, Terra container lids are secured with pins for safe transport.
+                                        </Typography>
+                                        <Typography variant="h6" sx={{ mt: 2, mb: 1, color: "error.main" }}>
+                                            Important Reminder
+                                        </Typography>
+                                        <Typography variant="body1" paragraph>
+                                            Please avoid placing the following items in Terra containers:
+                                        </Typography>
+                                        <Box component="ul" sx={{ listStyle: "none", paddingLeft: 0 }}>
+                                            <li>
+                                                <Typography variant="body1" sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                                                    <WarningAmberIcon color="error" />
+                                                    Large quantities of liquid
+                                                </Typography>
+                                            </li>
+                                            <li>
+                                                <Typography variant="body1" sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                                                    <WarningAmberIcon color="error" />
+                                                    Large knives
+                                                </Typography>
+                                            </li>
+                                            <li>
+                                                <Typography variant="body1" sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                                                    <WarningAmberIcon color="error" />
+                                                    Anatomical waste
+                                                </Typography>
+                                            </li>
+                                            <li>
+                                                <Typography variant="body1" sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                                                    <WarningAmberIcon color="error" />
+                                                    Batteries
+                                                </Typography>
+                                            </li>
+                                            <li>
+                                                <Typography variant="body1" sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                                                    <WarningAmberIcon color="error" />
+                                                    Drug paraphernalia
+                                                </Typography>
+                                            </li>
+
+                                            {/* YouTube Video Section */}
+                                            <Box sx={{ py: 8, backgroundColor: "#f9f9f9" }}>
+                                                <Container>
+                                                    <Typography variant="h4" align="center" fontWeight="bold" sx={{ mb: 4 }}>
+                                                        Instructional Video
+                                                    </Typography>
+                                                    <Box
+                                                        sx={{
+                                                            display: "flex",
+                                                            justifyContent: "center",
+                                                            alignItems: "center",
+                                                            border: "2px solid #ddd",
+                                                            borderRadius: 2,
+                                                            boxShadow: 3,
+                                                            padding: 2,
+                                                            backgroundColor: "#fff",
+                                                        }}
+                                                    >
+
+                                                        <YouTube
+                                                            videoId="3n-CkW5SDE0" 
+                                                            opts={{
+                                                                height: "490",
+                                                                width: "740",
+                                                                playerVars: {
+                                                                    autoplay: 0,
+                                                                },
+                                                            }}
+                                                        />
+                                                    </Box>
+                                                </Container>
+                                            </Box>
+                                        </Box>
+                                    </>
+                                ),
                             },
                         ].map((step, index) => (
-                            <Grid item xs={12} sm={6} md={4} key={index}>
+                            <Grid item xs={12} key={index}>
                                 <motion.div
                                     initial={{ opacity: 0, scale: 0.9 }}
                                     whileInView={{ opacity: 1, scale: 1 }}
@@ -191,17 +288,24 @@ function InstructionPage() {
                                 >
                                     <Paper
                                         elevation={3}
-                                        sx={{ p: 4, textAlign: "center", borderRadius: 2 }}
+                                        sx={{
+                                            p: 4,
+                                            textAlign: "left",
+                                            borderRadius: 2,
+                                            width: "100%",
+                                        }}
                                     >
                                         <Typography
                                             variant="h6"
-                                            sx={{ mb: 2, fontWeight: "bold" }}
+                                            sx={{ mb: 2, fontWeight: "bold", textAlign: "center" }}
                                         >
                                             {step.title}
                                         </Typography>
-                                        <Typography variant="body1" sx={{ mb: 2 }}>
-                                            {step.description}
-                                        </Typography>
+                                        {step.description || (
+                                            <Typography variant="body1" sx={{ mb: 2 }}>
+                                                No description provided.
+                                            </Typography>
+                                        )}
                                     </Paper>
                                 </motion.div>
                             </Grid>
@@ -209,6 +313,7 @@ function InstructionPage() {
                     </Grid>
                 </Container>
             </Box>
+
 
             {/* Waste Management Tips Section */}
             <Box sx={{ py: 8, backgroundColor: "#ffffff" }}>

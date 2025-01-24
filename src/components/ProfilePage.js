@@ -23,7 +23,7 @@ function ProfilePage() {
   const [activeTab, setActiveTab] = useState(0);
   const [error, setError] = useState();
   const userSession = JSON.parse(sessionStorage.getItem('userData'));
-  console.log('Profile-page', userSession);
+  console.log('Profile-page', userSession); 
   const userId = userSession ? userSession.id : null;
 
   useEffect(() => {
