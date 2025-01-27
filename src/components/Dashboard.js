@@ -16,16 +16,20 @@ import {
   CardMedia,
   Link
 } from "@mui/material";
+import { motion } from "framer-motion";
+import { FaRecycle, FaSyringe, FaPills, FaCalendarAlt, FaFileAlt, FaTruck, FaClipboardCheck, FaHospital } from "react-icons/fa";
+import axios from "axios";
 import AwesomeSlider from "react-awesome-slider";
 import "react-awesome-slider/dist/styles.css";
 import { keyframes } from "@emotion/react";
 import image1 from "../assets/images/bg_full_home.png";
 import image3 from "../assets/images/bg_full_2.png";
+import biomedman from "../assets/images/biomedman.png";
 import image_1 from "../assets/images/1.jpg";
 import image_2 from "../assets/images/2.jpg";
 import image_3 from "../assets/images/3.jpg";
 import "react-international-phone/style.css";
-import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const newCardHoverAnimation = keyframes`
   from {
@@ -35,6 +39,34 @@ const newCardHoverAnimation = keyframes`
     transform: scale(1.1) rotateY(15deg);
   }
 `;
+const services = [
+  {
+    title: "Biomedical Waste Disposal",
+    description: "Biomed processes all kinds of biohazardous waste.",
+    icon: <FaRecycle size={40} color="#003366" />,
+  },
+  {
+    title: "Sharps Container Management",
+    description: "Sharps Container Management",
+    icon: <FaSyringe size={40} color="#003366" />,
+  },
+  {
+    title: "Pharmaceutical Waste Recovery",
+    description: "Safely recover and dispose of pharmaceutical waste.",
+    icon: <FaPills size={40} color="#003366" />,
+  },
+  {
+    title: "Customizable Pickup Schedules",
+    description: "Flexible schedules tailored to your needs.",
+    icon: <FaCalendarAlt size={40} color="#003366" />,
+  },
+  {
+    title: "Compliance and Reporting Assistance",
+    description: "Expert assistance with compliance and reporting.",
+    icon: <FaFileAlt size={40} color="#003366" />,
+  },
+];
+
 
 const updates = [
   { title: "New Waste Guidelines", description: "Updated policies for 2025.", date: "Jan 10, 2025" },
@@ -58,6 +90,7 @@ const dataURLToFile = (dataURL, filename) => {
   return new File([new Uint8Array(array)], filename, { type: mime });
 };
 function Dashboard() {
+  const navigate = useNavigate();
   const [formOpen, setFormOpen] = useState(false);
   const handleFormOpen = () => setFormOpen(true);
   const handleFormClose = () => setFormOpen(false);
@@ -67,7 +100,8 @@ function Dashboard() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const userSession = JSON.parse(sessionStorage.getItem('userData'));
   const userId = userSession ? userSession.id : null;
-  const [formData, setFormData] = useState({contactNumber: "", description: "", photos: []
+  const [formData, setFormData] = useState({
+    contactNumber: "", description: "", photos: []
   });
 
   useEffect(() => {
@@ -117,35 +151,32 @@ function Dashboard() {
   const handleFormSubmit = async (event) => {
     event.preventDefault();
     setIsSubmitting(true);
-  
-    // Check for required fields
+
     if (!formData.contactNumber || !formData.description) {
       setError("Please fill out all required fields.");
       setIsSubmitting(false);
       return;
     }
-  
+
     try {
-      // Prepare form data for multipart/form-data
       const formDataToSend = new FormData();
       formDataToSend.append("facility", facilityName);
       formDataToSend.append("contactNumber", formData.contactNumber);
       formDataToSend.append("description", formData.description);
-  
-      // Append photos
+
       formData.photos.forEach((photo) => {
-        formDataToSend.append("photos", photo.file); // Append file directly
+        formDataToSend.append("photos", photo.file);
       });
-  
+
       // Send POST request
       const response = await axios.post(
         "http://localhost:5000/api/client-complaint/add",
         formDataToSend,
         {
-          headers: { "Content-Type": "multipart/form-data" }, // Important for file upload
+          headers: { "Content-Type": "multipart/form-data" },
         }
       );
-  
+
       alert("Complaint submitted successfully.");
       setFormData({ contactNumber: "", description: "", photos: [] });
       localStorage.removeItem("formData");
@@ -156,7 +187,7 @@ function Dashboard() {
       setIsSubmitting(false);
     }
   };
-  
+
   const handleRemoveImage = (index) => {
     setFormData((prev) => {
       const updatedPhotos = [...prev.photos];
@@ -401,6 +432,7 @@ function Dashboard() {
           </form>
         </Modal>
         <Button
+          onClick={() => navigate("/blogs")}
           variant="outlined"
           sx={{
             mt: 2,
@@ -427,8 +459,8 @@ function Dashboard() {
       </Box>
 
       {/* About Section */}
-      <Container sx={{ mt: 8 }}>
-        <Typography variant="h4" sx={{ mb: 4, textAlign: "center", fontWeight: "bold", color: "#003366" }}>
+      <Container>
+        <Typography variant="h5" sx={{ mb: 4, mt:4, textAlign: "center", fontWeight: "bold", color: "#003366" }}>
           About Biomed
         </Typography>
         <Grid container spacing={4}>
@@ -462,65 +494,184 @@ function Dashboard() {
         </Grid>
       </Container>
 
-      {/* Improperly Packaged Waste Section */}
-      <Box sx={{ py: 8, backgroundColor: "#ffffff" }}>
+      <Container sx={{ mt: 8 }}>
+        <Grid container spacing={4} alignItems="center">
+          {/* Services Section */}
+          <Grid item xs={12} md={8}>
+            <Typography
+              variant="h5"
+              sx={{
+                mb: 4,
+                textAlign: "center",
+                fontWeight: "bold",
+                color: "#003366",
+              }}
+            >
+              Services We Offer
+            </Typography>
+            <Grid container spacing={4}>
+              {[
+                {
+                  title: "Biomedical Waste Disposal",
+                  description:
+                    "We process all types of biohazardous waste, ensuring safe and compliant disposal.",
+                  icon: <FaRecycle size={40} color="#003366" />,
+                },
+                {
+                  title: "Sharps Container Management",
+                  description:
+                    "Comprehensive management solutions for sharps containers in medical facilities.",
+                  icon: <FaSyringe size={40} color="#003366" />,
+                },
+                {
+                  title: "Pharmaceutical Waste Recovery",
+                  description:
+                    "Specialized recovery and disposal of expired or unused pharmaceuticals.",
+                  icon: <FaHospital size={40} color="#003366" />,
+                },
+                {
+                  title: "Customizable Pickup Schedules",
+                  description: "Flexible scheduling to suit your waste collection needs.",
+                  icon: <FaTruck size={40} color="#003366" />,
+                },
+                {
+                  title: "Compliance and Reporting Assistance",
+                  description:
+                    "Expert support in meeting regulatory compliance and reporting requirements.",
+                  icon: <FaClipboardCheck size={40} color="#003366" />,
+                },
+                {
+                  title: "Secure-A-Sharp® Service Program",
+                  description:
+                    "Providing peace of mind to restaurants, service stations, and small businesses.",
+                  icon: <FaSyringe size={40} color="#003366" />,
+                },
+                {
+                  title: "Cytotoxic Waste Disposal",
+                  description:
+                    "Safe and efficient handling of cytotoxic and hazardous medical waste.",
+                  icon: <FaRecycle size={40} color="#003366" />,
+                },
+                {
+                  title: "Anatomical Waste Disposal",
+                  description: "Ethical and secure disposal of anatomical waste with utmost care.",
+                  icon: <FaHospital size={40} color="#003366" />,
+                },
+                {
+                  title: "Terra™ Reusable Sharps Container Program",
+                  description:
+                    "Simple, cost-effective sharps management for clinical settings, prioritizing sustainability.",
+                  icon: <FaRecycle size={40} color="#003366" />,
+                },
+              ].map((item, index) => (
+                <Grid item xs={12} md={4} key={index}>
+                  <motion.div
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    style={{ height: "100%" }}
+                  >
+                    <Card
+                      sx={{
+                        textAlign: "center",
+                        boxShadow: 3,
+                        borderRadius: 2,
+                        overflow: "hidden",
+                      }}
+                    >
+                      <CardContent>
+                        <div style={{ marginBottom: "16px" }}>{item.icon}</div>
+                        <Typography
+                          variant="h6"
+                          sx={{ fontWeight: "bold", color: "#003366" }}
+                        >
+                          {item.title}
+                        </Typography>
+                        <Typography variant="body2" sx={{ mt: 2, color: "#555" }}>
+                          {item.description}
+                        </Typography>
+                      </CardContent>
+                    </Card>
+                  </motion.div>
+                </Grid>
+              ))}
+            </Grid>
+          </Grid>
+          {/* Animated Image Section */}
+          <Grid item xs={12} md={4}>
+            <motion.div
+              animate={{ rotate: [0, 10, -10, 0], scale: [1, 1.1, 1, 1.1, 1] }}
+              transition={{ duration: 4, repeat: Infinity }}
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                height: "100%",
+              }}
+            >
+              <img
+                src={biomedman}
+                alt="Animated Illustration"
+                style={{
+                  width: "100%",
+                  height: "auto",
+                  borderRadius: "16px",
+                }}
+              />
+            </motion.div>
+          </Grid>
+        </Grid>
+      </Container>
+
+
+      {/* Proper Waste Packaging Section */}
+      <Box sx={{ mt: 8, py: 4, background: "linear-gradient(to right, #e0f7fa, #f1f8e9)", borderRadius: 2 }}>
         <Container sx={{ mt: 6, mb: 6 }}>
           <Typography variant="h4" sx={{ mb: 4, textAlign: "center", fontWeight: "bold", color: "#003366" }}>
-            Importance of Proper Waste Packaging
+            The Critical Role of Proper Waste Packaging
           </Typography>
           <Typography variant="body1" sx={{ textAlign: "center", mb: 4 }}>
-            Improperly packaged waste can lead to contamination, legal issues, and harm to the environment. This portal is
-            designed to educate users on the best practices for properly packaging waste to ensure safety and compliance
-            with regulations.
+            Properly packaging waste is essential to safeguarding health, ensuring regulatory compliance, and protecting the environment.
+            This portal provides the tools and knowledge you need to adopt effective packaging practices that promote safety and sustainability.
           </Typography>
           <Grid container spacing={4}>
-            {testimonials.map((testimonial, index) => (
-              <Grid item xs={12} md={6} key={index}>
-                <Paper
-                  elevation={3}
-                  sx={{ p: 3, backgroundColor: "#f9f9f9", borderRadius: 2, textAlign: "center" }}
-                >
-                  <Typography variant="body1" sx={{ fontStyle: "italic" }}>
-                    "{testimonial.feedback}"
-                  </Typography>
-                  <Typography variant="h6" sx={{ mt: 2, fontWeight: "bold" }}>
-                    - {testimonial.name}
-                  </Typography>
-                </Paper>
-              </Grid>
-            ))}
-          </Grid>
-        </Container></Box>
-
-      {/* Services Section */}
-      <Container sx={{ mt: 6 }}>
-        <Typography variant="h4" sx={{ mb: 4, textAlign: "center", fontWeight: "bold", color: "#003366" }}>
-          Our Services
-        </Typography>
-        <Grid container spacing={4}>
-          {[image_1, image_2, image_3].map((image, index) => (
+          {[
+            {
+              title: "Protection of Healthcare Workers",
+              description: "Proper packaging reduces exposure to hazardous materials, ensuring worker safety and fostering accountability in healthcare settings.",
+            },
+            {
+              title: "Preventing Disease Transmission",
+              description: "Securely packaged medical waste prevents the spread of infections, protecting both healthcare workers and the community.",
+            },
+            {
+              title: "Environmental Responsibility",
+              description: "Proper disposal minimizes ecological harm, safeguarding soil, water, and wildlife while promoting sustainability.",
+            },
+            {
+              title: "Regulatory Compliance",
+              description: "Following packaging guidelines demonstrates ethical responsibility, ensures public health safety, and avoids penalties.",
+            },
+            {
+              title: "Commitment to Community Well-being",
+              description: "Safe waste packaging protects vulnerable populations, builds public trust, and reflects healthcare's commitment to dignity and safety.",
+            },
+          ].map((item, index) => (
             <Grid item xs={12} md={4} key={index}>
-              <Paper
-                elevation={4}
-                sx={{
-                  p: 2,
-                  borderRadius: 2,
-                  textAlign: "center",
-                  "&:hover": { animation: `${newCardHoverAnimation} 0.5s ease-in-out forwards` },
-                }}
-              >
-                <img src={image} alt={`Service ${index}`} style={{ width: "100%", borderRadius: "8px" }} />
-                <Typography variant="h6" sx={{ mt: 2, fontWeight: "bold" }}>
-                  Service {index + 1}
-                </Typography>
-                <Button variant="contained" sx={{ mt: 2 }}>
-                  Learn More
-                </Button>
-              </Paper>
+              <Card sx={{ textAlign: "center", boxShadow: 3 }}>
+                <CardContent>
+                  <Typography variant="h6" sx={{ fontWeight: "bold", color: "#003366" }}>
+                    {item.title}
+                  </Typography>
+                  <Typography variant="body2" sx={{ mt: 2, color: "#555" }}>
+                    {item.description}
+                  </Typography>
+                </CardContent>
+              </Card>
             </Grid>
           ))}
         </Grid>
-      </Container>
+        </Container>
+      </Box>
 
       {/* Testimonials Section */}
       <Container sx={{ mt: 6, mb: 6 }}>

@@ -175,9 +175,12 @@ function InstructionPage() {
                     <Grid container spacing={4} direction="column">
                         {[
                             {
-                                title: "The Terra Program",
+                                title: "THE TERRA",
                                 description: (
                                     <>
+                                        <Typography variant="h6" align="center"  sx={{ mb: 2 }}>
+                                            TYSC4 | TYSC8 | TCTL8 | TCLL8
+                                        </Typography>
                                         <Typography variant="body1" paragraph>
                                             Our Terra Program provides a range of containers specifically designed for the safe disposal of sharps. This program is ideal for:
                                         </Typography>
