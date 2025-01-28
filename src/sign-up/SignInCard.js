@@ -32,7 +32,6 @@ const Card = styled(MuiCard)(({ theme }) => ({
 }));
 
 export default function SignInCard() {
-
   const [emailError, setEmailError] = React.useState(false);
   const [emailErrorMessage, setEmailErrorMessage] = React.useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -76,7 +75,7 @@ export default function SignInCard() {
 
     try {
       // Make API request for login
-      const response = await axios.post(`http://52.60.180.33:5000/api/user/login`, JSON.stringify(formData), {
+      const response = await axios.post(`http://localhost:5000/api/user/login`, JSON.stringify(formData), {
         headers: {
           'Content-Type': 'application/json',
         },

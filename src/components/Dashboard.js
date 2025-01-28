@@ -66,7 +66,7 @@ function Dashboard() {
   const [formOpen, setFormOpen] = useState(false);
   const handleFormOpen = () => setFormOpen(true);
   const handleFormClose = () => setFormOpen(false);
-  const [setError] = useState("");
+  const [ setError] = useState("");
   const [loading, setLoading] = useState(true);
   const [facilityName, setFacilityName] = useState();
   const [ setIsSubmitting] = useState(false);
@@ -157,8 +157,8 @@ function Dashboard() {
       });
       setLoading(true);
       // Send POST request
-      await axios.post(
-        `http://52.60.180.33:5000/api/client-complaint/add`,
+      const response = await axios.post(
+        `http://localhost:5000/api/client-complaint/add`,
         formDataToSend,
         {
           headers: { "Content-Type": "multipart/form-data" },
