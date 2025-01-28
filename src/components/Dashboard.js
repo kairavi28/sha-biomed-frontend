@@ -8,37 +8,26 @@ import {
   Paper,
   Button,
   TextField,
-  MenuItem,
   CircularProgress,
   Modal,
   Card,
   CardContent,
-  CardMedia,
-  Link
+  Snackbar,
+  Link,
+  Alert
 } from "@mui/material";
 import { motion } from "framer-motion";
 import { FaRecycle, FaSyringe, FaPills, FaCalendarAlt, FaFileAlt, FaTruck, FaClipboardCheck, FaHospital } from "react-icons/fa";
 import axios from "axios";
 import AwesomeSlider from "react-awesome-slider";
 import "react-awesome-slider/dist/styles.css";
-import { keyframes } from "@emotion/react";
 import image1 from "../assets/images/bg_full_home.png";
 import image3 from "../assets/images/bg_full_2.png";
 import biomedman from "../assets/images/biomedman.png";
-import image_1 from "../assets/images/1.jpg";
-import image_2 from "../assets/images/2.jpg";
-import image_3 from "../assets/images/3.jpg";
 import "react-international-phone/style.css";
 import { useNavigate } from "react-router-dom";
 
-const newCardHoverAnimation = keyframes`
-  from {
-    transform: scale(1) rotateY(0deg);
-  }
-  to {
-    transform: scale(1.1) rotateY(15deg);
-  }
-`;
+
 const services = [
   {
     title: "Biomedical Waste Disposal",
@@ -67,53 +56,55 @@ const services = [
   },
 ];
 
-
-const updates = [
-  { title: "New Waste Guidelines", description: "Updated policies for 2025.", date: "Jan 10, 2025" },
-  { title: "Expanded Services", description: "Now operating in additional locations!", date: "Jan 5, 2025" },
-];
-
 const testimonials = [
   { name: "John Doe", feedback: "Biomed’s services exceeded our expectations!" },
   { name: "Jane Smith", feedback: "Highly reliable and professional team!" },
 ];
 
-// Helper function to convert base64 to a File object
-const dataURLToFile = (dataURL, filename) => {
-  const [header, base64String] = dataURL.split(",");
-  const mime = header.match(/:(.*?);/)[1];
-  const binary = atob(base64String);
-  const array = [];
-  for (let i = 0; i < binary.length; i++) {
-    array.push(binary.charCodeAt(i));
-  }
-  return new File([new Uint8Array(array)], filename, { type: mime });
-};
 function Dashboard() {
   const navigate = useNavigate();
   const [formOpen, setFormOpen] = useState(false);
   const handleFormOpen = () => setFormOpen(true);
   const handleFormClose = () => setFormOpen(false);
-  const [error, setError] = useState("");
+  const [setError] = useState("");
   const [loading, setLoading] = useState(true);
   const [facilityName, setFacilityName] = useState();
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [ setIsSubmitting] = useState(false);
   const userSession = JSON.parse(sessionStorage.getItem('userData'));
   const userId = userSession ? userSession.id : null;
   const [formData, setFormData] = useState({
     contactNumber: "", description: "", photos: []
   });
 
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: "",
+    severity: "success",
+  });
+
+  // Handle Snackbar close
+  const handleSnackbarClose = () => {
+    setSnackbar({ ...snackbar, open: false });
+  };
+
   useEffect(() => {
+   
     const userData = JSON.parse(sessionStorage.getItem('userData'));
     if (userData) {
       setLoading(false);
       setFacilityName(userData.facility);
     }
+
+    setSnackbar({
+      open: true,
+      message: `Hello ${userData.facility}!`,
+      severity: "success",
+    });
   }, [userId]);
 
   const handleFileChange = (event) => {
     const files = Array.from(event.target.files);
+  
     const previews = files.map((file) => {
       const reader = new FileReader();
       reader.readAsDataURL(file);
@@ -121,18 +112,15 @@ function Dashboard() {
         reader.onloadend = () => resolve({ file, preview: reader.result });
       });
     });
-
+  
     Promise.all(previews).then((uploadedImages) => {
-      setFormData((prev) => {
-        const updatedForm = {
-          ...prev,
-          photos: [...(prev.photos || []), ...uploadedImages],
-        };
-        localStorage.setItem("formData", JSON.stringify(updatedForm));
-        return updatedForm;
-      });
+      setFormData((prev) => ({
+        ...prev,
+        photos: [...(prev.photos || []), ...uploadedImages],
+      }));
     });
   };
+  
 
   if (loading) {
     return (
@@ -167,22 +155,29 @@ function Dashboard() {
       formData.photos.forEach((photo) => {
         formDataToSend.append("photos", photo.file);
       });
-
+      setLoading(true);
       // Send POST request
-      const response = await axios.post(
-        "http://localhost:5000/api/client-complaint/add",
+      await axios.post(
+        `http://52.60.180.33:5000/api/client-complaint/add`,
         formDataToSend,
         {
           headers: { "Content-Type": "multipart/form-data" },
         }
       );
-
-      alert("Complaint submitted successfully.");
+      setSnackbar({
+        open: true,
+        message: "New complaint submitted successfully!",
+        severity: "success",
+      });
       setFormData({ contactNumber: "", description: "", photos: [] });
       localStorage.removeItem("formData");
+      setLoading(false);
     } catch (err) {
-      console.error("Failed to add complaint:", err);
-      setError("Failed to add complaint. Please try again.");
+      setSnackbar({
+        open: true,
+        message: "Error submitting the request. Please try again.",
+        severity: "error",
+      });
     } finally {
       setIsSubmitting(false);
     }
@@ -444,7 +439,7 @@ function Dashboard() {
         >
           Read a blog
         </Button>
-        <Button
+        {/* <Button
           variant="outlined"
           sx={{
             mt: 2,
@@ -455,12 +450,12 @@ function Dashboard() {
           }}
         >
           Ask a Question
-        </Button>
+        </Button> */}
       </Box>
 
       {/* About Section */}
       <Container>
-        <Typography variant="h5" sx={{ mb: 4, mt:4, textAlign: "center", fontWeight: "bold", color: "#003366" }}>
+        <Typography variant="h5" sx={{ mb: 4, mt: 4, textAlign: "center", fontWeight: "bold", color: "#003366" }}>
           About Biomed
         </Typography>
         <Grid container spacing={4}>
@@ -634,42 +629,42 @@ function Dashboard() {
             This portal provides the tools and knowledge you need to adopt effective packaging practices that promote safety and sustainability.
           </Typography>
           <Grid container spacing={4}>
-          {[
-            {
-              title: "Protection of Healthcare Workers",
-              description: "Proper packaging reduces exposure to hazardous materials, ensuring worker safety and fostering accountability in healthcare settings.",
-            },
-            {
-              title: "Preventing Disease Transmission",
-              description: "Securely packaged medical waste prevents the spread of infections, protecting both healthcare workers and the community.",
-            },
-            {
-              title: "Environmental Responsibility",
-              description: "Proper disposal minimizes ecological harm, safeguarding soil, water, and wildlife while promoting sustainability.",
-            },
-            {
-              title: "Regulatory Compliance",
-              description: "Following packaging guidelines demonstrates ethical responsibility, ensures public health safety, and avoids penalties.",
-            },
-            {
-              title: "Commitment to Community Well-being",
-              description: "Safe waste packaging protects vulnerable populations, builds public trust, and reflects healthcare's commitment to dignity and safety.",
-            },
-          ].map((item, index) => (
-            <Grid item xs={12} md={4} key={index}>
-              <Card sx={{ textAlign: "center", boxShadow: 3 }}>
-                <CardContent>
-                  <Typography variant="h6" sx={{ fontWeight: "bold", color: "#003366" }}>
-                    {item.title}
-                  </Typography>
-                  <Typography variant="body2" sx={{ mt: 2, color: "#555" }}>
-                    {item.description}
-                  </Typography>
-                </CardContent>
-              </Card>
-            </Grid>
-          ))}
-        </Grid>
+            {[
+              {
+                title: "Protection of Healthcare Workers",
+                description: "Proper packaging reduces exposure to hazardous materials, ensuring worker safety and fostering accountability in healthcare settings.",
+              },
+              {
+                title: "Preventing Disease Transmission",
+                description: "Securely packaged medical waste prevents the spread of infections, protecting both healthcare workers and the community.",
+              },
+              {
+                title: "Environmental Responsibility",
+                description: "Proper disposal minimizes ecological harm, safeguarding soil, water, and wildlife while promoting sustainability.",
+              },
+              {
+                title: "Regulatory Compliance",
+                description: "Following packaging guidelines demonstrates ethical responsibility, ensures public health safety, and avoids penalties.",
+              },
+              {
+                title: "Commitment to Community Well-being",
+                description: "Safe waste packaging protects vulnerable populations, builds public trust, and reflects healthcare's commitment to dignity and safety.",
+              },
+            ].map((item, index) => (
+              <Grid item xs={12} md={4} key={index}>
+                <Card sx={{ textAlign: "center", boxShadow: 3 }}>
+                  <CardContent>
+                    <Typography variant="h6" sx={{ fontWeight: "bold", color: "#003366" }}>
+                      {item.title}
+                    </Typography>
+                    <Typography variant="body2" sx={{ mt: 2, color: "#555" }}>
+                      {item.description}
+                    </Typography>
+                  </CardContent>
+                </Card>
+              </Grid>
+            ))}
+          </Grid>
         </Container>
       </Box>
 
@@ -711,6 +706,17 @@ function Dashboard() {
           </Link>
         </Box>
       </Box>
+      {/* Snackbar for Feedback */}
+      <Snackbar
+        open={snackbar.open}
+        autoHideDuration={6000}
+        onClose={handleSnackbarClose}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+      >
+        <Alert onClose={handleSnackbarClose} severity={snackbar.severity} sx={{ width: "100%" }}>
+          {snackbar.message}
+        </Alert>
+      </Snackbar>
     </Box>
   );
 }

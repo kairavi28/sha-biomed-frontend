@@ -10,7 +10,7 @@ import Typography from '@mui/material/Typography';
 import logo from '../assets/images/logo.png';
 import { styled } from '@mui/material/styles';
 import ForgotPassword from './ForgotPassword';
-import { GoogleIcon, FacebookIcon } from './CustomIcons';
+import { GoogleIcon } from './CustomIcons';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 
 const Card = styled(MuiCard)(({ theme }) => ({
@@ -32,6 +32,7 @@ const Card = styled(MuiCard)(({ theme }) => ({
 }));
 
 export default function SignInCard() {
+
   const [emailError, setEmailError] = React.useState(false);
   const [emailErrorMessage, setEmailErrorMessage] = React.useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -75,7 +76,7 @@ export default function SignInCard() {
 
     try {
       // Make API request for login
-      const response = await axios.post('http://localhost:5000/api/user/login', JSON.stringify(formData), {
+      const response = await axios.post(`http://52.60.180.33:5000/api/user/login`, JSON.stringify(formData), {
         headers: {
           'Content-Type': 'application/json',
         },

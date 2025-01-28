@@ -77,6 +77,8 @@ export default function SignUp() {
   const [snackbarMessage, setSnackbarMessage] = useState('');
   const [snackbarSeverity, setSnackbarSeverity] = useState('success');
 
+  //text field
+  const [otherFacility, setOtherFacility] = React.useState(''); // State for custom facility input
   const navigate = useNavigate();
 
   React.useEffect(() => {
@@ -188,6 +190,9 @@ export default function SignUp() {
       console.log('Error popped up');
       return;
     }
+    const facilityValue =
+      selectedFacility === 'Other' ? otherFacility : selectedFacility;
+
     // Extract form data
     const data = new FormData(event.currentTarget);
     const formData = {
@@ -195,12 +200,12 @@ export default function SignUp() {
       email: data.get('email'),
       password: data.get('password'),
       facilityType: selectedFacilityType,
-      facility: selectedFacility,
+      facility: facilityValue,
     };
     console.log('Form Data:', formData);
 
     try {
-      const response = await axios.post('http://localhost:5000/api/user/register', formData, {
+      const response = await axios.post('http://52.60.180.33:5000/api/user/register', formData, {
         headers: {
           'Content-Type': 'application/json',
         },
@@ -210,7 +215,7 @@ export default function SignUp() {
       setSnackbarSeverity('success');
       setSnackbarOpen(true);
       setTimeout(() => {
-        navigate('/login');
+        navigate('/');
       }, 3000);
     } catch (error) {
       console.error('Error during registration:', error);
@@ -239,6 +244,7 @@ export default function SignUp() {
       setSnackbarOpen(true);
     }
   };
+
 
 
   const handleSnackbarClose = () => {
@@ -321,7 +327,6 @@ export default function SignUp() {
                           onClick={togglePasswordVisibility}
                           edge="end"
                         >
-
                           {showPassword ? <Visibility /> : <VisibilityOff />}
                         </IconButton>
                       </InputAdornment>
@@ -330,7 +335,7 @@ export default function SignUp() {
                 />
               </FormControl>
 
-              {/* <FormControl fullWidth>
+              <FormControl fullWidth>
                 <FormLabel htmlFor="facilityType">Facility Type</FormLabel>
                 <TextField
                   select
@@ -347,13 +352,14 @@ export default function SignUp() {
                   color={facilityTypeError ? 'error' : 'primary'}
                 >
                   <option value="">Select a Facility Type</option>
-                  {facilityTypes.map((type) => (
-                    <option key={type.id} value={type.id}>
+                  {facilityTypes.map((type, index) => (
+                    <option key={`${type.id}-${index}`} value={type.id}>
                       {type.name}
                     </option>
                   ))}
+
                 </TextField>
-              </FormControl> */}
+              </FormControl>
 
               <FormControl fullWidth>
                 <FormLabel htmlFor="facility">Facility</FormLabel>
@@ -364,7 +370,6 @@ export default function SignUp() {
                   onChange={(event) => setSelectedFacility(event.target.value)}
                   SelectProps={{
                     native: true,
-                    width: '300px'
                   }}
                   variant="outlined"
                   error={facilityError}
@@ -377,9 +382,20 @@ export default function SignUp() {
                       {facility.name}
                     </option>
                   ))}
+                  <option value="Other">Other</option>
                 </TextField>
+                {selectedFacility === 'Other' && (
+                  <TextField
+                    fullWidth
+                    id="otherFacility"
+                    placeholder="Enter facility name"
+                    value={otherFacility}
+                    onChange={(event) => setOtherFacility(event.target.value)}
+                    variant="outlined"
+                    margin="normal"
+                  />
+                )}
               </FormControl>
-
               <FormControlLabel
                 control={<Checkbox value="allowExtraEmails" color="primary" />}
                 label="I want to receive updates via email."

@@ -5,7 +5,7 @@ import SignInSide from './sign-up/SignInSide';
 import SignUp from './sign-up/SignUp';
 import Navbar from './components/Navbar';
 import Dashboard from './components/Dashboard';
-import Issues from './components/Issues';
+import Complaints from './components/Complaints';
 import BlogPage from './components/BlogPage';
 import Blog from './components/Blog';
 import ProfilePage from './components/ProfilePage';
@@ -18,10 +18,9 @@ function App() {
       <Route path="/sign-up" element={<SignUp />} />
       <Route element={<LayoutWithNavbar />}>
         <Route path="/home" element={<Dashboard />} />
-        <Route path="/services" element={<Issues />} />
+        <Route path="/services" element={<Complaints />} />
         <Route path="/instruction" element={<InstructionPage />} />
         <Route path="/blogs" element={<BlogPage />} />
-        <Route path="/login" element={<SignInSide/>} />
         <Route path="/blog" element={<Blog />} />
         <Route path="/profile" element={<ProfilePage/>} />
       </Route>
@@ -35,7 +34,7 @@ function LayoutWithNavbar() {
       <Navbar />
       <Routes>
         <Route path="/home" element={<Dashboard />} />
-        <Route path="/services" element={<Issues />} />
+        <Route path="/services" element={<Complaints />} />
         <Route path="/blogs" element={<BlogPage />} />
         <Route path="/" element={<SignInSide/>} />
         <Route path="/blog" element={<Blog />} />

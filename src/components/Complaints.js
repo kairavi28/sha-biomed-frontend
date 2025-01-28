@@ -16,19 +16,6 @@ import {
 import axios from "axios";
 import Link from "@mui/material/Link";
 
-function Copyright() {
-    return (
-        <Typography variant="body2" color="textSecondary">
-            {"Copyright © "}
-            <Link color="inherit" href="https://material-ui.com/">
-                Biomed Waste Communication Channel
-            </Link>{" "}
-            {new Date().getFullYear()}
-            {"."}
-        </Typography>
-    );
-}
-
 // Helper function to convert base64 to a File object
 const dataURLToFile = (dataURL, filename) => {
     const [header, base64String] = dataURL.split(",");
@@ -41,14 +28,21 @@ const dataURLToFile = (dataURL, filename) => {
     return new File([new Uint8Array(array)], filename, { type: mime });
 };
 
-function Issues() {
+function Complaints() {
+    // let apiUrl;
+    // if (process.env.NODE_ENV === 'production') {
+    //     apiUrl = process.env.REACT_APP_API_URL || 'http://52.60.180.33:5000';
+    // } else {
+    //     apiUrl = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+    // }
+
     const [issues, setIssues] = useState([]);
     const [autoReload, setAutoReload] = useState(true);
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(true);
     const [selectedIssue, setSelectedIssue] = useState(null);
     const [isDialogOpen, setIsDialogOpen] = useState(false);
-    const [isFormActive, setIsFormActive] = useState(false);
+    const [isFormActive] = useState(false);
     const [quoteData, setQuoteData] = useState({
         name: '',
         email: '',
@@ -118,7 +112,7 @@ function Issues() {
 
         try {
             setIsSubmitting(true);
-            await axios.post("http://localhost:5000/api/issues/add", formDataToSubmit, {
+            await axios.post(`http://52.60.180.33:5000/api/issues/add`, formDataToSubmit, {
                 headers: { "Content-Type": "multipart/form-data" },
             });
             alert("Issue submitted successfully.");
@@ -169,28 +163,12 @@ function Issues() {
         });
     };
 
-    const handleSubmit = () => {
-        if (!quoteData.name || !quoteData.email || !quoteData.phone) {
-            alert("Please fill in all fields.");
-            return;
-        }
-
-        axios.post("http://localhost:5000/api/quotes", quoteData)
-            .then(() => {
-                alert(`Thank you, ${quoteData.name}! We will contact you soon.`);
-                setQuoteData({ name: '', email: '', phone: '', serviceType: 'home' });
-            })
-            .catch(() => {
-                alert("There was an error submitting your quote. Please try again.");
-            });
-    };
-
     useEffect(() => {
         let intervalId;
         if (autoReload && !isDialogOpen && !isFormActive) {
             setLoading(true);
             axios
-                .get("http://localhost:5000/api/complaints")
+                .get(`http://52.60.180.33:5000/api/complaints`)
                 .then((response) => {
                     setIssues(response.data);
                     console.log('here', response.data);
@@ -602,4 +580,4 @@ function Issues() {
     );
 }
 
-export default Issues;
+export default Complaints;

@@ -74,7 +74,7 @@ const Navbar = () => {
   const handleSubmit = () => {
     console.log(formData);
     axios
-      .post("http://localhost:5000/api/quote/add", formData)
+      .post("http://52.60.180.33:5000/api/quote/add", formData)
       .then((res) => {
         setSnackbar({
           open: true,
@@ -195,23 +195,6 @@ const Navbar = () => {
               Complaint Services
             </Button>
             <Button
-              onClick={() => navigate("/blogs")}
-              sx={{
-                color: isActive("/blogs") ? "#C9CC3F" : "#003366",
-                fontWeight: isActive("/blogs") ? "bold" : "bold",
-                textTransform: "none",
-                fontSize: "16px",
-                borderBottom: isActive("/blogs") ? "2px solid #C9CC3F" : "none",
-                "&:hover": {
-                  color: "#ffffff",
-                  backgroundColor: "#C9CC3F",
-                  borderRadius: "8px",
-                },
-              }}
-            >
-              Our Blog
-            </Button>
-            <Button
               onClick={() => navigate("/instruction")}
               sx={{
                 color: isActive("/instruction") ? "#C9CC3F" : "#003366",
@@ -270,7 +253,7 @@ const Navbar = () => {
                 onClick={() => {
                   handleMenuClose();
                   axios
-                    .post("http://localhost:5000/logout")
+                    .post("http://52.60.180.33:5000/logout")
                     .then(() => {
                       navigate("/");
                     })

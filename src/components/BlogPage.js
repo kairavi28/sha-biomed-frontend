@@ -15,19 +15,6 @@ import {
 import axios from "axios";
 import Link from "@mui/material/Link";
 
-function Copyright() {
-  return (
-    <Typography variant="body2" color="textSecondary">
-      {"Copyright © "}
-      <Link color="inherit" href="https://material-ui.com/">
-        Biomed Waste Communication Channel
-      </Link>{" "}
-      {new Date().getFullYear()}
-      {"."}
-    </Typography>
-  );
-}
-
 function BlogPage() {
   const [blogs, setBlogs] = useState([]);
   const [autoReload, setAutoReload] = useState(true);
@@ -35,43 +22,14 @@ function BlogPage() {
   const [error, setError] = useState("");
   const [open, setOpen] = useState(false);
   const [selectedBlog, setSelectedBlog] = useState(null);
-  // const [quoteData, setQuoteData] = useState({
-  //   name: '',
-  //   email: '',
-  //   phone: '',
-  //   serviceType: 'home'
-  // });
 
-  // const handleInputChange = (event) => {
-  //   const { name, value } = event.target;
-  //   setQuoteData(prevState => ({
-  //     ...prevState,
-  //     [name]: value
-  //   }));
-  // };
-
-  // const handleSubmit = () => {
-  //   if (!quoteData.name || !quoteData.email || !quoteData.phone) {
-  //     alert("Please fill in all fields.");
-  //     return;
-  //   }
-
-  //   axios.post("http://localhost:5000/api/quotes", quoteData)
-  //     .then(() => {
-  //       alert(`Thank you, ${quoteData.name}! We will contact you soon.`);
-  //       setQuoteData({ name: '', email: '', phone: '', serviceType: 'home' });
-  //     })
-  //     .catch(() => {
-  //       alert("There was an error submitting your quote. Please try again.");
-  //     });
-  // };
 
   useEffect(() => {
     let intervalId;
     if (autoReload) {
       setLoading(true);
       axios
-        .get("http://localhost:5000/api/blogs")
+        .get("http://52.60.180.33:5000/api/blogs")
         .then((response) => {
           setBlogs(response.data);
           setLoading(false);
