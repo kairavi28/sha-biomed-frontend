@@ -1,0 +1,17 @@
+{
+  "files": {
+    "main.css": "/static/css/main.4d7f530f.css",
+    "main.js": "/static/js/main.60212f8b.js",
+    "static/media/bg_full_2.png": "/static/media/bg_full_2.a6f901eff92e41aa7b14.png",
+    "static/media/biomedman.png": "/static/media/biomedman.dd1ee8606b64ddae7560.png",
+    "static/media/bg_full_home.png": "/static/media/bg_full_home.7dee8890ec2cb12e549b.png",
+    "static/media/logo.png": "/static/media/logo.8dd4c2e26567d486f017.png",
+    "index.html": "/index.html",
+    "main.4d7f530f.css.map": "/static/css/main.4d7f530f.css.map",
+    "main.60212f8b.js.map": "/static/js/main.60212f8b.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.4d7f530f.css",
+    "static/js/main.60212f8b.js"
+  ]
+}
