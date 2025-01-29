@@ -24,7 +24,7 @@ function InstructionPage() {
     useEffect(() => {
         setLoading(true);
         axios
-            .get("http://52.60.180.33:5000/api/blogs") 
+            .get("http://localhost:5000/api/blogs") 
             .then((response) => {
                 setBlogs(response.data);
                 setLoading(false);

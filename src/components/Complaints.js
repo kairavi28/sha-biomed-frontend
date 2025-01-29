@@ -112,7 +112,7 @@ function Complaints() {
 
         try {
             setIsSubmitting(true);
-            await axios.post(`http://52.60.180.33:5000/api/issues/add`, formDataToSubmit, {
+            await axios.post(`http://localhost:5000/api/issues/add`, formDataToSubmit, {
                 headers: { "Content-Type": "multipart/form-data" },
             });
             alert("Issue submitted successfully.");
@@ -168,7 +168,7 @@ function Complaints() {
         if (autoReload && !isDialogOpen && !isFormActive) {
             setLoading(true);
             axios
-                .get(`http://52.60.180.33:5000/api/complaints`)
+                .get(`http://localhost:5000/api/complaints`)
                 .then((response) => {
                     setIssues(response.data);
                     console.log('here', response.data);

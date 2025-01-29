@@ -5,12 +5,12 @@ const Blog = () => {
 
     useEffect(() => {
         // Fetch initial blogs
-        fetch('http://52.60.180.33:5000/api/blogs')
+        fetch('http://localhost:5000/api/blogs')
             .then(response => response.json())
             .then(data => setBlogs(data));
 
         // Set up WebSocket connection
-        const ws = new WebSocket('ws://52.60.180.33:5000');
+        const ws = new WebSocket('ws://localhost:5000');
 
         ws.onmessage = (event) => {
             const message = JSON.parse(event.data);
