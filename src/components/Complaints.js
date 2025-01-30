@@ -33,7 +33,7 @@ function Complaints() {
     // if (process.env.NODE_ENV === 'production') {
     //     apiUrl = process.env.REACT_APP_API_URL || 'http://52.60.180.33:5000';
     // } else {
-    //     apiUrl = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+    //     apiUrl = process.env.REACT_APP_API_URL || 'http://35.182.166.248';
     // }
 
     const [issues, setIssues] = useState([]);
@@ -112,7 +112,7 @@ function Complaints() {
 
         try {
             setIsSubmitting(true);
-            await axios.post(`http://localhost:5000/api/issues/add`, formDataToSubmit, {
+            await axios.post(`http://35.182.166.248/api/issues/add`, formDataToSubmit, {
                 headers: { "Content-Type": "multipart/form-data" },
             });
             alert("Issue submitted successfully.");
@@ -140,7 +140,7 @@ function Complaints() {
     //     }
     //     try {
     //         setIsSubmitting(true);
-    //         await axios.post("http://localhost:5000/api/issues/add", formDataToSubmit, {
+    //         await axios.post("http://35.182.166.248/api/issues/add", formDataToSubmit, {
     //             headers: { "Content-Type": "multipart/form-data" },
     //         });
     //         alert("Complaint submitted successfully.");
@@ -168,7 +168,7 @@ function Complaints() {
         if (autoReload && !isDialogOpen && !isFormActive) {
             setLoading(true);
             axios
-                .get(`http://localhost:5000/api/complaints`)
+                .get(`http://35.182.166.248/api/complaints`)
                 .then((response) => {
                     setIssues(response.data);
                     console.log('here', response.data);

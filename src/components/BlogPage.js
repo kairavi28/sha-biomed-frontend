@@ -43,7 +43,7 @@ function BlogPage() {
   //     return;
   //   }
 
-  //   axios.post("http://localhost:5000/api/quotes", quoteData)
+  //   axios.post("http://http://35.182.166.248/api//api/quotes", quoteData)
   //     .then(() => {
   //       alert(`Thank you, ${quoteData.name}! We will contact you soon.`);
   //       setQuoteData({ name: '', email: '', phone: '', serviceType: 'home' });
@@ -58,7 +58,7 @@ function BlogPage() {
     if (autoReload) {
       setLoading(true);
       axios
-        .get("http://localhost:5000/api/blogs")
+        .get("http://35.182.166.248/api/blogs")
         .then((response) => {
           setBlogs(response.data);
           setLoading(false);
