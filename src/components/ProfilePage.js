@@ -29,7 +29,7 @@ function ProfilePage() {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/api/user/${userId}`);
+        const response = await axios.get(`http://35.182.166.248/api/user/${userId}`);
         setUserData(response.data);
       } catch (err) {
         if (err.response) {

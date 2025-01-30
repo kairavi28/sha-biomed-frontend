@@ -74,7 +74,7 @@ const Navbar = () => {
   const handleSubmit = () => {
     console.log(formData);
     axios
-      .post("http://localhost:5000/api/quote/add", formData)
+      .post("http://35.182.166.248/api/quote/add", formData)
       .then((res) => {
         setSnackbar({
           open: true,
@@ -253,7 +253,7 @@ const Navbar = () => {
                 onClick={() => {
                   handleMenuClose();
                   axios
-                    .post("http://localhost:5000/logout")
+                    .post("http://35.182.166.248/logout")
                     .then(() => {
                       navigate("/");
                     })

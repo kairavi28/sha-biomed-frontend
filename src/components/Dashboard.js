@@ -158,7 +158,7 @@ function Dashboard() {
       setLoading(true);
       // Send POST request
       const response = await axios.post(
-        `http://localhost:5000/api/client-complaint/add`,
+        `http://35.182.166.248/api/client-complaint/add`,
         formDataToSend,
         {
           headers: { "Content-Type": "multipart/form-data" },
