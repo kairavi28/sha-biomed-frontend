@@ -66,14 +66,16 @@ function Dashboard() {
   const [formOpen, setFormOpen] = useState(false);
   const handleFormOpen = () => setFormOpen(true);
   const handleFormClose = () => setFormOpen(false);
-  const [ setError] = useState("");
+  const [setError] = useState("");
   const [loading, setLoading] = useState(true);
   const [facilityName, setFacilityName] = useState();
-  const [ setIsSubmitting] = useState(false);
   const userSession = JSON.parse(sessionStorage.getItem('userData'));
   const userId = userSession ? userSession.id : null;
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
-    contactNumber: "", description: "", photos: []
+    contactNumber: "",
+    description: "",
+    photos: [],
   });
 
   const [snackbar, setSnackbar] = useState({
@@ -88,7 +90,7 @@ function Dashboard() {
   };
 
   useEffect(() => {
-   
+
     const userData = JSON.parse(sessionStorage.getItem('userData'));
     if (userData) {
       setLoading(false);
@@ -104,7 +106,7 @@ function Dashboard() {
 
   const handleFileChange = (event) => {
     const files = Array.from(event.target.files);
-  
+
     const previews = files.map((file) => {
       const reader = new FileReader();
       reader.readAsDataURL(file);
@@ -112,7 +114,7 @@ function Dashboard() {
         reader.onloadend = () => resolve({ file, preview: reader.result });
       });
     });
-  
+
     Promise.all(previews).then((uploadedImages) => {
       setFormData((prev) => ({
         ...prev,
@@ -120,7 +122,7 @@ function Dashboard() {
       }));
     });
   };
-  
+
 
   if (loading) {
     return (
@@ -138,7 +140,7 @@ function Dashboard() {
 
   const handleFormSubmit = async (event) => {
     event.preventDefault();
-    setIsSubmitting(true);
+    setIsSubmitting(true); // ✅ Now it's properly defined
 
     if (!formData.contactNumber || !formData.description) {
       setError("Please fill out all required fields.");
@@ -155,8 +157,9 @@ function Dashboard() {
       formData.photos.forEach((photo) => {
         formDataToSend.append("photos", photo.file);
       });
+
       setLoading(true);
-      // Send POST request
+
       const response = await axios.post(
         `http://35.182.166.248/api/client-complaint/add`,
         formDataToSend,
@@ -164,11 +167,13 @@ function Dashboard() {
           headers: { "Content-Type": "multipart/form-data" },
         }
       );
+
       setSnackbar({
         open: true,
         message: "New complaint submitted successfully!",
         severity: "success",
       });
+
       setFormData({ contactNumber: "", description: "", photos: [] });
       localStorage.removeItem("formData");
       setLoading(false);
@@ -182,6 +187,7 @@ function Dashboard() {
       setIsSubmitting(false);
     }
   };
+
 
   const handleRemoveImage = (index) => {
     setFormData((prev) => {

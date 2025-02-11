@@ -10,6 +10,7 @@ import BlogPage from './components/BlogPage';
 import Blog from './components/Blog';
 import ProfilePage from './components/ProfilePage';
 import InstructionPage from './components/InstructionPage';
+import InvoiceList from './components/InvoiceList';
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
         <Route path="/blogs" element={<BlogPage />} />
         <Route path="/blog" element={<Blog />} />
         <Route path="/profile" element={<ProfilePage/>} />
+        <Route path="/invoice" element={<InvoiceList/>} />
       </Route>
     </Routes>
   );
@@ -36,6 +38,7 @@ function LayoutWithNavbar() {
         <Route path="/home" element={<Dashboard />} />
         <Route path="/services" element={<Complaints />} />
         <Route path="/blogs" element={<BlogPage />} />
+        <Route path="/invoice" element={<InvoiceList/>} />
         <Route path="/" element={<SignInSide/>} />
         <Route path="/blog" element={<Blog />} />
         <Route path="/instruction" element={<InstructionPage />} />

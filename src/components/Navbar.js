@@ -25,6 +25,8 @@ import { AccountCircle, Logout, Person } from "@mui/icons-material";
 import { useNavigate, useLocation } from "react-router-dom";
 import logo from "../assets/images/logo.png";
 import axios from "axios";
+import ReceiptIcon from '@mui/icons-material/Receipt'
+import FileCopyIcon from '@mui/icons-material/FileCopy';;
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -37,7 +39,7 @@ const Navbar = () => {
     company: "",
     phone: "",
     email: "",
-    province: "",
+    province: "Saskatchewan",
     postalCode: "",
     description: "",
   });
@@ -247,6 +249,26 @@ const Navbar = () => {
               >
                 <Person fontSize="small" />
                 <Typography variant="inherit">Profile</Typography>
+              </MenuItem>
+              <MenuItem
+                onClick={() => {
+                  handleMenuClose();
+                  navigate("/waybill");
+                }}
+                sx={{ display: "flex", gap: 1 }}
+              >
+                <ReceiptIcon fontSize="small" />
+                <Typography variant="inherit">Billing</Typography>
+              </MenuItem>
+              <MenuItem
+                onClick={() => {
+                  handleMenuClose();
+                  navigate("/invoice");
+                }}
+                sx={{ display: "flex", gap: 1 }}
+              >
+                <FileCopyIcon fontSize="small" />
+                <Typography variant="inherit">Invoices</Typography>
               </MenuItem>
               <Divider />
               <MenuItem

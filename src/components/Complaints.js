@@ -37,19 +37,11 @@ function Complaints() {
     // }
 
     const [issues, setIssues] = useState([]);
-    const [autoReload, setAutoReload] = useState(true);
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(true);
     const [selectedIssue, setSelectedIssue] = useState(null);
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const [isFormActive] = useState(false);
-    const [quoteData, setQuoteData] = useState({
-        name: '',
-        email: '',
-        phone: '',
-        serviceType: 'home',
-    });
-
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [formData, setFormData] = useState({
         productType: "",
@@ -165,7 +157,7 @@ function Complaints() {
 
     useEffect(() => {
         let intervalId;
-        if (autoReload && !isDialogOpen && !isFormActive) {
+        if (!isDialogOpen && !isFormActive) {
             setLoading(true);
             axios
                 .get(`http://35.182.166.248/api/complaints`)
@@ -184,7 +176,7 @@ function Complaints() {
             }, 10000);
         }
         return () => clearInterval(intervalId);
-    }, [autoReload, isDialogOpen, isFormActive]);
+    }, [isDialogOpen, isFormActive]);
 
     useEffect(() => {
         const savedFormData = JSON.parse(localStorage.getItem("formData"));
@@ -559,9 +551,9 @@ function Complaints() {
                     </form>
                 </Container>
             </Box>
-            <button onClick={() => setAutoReload(!autoReload)}>
+            {/* <button onClick={() => setAutoReload(!autoReload)}>
                 {autoReload ? "Pause Auto-Reload" : "Resume Auto-Reload"}
-            </button>
+            </button> */}
             {/* Footer */}
             <Box sx={{ backgroundColor: "#333", color: "#fff", textAlign: "center", py: 4 }}>
                 <Typography variant="body2">
