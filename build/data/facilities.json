@@ -1,0 +1,1178 @@
+[
+    {
+        "id": "1",
+        "name": "Main Street Dental Clinic"
+    },
+    {
+        "id": "2",
+        "name": "Regina Dental Group"
+    },
+    {
+        "id": "3",
+        "name": "Regina Dental Group (Southland Mall)"
+    },
+    {
+        "id": "4",
+        "name": "Regina Lakeview Dental"
+    },
+    {
+        "id": "5",
+        "name": "12th Ave Clinic"
+    },
+    {
+        "id": "6",
+        "name": "13th Avenue Pharmacy"
+    },
+    {
+        "id": "7",
+        "name": "24 Hr Animal Care Centre"
+    },
+    {
+        "id": "8",
+        "name": "2nd Avenue Dental Clinic"
+    },
+    {
+        "id": "9",
+        "name": "3sH_ Population/Public Health Taylor"
+    },
+    {
+        "id": "10",
+        "name": "Absolute Fire &Flood Restoration"
+    },
+    {
+        "id": "11",
+        "name": "Acadia Dental"
+    },
+    {
+        "id": "12",
+        "name": "Adult Outreach (Coast)"
+    },
+    {
+        "id": "13",
+        "name": "Advanced Medical Solutions"
+    },
+    {
+        "id": "14",
+        "name": "Ahtahkakoop Cree Nation Treatment Haven"
+    },
+    {
+        "id": "15",
+        "name": "Albert North Veterinary Clinic"
+    },
+    {
+        "id": "16",
+        "name": "Albert & Parliament Primary Health Care"
+    },
+    {
+        "id": "17",
+        "name": "All About Smiles Family Dentistry"
+    },
+    {
+        "id": "18",
+        "name": "Alliance Health Pharmacy (Medical Center)LTD"
+    },
+    {
+        "id": "19",
+        "name": "All Nations Healing Hospital"
+    },
+    {
+        "id": "20",
+        "name": "All Smiles Dental Clinic Dentists"
+    },
+    {
+        "id": "21",
+        "name": "All West Veterinary Clinic"
+    },
+    {
+        "id": "22",
+        "name": "Altima Dental Services"
+    },
+    {
+        "id": "23",
+        "name": "Animal Clinic of Regina"
+    },
+    {
+        "id": "24",
+        "name": "Animal Control Agency"
+    },
+    {
+        "id": "25",
+        "name": "Animal Control Agency:City of Saskatoon - City Hall"
+    },
+    {
+        "id": "26",
+        "name": "Animal Control Agency:City of Saskatoon - Facilities & Fleet Management"
+    },
+    {
+        "id": "27",
+        "name": "Animal Control Agency:City of Saskatoon - Secure-A-Sharp Service Program"
+    },
+    {
+        "id": "28",
+        "name": "Animal Control Agency:Cosmo Civic Centre"
+    },
+    {
+        "id": "29",
+        "name": "Animal Control Agency:Frances Morrison Library"
+    },
+    {
+        "id": "30",
+        "name": "Animal Control Agency:Lakewood Civic Centre"
+    },
+    {
+        "id": "31",
+        "name": "Animal Control Agency:Saskatoon Police Service (Exhibits  & Lost and Found)"
+    },
+    {
+        "id": "32",
+        "name": "Animal Control Agency:Saskatoon Police Service (Garage / Fleet Service)"
+    },
+    {
+        "id": "33",
+        "name": "Animal Control Agency:Saskatoon Police Service (Quarter Master Stores)"
+    },
+    {
+        "id": "34",
+        "name": "Animal Control Agency:Shaw Centre"
+    },
+    {
+        "id": "35",
+        "name": "Animal Hospital Of Assiniboia"
+    },
+    {
+        "id": "36",
+        "name": "Arcola Physio & Acupuncture Clinic"
+    },
+    {
+        "id": "37",
+        "name": "Arlington Animal Hospital"
+    },
+    {
+        "id": "38",
+        "name": "Army, Navy & Air Force Veterans"
+    },
+    {
+        "id": "39",
+        "name": "Artisan Prosthodontics"
+    },
+    {
+        "id": "40",
+        "name": "Assiniboia Public Health"
+    },
+    {
+        "id": "41",
+        "name": "Assiniboia Veterinary Clinic"
+    },
+    {
+        "id": "42",
+        "name": "Associate Family Physicians Clinic"
+    },
+    {
+        "id": "43",
+        "name": "Associate Medical Clinic"
+    },
+    {
+        "id": "44",
+        "name": "Arborfield & District Health Care Centre"
+    },
+    {
+        "id": "45",
+        "name": "Athabasca Health Authority"
+    },
+    {
+        "id": "46",
+        "name": "Atlas Hotel"
+    },
+    {
+        "id": "47",
+        "name": "Aura Dental"
+    },
+    {
+        "id": "48",
+        "name": "Aurora Reproductive Care"
+    },
+    {
+        "id": "49",
+        "name": "Avalon Dental Clinic"
+    },
+    {
+        "id": "50",
+        "name": "Avon Medical Clinic"
+    },
+    {
+        "id": "51",
+        "name": "Hudson Bay Health Care Facility"
+    },
+    {
+        "id": "52",
+        "name": "Keewatin Yathe Health Dist."
+    },
+    {
+        "id": "53",
+        "name": "Keewatin Yathe Health Dist.-La Loche Hospital"
+    },
+    {
+        "id": "54",
+        "name": "Keewatin Yathe Health Dist.-St. Joseph's Hospital Ile-A-La-Crosse"
+    },
+    {
+        "id": "55",
+        "name": "Kelvington Hospital"
+    },
+    {
+        "id": "56",
+        "name": "Melfort Hospital"
+    },
+    {
+        "id": "57",
+        "name": "Newmarket Manor"
+    },
+    {
+        "id": "58",
+        "name": "Nipawin Hospital"
+    },
+    {
+        "id": "59",
+        "name": "Pineview Lodge"
+    },
+    {
+        "id": "60",
+        "name": "Population Health Unit"
+    },
+    {
+        "id": "61",
+        "name": "Rose Valley Health Centre"
+    },
+    {
+        "id": "62",
+        "name": "Smeaton Health Centre"
+    },
+    {
+        "id": "63",
+        "name": "Tisdale Hospital"
+    },
+    {
+        "id": "64",
+        "name": "Enviro Services"
+    },
+    {
+        "id": "65",
+        "name": "Enviro Services-Access Place - Mair Park"
+    },
+    {
+        "id": "66",
+        "name": "Enviro Services-Big River Health Center"
+    },
+    {
+        "id": "67",
+        "name": "Enviro Services-Birch Hills Health Centre"
+    },
+    {
+        "id": "68",
+        "name": "Enviro Services-Canwood Whispering Pines Place"
+    },
+    {
+        "id": "69",
+        "name": "Enviro Services-Evergreen Health Centre(Leoville HC)"
+    },
+    {
+        "id": "70",
+        "name": "Enviro Services-Hafford Special Care Centre"
+    },
+    {
+        "id": "71",
+        "name": "Tisdale Hospital"
+    },
+    {
+        "id": "72",
+        "name": "Tisdale Hospital"
+    },
+    {
+        "id": "73",
+        "name": "Tisdale Hospital"
+    },
+    {
+        "id": "74",
+        "name": "Tisdale Hospital"
+    },
+    {
+        "id": "75",
+        "name": "Tisdale Hospital"
+    },
+    {
+        "id": "76",
+        "name": " Enviro Services-Pineview Terrace"
+    },
+    {
+        "id": "77",
+        "name": "Enviro Services-Shellbrook Primary Health Care Clinic"
+    },
+    {
+        "id": "78",
+        "name": "Enviro Services-Spiritwood and District Health Complex"
+    },
+    {
+        "id": "79",
+        "name": "Enviro Services-Victoria Hospital"
+    },
+    {
+        "id": "80",
+        "name": "Enviro Services-Victoria Square(Community Mental Health Nursing)"
+    },
+    {
+        "id": "81",
+        "name": "Enviro Services-Wheatland Lodge"
+    },
+    {
+        "id": "82",
+        "name": "Access Place - Sexual Health Clinic"
+    },
+    {
+        "id": "83",
+        "name": "Addictions Prince Albert (NDB)"
+    },
+    {
+        "id": "84",
+        "name": "Birchview Nursing Home"
+    },
+    {
+        "id": "85",
+        "name": "Blaine Lake Medical Clinic"
+    },
+    {
+        "id": "86",
+        "name": "Community Mental Health Nursing Dept."
+    },
+    {
+        "id": "87",
+        "name": "Kinistino Jubilee Lodge & HC"
+    },
+    {
+        "id": "88",
+        "name": "La Ronge Health Centre"
+    },
+    {
+        "id": "89",
+        "name": "Parkland Integrated Facility(Shellbrook Hospital)"
+    },
+    {
+        "id": "90",
+        "name": "Prince Albert Home Care"
+    },
+    {
+        "id": "91",
+        "name": "Prince Albert Public Health"
+    },
+    {
+        "id": "92",
+        "name": "South Hill Lab"
+    },
+    {
+        "id": "93",
+        "name": "South Hill Lab P.A."
+    },
+    {
+        "id": "94",
+        "name": "Lloydminster Area - Terra"
+    },
+    {
+        "id": "95",
+        "name": "Lloydminster Area - Terra- Meadow Lake area - Terra"
+    },
+    {
+        "id": "96",
+        "name": "Battleford  Sexual Health Clinic"
+    },
+    {
+        "id": "97",
+        "name": "Co-op Plaza Public Health #115"
+    },
+    {
+        "id": "98",
+        "name": "Cut Knife Health Complex"
+    },
+    {
+        "id": "99",
+        "name": "Jubilee Home (Lloydminster)"
+    },
+    {
+        "id": "100",
+        "name": "Lloydminster Home Care Services (no PST)"
+    },
+    {
+        "id": "101",
+        "name": "Lloydminster Hospital"
+    },
+    {
+        "id": "102",
+        "name": "Maidstone Health Complex(Maidstone Hospital)"
+    },
+    {
+        "id": "103",
+        "name": "Manitou Health Centre"
+    },
+    {
+        "id": "104",
+        "name": "PARADISE HILL HEALTH CENTRE"
+    },
+    {
+        "id": "105",
+        "name": "Prairie North Health Centre Lab (Do Not Use)"
+    },
+    {
+        "id": "106",
+        "name": "Prairie North Plaza"
+    },
+    {
+        "id": "107",
+        "name": "Saskatchewan Hospital North Battleford"
+    },
+    {
+        "id": "108",
+        "name": "St. Walburg Health Complex"
+    },
+    {
+        "id": "109",
+        "name": "Twin City Medical Clinic"
+    },
+    {
+        "id": "110",
+        "name": "Battlefords"
+    },
+    {
+        "id": "111",
+        "name": "Battlefords - PO"
+    },
+    {
+        "id": "112",
+        "name": "Battlefords- - NB Area - Terra"
+    },
+    {
+        "id": "113",
+        "name": "Battlefords- Centre Lab"
+    },
+    {
+        "id": "114",
+        "name": "Battlefords- Enviro Services"
+    },
+    {
+        "id": "115",
+        "name": "Battlefords- Enviro Services-Battleford District Care Center - LTC"
+    },
+    {
+        "id": "116",
+        "name": "Battlefords- Enviro Services-Battlefords Union Hospital & Home Care"
+    },
+    {
+        "id": "117",
+        "name": "Battlefords- Enviro Services-Riverside Health Complex (Turtleford HC)"
+    },
+    {
+        "id": "118",
+        "name": "Battlefords- Enviro Services-Saskatchewan Hospital North Battleford"
+    },
+    {
+        "id": "119",
+        "name": "Battlefords-Battleford (NDB)"
+    },
+    {
+        "id": "120",
+        "name": "Battlefords-L. Gervais Memorial Health Centre(Goodsoil HC)"
+    },
+    {
+        "id": "121",
+        "name": "Battlefords-Lady Minto HSKG(Edam HC)"
+    },
+    {
+        "id": "122",
+        "name": "Battlefords-Loon Lake Hospital & Special Care Home"
+    },
+    {
+        "id": "123",
+        "name": "Battlefords-Meadow Lake Fire Hall (NDB)"
+    },
+    {
+        "id": "124",
+        "name": "Battlefords-Meadow Lake Union Hospital"
+    },
+    {
+        "id": "125",
+        "name": "Battlefords-North Battleford Medical Clinic"
+    },
+    {
+        "id": "126",
+        "name": "Battlefords-Primary Health Centre (Frontier Mall)"
+    },
+    {
+        "id": "127",
+        "name": "Battlefords-River Heights Lodge Inc"
+    },
+    {
+        "id": "128",
+        "name": "Battlefords-WPD Ambulance"
+    },
+    {
+        "id": "129",
+        "name": "Meadow Lake Hospital (NDB)"
+    },
+    {
+        "id": "130",
+        "name": "Enviro Services"
+    },
+    {
+        "id": "131",
+        "name": "Enviro Services-Addiction Treatment Centre - Social Detox"
+    },
+    {
+        "id": "132",
+        "name": "Enviro Services-Long Lake Valley Integrated Facility"
+    },
+    {
+        "id": "133",
+        "name": "Enviro Services-Regina General Hospital"
+    },
+    {
+        "id": "134",
+        "name": "Enviro Services-Regina Pioneer Village"
+    },
+    {
+        "id": "135",
+        "name": "Enviro Services-Regina Urgent Care Centre"
+    },
+    {
+        "id": "136",
+        "name": "Enviro Services-Wascana Rehab Centre"
+    },
+    {
+        "id": "137",
+        "name": "Addiction Services"
+    },
+    {
+        "id": "138",
+        "name": "Al Ritchie Health Action Center"
+    },
+    {
+        "id": "139",
+        "name": "Balcarres Integrated Care Centre"
+    },
+    {
+        "id": "140",
+        "name": "Broadview Centenial Lodge"
+    },
+    {
+        "id": "141",
+        "name": "Broadview Hospital"
+    },
+    {
+        "id": "142",
+        "name": "Chronic Pain Clinic"
+    },
+    {
+        "id": "143",
+        "name": "Echo Lodge Special Care Home"
+    },
+    {
+        "id": "144",
+        "name": "Eden Care Communities Inc."
+    },
+    {
+        "id": "145",
+        "name": "Elmview"
+    },
+    {
+        "id": "146",
+        "name": "Four Directions Community Health Centre"
+    },
+    {
+        "id": "147",
+        "name": "Golden Prairie Home"
+    },
+    {
+        "id": "148",
+        "name": "Grenfell Health Centre"
+    },
+    {
+        "id": "149",
+        "name": "Grenfell Pioneer Home"
+    },
+    {
+        "id": "150",
+        "name": "Healthline Regina"
+    },
+    {
+        "id": "151",
+        "name": "Home Care Treatment Centre"
+    },
+    {
+        "id": "152",
+        "name": "Indian Head Hospital"
+    },
+    {
+        "id": "153",
+        "name": "Meadow Primary Health Care Centre"
+    },
+    {
+        "id": "154",
+        "name": "Montmarte Health Centre"
+    },
+    {
+        "id": "155",
+        "name": "Montmartre Health Centre"
+    },
+    {
+        "id": "156",
+        "name": "Parkside"
+    },
+    {
+        "id": "157",
+        "name": "Pasqua Hospital"
+    },
+    {
+        "id": "158",
+        "name": "Primary Health Care Centre (Fort Qu'Appelle)"
+    },
+    {
+        "id": "159",
+        "name": "Primary Health Care Clinic"
+    },
+    {
+        "id": "160",
+        "name": "Primary Health Centre (HOME CARE)"
+    },
+    {
+        "id": "161",
+        "name": "QuAppelle House"
+    },
+    {
+        "id": "162",
+        "name": "Queen City Wellness Pharmacy (NDB)"
+    },
+    {
+        "id": "163",
+        "name": "Regina (5th Ave & Cameron St)  (NDB)"
+    },
+    {
+        "id": "164",
+        "name": "Regina Centre Crossing"
+    },
+    {
+        "id": "165",
+        "name": "Regina HD (Surgical Assessment Centre)"
+    },
+    {
+        "id": "166",
+        "name": "Regina Health District"
+    },
+    {
+        "id": "167",
+        "name": "Regina Health District - Terra"
+    },
+    {
+        "id": "168",
+        "name": "Regina Public Health"
+    },
+    {
+        "id": "169",
+        "name": "Regina Public Health-Darlene - 1309 Grosvenor St"
+    },
+    {
+        "id": "170",
+        "name": "Regina Public Health-Regina Mental Health Clinic (Hamilton St - 3rd floor))"
+    },
+    {
+        "id": "171",
+        "name": "Regina Public Health-Regina Public Health - APSS"
+    },
+    {
+        "id": "172",
+        "name": "Regina Public Health-Regina Public Health (Hamilton St)"
+    },
+    {
+        "id": "173",
+        "name": "Regina Public Health-Regina Public Health (Wascana St)"
+    },
+    {
+        "id": "174",
+        "name": "Regina Public Health-Regina Public Health(Park St)"
+    },
+    {
+        "id": "175",
+        "name": "Roy Romanow Provincial Lab"
+    },
+    {
+        "id": "176",
+        "name": "RQRH Renal Program"
+    },
+    {
+        "id": "177",
+        "name": "Silver Heights Special Care Home"
+    },
+    {
+        "id": "178",
+        "name": "Southeast Integrated Care Center(Moosomin Hospital)"
+    },
+    {
+        "id": "179",
+        "name": "Southeast Integrated Care Centre- Terra"
+    },
+    {
+        "id": "180",
+        "name": "St. Joseph's Integrated Care Centre"
+    },
+    {
+        "id": "181",
+        "name": "Sunset"
+    },
+    {
+        "id": "182",
+        "name": "Sunset Special Care Home"
+    },
+    {
+        "id": "183",
+        "name": "Surgical Assessment Centre"
+    },
+    {
+        "id": "184",
+        "name": "Transitional Care Unit Regina"
+    },
+    {
+        "id": "185",
+        "name": "Wecana Rehab Pharmacy"
+    },
+    {
+        "id": "190",
+        "name": "Wellness Pharmacy & 5th & Cameron (NDB)"
+    },
+    {
+        "id": "191",
+        "name": "Whitewood Community Health Centre"
+    },
+    {
+        "id": "192",
+        "name": "Wolseley Medical Clinic"
+    },
+    {
+        "id": "193",
+        "name": "Wolseley Memorial Integrated Health Centre"
+    },
+    {
+        "id": "194",
+        "name": "Enviro Services Manager"
+    },
+    {
+        "id": "195",
+        "name": "Enviro Services Manager-Arcola Health Center"
+    },
+    {
+        "id": "196",
+        "name": "Enviro Services Manager-Bengough Health Centre"
+    },
+    {
+        "id": "200",
+        "name": "Enviro Services Manager-Carlyle Community Health Services"
+    },
+    {
+        "id": "201",
+        "name": "Enviro Services Manager-Carlyle Primary Health Clinic"
+    },
+    {
+        "id": "202",
+        "name": "Enviro Services Manager-Fillmore Health Centre"
+    },
+    {
+        "id": "203",
+        "name": "Enviro Services Manager-Gainsborough Health Centre"
+    },
+    {
+        "id": "204",
+        "name": "Enviro Services Manager-Galloway Heath Centre"
+    },
+    {
+        "id": "205",
+        "name": "Enviro Services Manager-Lampman Community Health Centre"
+    },
+    {
+        "id": "206",
+        "name": "Enviro Services Manager-Mainprize Manor & Health Centre"
+    },
+    {
+        "id": "207",
+        "name": "Enviro Services Manager-Moose Mountain Lodge"
+    },
+    {
+        "id": "208",
+        "name": "Enviro Services Manager-Pangman Health Centre"
+    },
+    {
+        "id": "209",
+        "name": "Enviro Services Manager-Sunset Haven"
+    },
+    {
+        "id": "210",
+        "name": "Enviro Services Manager-Tatagwa View"
+    },
+    {
+        "id": "211",
+        "name": "Enviro Services Manager-Weyburn General Hospital"
+    },
+    {
+        "id": "212",
+        "name": "Enviro Services Manager-Weyburn Special Care Home"
+    },
+    {
+        "id": "213",
+        "name": "Coronach Health Centre"
+    },
+    {
+        "id": "214",
+        "name": "Kincaid Wellness Centre"
+    },
+    {
+        "id": "215",
+        "name": "Kipling Integrated Health Centre"
+    },
+    {
+        "id": "216",
+        "name": "Radville Health Centre"
+    },
+    {
+        "id": "217",
+        "name": "Redvers Health Centre"
+    },
+    {
+        "id": "218",
+        "name": "St. Joseph's Hospital of Estevan"
+    },
+    {
+        "id": "219",
+        "name": "Sun Country (Reusable Sharps Containers, Kipling)"
+    },
+    {
+        "id": "220",
+        "name": "Sun Country OXBOW"
+    },
+    {
+        "id": "221",
+        "name": "[COVID-19]  22nd St Covid Test Site"
+    },
+    {
+        "id": "222",
+        "name": "Borden Primary Health Center"
+    },
+    {
+        "id": "223",
+        "name": "Brief and Social Detox"
+    },
+    {
+        "id": "224",
+        "name": "Calder Centre"
+    },
+    {
+        "id": "225",
+        "name": "Community Health Centre"
+    },
+    {
+        "id": "226",
+        "name": "Cudworth Health Centre"
+    },
+    {
+        "id": "226",
+        "name": "Delisle Community Health & Social Centre"
+    },
+    {
+        "id": "227",
+        "name": "HOME CARE"
+    },
+    {
+        "id": "228",
+        "name": "Idylwyld Treatment Centre"
+    },
+    {
+        "id": "229",
+        "name": "Lighthouse Supported Living Inc."
+    },
+    {
+        "id": "230",
+        "name": "Live Well Diabetes"
+    },
+    {
+        "id": "231",
+        "name": "Martensville Primary Health Centre"
+    },
+    {
+        "id": "232",
+        "name": "Mental Health & Addiction Svcs"
+    },
+    {
+        "id": "233",
+        "name": "Methadone Program"
+    },
+    {
+        "id": "234",
+        "name": "North East Public Health"
+    },
+    {
+        "id": "235",
+        "name": "OARS Clinic"
+    },
+    {
+        "id": "236",
+        "name": "Our Neighbourhood Health Centre"
+    },
+    {
+        "id": "237",
+        "name": "Parkridge Special Care Home (TERRA)"
+    },
+    {
+        "id": "238",
+        "name": "Prairie Harm Reduction"
+    },
+    {
+        "id": "239",
+        "name": "Prairie Harm Reduction Master"
+    },
+    {
+        "id": "240",
+        "name": "Prairie Harm Reduction Master-Humboldt (NDB)"
+    },
+    {
+        "id": "241",
+        "name": "Prairie Harm Reduction Master-Lannigan (NDB)"
+    },
+    {
+        "id": "242",
+        "name": "Prairie Harm Reduction Master-Watrous - Centennial Arena (NDB)"
+    },
+    {
+        "id": "243",
+        "name": "Prairie Harm Reduction Master-Watson (NDB)"
+    },
+    {
+        "id": "244",
+        "name": "Preston Special Care Home"
+    },
+    {
+        "id": "245",
+        "name": "Rosthern Hospital"
+    },
+    {
+        "id": "246",
+        "name": "Rosthern Public Health"
+    },
+    {
+        "id": "247",
+        "name": "Saskatchewan Air Ambulance"
+    },
+    {
+        "id": "248",
+        "name": "Saskatoon Community Renal Health Center"
+    },
+    {
+        "id": "249",
+        "name": "Saskatoon District Health"
+    },
+    {
+        "id": "250",
+        "name": "Saskatoon Home Dialysis"
+    },
+    {
+        "id": "251",
+        "name": "Saskatoon HR Enviro Services"
+    },
+    {
+        "id": "252",
+        "name": "Saskatoon HR Enviro Services-Humboldt Hospital"
+    },
+    {
+        "id": "253",
+        "name": "Saskatoon HR Enviro Services-Jim Pattison Children's Hospital"
+    },
+    {
+        "id": "254",
+        "name": "Saskatoon HR Enviro Services-Lanigan Hospital"
+    },
+    {
+        "id": "255",
+        "name": "Saskatoon HR Enviro Services-Last Mountain Pioneer Home"
+    },
+    {
+        "id": "256",
+        "name": "Saskatoon HR Enviro Services-Last Mountain Pioneer Home(Strasbourg Pioneer Home)"
+    },
+    {
+        "id": "257",
+        "name": "Saskatoon HR Enviro Services-Nokomis Health Centre"
+    },
+    {
+        "id": "258",
+        "name": "Saskatoon HR Enviro Services-Parkridge Centre"
+    },
+    {
+        "id": "259",
+        "name": "Saskatoon HR Enviro Services-RUH"
+    },
+    {
+        "id": "260",
+        "name": "Saskatoon HR Enviro Services-Saskatoon City Hospital"
+    },
+    {
+        "id": "261",
+        "name": "Saskatoon HR Enviro Services-St. Mary's Villa"
+    },
+    {
+        "id": "262",
+        "name": "Saskatoon HR Enviro Services-St. Paul's Hospital"
+    },
+    {
+        "id": "263",
+        "name": "Saskatoon HR Enviro Services-Watrous District Health Centre"
+    },
+    {
+        "id": "264",
+        "name": "Saskatoon Methadone Program"
+    },
+    {
+        "id": "265",
+        "name": "Saskatoon Public Health Office"
+    },
+    {
+        "id": "266",
+        "name": "Strasbourg Health Center"
+    },
+    {
+        "id": "267",
+        "name": "TB Clinic"
+    },
+    {
+        "id": "268",
+        "name": "The Lighthouse Supported Living"
+    },
+    {
+        "id": "269",
+        "name": "Wadena Hospital"
+    },
+    {
+        "id": "270",
+        "name": "Wakaw Primary Health Centre"
+    },
+    {
+        "id": "271",
+        "name": "Warman Primary Health Centre"
+    },
+    {
+        "id": "272",
+        "name": "Watson Health Centre"
+    },
+    {
+        "id": "273",
+        "name": "West Winds Primary Health Centre"
+    },
+    {
+        "id": "274",
+        "name": "Wynyard Community Health Center"
+    },
+    {
+        "id": "275",
+        "name": "Wynyard Hospital"
+    },
+    {
+        "id": "280",
+        "name": "Canora Gateway Lodge"
+    },
+    {
+        "id": "281",
+        "name": "Canora Hospital"
+    },
+    {
+        "id": "282",
+        "name": "Esterhazy Primary Health Centre"
+    },
+    {
+        "id": "283",
+        "name": "Foam Lake Jubilee Home Foam Lake"
+    },
+    {
+        "id": "284",
+        "name": "Ituna Pioneer Health Care Centre"
+    },
+    {
+        "id": "284",
+        "name": "Kamsack Hospital & Nursing Home"
+    },
+    {
+        "id": "285",
+        "name": "Kamsack Hospital & Nursing Home-Kamsack Needle Drop Box"
+    },
+    {
+        "id": "286",
+        "name": "Lakeside Manor Care Home"
+    },
+    {
+        "id": "287",
+        "name": "Langenburg Health Care Complex"
+    },
+    {
+        "id": "288",
+        "name": "Melville Primary Health Clinic - 3rd Ave"
+    },
+    {
+        "id": "289",
+        "name": "Melville Primary Health Clinic - Queen St"
+    },
+    {
+        "id": "290",
+        "name": "Norquay Health Centre"
+    },
+    {
+        "id": "291",
+        "name": "Preeceville  and District Health Centre"
+    },
+    {
+        "id": "292",
+        "name": "Preeceville Long Term Care"
+    },
+    {
+        "id": "293",
+        "name": "Queen Street (NDB)"
+    },
+    {
+        "id": "294",
+        "name": "St. Anthony's Hospital"
+    },
+    {
+        "id": "295",
+        "name": "St. Peter's Hospital (Melville Hospital)"
+    },
+    {
+        "id": "296",
+        "name": "St. Peter's Hospital (Melville Hospital)  (NDB)"
+    },
+    {
+        "id": "297",
+        "name": "Stoughton New Hope Lodge"
+    },
+    {
+        "id": "298",
+        "name": "Theodore Health Centre"
+    },
+    {
+        "id": "299",
+        "name": "Turning Point Program"
+    },
+    {
+        "id": "300",
+        "name": "Turning Point Program (NDB)"
+    },
+    {
+        "id": "301",
+        "name": "Yorkton Fire Hall (NDB)"
+    },
+    {
+        "id": "302",
+        "name": "Yorkton Hospital - Regional Health Centre"
+    },
+    {
+        "id": "303",
+        "name": "Yorkton Regional Health Centre (NDB)"
+    }
+]
