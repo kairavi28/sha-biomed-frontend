@@ -117,8 +117,6 @@ function Complaints() {
             setIsSubmitting(false);
         }
     };
-
-
     // const handleFormSubmit = async (event) => {
     //     event.preventDefault();
     //     const formDataToSubmit = new FormData();
@@ -156,7 +154,6 @@ function Complaints() {
     };
 
     useEffect(() => {
-        let intervalId;
         if (!isDialogOpen && !isFormActive) {
             setLoading(true);
             axios
@@ -170,12 +167,15 @@ function Complaints() {
                     setError("Failed to load issues. Please try again.");
                     setLoading(false);
                 });
-
-            intervalId = setInterval(() => {
-                window.location.reload();
-            }, 10000);
+    
+            // Removed the auto-reload interval
+            // intervalId = setInterval(() => {
+            //     window.location.reload();
+            // }, 10000);
         }
-        return () => clearInterval(intervalId);
+    
+        // No need to clear interval since it's removed
+        return () => {};
     }, [isDialogOpen, isFormActive]);
 
     useEffect(() => {
