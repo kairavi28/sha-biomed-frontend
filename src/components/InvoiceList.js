@@ -14,6 +14,7 @@ import {
   Paper,
   IconButton,
   Dialog,
+  Button,
   DialogActions,
   DialogContent,
   DialogTitle,
@@ -22,12 +23,15 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import DownloadIcon from "@mui/icons-material/Download";
 import { Viewer, Worker } from "@react-pdf-viewer/core";
 import "@react-pdf-viewer/core/lib/styles/index.css";
+import * as pdfjsLib from "pdfjs-dist/webpack";
+
 
 const InvoiceList = () => {
   const [invoices, setInvoices] = useState([]);
   const [facilityName, setFacilityName] = useState("");
   const [openPreview, setOpenPreview] = useState(false);
   const [currentInvoice, setCurrentInvoice] = useState(null);
+  const fileUrl = currentInvoice ? `http://localhost:5000/invoices/${currentInvoice.fileName}` : "";
 
   useEffect(() => {
     const userData = JSON.parse(sessionStorage.getItem("userData"));
@@ -40,6 +44,7 @@ const InvoiceList = () => {
   const fetchInvoices = async (facility) => {
     try {
       const response = await axios.get(`http://localhost:5000/invoice/${facility}`);
+      console.log('FETCH', response.data);
       setInvoices(response.data);
     } catch (error) {
       console.error("Error fetching invoices:", error);
@@ -69,9 +74,11 @@ const InvoiceList = () => {
           <Table>
             <TableHead>
               <TableRow sx={{ backgroundColor: "#f5f5f5" }}>
-                <TableCell><strong>Invoice ID</strong></TableCell>
+                <TableCell><strong>File Name</strong></TableCell>
+                <TableCell><strong>Total Amount</strong></TableCell>
                 <TableCell><strong>Preview</strong></TableCell>
                 <TableCell><strong>Download</strong></TableCell>
+                <TableCell><strong>Balance Due</strong></TableCell>
                 <TableCell><strong>Uploaded At</strong></TableCell>
               </TableRow>
             </TableHead>
@@ -79,23 +86,29 @@ const InvoiceList = () => {
               {invoices.length > 0 ? (
                 invoices.map((invoice) => (
                   <TableRow key={invoice._id} hover>
-                    <TableCell sx={{ fontFamily: "monospace" }}>{invoice._id}</TableCell>
+                    <TableCell sx={{ fontFamily: "monospace" }}>{invoice.fileName}</TableCell>
+                    <TableCell sx={{ fontWeight: "bold", color: "green" }}>
+                      {invoice.totalAmt !== null ? `$${invoice.totalAmt.toFixed(2)}` : "N/A"}
+                    </TableCell>
                     <TableCell>
                       <IconButton color="primary" onClick={() => handlePreviewOpen(invoice)}>
                         <VisibilityIcon />
                       </IconButton>
                     </TableCell>
                     <TableCell>
-                      <IconButton color="success" component="a" href={`http://localhost:5000/${invoice.filePath}`} download>
+                      <IconButton color="success" component="a" href={`http://localhost:5000/invoices/${invoice.fileName}`} download>
                         <DownloadIcon />
                       </IconButton>
+                    </TableCell>
+                    <TableCell sx={{ fontWeight: "bold", color: "green" }}>
+                      {invoice.balanceDue !== null ? `$${invoice.balanceDue.toFixed(2)}` : "N/A"}
                     </TableCell>
                     <TableCell>{new Date(invoice.uploadedAt).toLocaleString()}</TableCell>
                   </TableRow>
                 ))
               ) : (
                 <TableRow>
-                  <TableCell colSpan={4} align="center">
+                  <TableCell colSpan={6} align="center">
                     <Typography variant="body2" color="textSecondary">
                       No invoices available.
                     </Typography>
@@ -108,19 +121,17 @@ const InvoiceList = () => {
       </CardContent>
 
       {/* Dialog for PDF Preview */}
-      <Dialog open={openPreview} onClose={handlePreviewClose} maxWidth="md" fullWidth>
+      <Dialog open={openPreview} onClose={() => handlePreviewClose()} maxWidth="md" fullWidth>
         <DialogTitle>Invoice Preview</DialogTitle>
-        <DialogContent sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
+        <DialogContent sx={{ display: "flex", justifyContent: "center", alignItems: "center", height: "80vh" }}>
           {currentInvoice && (
-            <Worker workerUrl="https://unpkg.com/pdfjs-dist@2.16.105/build/pdf.worker.min.js">
-              <Viewer fileUrl={`http://localhost:5000/${currentInvoice.filePath}`} />
+            <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.min.js">
+              <Viewer fileUrl={fileUrl} />
             </Worker>
           )}
         </DialogContent>
         <DialogActions>
-          <IconButton color="primary" component="a" href={`http://localhost:5000/${currentInvoice?.filePath}`} download>
-            <DownloadIcon /> Download
-          </IconButton>
+          <Button onClick={() => handlePreviewClose()}>Close</Button>
         </DialogActions>
       </Dialog>
     </Card>

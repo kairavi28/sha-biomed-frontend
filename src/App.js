@@ -11,6 +11,7 @@ import Blog from './components/Blog';
 import ProfilePage from './components/ProfilePage';
 import InstructionPage from './components/InstructionPage';
 import InvoiceList from './components/InvoiceList';
+import WaybillList from './components/WaybillList'
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
         <Route path="/blog" element={<Blog />} />
         <Route path="/profile" element={<ProfilePage/>} />
         <Route path="/invoice" element={<InvoiceList/>} />
+        <Route path="/waybill" element={<WaybillList/>} />
       </Route>
     </Routes>
   );
@@ -39,6 +41,7 @@ function LayoutWithNavbar() {
         <Route path="/services" element={<Complaints />} />
         <Route path="/blogs" element={<BlogPage />} />
         <Route path="/invoice" element={<InvoiceList/>} />
+        <Route path="/waybill" element={<WaybillList/>} />
         <Route path="/" element={<SignInSide/>} />
         <Route path="/blog" element={<Blog />} />
         <Route path="/instruction" element={<InstructionPage />} />
