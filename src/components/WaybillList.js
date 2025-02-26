@@ -23,7 +23,6 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import DownloadIcon from "@mui/icons-material/Download";
 import { Viewer, Worker } from "@react-pdf-viewer/core";
 import "@react-pdf-viewer/core/lib/styles/index.css";
-import * as pdfjsLib from "pdfjs-dist/webpack";
 
 const WaybillList = () => {
     const [waybills, setWaybills] = useState([]);
@@ -94,7 +93,6 @@ const WaybillList = () => {
                                                 <DownloadIcon />
                                             </IconButton>
                                         </TableCell>
-
                                         <TableCell>{new Date(waybill.uploadedAt).toLocaleString()}</TableCell>
                                     </TableRow>
                                 ))

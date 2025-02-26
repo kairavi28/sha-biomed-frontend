@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import {
+  Box,
   Card,
   CardContent,
   CardHeader,
@@ -18,38 +19,57 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
+  CircularProgress,
 } from "@mui/material";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import DownloadIcon from "@mui/icons-material/Download";
 import { Viewer, Worker } from "@react-pdf-viewer/core";
 import "@react-pdf-viewer/core/lib/styles/index.css";
-import * as pdfjsLib from "pdfjs-dist/webpack";
-
 
 const InvoiceList = () => {
   const [invoices, setInvoices] = useState([]);
   const [facilityName, setFacilityName] = useState("");
   const [openPreview, setOpenPreview] = useState(false);
+  const [userData, setUserData] = useState(null);
+  const [error, setError] = useState();
+  const [loading, setLoading] = useState(true);
   const [currentInvoice, setCurrentInvoice] = useState(null);
   const fileUrl = currentInvoice ? `http://localhost:5000/invoices/${currentInvoice.fileName}` : "";
+  const userSession = JSON.parse(sessionStorage.getItem('userData'));
+  const userId = userSession ? userSession.id : null;
 
   useEffect(() => {
-    const userData = JSON.parse(sessionStorage.getItem("userData"));
-    if (userData) {
-      setFacilityName(userData.facility);
-      fetchInvoices(userData.facility);
+    const fetchUserData = async () => {
+      try {
+        const response = await axios.get(`http://35.182.166.248/api/user/${userId}`);
+        setUserData(response.data);
+      } catch (err) {
+        setError(err.response?.data?.message || "Network error or server not reachable");
+      } finally {
+        setLoading(false);
+      }
+    };
+  
+    if (userId) {
+      fetchUserData();
     }
-  }, []);
-
-  const fetchInvoices = async (facility) => {
+  }, [userId]);
+  
+  useEffect(() => {
+    if (userData?.facility) {
+      fetchInvoices();
+    }
+  }, [userData]);
+  
+  const fetchInvoices = async () => {
     try {
-      const response = await axios.get(`http://localhost:5000/invoice/${facility}`);
-      console.log('FETCH', response.data);
+      const response = await axios.get(`http://localhost:5000/invoice/${userData.facility}`);
       setInvoices(response.data);
     } catch (error) {
       console.error("Error fetching invoices:", error);
     }
   };
+  
 
   const handlePreviewOpen = (invoice) => {
     setCurrentInvoice(invoice);
@@ -60,12 +80,26 @@ const InvoiceList = () => {
     setOpenPreview(false);
   };
 
+  if (loading) {
+    return (
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        height="100vh"
+        sx={{ background: "#f3f4f6" }}
+      >
+        <CircularProgress />
+      </Box>
+    );
+  }
+
   return (
     <Card sx={{ maxWidth: 900, mx: "auto", mt: 4, p: 2, boxShadow: 3 }}>
       <CardHeader
         title={
           <Typography variant="h5" color="primary" sx={{ fontWeight: "bold" }}>
-            Invoices for {facilityName}
+            Invoices for {userData?.facility}
           </Typography>
         }
       />
