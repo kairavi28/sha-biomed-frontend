@@ -53,8 +53,10 @@ const SignUpContainer = styled(Stack)(({ theme }) => ({
 export default function SignUp() {
   const [mode, setMode] = React.useState('light');
   const defaultTheme = createTheme({ palette: { mode } });
-  const [nameError, setNameError] = React.useState(false);
-  const [nameErrorMessage, setNameErrorMessage] = React.useState('');
+  const [firstNameError, setFirstNameError] = React.useState(false);
+  const [firstNameErrorMessage, setFirstNameErrorMessage] = React.useState('');
+  const [lastNameError, setLastNameError] = React.useState(false);
+  const [lastNameErrorMessage, setLastNameErrorMessage] = React.useState('');
   const [emailError, setEmailError] = React.useState(false);
   const [emailErrorMessage, setEmailErrorMessage] = React.useState('');
   //password
@@ -125,8 +127,9 @@ export default function SignUp() {
   const validateInputs = () => {
     const email = document.getElementById('email');
     const password = document.getElementById('password');
-    const name = document.getElementById('name');
-
+    const firstname = document.getElementById('firstname');
+    const lastname = document.getElementById('lastname');
+  
     let isValid = true;
 
     if (!email.value || !/\S+@\S+\.\S+/.test(email.value)) {
@@ -147,9 +150,15 @@ export default function SignUp() {
       setPasswordErrorMessage('');
     }
 
-    if (!name) {
-      setNameError(true);
-      setNameErrorMessage('Name is required.');
+    if(!firstname) {
+      setFirstNameError(true);
+      setFirstNameErrorMessage('First Name is Required');
+      isValid = false;
+    }
+
+    if(!lastname) {
+      setLastNameError(true);
+      setLastNameErrorMessage('Last Name is Required');
       isValid = false;
     }
 
@@ -186,7 +195,7 @@ export default function SignUp() {
     event.preventDefault();
     console.log('submit clicked');
     // Validate form errors
-    if (nameError || emailError || passwordError) {
+    if (firstNameError || lastNameError || emailError || passwordError) {
       console.log('Error popped up');
       return;
     }
@@ -196,7 +205,8 @@ export default function SignUp() {
     // Extract form data
     const data = new FormData(event.currentTarget);
     const formData = {
-      name: data.get('name'),
+      firstname: data.get('firstname'),
+      lastname: data.get('lastname'),
       email: data.get('email'),
       password: data.get('password'),
       facilityType: selectedFacilityType,
@@ -205,7 +215,7 @@ export default function SignUp() {
     console.log('Form Data:', formData);
 
     try {
-      const response = await axios.post('http://35.182.166.248/api/user/register', formData, {
+      const response = await axios.post('http://localhost:5000/user/register', formData, {
         headers: {
           'Content-Type': 'application/json',
         },
@@ -245,8 +255,6 @@ export default function SignUp() {
     }
   };
 
-
-
   const handleSnackbarClose = () => {
     setSnackbarOpen(false);
   };
@@ -274,17 +282,31 @@ export default function SignUp() {
               sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}
             >
               <FormControl>
-                <FormLabel htmlFor="name">Full name</FormLabel>
+                <FormLabel htmlFor="firstname">First Name</FormLabel>
                 <TextField
                   required
-                  autoComplete="name"
-                  name="name"
+                  autoComplete="firstname"
+                  name="firstname"
                   fullWidth
-                  id="name"
-                  placeholder="Jon Snow"
-                  error={nameError}
-                  helperText={nameErrorMessage}
-                  color={nameError ? 'error' : 'primary'}
+                  id="firstname"
+                  placeholder="first name"
+                  error={firstNameError}
+                  helperText={firstNameErrorMessage}
+                  color={firstNameError ? 'error' : 'primary'}
+                />
+              </FormControl>
+              <FormControl>
+                <FormLabel htmlFor="lastname">Last Name</FormLabel>
+                <TextField
+                  required
+                  autoComplete="lastname"
+                  name="lastname"
+                  fullWidth
+                  id="lastname"
+                  placeholder="last name"
+                  error={lastNameError}
+                  helperText={lastNameErrorMessage}
+                  color={lastNameError ? 'error' : 'primary'}
                 />
               </FormControl>
               <FormControl>
@@ -335,7 +357,7 @@ export default function SignUp() {
                 />
               </FormControl>
 
-              <FormControl fullWidth>
+              {/* <FormControl fullWidth>
                 <FormLabel htmlFor="facilityType">Facility Type</FormLabel>
                 <TextField
                   select
@@ -395,7 +417,7 @@ export default function SignUp() {
                     margin="normal"
                   />
                 )}
-              </FormControl>
+              </FormControl> */}
               <FormControlLabel
                 control={<Checkbox value="allowExtraEmails" color="primary" />}
                 label="I want to receive updates via email."

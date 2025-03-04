@@ -75,7 +75,7 @@ export default function SignInCard() {
 
     try {
       // Make API request for login
-      const response = await axios.post(`http://35.182.166.248/api/user/login`, JSON.stringify(formData), {
+      const response = await axios.post(`http://localhost:5000/user/login`, JSON.stringify(formData), {
         headers: {
           'Content-Type': 'application/json',
         },

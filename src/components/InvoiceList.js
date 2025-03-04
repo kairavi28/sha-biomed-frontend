@@ -70,7 +70,6 @@ const InvoiceList = () => {
     }
   };
   
-
   const handlePreviewOpen = (invoice) => {
     setCurrentInvoice(invoice);
     setOpenPreview(true);

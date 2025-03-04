@@ -12,36 +12,33 @@ import {
   Divider,
   Tabs,
   Tab,
+  IconButton,
 } from "@mui/material";
 import axios from "axios";
 import EditIcon from "@mui/icons-material/Edit";
+import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 
 function ProfilePage() {
   const [userData, setUserData] = useState(null);
-  const [recentActivities] = useState([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState(0);
-  const [error, setError] = useState();
-  const userSession = JSON.parse(sessionStorage.getItem('userData'));
-  console.log('Profile-page', userSession); 
+  const [error, setError] = useState(null);
+  const [isEditing, setIsEditing] = useState(false);
+  const [imageFile, setImageFile] = useState(null);
+  const userSession = JSON.parse(sessionStorage.getItem("userData"));
   const userId = userSession ? userSession.id : null;
 
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await axios.get(`http://35.182.166.248/api/user/${userId}`);
+        const response = await axios.get(`http://localhost:5000/user/${userId}`);
         setUserData(response.data);
       } catch (err) {
-        if (err.response) {
-          setError(err.response.data.message || "Error fetching user data");
-        } else {
-          setError("Network error or server not reachable");
-        }
+        setError("Failed to fetch user data.");
       } finally {
         setLoading(false);
       }
     };
-
     fetchUserData();
   }, [userId]);
 
@@ -50,205 +47,111 @@ function ProfilePage() {
   };
 
   const handleEditProfile = () => {
-    alert("Edit Profile functionality coming soon!");
+    setIsEditing(!isEditing);
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setUserData({ ...userData, [name]: value });
+  };
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    setImageFile(file);
+    setUserData({ ...userData, avatar: URL.createObjectURL(file) });
+  };
+
+  const handleSave = async () => {
+    const formData = new FormData();
+    formData.append("firstname", userData.firstname);
+    formData.append("lastname", userData.lastname);
+    formData.append("email", userData.email);
+    if (imageFile) {
+      formData.append("avatar", imageFile);
+    }
+
+    try {
+      await axios.put(`http://localhost:5000/user/${userId}`, formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+      setIsEditing(false);
+      alert("Profile updated successfully");
+    } catch (err) {
+      setError("Failed to update profile.");
+    }
   };
 
   if (loading) {
     return (
-      <Box
-        display="flex"
-        justifyContent="center"
-        alignItems="center"
-        height="100vh"
-        sx={{ background: "#f3f4f6" }}
-      >
+      <Box display="flex" justifyContent="center" alignItems="center" height="100vh">
         <CircularProgress />
       </Box>
     );
   }
 
   return (
-    <Box sx={{
-      background: "linear-gradient(to bottom, white, #b3e0ff, #b3e6b3)",
-      minHeight: "100vh",
-      pb: 1,
-      justifyContent: "center",
-      alignItems: "center",
-      overflowX: 'hidden'
-    }}>
-      <Container maxWidth="lg"
-        sx={{
-          // background: "",
-          borderRadius: 4,
-          boxShadow: "0px 10px 20px rgba(0, 0, 0, 0.1)",
-          py: 4,
-          px: 4,
-        }}>
-        <Typography
-          variant="h5"
-          align="center"
-          fontWeight="bold"
-          sx={{
-            mb: 6,
-            color: "#333",
-            textTransform: "uppercase",
-            letterSpacing: 1.5,
-          }}
-        >
-          Welcome, {userData?.name}
-        </Typography>
-        {/* User Information */}
-        <Grid container spacing={4}>
-          <Grid item xs={12} md={4}>
-            <Paper
-              elevation={4}
-              sx={{
-                p: 3,
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                borderRadius: 3,
-              }}
-            >
-              <Avatar
-                src={userData?.avatar}
-                alt={userData?.name}
-                sx={{ width: 120, height: 120, mb: 2 }}
-              />
-              <Typography variant="h6" fontWeight="bold">
-                {userData?.name}
-              </Typography>
-              <Typography variant="body2" color="textSecondary" sx={{ mb: 2 }}>
-                {userData?.email}
-              </Typography>
-              <Button
-                variant="outlined"
-                startIcon={<EditIcon />}
-                onClick={handleEditProfile}
-              >
-                Edit Profile
-              </Button>
-            </Paper>
-          </Grid>
-
-          <Grid item xs={12} md={8}>
-            <Paper elevation={4} sx={{ p: 3, borderRadius: 3 }}>
-              <Typography variant="h6" fontWeight="bold" sx={{ mb: 2 }}>
-                Personal Details
-              </Typography>
-              <Divider sx={{ mb: 2 }} />
+    <Box sx={{ background: "#f3f4f6", minHeight: "100vh", py: 4 }}>
+      <Container maxWidth="md">
+        <Paper elevation={4} sx={{ p: 4, borderRadius: 3 }}>
+          <Typography variant="h5" align="center" fontWeight="bold" mb={4}>Profile</Typography>
+          {error && <Typography color="error">{error}</Typography>}
+          <Grid container spacing={4} alignItems="center">
+            <Grid item xs={12} md={4} textAlign="center">
+              <Avatar src={userData?.avatar} sx={{ width: 250, height: 250, mb: 2 }} />
+              {isEditing && (
+                <IconButton color="primary" component="label">
+                  <CloudUploadIcon />
+                  <input type="file" hidden onChange={handleImageChange} />
+                </IconButton>
+              )}
+            </Grid>
+            <Grid item xs={12} md={8}>
               <Grid container spacing={2}>
                 <Grid item xs={6}>
                   <TextField
-                    label="Full Name"
-                    value={userData?.name}
+                    label="First Name"
+                    name="firstname"
+                    value={userData?.firstname || ""}
                     fullWidth
-                    InputProps={{ readOnly: true }}
+                    disabled={!isEditing}
+                    onChange={handleInputChange}
                   />
                 </Grid>
                 <Grid item xs={6}>
+                  <TextField
+                    label="Last Name"
+                    name="lastname"
+                    value={userData?.lastname || ""}
+                    fullWidth
+                    disabled={!isEditing}
+                    onChange={handleInputChange}
+                  />
+                </Grid>
+                <Grid item xs={12}>
                   <TextField
                     label="Email"
-                    value={userData?.email}
+                    name="email"
+                    value={userData?.email || ""}
                     fullWidth
-                    InputProps={{ readOnly: true }}
-                  />
-                </Grid>
-                <Grid item xs={6}>
-                  <TextField
-                    label="Phone Number"
-                    value={userData?.phone || "N/A"}
-                    fullWidth
-                    InputProps={{ readOnly: true }}
-                  />
-                </Grid>
-                <Grid item xs={6}>
-                  <TextField
-                    label="Facility"
-                    value={userData?.facility || "N/A"}
-                    fullWidth
-                    InputProps={{ readOnly: true }}
+                    disabled={!isEditing}
+                    onChange={handleInputChange}
                   />
                 </Grid>
               </Grid>
-            </Paper>
+            </Grid>
           </Grid>
-        </Grid>
-
-        {/* Tabs for Recent Activities and Settings */}
-        <Box sx={{ mt: 4 }}>
-          <Paper elevation={4} sx={{ borderRadius: 3 }}>
-            <Tabs
-              value={activeTab}
-              onChange={handleTabChange}
-              variant="fullWidth"
-              indicatorColor="primary"
-              textColor="primary"
-            >
-              <Tab label="Recent Activities" />
-              <Tab label="Settings" />
-            </Tabs>
-          </Paper>
-
-          {activeTab === 0 && (
-            <Paper
-              elevation={4}
-              sx={{ p: 3, mt: 2, borderRadius: 3, backgroundColor: "#fff" }}
-            >
-              <Typography variant="h6" fontWeight="bold" sx={{ mb: 2 }}>
-                Recent Activities
-              </Typography>
-              {recentActivities.length > 0 ? (
-                <Grid container spacing={2}>
-                  {recentActivities.map((activity) => (
-                    <Grid item xs={12} key={activity.id}>
-                      <Paper
-                        elevation={2}
-                        sx={{
-                          p: 2,
-                          borderRadius: 2,
-                          backgroundColor: "#f9f9f9",
-                        }}
-                      >
-                        <Typography variant="body1" fontWeight="bold">
-                          {activity.title}
-                        </Typography>
-                        <Typography variant="body2" color="textSecondary">
-                          {activity.description}
-                        </Typography>
-                        <Typography
-                          variant="caption"
-                          color="textSecondary"
-                          sx={{ mt: 1 }}
-                        >
-                          {new Date(activity.date).toLocaleString()}
-                        </Typography>
-                      </Paper>
-                    </Grid>
-                  ))}
-                </Grid>
-              ) : (
-                <Typography variant="body2" color="textSecondary">
-                  No recent activities to show.
-                </Typography>
-              )}
-            </Paper>
-          )}
-
-          {activeTab === 1 && (
-            <Paper
-              elevation={4}
-              sx={{ p: 3, mt: 2, borderRadius: 3, backgroundColor: "#fff" }}
-            >
-              <Typography variant="h6" fontWeight="bold" sx={{ mb: 2 }}>
-                Settings
-              </Typography>
-              <Typography variant="body2" color="textSecondary">
-                Settings functionality coming soon!
-              </Typography>
-            </Paper>
-          )}
-        </Box>
+          <Box textAlign="center" mt={4}>
+            {!isEditing ? (
+              <Button variant="outlined" startIcon={<EditIcon />} onClick={handleEditProfile}>
+                Edit Profile
+              </Button>
+            ) : (
+              <Button variant="contained" color="primary" onClick={handleSave}>
+                Save Changes
+              </Button>
+            )}
+          </Box>
+        </Paper>
       </Container>
     </Box>
   );
