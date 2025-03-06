@@ -57,7 +57,6 @@ function ProfilePage() {
       }
     };
 
-
     fetchUserData();
     fetchFacilities();
   }, [userId]);
@@ -72,7 +71,7 @@ function ProfilePage() {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setUserData({ ...userData, [name]: value });
+    setUserData({ ...userData, [e.target.name]: e.target.value });
   };
 
   const handleImageChange = (e) => {
@@ -85,26 +84,30 @@ function ProfilePage() {
     setSelectedFacilities(event.target.value);
   };
 
+
   const handleSave = async () => {
     const formData = new FormData();
     formData.append("firstname", userData.firstname);
     formData.append("lastname", userData.lastname);
     formData.append("email", userData.email);
     formData.append("facilities", JSON.stringify(selectedFacilities));
+    console.log(imageFile);
     if (imageFile) {
       formData.append("avatar", imageFile);
     }
-
+  
     try {
-      await axios.put(`http://localhost:5000/user/${userId}`, formData, {
+      await axios.put(`http://localhost:5000/user/edit/${userId}`, formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
       setIsEditing(false);
       alert("Profile updated successfully");
     } catch (err) {
+      console.error("Error updating profile:", err);
       setError("Failed to update profile.");
     }
   };
+  
 
   if (loading) {
     return (
