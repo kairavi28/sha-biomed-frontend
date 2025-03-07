@@ -51,6 +51,7 @@ function ProfilePage() {
     const fetchFacilities = async () => {
       try {
         const response = await axios.get("http://localhost:5000/facilities/company_name");
+        console.log('facilities', response.data.map(facility => facility.Company_Name));
         setAvailableFacilities(response.data.map(facility => facility.Company_Name));
       } catch (err) {
         console.error("Failed to fetch facilities.", err);
@@ -84,14 +85,14 @@ function ProfilePage() {
     setSelectedFacilities(event.target.value);
   };
 
-
   const handleSave = async () => {
     const formData = new FormData();
     formData.append("firstname", userData.firstname);
     formData.append("lastname", userData.lastname);
     formData.append("email", userData.email);
     formData.append("facilities", JSON.stringify(selectedFacilities));
-    console.log(imageFile);
+  
+    // Only append the image file if one was selected
     if (imageFile) {
       formData.append("avatar", imageFile);
     }
@@ -108,7 +109,6 @@ function ProfilePage() {
     }
   };
   
-
   if (loading) {
     return (
       <Box display="flex" justifyContent="center" alignItems="center" height="100vh">
