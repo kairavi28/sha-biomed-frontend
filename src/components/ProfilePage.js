@@ -40,28 +40,32 @@ function ProfilePage() {
       try {
         const response = await axios.get(`http://localhost:5000/user/${userId}`);
         setUserData(response.data);
-        setSelectedFacilities(response.data.facilities || []);
+        if (response.data?.facilities) {
+          setSelectedFacilities(response.data.facilities.map(facility => facility.name));
+        }
       } catch (err) {
         setError("Failed to fetch user data.");
       } finally {
         setLoading(false);
       }
     };
-
+  
     const fetchFacilities = async () => {
       try {
         const response = await axios.get("http://localhost:5000/facilities/company_name");
-        console.log('facilities', response.data.map(facility => facility.Company_Name));
-        setAvailableFacilities(response.data.map(facility => facility.Company_Name));
+        const facilityNames = [...new Set(response.data.map(facility => facility.Company_Name))];
+        setAvailableFacilities(facilityNames);
       } catch (err) {
         console.error("Failed to fetch facilities.", err);
       }
     };
-
-    fetchUserData();
-    fetchFacilities();
-  }, [userId]);
-
+  
+    if (userId) {
+      fetchUserData();
+      fetchFacilities();
+    }
+  }, [userId]); // only re-fetch when userId changes
+  
   const handleTabChange = (event, newValue) => {
     setActiveTab(newValue);
   };
@@ -91,12 +95,12 @@ function ProfilePage() {
     formData.append("lastname", userData.lastname);
     formData.append("email", userData.email);
     formData.append("facilities", JSON.stringify(selectedFacilities));
-  
+
     // Only append the image file if one was selected
     if (imageFile) {
       formData.append("avatar", imageFile);
     }
-  
+
     try {
       await axios.put(`http://localhost:5000/user/edit/${userId}`, formData, {
         headers: { "Content-Type": "multipart/form-data" },
@@ -108,7 +112,7 @@ function ProfilePage() {
       setError("Failed to update profile.");
     }
   };
-  
+
   if (loading) {
     return (
       <Box display="flex" justifyContent="center" alignItems="center" height="100vh">
@@ -173,43 +177,74 @@ function ProfilePage() {
                       freeSolo
                       options={availableFacilities}
                       value={selectedFacilities}
-                      onChange={(event, newValue) => setSelectedFacilities(newValue)}
+                      onChange={(event, newValue) => {
+                        setSelectedFacilities(newValue);
+                      }}
+                      isOptionEqualToValue={(option, value) => option === value}
+                      getOptionLabel={(option) => option}
+                      disableCloseOnSelect
                       disabled={!isEditing}
                       renderInput={(params) => (
                         <TextField
                           {...params}
                           label="Facilities"
-                          placeholder="Select Facilities"
+                          placeholder="Select or type facilities"
                           fullWidth
+                          variant="outlined"
+                          sx={{
+                            '& .MuiOutlinedInput-root': {
+                              borderRadius: '12px',
+                              backgroundColor: '#f9f9f9',
+                            },
+                            '& .MuiInputLabel-root': {
+                              color: '#1976D2',
+                            },
+                          }}
                         />
                       )}
-                      getOptionLabel={(option) => option}
-                      isOptionEqualToValue={(option, value) => option === value}
-                      PopperComponent={(props) => (
-                        <div {...props} style={{ zIndex: 2, maxHeight: "200px", overflowY: "auto", border: "1px solid #1976D2", borderRadius: "8px", backgroundColor: "#f0f7ff" }} />
-                      )}
-                      ListboxProps={{
-                        style: {
-                          padding: "10px",
-                          backgroundColor: "#f0f7ff", // Light Blue Background
-                          borderRadius: "8px",
+                      sx={{
+                        '& .MuiAutocomplete-tag': {
+                          backgroundColor: '#1976D2',
+                          color: 'white',
+                          fontWeight: 'bold',
+                          borderRadius: '8px',
+                          padding: '4px 8px',
+                        },
+                        '& .MuiOutlinedInput-root': {
+                          padding: '10px',
+                        },
+                        '& .MuiAutocomplete-popupIndicator': {
+                          color: '#1976D2',
+                        },
+                        '& .MuiAutocomplete-clearIndicator': {
+                          color: '#FF5252',
                         },
                       }}
-                      renderOption={(props, option) => (
+                      ListboxProps={{
+                        style: {
+                          maxHeight: '200px',
+                          overflowY: 'auto',
+                          border: '1px solid #1976D2',
+                          borderRadius: '8px',
+                          backgroundColor: '#fff',
+                        },
+                      }}
+                      renderOption={(props, option, { selected }) => (
                         <li
                           {...props}
                           style={{
-                            padding: "10px",
-                            backgroundColor: props["aria-selected"] ? "#1976D2" : "#f0f7ff",
-                            color: props["aria-selected"] ? "white" : "black",
-                            cursor: "pointer",
-                            borderBottom: "1px solid #dce6f1",
+                            padding: '10px',
+                            backgroundColor: selected ? '#1976D2' : '#fff',
+                            color: selected ? 'white' : 'black',
+                            cursor: 'pointer',
+                            borderBottom: '1px solid #dce6f1',
                           }}
                         >
                           {option}
                         </li>
                       )}
                     />
+
                   </Box>
                 </Grid>
               </Grid>
