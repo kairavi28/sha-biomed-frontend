@@ -9,13 +9,14 @@ import {
   Button,
   TextField,
   Avatar,
-  Divider,
-  Tabs,
-  Tab,
+  Snackbar,
+  Alert,
   IconButton,
-  MenuItem,
-  Select,
-  Chip,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle
 } from "@mui/material";
 import axios from "axios";
 import EditIcon from "@mui/icons-material/Edit";
@@ -31,17 +32,33 @@ function ProfilePage() {
   const [imageFile, setImageFile] = useState(null);
   const [availableFacilities, setAvailableFacilities] = useState([]);
   const [selectedFacilities, setSelectedFacilities] = useState([]);
-
   const userSession = JSON.parse(sessionStorage.getItem("userData"));
   const userId = userSession ? userSession.id : null;
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [dialogMessage, setDialogMessage] = useState("");
+  //Snackbar for notifications
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: "",
+    severity: "success",
+  });
+  // Handle Snackbar close
+  const handleSnackbarClose = () => {
+    setSnackbar({ ...snackbar, open: false });
+  };
 
   useEffect(() => {
     const fetchUserData = async () => {
       try {
         const response = await axios.get(`http://localhost:5000/user/${userId}`);
         setUserData(response.data);
+
         if (response.data?.facilities) {
-          setSelectedFacilities(response.data.facilities.map(facility => facility.name));
+          const approvedFacilities = response.data.facilities
+            .filter(facility => facility.approved)
+            .map(facility => facility.name);
+
+          setSelectedFacilities(approvedFacilities);
         }
       } catch (err) {
         setError("Failed to fetch user data.");
@@ -49,26 +66,22 @@ function ProfilePage() {
         setLoading(false);
       }
     };
-  
+
     const fetchFacilities = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/facilities/company_name");
-        const facilityNames = [...new Set(response.data.map(facility => facility.Company_Name))];
+        const response = await axios.get("http://localhost:5000/json/company_name");
+        console.log(response);
+        const facilityNames = [...new Set(response.data.map(facility => facility.CompanyName))];
         setAvailableFacilities(facilityNames);
       } catch (err) {
         console.error("Failed to fetch facilities.", err);
       }
     };
-  
     if (userId) {
       fetchUserData();
       fetchFacilities();
     }
-  }, [userId]); // only re-fetch when userId changes
-  
-  const handleTabChange = (event, newValue) => {
-    setActiveTab(newValue);
-  };
+  }, [userId]);
 
   const handleEditProfile = () => {
     setIsEditing(!isEditing);
@@ -89,6 +102,29 @@ function ProfilePage() {
     setSelectedFacilities(event.target.value);
   };
 
+  useEffect(() => {
+    const interval = setInterval(async () => {
+      try {
+        const response = await axios.get(`http://localhost:5000/user/${userId}`);
+        const approvedFacilities = response.data?.facilities
+          .filter(facility => facility.approved)
+          .map(facility => facility.name);
+  
+        setUserData(response.data);
+        setSelectedFacilities(approvedFacilities);
+  
+        // If any facility is newly approved, reload the page
+        if (response.data?.facilities.some(facility => facility.approved)) {
+          window.location.reload();
+        }
+      } catch (err) {
+        console.error("Error checking facility approval:", err);
+      }
+    }, 3 * 60 * 1000); // Poll every 5 minutes
+  
+    return () => clearInterval(interval); // Cleanup on unmount
+  }, [userId]);
+
   const handleSave = async () => {
     const formData = new FormData();
     formData.append("firstname", userData.firstname);
@@ -96,17 +132,39 @@ function ProfilePage() {
     formData.append("email", userData.email);
     formData.append("facilities", JSON.stringify(selectedFacilities));
 
-    // Only append the image file if one was selected
     if (imageFile) {
       formData.append("avatar", imageFile);
     }
 
     try {
-      await axios.put(`http://localhost:5000/user/edit/${userId}`, formData, {
+      // Send update request
+      const response = await axios.put(`http://localhost:5000/user/edit/${userId}`, formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
+
+      // Fetch updated user data
+      const updatedResponse = await axios.get(`http://localhost:5000/user/${userId}`);
+      setUserData(updatedResponse.data);
+
+      const approvedFacilities = updatedResponse.data?.facilities
+        .filter(facility => facility.approved)
+        .map(facility => facility.name);
+
+      setSelectedFacilities(approvedFacilities);
+
       setIsEditing(false);
-      alert("Profile updated successfully");
+      setSnackbar({
+        open: true,
+        message: "PROFILE CHANGES ARE SAVED SUCCESSFULLY",
+        severity: "success",
+      });
+
+      // Check if any newly added facility has been approved
+      if (response.data.newlyAddedFacilities.length > 0) {
+        const facilityNames = response.data.newlyAddedFacilities.join(", ");
+        setDialogMessage(`Facility ${facilityNames} has been sent for approval. It will be approved within 24 hours.`);
+        setDialogOpen(true);
+      }
     } catch (err) {
       console.error("Error updating profile:", err);
       setError("Failed to update profile.");
@@ -174,13 +232,11 @@ function ProfilePage() {
                   <Box sx={{ overflow: "visible" }}>
                     <Autocomplete
                       multiple
-                      freeSolo
                       options={availableFacilities}
                       value={selectedFacilities}
                       onChange={(event, newValue) => {
                         setSelectedFacilities(newValue);
                       }}
-                      isOptionEqualToValue={(option, value) => option === value}
                       getOptionLabel={(option) => option}
                       disableCloseOnSelect
                       disabled={!isEditing}
@@ -229,23 +285,51 @@ function ProfilePage() {
                           backgroundColor: '#fff',
                         },
                       }}
-                      renderOption={(props, option, { selected }) => (
-                        <li
-                          {...props}
-                          style={{
-                            padding: '10px',
-                            backgroundColor: selected ? '#1976D2' : '#fff',
-                            color: selected ? 'white' : 'black',
-                            cursor: 'pointer',
-                            borderBottom: '1px solid #dce6f1',
-                          }}
-                        >
-                          {option}
-                        </li>
-                      )}
+                      renderOption={(props, option) => {
+                        const isApproved = userData?.facilities?.some(
+                          (facility) => facility.name === option && facility.approved
+                        );
+
+                        return (
+                          <li
+                            {...props}
+                            style={{
+                              padding: '10px',
+                              backgroundColor: isApproved ? '#e8f5e9' : '#fff', // Light green for approved
+                              color: 'black',
+                              cursor: 'pointer',
+                              borderBottom: '1px solid #dce6f1',
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'space-between',
+                            }}
+                          >
+                            {option}
+                            {isApproved && (
+                              <span style={{ color: 'green', fontWeight: 'bold' }}>✔️</span>
+                            )}
+                          </li>
+                        );
+                      }}
                     />
 
                   </Box>
+                  <Box sx={{ overflow: "visible", margin: "10px" }}>
+                    {/* <Typography>
+                      Approved Facilities: {selectedFacilities.length ? selectedFacilities.join(", ") : "None"}
+                    </Typography> */}
+                  </Box>
+                  <Dialog open={dialogOpen} onClose={() => setDialogOpen(false)}>
+                    <DialogTitle>Facility Approval</DialogTitle>
+                    <DialogContent>
+                      <DialogContentText>{dialogMessage}</DialogContentText>
+                    </DialogContent>
+                    <DialogActions>
+                      <Button onClick={() => setDialogOpen(false)} color="primary">
+                        OK
+                      </Button>
+                    </DialogActions>
+                  </Dialog>
                 </Grid>
               </Grid>
             </Grid>
@@ -263,6 +347,18 @@ function ProfilePage() {
           </Box>
         </Paper>
       </Container>
+      {/* Snackbar for Feedback */}
+      <Snackbar
+        open={snackbar.open}
+        autoHideDuration={6000}
+        onClose={handleSnackbarClose}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+      >
+        <Alert onClose={handleSnackbarClose} severity={snackbar.severity} sx={{ width: "100%" }}>
+          {snackbar.message}
+        </Alert>
+      </Snackbar>
+
     </Box>
   );
 }
