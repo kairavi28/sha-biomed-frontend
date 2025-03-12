@@ -61,7 +61,7 @@ function ProfilePage() {
           setSelectedFacilities(approvedFacilities);
           // Store user data in session storage
           sessionStorage.setItem(
-            "userData",
+            "facilityData",
             JSON.stringify({
               id: response.data._id,
               username: response.data.username,
