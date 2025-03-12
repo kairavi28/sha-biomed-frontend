@@ -105,7 +105,7 @@ function ProfilePage() {
       alert("Profile updated successfully");
     } catch (err) {
       console.error("Error updating profile:", err);
-      setError("Failed to update profile.");
+      // setError("Failed to update profile.");
     }
   };
   

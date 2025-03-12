@@ -52,13 +52,22 @@ function ProfilePage() {
       try {
         const response = await axios.get(`http://localhost:5000/user/${userId}`);
         setUserData(response.data);
-
+  
         if (response.data?.facilities) {
           const approvedFacilities = response.data.facilities
             .filter(facility => facility.approved)
             .map(facility => facility.name);
-
+  
           setSelectedFacilities(approvedFacilities);
+          // Store user data in session storage
+          sessionStorage.setItem(
+            "userData",
+            JSON.stringify({
+              id: response.data._id,
+              username: response.data.username,
+              approvedFacilities: approvedFacilities,
+            })
+          );
         }
       } catch (err) {
         setError("Failed to fetch user data.");
@@ -66,11 +75,11 @@ function ProfilePage() {
         setLoading(false);
       }
     };
-
+  
     const fetchFacilities = async () => {
       try {
         const response = await axios.get("http://localhost:5000/json/company_name");
-        console.log(response);
+
         const facilityNames = [...new Set(response.data.map(facility => facility.CompanyName))];
         setAvailableFacilities(facilityNames);
       } catch (err) {
@@ -104,8 +113,16 @@ function ProfilePage() {
 
   useEffect(() => {
     const interval = setInterval(async () => {
+      const currentUserSession = JSON.parse(sessionStorage.getItem("userData"));
+      const currentUserId = currentUserSession ? currentUserSession.id : null;
+      
+      if (!currentUserId) {
+        console.error("User ID is undefined inside interval");
+        return;
+      }
+  
       try {
-        const response = await axios.get(`http://localhost:5000/user/${userId}`);
+        const response = await axios.get(`http://localhost:5000/user/${currentUserId}`);
         const approvedFacilities = response.data?.facilities
           .filter(facility => facility.approved)
           .map(facility => facility.name);
@@ -113,17 +130,17 @@ function ProfilePage() {
         setUserData(response.data);
         setSelectedFacilities(approvedFacilities);
   
-        // If any facility is newly approved, reload the page
         if (response.data?.facilities.some(facility => facility.approved)) {
           window.location.reload();
         }
       } catch (err) {
         console.error("Error checking facility approval:", err);
       }
-    }, 3 * 60 * 1000); // Poll every 5 minutes
+    }, 3 * 60 * 1000);
   
-    return () => clearInterval(interval); // Cleanup on unmount
-  }, [userId]);
+    return () => clearInterval(interval);
+  }, []);
+  
 
   const handleSave = async () => {
     const formData = new FormData();
@@ -131,38 +148,46 @@ function ProfilePage() {
     formData.append("lastname", userData.lastname);
     formData.append("email", userData.email);
     formData.append("facilities", JSON.stringify(selectedFacilities));
-
+  
     if (imageFile) {
       formData.append("avatar", imageFile);
     }
-
+  
     try {
       // Send update request
       const response = await axios.put(`http://localhost:5000/user/edit/${userId}`, formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
-
+  
       // Fetch updated user data
       const updatedResponse = await axios.get(`http://localhost:5000/user/${userId}`);
       setUserData(updatedResponse.data);
-
+  
       const approvedFacilities = updatedResponse.data?.facilities
         .filter(facility => facility.approved)
         .map(facility => facility.name);
-
+  
       setSelectedFacilities(approvedFacilities);
-
+  
       setIsEditing(false);
       setSnackbar({
         open: true,
         message: "PROFILE CHANGES ARE SAVED SUCCESSFULLY",
         severity: "success",
       });
-
-      // Check if any newly added facility has been approved
+  
+      // Check if any newly added facilities need approval
       if (response.data.newlyAddedFacilities.length > 0) {
-        const facilityNames = response.data.newlyAddedFacilities.join(", ");
-        setDialogMessage(`Facility ${facilityNames} has been sent for approval. It will be approved within 24 hours.`);
+        const facilityNames = response.data.newlyAddedFacilities;
+  
+        // Send approval request for each new facility
+        for (const facilityName of facilityNames) {
+          await axios.post(`http://localhost:5000/user/request-facility`, { userId, facilityName }, {
+            headers: { "Content-Type": "application/json" },
+          });
+        }
+  
+        setDialogMessage(`Facility ${facilityNames.join(", ")} has been sent for approval. It will be approved within 24 hours or up to 2 business days.`);
         setDialogOpen(true);
       }
     } catch (err) {
@@ -170,6 +195,7 @@ function ProfilePage() {
       setError("Failed to update profile.");
     }
   };
+  
 
   if (loading) {
     return (
