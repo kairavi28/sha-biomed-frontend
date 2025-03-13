@@ -59,15 +59,6 @@ function ProfilePage() {
             .map(facility => facility.name);
   
           setSelectedFacilities(approvedFacilities);
-          // Store user data in session storage
-          sessionStorage.setItem(
-            "facilityData",
-            JSON.stringify({
-              id: response.data._id,
-              username: response.data.username,
-              approvedFacilities: approvedFacilities,
-            })
-          );
         }
       } catch (err) {
         setError("Failed to fetch user data.");

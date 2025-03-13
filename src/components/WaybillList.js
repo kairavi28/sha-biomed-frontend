@@ -25,11 +25,13 @@ import { Viewer, Worker } from "@react-pdf-viewer/core";
 import "@react-pdf-viewer/core/lib/styles/index.css";
 
 const WaybillList = () => {
-    const [waybills, setWaybills] = useState([]);
+    const [waybills, setWaybills] = useState({});
     const [facilityName, setFacilityName] = useState("");
     const [openPreview, setOpenPreview] = useState(false);
     const [currentWaybill, setCurrentWaybill] = useState(null);
     const fileUrl = currentWaybill ? `http://localhost:5000/waybills/${currentWaybill.fileName}` : "";
+    const facilityUserSession = JSON.parse(sessionStorage.getItem("facilityData"));
+    const approvedFacilities = facilityUserSession?.approvedFacilities || [];
 
     useEffect(() => {
         const userData = JSON.parse(sessionStorage.getItem("userData"));
@@ -39,13 +41,16 @@ const WaybillList = () => {
         }
     }, []);
 
-    const fetchWaybills = async (facility) => {
-        try {
-            const response = await axios.get(`http://localhost:5000/waybill/${facility}`);
-            console.log('FETCH', response.data);
-            setWaybills(response.data);
-        } catch (error) {
-            console.error("Error fetching waybills:", error);
+    const fetchWaybills = async () => {
+        const waybillData = {};
+        for (const facility of approvedFacilities) {
+            try {
+                const response = await axios.get(`http://localhost:5000/waybill/${facility}`);
+                waybillData[facility] = response.data;
+                setWaybills(response.data);
+            } catch (error) {
+                console.error("Error fetching waybills:", error);
+            }
         }
     };
 
