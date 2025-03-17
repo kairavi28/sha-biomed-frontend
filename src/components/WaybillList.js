@@ -18,41 +18,78 @@ import {
     DialogActions,
     DialogContent,
     DialogTitle,
+    Collapse
 } from "@mui/material";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import DownloadIcon from "@mui/icons-material/Download";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { Viewer, Worker } from "@react-pdf-viewer/core";
 import "@react-pdf-viewer/core/lib/styles/index.css";
 
 const WaybillList = () => {
-    const [waybills, setWaybills] = useState({});
-    const [facilityName, setFacilityName] = useState("");
+    const [groupedWaybills, setGroupedWaybills] = useState({});
+    const [facilityDetails, setFacilityDetails] = useState({});
+    const [selectedFacilities, setSelectedFacilities] = useState([]);
     const [openPreview, setOpenPreview] = useState(false);
     const [currentWaybill, setCurrentWaybill] = useState(null);
-    const fileUrl = currentWaybill ? `http://localhost:5000/waybills/${currentWaybill.fileName}` : "";
-    const facilityUserSession = JSON.parse(sessionStorage.getItem("facilityData"));
-    const approvedFacilities = facilityUserSession?.approvedFacilities || [];
+    const [expandedFacility, setExpandedFacility] = useState(null);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const userData = JSON.parse(sessionStorage.getItem("userData"));
-        if (userData) {
-            setFacilityName(userData.facility);
-            fetchWaybills(userData.facility);
-        }
+        const fetchUserData = async () => {
+            setLoading(true);
+
+            const currentUserSession = JSON.parse(sessionStorage.getItem("userData"));
+            const currentUserId = currentUserSession ? currentUserSession.id : null;
+
+            if (!currentUserId) {
+                console.error("User ID is undefined");
+                setLoading(false);
+                return;
+            }
+
+            try {
+                const response = await axios.get(`http://localhost:5000/user/${currentUserId}`);
+                const approvedFacilities = response.data?.facilities
+                    .filter(facility => facility.approved)
+                    .map(facility => facility.name) || [];
+                setSelectedFacilities(approvedFacilities);
+            } catch (err) {
+                console.error("Error fetching user data:", err);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchUserData();
     }, []);
 
-    const fetchWaybills = async () => {
-        const waybillData = {};
-        for (const facility of approvedFacilities) {
-            try {
-                const response = await axios.get(`http://localhost:5000/waybill/${facility}`);
-                waybillData[facility] = response.data;
-                setWaybills(response.data);
-            } catch (error) {
-                console.error("Error fetching waybills:", error);
-            }
+    useEffect(() => {
+        if (selectedFacilities.length === 0) {
+            console.warn("selectedFacilities is empty, skipping waybill fetch");
+            return;
         }
-    };
+
+        const fetchWaybills = async () => {
+            try {
+                const waybillData = {};
+                for (const facility of selectedFacilities) {
+                    try {
+                        const waybillResponse = await axios.get(`http://localhost:5000/waybill/${facility}`)
+                        waybillData[facility] = waybillResponse.data;
+                    } catch (error) {
+                        console.error(`Error fetching data for facility: ${facility}`, error);
+                    }
+                }
+                setGroupedWaybills(waybillData);
+            } catch (error) {
+                console.error("Error fetching waybills or facilities:", error);
+            }
+        };
+
+        fetchWaybills();
+    }, [selectedFacilities]);
+
 
     const handlePreviewOpen = (waybill) => {
         setCurrentWaybill(waybill);
@@ -63,70 +100,89 @@ const WaybillList = () => {
         setOpenPreview(false);
     };
 
+    const toggleFacility = (facility) => {
+        setExpandedFacility(expandedFacility === facility ? null : facility);
+    };
+
     return (
         <Card sx={{ maxWidth: 900, mx: "auto", mt: 4, p: 2, boxShadow: 3 }}>
             <CardHeader
-                title={
-                    <Typography variant="h5" color="primary" sx={{ fontWeight: "bold" }}>
-                        Waybills for {facilityName}
-                    </Typography>
-                }
+                title={<Typography variant="h5" color="primary" sx={{ fontWeight: "bold" }}>Waybills</Typography>}
             />
             <CardContent>
-                <TableContainer component={Paper} sx={{ boxShadow: 2 }}>
-                    <Table>
-                        <TableHead>
-                            <TableRow sx={{ backgroundColor: "#f5f5f5" }}>
-                                <TableCell><strong>File Name</strong></TableCell>
-                                <TableCell><strong>Preview</strong></TableCell>
-                                <TableCell><strong>Download</strong></TableCell>
-                                <TableCell><strong>Uploaded At</strong></TableCell>
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {waybills.length > 0 ? (
-                                waybills.map((waybill) => (
-                                    <TableRow key={waybill._id} hover>
-                                        <TableCell sx={{ fontFamily: "monospace" }}>{waybill.fileName}</TableCell>
-                                        <TableCell>
-                                            <IconButton color="primary" onClick={() => handlePreviewOpen(waybill)}>
-                                                <VisibilityIcon />
-                                            </IconButton>
-                                        </TableCell>
-                                        <TableCell>
-                                            <IconButton color="success" component="a" href={`http://localhost:5000/waybills/${waybill.fileName}`} download>
-                                                <DownloadIcon />
-                                            </IconButton>
-                                        </TableCell>
-                                        <TableCell>{new Date(waybill.uploadedAt).toLocaleString()}</TableCell>
-                                    </TableRow>
-                                ))
-                            ) : (
-                                <TableRow>
-                                    <TableCell colSpan={6} align="center">
-                                        <Typography variant="body2" color="textSecondary">
-                                            No Waybills available.
-                                        </Typography>
-                                    </TableCell>
-                                </TableRow>
-                            )}
-                        </TableBody>
-                    </Table>
-                </TableContainer>
+                {loading ? (
+                    <Typography variant="body2" color="textSecondary" align="center">Loading waybills...</Typography>
+                ) : selectedFacilities.length > 0 ? (
+                    selectedFacilities.map((facility) => (
+                        <Paper key={facility} sx={{ mb: 2, p: 2, boxShadow: 3 }}>
+                            <Typography
+                                variant="h6"
+                                color="secondary"
+                                onClick={() => toggleFacility(facility)}
+                                sx={{ cursor: "pointer", display: "flex", alignItems: "center" }}
+                            >
+                                <ExpandMoreIcon sx={{ transform: expandedFacility === facility ? "rotate(180deg)" : "rotate(0deg)" }} />
+                                {facilityDetails[facility]?.name || facility}
+                            </Typography>
+                            <Collapse in={expandedFacility === facility} timeout="auto" unmountOnExit>
+                                <TableContainer component={Paper} sx={{ boxShadow: 2, mt: 1 }}>
+                                    <Table>
+                                        <TableHead>
+                                            <TableRow sx={{ backgroundColor: "#f5f5f5" }}>
+                                                <TableCell><strong>File Name</strong></TableCell>
+                                                <TableCell><strong>Preview</strong></TableCell>
+                                                <TableCell><strong>Download</strong></TableCell>
+                                                <TableCell><strong>Uploaded At</strong></TableCell>
+                                            </TableRow>
+                                        </TableHead>
+                                        <TableBody>
+                                            {groupedWaybills[facility]?.length > 0 ? (
+                                                groupedWaybills[facility].map((waybill) => (
+                                                    <TableRow key={waybill._id} hover>
+                                                        <TableCell>{waybill.fileName}</TableCell>
+                                                        <TableCell>
+                                                            <IconButton color="primary" onClick={() => handlePreviewOpen(waybill)}>
+                                                                <VisibilityIcon />
+                                                            </IconButton>
+                                                        </TableCell>
+                                                        <TableCell>
+                                                            <IconButton color="success" component="a" href={`http://localhost:5000/waybill/${waybill.fileName}`} download>
+                                                                <DownloadIcon />
+                                                            </IconButton>
+                                                        </TableCell>
+                                                        <TableCell>{new Date(waybill.uploadedAt).toLocaleString()}</TableCell>
+                                                    </TableRow>
+                                                ))
+                                            ) : (
+                                                <TableRow>
+                                                    <TableCell colSpan={4} align="center">
+                                                        <Typography variant="body2" color="textSecondary">No Waybills available.</Typography>
+                                                    </TableCell>
+                                                </TableRow>
+                                            )}
+                                        </TableBody>
+                                    </Table>
+                                </TableContainer>
+                            </Collapse>
+                        </Paper>
+                    ))
+                ) : (
+                    <Typography variant="body2" color="textSecondary" align="center">No waybills available.</Typography>
+                )}
             </CardContent>
 
             {/* Dialog for PDF Preview */}
-            <Dialog open={openPreview} onClose={() => handlePreviewClose()} maxWidth="md" fullWidth>
+            <Dialog open={openPreview} onClose={handlePreviewClose} maxWidth="md" fullWidth>
                 <DialogTitle>Waybill Preview</DialogTitle>
                 <DialogContent sx={{ display: "flex", justifyContent: "center", alignItems: "center", height: "80vh" }}>
                     {currentWaybill && (
                         <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.min.js">
-                            <Viewer fileUrl={fileUrl} />
+                            <Viewer fileUrl={`http://localhost:5000/waybills/${currentWaybill.fileName}`} />
                         </Worker>
                     )}
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={() => handlePreviewClose()}>Close</Button>
+                    <Button onClick={handlePreviewClose}>Close</Button>
                 </DialogActions>
             </Dialog>
         </Card>

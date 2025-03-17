@@ -29,13 +29,6 @@ const dataURLToFile = (dataURL, filename) => {
 };
 
 function Complaints() {
-    // let apiUrl;
-    // if (process.env.NODE_ENV === 'production') {
-    //     apiUrl = process.env.REACT_APP_API_URL || 'http://52.60.180.33:5000';
-    // } else {
-    //     apiUrl = process.env.REACT_APP_API_URL || 'http://35.182.166.248';
-    // }
-
     const [issues, setIssues] = useState([]);
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(true);
@@ -160,7 +153,6 @@ function Complaints() {
                 .get(`http://35.182.166.248/api/complaints`)
                 .then((response) => {
                     setIssues(response.data);
-                    console.log('here', response.data);
                     setLoading(false);
                 })
                 .catch(() => {

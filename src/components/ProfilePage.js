@@ -59,6 +59,7 @@ function ProfilePage() {
             .map(facility => facility.name);
   
           setSelectedFacilities(approvedFacilities);
+
         }
       } catch (err) {
         setError("Failed to fetch user data.");
@@ -70,7 +71,6 @@ function ProfilePage() {
     const fetchFacilities = async () => {
       try {
         const response = await axios.get("http://localhost:5000/json/company_name");
-
         const facilityNames = [...new Set(response.data.map(facility => facility.CompanyName))];
         setAvailableFacilities(facilityNames);
       } catch (err) {

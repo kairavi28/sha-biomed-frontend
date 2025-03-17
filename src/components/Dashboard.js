@@ -27,7 +27,6 @@ import biomedman from "../assets/images/biomedman.png";
 import "react-international-phone/style.css";
 import { useNavigate } from "react-router-dom";
 
-
 const services = [
   {
     title: "Biomedical Waste Disposal",

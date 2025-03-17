@@ -33,46 +33,57 @@ const InvoiceList = () => {
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [currentInvoice, setCurrentInvoice] = useState(null);
-  const userSession = JSON.parse(sessionStorage.getItem("userData"));
-  const userId = userSession ? userSession.id : null;
-  const facilityUserSession = JSON.parse(sessionStorage.getItem("facilityData"));
-  const approvedFacilities = facilityUserSession?.approvedFacilities || [];
+  const [selectedFacilities, setSelectedFacilities] = useState([]);
 
   useEffect(() => {
     const fetchUserData = async () => {
+      const currentUserSession = JSON.parse(sessionStorage.getItem("userData"));
+      const currentUserId = currentUserSession ? currentUserSession.id : null;
+
+      if (!currentUserId) {
+        console.error("User ID is undefined");
+        setLoading(false);
+        return;
+      }
+
       try {
-        const response = await axios.get(`http://35.182.166.248/api/user/${userId}`);
+        const response = await axios.get(`http://localhost:5000/user/${currentUserId}`);
+        const approvedFacilities = response.data?.facilities
+          .filter(facility => facility.approved)
+          .map(facility => facility.name);
+
         setUserData(response.data);
+        setSelectedFacilities(approvedFacilities);
+        setLoading(false);
       } catch (err) {
         console.error("Error fetching user data:", err);
-      } finally {
         setLoading(false);
       }
     };
 
-    if (userId) {
-      fetchUserData();
-    }
-  }, [userId]);
+    fetchUserData();
+    const interval = setInterval(fetchUserData, 3 * 60 * 1000);
+    return () => clearInterval(interval);
+  }, []);
 
   useEffect(() => {
     const fetchInvoices = async () => {
-      const invoicesData = {};
-      for (const facility of approvedFacilities) {
-        try {
+      try {
+        const invoicesData = {};
+        for (const facility of selectedFacilities) {
           const response = await axios.get(`http://localhost:5000/invoice/${facility}`);
           invoicesData[facility] = response.data;
-        } catch (error) {
-          console.error(`Error fetching invoices for facility ${facility}:`, error);
         }
+        setInvoices(invoicesData);
+      } catch (error) {
+        console.error("Error fetching invoices:", error);
       }
-      setInvoices(invoicesData);
     };
 
-    if (approvedFacilities.length > 0) {
+    if (selectedFacilities.length > 0) {
       fetchInvoices();
     }
-  }, [approvedFacilities]);
+  }, [selectedFacilities]);
 
   const totalAmountDue = Object.values(invoices).flat().reduce((acc, invoice) => acc + (invoice.balanceDue || 0), 0);
   const totalAmountPaid = Object.values(invoices).flat().reduce((acc, invoice) => acc + (invoice.totalAmt || 0) - (invoice.balanceDue || 0), 0);
@@ -107,7 +118,7 @@ const InvoiceList = () => {
           </Grid>
         </Grid>
       </Box>
-      {approvedFacilities.map((facility) => (
+      {selectedFacilities.map((facility) => (
         <Box key={facility} sx={{ mb: 3 }}>
           <CardHeader
             title={<Typography variant="h6" color="primary" sx={{ fontWeight: "bold" }}>Invoices for {facility}</Typography>}
@@ -129,10 +140,8 @@ const InvoiceList = () => {
                   {invoices[facility]?.length > 0 ? (
                     invoices[facility].map((invoice) => (
                       <TableRow key={invoice._id} hover>
-                        <TableCell>{invoice.fileName}</TableCell>
-                        <TableCell sx={{ fontWeight: "bold", color: "green" }}>
-                          ${invoice.totalAmt?.toFixed(2) || "N/A"}
-                        </TableCell>
+                        <TableCell>{invoice.fileName || "N/A"}</TableCell>
+                        <TableCell>${invoice.totalAmt?.toFixed(2) || "N/A"}</TableCell>
                         <TableCell>
                           <IconButton color="primary" onClick={() => handlePreviewOpen(invoice)}>
                             <VisibilityIcon />
@@ -143,17 +152,13 @@ const InvoiceList = () => {
                             <DownloadIcon />
                           </IconButton>
                         </TableCell>
-                        <TableCell sx={{ fontWeight: "bold", color: "green" }}>
-                          ${invoice.balanceDue?.toFixed(2) || "N/A"}
-                        </TableCell>
-                        <TableCell>{new Date(invoice.uploadedAt).toLocaleString()}</TableCell>
+                        <TableCell>${invoice.balanceDue?.toFixed(2) || "N/A"}</TableCell>
+                        <TableCell>{invoice.uploadedAt ? new Date(invoice.uploadedAt).toLocaleString() : "N/A"}</TableCell>
                       </TableRow>
                     ))
                   ) : (
                     <TableRow>
-                      <TableCell colSpan={6} align="center">
-                        <Typography variant="body2" color="textSecondary">No invoices available.</Typography>
-                      </TableCell>
+                      <TableCell colSpan={6} align="center">No invoices available.</TableCell>
                     </TableRow>
                   )}
                 </TableBody>
@@ -162,9 +167,10 @@ const InvoiceList = () => {
           </CardContent>
         </Box>
       ))}
+      {/* Dialog for PDF Preview */}
       <Dialog open={openPreview} onClose={handlePreviewClose} maxWidth="md" fullWidth>
         <DialogTitle>Invoice Preview</DialogTitle>
-        <DialogContent>
+        <DialogContent sx={{ display: "flex", justifyContent: "center", alignItems: "center", height: "80vh" }}>
           {currentInvoice && (
             <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.min.js">
               <Viewer fileUrl={`http://localhost:5000/invoices/${currentInvoice.fileName}`} />

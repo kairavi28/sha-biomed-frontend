@@ -1,11 +1,15 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import { BrowserRouter as Router } from 'react-router-dom';
-import App from './App';
+import React from "react";
+import ReactDOM from "react-dom";
+import { BrowserRouter } from "react-router-dom";
+import { MsalProvider } from "@azure/msal-react";
+import msalInstance from "./msalConfig"; 
+import App from "./App";
 
 ReactDOM.render(
-  <Router>
-    <App />
-  </Router>,
-  document.getElementById('root')
+  <MsalProvider instance={msalInstance}>
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
+  </MsalProvider>,
+  document.getElementById("root")
 );

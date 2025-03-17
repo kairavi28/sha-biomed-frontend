@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { FormControl, Button, FormLabel, TextField, IconButton, InputAdornment } from '@mui/material';
+import { FormControl, Button, FormControlLabel, FormLabel, TextField, IconButton, InputAdornment } from '@mui/material';
 import Box from '@mui/material/Box';
 import MuiCard from '@mui/material/Card';
 import Checkbox from '@mui/material/Checkbox';
@@ -10,8 +10,10 @@ import Typography from '@mui/material/Typography';
 import logo from '../assets/images/logo.png';
 import { styled } from '@mui/material/styles';
 import ForgotPassword from './ForgotPassword';
-import { GoogleIcon } from './CustomIcons';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
+import { useMsal } from "@azure/msal-react";
+import { InteractionType } from "@azure/msal-browser";
+
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: 'flex',
@@ -20,31 +22,127 @@ const Card = styled(MuiCard)(({ theme }) => ({
   width: '100%',
   padding: theme.spacing(4),
   gap: theme.spacing(2),
-  boxShadow: '0px 5px 15px rgba(0,0,0,0.05)',
+  boxShadow:
+    'hsla(220, 30%, 5%, 0.05) 0px 5px 15px 0px, hsla(220, 25%, 10%, 0.05) 0px 15px 35px -5px',
   [theme.breakpoints.up('sm')]: {
     width: '450px',
   },
+  ...theme.applyStyles('dark', {
+    boxShadow:
+      'hsla(220, 30%, 5%, 0.5) 0px 5px 15px 0px, hsla(220, 25%, 10%, 0.08) 0px 15px 35px -5px',
+  }),
 }));
 
 export default function SignInCard() {
-  const [emailError, setEmailError] = useState(false);
-  const [emailErrorMessage, setEmailErrorMessage] = useState('');
+  const [emailError, setEmailError] = React.useState(false);
+  const [emailErrorMessage, setEmailErrorMessage] = React.useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const [passwordError, setPasswordError] = React.useState(false);
   const [password, setPassword] = useState('');
-  const [passwordError, setPasswordError] = useState(false);
-  const [passwordErrorMessage, setPasswordErrorMessage] = useState('');
-  const [open, setOpen] = useState(false);
+  const [passwordErrorMessage, setPasswordErrorMessage] = React.useState('');
+  const [open, setOpen] = React.useState(false);
+  const { instance } = useMsal();
+
+  const handleMicrosoftLogin = async () => {
+    console.log('handle microsoft login function triggered');
+    try {
+      const loginResponse = await instance.loginPopup({
+        scopes: ["User.Read"], // Add necessary scopes
+      });
+
+      console.log("Login Success:", loginResponse);
+      sessionStorage.setItem("userData", JSON.stringify(loginResponse.account));
+      //store in db 
+      const responseObj = await axios.post(`http://localhost:5000/user/microsoft-signin`, loginResponse.account, {
+        headers: { "Content-Type": "application/json" },
+      });
+      console.log('response', responseObj);
+      //window.location.href = "/home"; // Redirect after login
+      console.log(loginResponse.account);
+    } catch (error) {
+      console.error("Login Failed:", error);
+    }
+  };
 
   const navigate = useNavigate();
 
-  const handlePasswordChange = (event) => setPassword(event.target.value);
-  const togglePasswordVisibility = () => setShowPassword((prev) => !prev);
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const handlePasswordChange = (event) => {
+    setPassword(event.target.value);
+  };
+
+  const togglePasswordVisibility = () => {
+    setShowPassword((prev) => !prev);
+  };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    // Check for validation errors
+    if (emailError || passwordError) {
+      console.log("Error popped up");
+      return;
+    }
+    // Extract form data
+    const data = new FormData(event.currentTarget);
+    const formData = {
+      email: data.get('email'),
+      password: data.get('password'),
+    };
+    console.log('Form Data:', formData);
+
+    try {
+      // Make API request for login
+      const response = await axios.post(`http://localhost:5000/user/login`, JSON.stringify(formData), {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      console.log('Login successful:', response.data);
+      sessionStorage.setItem('userData', JSON.stringify(response.data));
+
+      // Optionally check the stored data
+      console.log('Data stored in session:', sessionStorage.getItem('userData'));
+      // Navigate to the home page
+      navigate('/home');
+    } catch (error) {
+      console.error('Error during login:', error);
+
+      // Handle specific error cases
+      if (error.response) {
+        const { status, data } = error.response;
+
+        if (status === 400) {
+          alert("Invalid Password or Email");
+        } else if (status === 401) {
+          alert("Unauthorized access. Please check your credentials.");
+        } else {
+          alert(data.message || "An unexpected error occurred. Please try again.");
+        }
+      } else if (error.request) {
+        // Network or server not reachable
+        alert("Unable to reach the server. Please check your internet connection.");
+      } else {
+        // Other unexpected errors
+        alert("An error occurred. Please try again later.");
+      }
+    }
+  };
+
 
   const validateInputs = () => {
-    const email = document.getElementById('email').value;
+    const email = document.getElementById('email');
+    const password = document.getElementById('password');
+    console.log(email, password);
     let isValid = true;
 
-    if (!email || !/\S+@\S+\.\S+/.test(email)) {
+    if (!email.value || !/\S+@\S+\.\S+/.test(email.value)) {
       setEmailError(true);
       setEmailErrorMessage('Please enter a valid email address.');
       isValid = false;
@@ -53,7 +151,7 @@ export default function SignInCard() {
       setEmailErrorMessage('');
     }
 
-    if (!password || password.length < 6) {
+    if (!password.value || password.value.length < 6) {
       setPasswordError(true);
       setPasswordErrorMessage('Password must be at least 6 characters long.');
       isValid = false;
@@ -65,52 +163,24 @@ export default function SignInCard() {
     return isValid;
   };
 
-  const fetchUserData = async (userId) => {
-    try {
-      const response = await axios.get(`http://localhost:5000/user/${userId}`);
-
-      if (response.data) {
-        const { _id, username, facilities } = response.data;
-        const approvedFacilities = facilities?.filter(facility => facility.approved).map(facility => facility.name) || [];
-        sessionStorage.setItem("userData", JSON.stringify(response.data));
-        sessionStorage.setItem("facilityData", JSON.stringify({ id: _id, username, approvedFacilities }));
-      }
-    } catch (error) {
-      console.error("Failed to fetch user data:", error);
-    }
-  };
-
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    if (!validateInputs()) return;
-
-    const data = new FormData(event.currentTarget);
-    const formData = { email: data.get('email'), password: data.get('password') };
-    try {
-      const response = await axios.post(`http://localhost:5000/user/login`, JSON.stringify(formData), {
-        headers: { 'Content-Type': 'application/json' },
-      });
-      if (response.data?.id) {  
-        await fetchUserData(response.data.id);
-        navigate('/home');
-      }
-    } catch (error) {
-      if (error.response) {
-        const { status, data } = error.response;
-        alert(status === 400 ? "Invalid Email or Password" : data.message || "An unexpected error occurred.");
-      } else {
-        alert("Network error. Please try again.");
-      }
-    }
-  };
-
   return (
     <Card variant="outlined">
       <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
         <img src={logo} alt="Logo" style={{ width: '500px', height: 'auto' }} />
       </Box>
-      <Typography component="h1" variant="h5">Sign In</Typography>
-      <Box component="form" onSubmit={handleSubmit} noValidate sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+      <Typography
+        component="h1"
+        variant="h5"
+        sx={{ width: '100%', fontSize: 'clamp(1.8rem, 10vw, 1.8r1em)' }}
+      >
+        Sign In
+      </Typography>
+      <Box
+        component="form"
+        onSubmit={handleSubmit}
+        noValidate
+        sx={{ display: 'flex', flexDirection: 'column', width: '100%', gap: 2 }}
+      >
         <FormControl>
           <FormLabel htmlFor="email">Email</FormLabel>
           <TextField
@@ -120,16 +190,29 @@ export default function SignInCard() {
             type="email"
             name="email"
             placeholder="your@email.com"
+            autoComplete="email"
+            autoFocus
             required
             fullWidth
             variant="outlined"
+            color={emailError ? 'error' : 'primary'}
+            sx={{ ariaLabel: 'email' }}
           />
         </FormControl>
         <FormControl>
           <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
             <FormLabel htmlFor="password">Password</FormLabel>
-            <Link component="button" onClick={() => setOpen(true)} variant="body2">Forgot your password?</Link>
+            <Link
+              component="button"
+              type="button"
+              onClick={handleClickOpen}
+              variant="body2"
+              sx={{ alignSelf: 'baseline' }}
+            >
+              Forgot your password?
+            </Link>
           </Box>
+
           <TextField
             required
             fullWidth
@@ -137,15 +220,22 @@ export default function SignInCard() {
             placeholder="••••••"
             type={showPassword ? 'text' : 'password'}
             id="password"
+            autoComplete="current-password"
             variant="outlined"
             error={passwordError}
             helperText={passwordErrorMessage}
+            color={passwordError ? 'error' : 'primary'}
             value={password}
+            autoFocus
             onChange={handlePasswordChange}
             InputProps={{
               endAdornment: (
                 <InputAdornment position="end">
-                  <IconButton onClick={togglePasswordVisibility}>
+                  <IconButton
+                    aria-label="toggle password visibility"
+                    onClick={togglePasswordVisibility}
+                    edge="end"
+                  >
                     {showPassword ? <Visibility /> : <VisibilityOff />}
                   </IconButton>
                 </InputAdornment>
@@ -154,17 +244,54 @@ export default function SignInCard() {
           />
         </FormControl>
 
-        <Checkbox value="remember" color="primary" label="Remember me" />
-        <ForgotPassword open={open} handleClose={() => setOpen(false)} />
-        <Button type="submit" fullWidth variant="contained">Sign in</Button>
+        <FormControlLabel
+          control={<Checkbox value="remember" color="primary" />}
+          label="Remember me"
+        />
+        <ForgotPassword open={open} handleClose={handleClose} />
+        <Button type="submit" fullWidth variant="contained" onClick={validateInputs}>
+          Sign in
+        </Button>
         <Typography sx={{ textAlign: 'center' }}>
-          Don't have an account? <Link to="/sign-up">Sign up</Link>
+          Don&apos;t have an account?{' '}
+          <span>
+            <Link
+              to="/sign-up"
+              variant="body2"
+              sx={{ alignSelf: 'center' }}
+            >
+              Sign up
+            </Link>
+          </span>
         </Typography>
       </Box>
       <Divider>or</Divider>
-      <Button fullWidth variant="outlined" onClick={() => alert('Sign in with Google')} startIcon={<GoogleIcon />}>
-        Sign in with Google
-      </Button>
+      <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+        <Button
+          fullWidth
+          variant="outlined"
+          onClick={handleMicrosoftLogin}
+          startIcon={<img src="https://upload.wikimedia.org/wikipedia/commons/4/44/Microsoft_logo.svg" alt="Microsoft Logo" width="20" />}
+          sx={{
+            textTransform: 'none',
+            fontSize: '16px',
+            fontWeight: 'bold',
+            color: '#333',
+            borderColor: '#999',
+            '&:hover': {
+              borderColor: '#0078D4',
+              backgroundColor: 'rgba(0, 120, 212, 0.1)',
+            },
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            gap: 1,
+            padding: '10px',
+          }}
+        >
+          Sign in with Microsoft
+        </Button>
+      </Box>
     </Card>
   );
 }

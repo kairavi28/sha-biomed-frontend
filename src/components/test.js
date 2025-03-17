@@ -1,235 +1,171 @@
-import React, { useEffect, useState } from "react";
-import {
-  Box,
-  Typography,
-  Container,
-  Grid,
-  Paper,
-  CircularProgress,
-  Button,
-  TextField,
-  Avatar,
-  Divider,
-  Tabs,
-  Tab,
-  IconButton,
-  MenuItem,
-  Select,
-  Chip,
-} from "@mui/material";
-import axios from "axios";
-import EditIcon from "@mui/icons-material/Edit";
-import CloudUploadIcon from "@mui/icons-material/CloudUpload";
-import Autocomplete from "@mui/material/Autocomplete";
+import React, { useState } from 'react';
+import axios from 'axios';
+import { FormControl, Button, FormLabel, TextField, IconButton, InputAdornment } from '@mui/material';
+import Box from '@mui/material/Box';
+import MuiCard from '@mui/material/Card';
+import Checkbox from '@mui/material/Checkbox';
+import Divider from '@mui/material/Divider';
+import { Link, useNavigate } from 'react-router-dom';
+import Typography from '@mui/material/Typography';
+import logo from '../assets/images/logo.png';
+import { styled } from '@mui/material/styles';
+import ForgotPassword from './ForgotPassword';
+import { GoogleIcon } from './CustomIcons';
+import { Visibility, VisibilityOff } from '@mui/icons-material';
 
-function ProfilePage() {
-  const [userData, setUserData] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState(0);
-  const [error, setError] = useState(null);
-  const [isEditing, setIsEditing] = useState(false);
-  const [imageFile, setImageFile] = useState(null);
-  const [availableFacilities, setAvailableFacilities] = useState([]);
-  const [selectedFacilities, setSelectedFacilities] = useState([]);
+const Card = styled(MuiCard)(({ theme }) => ({
+  display: 'flex',
+  flexDirection: 'column',
+  alignSelf: 'center',
+  width: '100%',
+  padding: theme.spacing(4),
+  gap: theme.spacing(2),
+  boxShadow: '0px 5px 15px rgba(0,0,0,0.05)',
+  [theme.breakpoints.up('sm')]: {
+    width: '450px',
+  },
+}));
 
-  const userSession = JSON.parse(sessionStorage.getItem("userData"));
-  const userId = userSession ? userSession.id : null;
+export default function SignInCard() {
+  const [emailError, setEmailError] = useState(false);
+  const [emailErrorMessage, setEmailErrorMessage] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [password, setPassword] = useState('');
+  const [passwordError, setPasswordError] = useState(false);
+  const [passwordErrorMessage, setPasswordErrorMessage] = useState('');
+  const [open, setOpen] = useState(false);
 
-  useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        const response = await axios.get(`http://localhost:5000/user/${userId}`);
-        setUserData(response.data);
-        setSelectedFacilities(response.data.facilities || []);
-      } catch (err) {
-        setError("Failed to fetch user data.");
-      } finally {
-        setLoading(false);
-      }
-    };
+  const navigate = useNavigate();
 
-    const fetchFacilities = async () => {
-      try {
-        const response = await axios.get("http://localhost:5000/facilities/company_name");
-        console.log('facilities', response.data.map(facility => facility.Company_Name));
-        setAvailableFacilities(response.data.map(facility => facility.Company_Name));
-      } catch (err) {
-        console.error("Failed to fetch facilities.", err);
-      }
-    };
+  const handlePasswordChange = (event) => setPassword(event.target.value);
+  const togglePasswordVisibility = () => setShowPassword((prev) => !prev);
 
-    fetchUserData();
-    fetchFacilities();
-  }, [userId]);
+  const validateInputs = () => {
+    const email = document.getElementById('email').value;
+    let isValid = true;
 
-  const handleTabChange = (event, newValue) => {
-    setActiveTab(newValue);
-  };
-
-  const handleEditProfile = () => {
-    setIsEditing(!isEditing);
-  };
-
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setUserData({ ...userData, [e.target.name]: e.target.value });
-  };
-
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    setImageFile(file);
-    setUserData({ ...userData, avatar: URL.createObjectURL(file) });
-  };
-
-  const handleFacilitiesChange = (event) => {
-    setSelectedFacilities(event.target.value);
-  };
-
-  const handleSave = async () => {
-    const formData = new FormData();
-    formData.append("firstname", userData.firstname);
-    formData.append("lastname", userData.lastname);
-    formData.append("email", userData.email);
-    formData.append("facilities", JSON.stringify(selectedFacilities));
-  
-    // Only append the image file if one was selected
-    if (imageFile) {
-      formData.append("avatar", imageFile);
+    if (!email || !/\S+@\S+\.\S+/.test(email)) {
+      setEmailError(true);
+      setEmailErrorMessage('Please enter a valid email address.');
+      isValid = false;
+    } else {
+      setEmailError(false);
+      setEmailErrorMessage('');
     }
-  
+
+    if (!password || password.length < 6) {
+      setPasswordError(true);
+      setPasswordErrorMessage('Password must be at least 6 characters long.');
+      isValid = false;
+    } else {
+      setPasswordError(false);
+      setPasswordErrorMessage('');
+    }
+
+    return isValid;
+  };
+
+  const fetchUserData = async (userId) => {
+    console.log('in fetch user data', userId);
     try {
-      await axios.put(`http://localhost:5000/user/edit/${userId}`, formData, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
-      setIsEditing(false);
-      alert("Profile updated successfully");
-    } catch (err) {
-      console.error("Error updating profile:", err);
-      // setError("Failed to update profile.");
+      const response = await axios.get(`http://localhost:5000/user/${userId}`);
+
+      if (response.data) {
+        const { _id, username, facilities } = response.data;
+        const approvedFacilities = facilities?.filter(facility => facility.approved).map(facility => facility.name) || [];
+        sessionStorage.setItem("userData", JSON.stringify(response.data));
+        sessionStorage.setItem("facilityData", JSON.stringify({ id: _id, username, approvedFacilities }));
+      }
+    } catch (error) {
+      console.error("Failed to fetch user data:", error);
     }
   };
-  
-  if (loading) {
-    return (
-      <Box display="flex" justifyContent="center" alignItems="center" height="100vh">
-        <CircularProgress />
-      </Box>
-    );
-  }
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    if (!validateInputs()) return;
+
+    const data = new FormData(event.currentTarget);
+    const formData = { email: data.get('email'), password: data.get('password') };
+    try {
+      const response = await axios.post(`http://localhost:5000/user/login`, JSON.stringify(formData), {
+        headers: { 'Content-Type': 'application/json' },
+      });
+      if (response.data?.id) {
+        await fetchUserData(response.data.id);
+        navigate('/home');
+      }
+    } catch (error) {
+      if (error.response) {
+        const { status, data } = error.response;
+        alert(status === 400 ? "Invalid Email or Password" : data.message || "An unexpected error occurred.");
+      } else {
+        alert("Network error. Please try again.");
+      }
+    }
+  };
 
   return (
-    <Box sx={{ background: "#f3f4f6", minHeight: "100vh", py: 4 }}>
-      <Container maxWidth="md">
-        <Paper elevation={4} sx={{ p: 4, borderRadius: 3 }}>
-          <Typography variant="h5" align="center" fontWeight="bold" mb={4}>Profile</Typography>
-          {error && <Typography color="error">{error}</Typography>}
-          <Grid container spacing={4} alignItems="center">
-            <Grid item xs={12} md={4} textAlign="center">
-              <Avatar src={userData?.avatar} sx={{ width: 250, height: 250, mb: 2 }} />
-              {isEditing && (
-                <IconButton color="primary" component="label">
-                  <CloudUploadIcon />
-                  <input type="file" hidden onChange={handleImageChange} />
-                </IconButton>
-              )}
-            </Grid>
-            <Grid item xs={12} md={8}>
-              <Grid container spacing={2}>
-                <Grid item xs={6}>
-                  <TextField
-                    label="First Name"
-                    name="firstname"
-                    value={userData?.firstname || ""}
-                    fullWidth
-                    disabled={!isEditing}
-                    onChange={handleInputChange}
-                  />
-                </Grid>
-                <Grid item xs={6}>
-                  <TextField
-                    label="Last Name"
-                    name="lastname"
-                    value={userData?.lastname || ""}
-                    fullWidth
-                    disabled={!isEditing}
-                    onChange={handleInputChange}
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <TextField
-                    label="Email"
-                    name="email"
-                    value={userData?.email || ""}
-                    fullWidth
-                    disabled={!isEditing}
-                    onChange={handleInputChange}
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <Typography>Facilities</Typography>
-                  <Box sx={{ overflow: "visible" }}>
-                    <Autocomplete
-                      multiple
-                      freeSolo
-                      options={availableFacilities}
-                      value={selectedFacilities}
-                      onChange={(event, newValue) => setSelectedFacilities(newValue)}
-                      disabled={!isEditing}
-                      renderInput={(params) => (
-                        <TextField
-                          {...params}
-                          label="Facilities"
-                          placeholder="Select Facilities"
-                          fullWidth
-                        />
-                      )}
-                      getOptionLabel={(option) => option}
-                      isOptionEqualToValue={(option, value) => option === value}
-                      PopperComponent={(props) => (
-                        <div {...props} style={{ zIndex: 2, maxHeight: "200px", overflowY: "auto", border: "1px solid #1976D2", borderRadius: "8px", backgroundColor: "#f0f7ff" }} />
-                      )}
-                      ListboxProps={{
-                        style: {
-                          padding: "10px",
-                          backgroundColor: "#f0f7ff", // Light Blue Background
-                          borderRadius: "8px",
-                        },
-                      }}
-                      renderOption={(props, option) => (
-                        <li
-                          {...props}
-                          style={{
-                            padding: "10px",
-                            backgroundColor: props["aria-selected"] ? "#1976D2" : "#f0f7ff",
-                            color: props["aria-selected"] ? "white" : "black",
-                            cursor: "pointer",
-                            borderBottom: "1px solid #dce6f1",
-                          }}
-                        >
-                          {option}
-                        </li>
-                      )}
-                    />
-                  </Box>
-                </Grid>
-              </Grid>
-            </Grid>
-          </Grid>
-          <Box textAlign="center" mt={4}>
-            {!isEditing ? (
-              <Button variant="outlined" startIcon={<EditIcon />} onClick={handleEditProfile}>
-                Edit Profile
-              </Button>
-            ) : (
-              <Button variant="contained" color="primary" onClick={handleSave}>
-                Save Changes
-              </Button>
-            )}
+    <Card variant="outlined">
+      <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
+        <img src={logo} alt="Logo" style={{ width: '500px', height: 'auto' }} />
+      </Box>
+      <Typography component="h1" variant="h5">Sign In</Typography>
+      <Box component="form" onSubmit={handleSubmit} noValidate sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+        <FormControl>
+          <FormLabel htmlFor="email">Email</FormLabel>
+          <TextField
+            error={emailError}
+            helperText={emailErrorMessage}
+            id="email"
+            type="email"
+            name="email"
+            placeholder="your@email.com"
+            required
+            fullWidth
+            variant="outlined"
+          />
+        </FormControl>
+        <FormControl>
+          <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+            <FormLabel htmlFor="password">Password</FormLabel>
+            <Link component="button" onClick={() => setOpen(true)} variant="body2">Forgot your password?</Link>
           </Box>
-        </Paper>
-      </Container>
-    </Box>
+          <TextField
+            required
+            fullWidth
+            name="password"
+            placeholder="••••••"
+            type={showPassword ? 'text' : 'password'}
+            id="password"
+            variant="outlined"
+            error={passwordError}
+            helperText={passwordErrorMessage}
+            value={password}
+            onChange={handlePasswordChange}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton onClick={togglePasswordVisibility}>
+                    {showPassword ? <Visibility /> : <VisibilityOff />}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
+          />
+        </FormControl>
+
+        <Checkbox value="remember" color="primary" label="Remember me" />
+        <ForgotPassword open={open} handleClose={() => setOpen(false)} />
+        <Button type="submit" fullWidth variant="contained">Sign in</Button>
+        <Typography sx={{ textAlign: 'center' }}>
+          Don't have an account? <Link to="/sign-up">Sign up</Link>
+        </Typography>
+      </Box>
+      <Divider>or</Divider>
+      <Button fullWidth variant="outlined" onClick={() => alert('Sign in with Google')} startIcon={<GoogleIcon />}>
+        Sign in with Google
+      </Button>
+    </Card>
   );
 }
-
-export default ProfilePage;
