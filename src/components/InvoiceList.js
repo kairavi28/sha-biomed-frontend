@@ -69,22 +69,35 @@ const InvoiceList = () => {
   useEffect(() => {
     const fetchInvoices = async () => {
       try {
-        const invoicesData = {};
-        for (const facility of selectedFacilities) {
-          const response = await axios.get(`http://localhost:5000/invoice/${facility}`);
-          invoicesData[facility] = response.data;
-        }
-        setInvoices(invoicesData);
+        const invoicesData = {}; 
+  
+        // Fetch invoices for all facilities
+        const fetchPromises = selectedFacilities.map(async (facility) => {
+          try {
+            const response = await axios.get(`http://localhost:5000/invoice/${facility}`);
+            invoicesData[facility] = response.data.length ? response.data : []; // Store the result
+          } catch (error) {
+            console.error(`Error fetching invoices for ${facility}:`, error);
+            invoicesData[facility] = []; // Ensure it does not break due to one failed request
+          }
+        });
+  
+        await Promise.all(fetchPromises); // Wait for all requests to complete
+  
+        setInvoices((prevInvoices) => ({
+          ...prevInvoices, // Preserve previous invoices in case of partial updates
+          ...invoicesData, // Merge newly fetched data
+        }));
       } catch (error) {
         console.error("Error fetching invoices:", error);
       }
     };
-
+  
     if (selectedFacilities.length > 0) {
       fetchInvoices();
     }
   }, [selectedFacilities]);
-
+  
   const totalAmountDue = Object.values(invoices).flat().reduce((acc, invoice) => acc + (invoice.balanceDue || 0), 0);
   const totalAmountPaid = Object.values(invoices).flat().reduce((acc, invoice) => acc + (invoice.totalAmt || 0) - (invoice.balanceDue || 0), 0);
 
@@ -137,7 +150,7 @@ const InvoiceList = () => {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {invoices[facility]?.length > 0 ? (
+                {(invoices[facility] && invoices[facility].length > 0) ? (
                     invoices[facility].map((invoice) => (
                       <TableRow key={invoice._id} hover>
                         <TableCell>{invoice.fileName || "N/A"}</TableCell>
