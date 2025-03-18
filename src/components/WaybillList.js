@@ -40,14 +40,13 @@ const WaybillList = () => {
             setLoading(true);
 
             const currentUserSession = JSON.parse(sessionStorage.getItem("userData"));
-            const currentUserId = currentUserSession ? currentUserSession.id : null;
+            const currentUserId = currentUserSession.id ? currentUserSession.id : currentUserSession._id;
 
             if (!currentUserId) {
                 console.error("User ID is undefined");
                 setLoading(false);
                 return;
             }
-
             try {
                 const response = await axios.get(`http://localhost:5000/user/${currentUserId}`);
                 const approvedFacilities = response.data?.facilities
@@ -60,7 +59,6 @@ const WaybillList = () => {
                 setLoading(false);
             }
         };
-
         fetchUserData();
     }, []);
 

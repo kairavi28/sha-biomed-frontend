@@ -14,7 +14,6 @@ import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { useMsal } from "@azure/msal-react";
 import { InteractionType } from "@azure/msal-browser";
 
-
 const Card = styled(MuiCard)(({ theme }) => ({
   display: 'flex',
   flexDirection: 'column',
@@ -47,18 +46,19 @@ export default function SignInCard() {
     console.log('handle microsoft login function triggered');
     try {
       const loginResponse = await instance.loginPopup({
-        scopes: ["User.Read"], // Add necessary scopes
+        scopes: ["User.Read"], 
       });
-
-      console.log("Login Success:", loginResponse);
-      sessionStorage.setItem("userData", JSON.stringify(loginResponse.account));
       //store in db 
       const responseObj = await axios.post(`http://localhost:5000/user/microsoft-signin`, loginResponse.account, {
         headers: { "Content-Type": "application/json" },
       });
-      console.log('response', responseObj);
-      //window.location.href = "/home"; // Redirect after login
-      console.log(loginResponse.account);
+      sessionStorage.setItem("userData", JSON.stringify(responseObj.data.user));
+      if(responseObj != null) {
+        window.location.href = "/home"; 
+      } else {
+        alert("Error while logging in");
+      }
+      
     } catch (error) {
       console.error("Login Failed:", error);
     }

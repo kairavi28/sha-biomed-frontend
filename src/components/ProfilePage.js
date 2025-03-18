@@ -33,7 +33,7 @@ function ProfilePage() {
   const [availableFacilities, setAvailableFacilities] = useState([]);
   const [selectedFacilities, setSelectedFacilities] = useState([]);
   const userSession = JSON.parse(sessionStorage.getItem("userData"));
-  const userId = userSession ? userSession.id : null;
+  const userId = userSession.id ? userSession.id : userSession._id;
   const [dialogOpen, setDialogOpen] = useState(false);
   const [dialogMessage, setDialogMessage] = useState("");
   //Snackbar for notifications
@@ -50,9 +50,11 @@ function ProfilePage() {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
+        console.log(userId);
         const response = await axios.get(`http://localhost:5000/user/${userId}`);
+
+        console.log('User',response);
         setUserData(response.data);
-  
         if (response.data?.facilities) {
           const approvedFacilities = response.data.facilities
             .filter(facility => facility.approved)
@@ -105,8 +107,8 @@ function ProfilePage() {
   useEffect(() => {
     const interval = setInterval(async () => {
       const currentUserSession = JSON.parse(sessionStorage.getItem("userData"));
-      const currentUserId = currentUserSession ? currentUserSession.id : null;
-      
+      const currentUserId = currentUserSession.id ? currentUserSession.id : currentUserSession._id;
+     
       if (!currentUserId) {
         console.error("User ID is undefined inside interval");
         return;
