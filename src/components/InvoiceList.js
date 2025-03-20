@@ -75,18 +75,18 @@ const InvoiceList = () => {
         const fetchPromises = selectedFacilities.map(async (facility) => {
           try {
             const response = await axios.get(`http://localhost:5000/invoice/${facility}`);
-            invoicesData[facility] = response.data.length ? response.data : []; // Store the result
+            invoicesData[facility] = response.data.length ? response.data : []; 
           } catch (error) {
             console.error(`Error fetching invoices for ${facility}:`, error);
-            invoicesData[facility] = []; // Ensure it does not break due to one failed request
+            invoicesData[facility] = []; 
           }
         });
   
         await Promise.all(fetchPromises); // Wait for all requests to complete
   
         setInvoices((prevInvoices) => ({
-          ...prevInvoices, // Preserve previous invoices in case of partial updates
-          ...invoicesData, // Merge newly fetched data
+          ...prevInvoices, 
+          ...invoicesData, 
         }));
       } catch (error) {
         console.error("Error fetching invoices:", error);

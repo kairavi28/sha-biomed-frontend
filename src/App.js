@@ -13,6 +13,8 @@ import InstructionPage from "./components/InstructionPage";
 import InvoiceList from "./components/InvoiceList";
 import WaybillList from "./components/WaybillList";
 import AuthCallback from "./components/AuthCallback";
+import Dash from "./components/Dash";
+import FeedbackSlider from "./components/FeedbackSlider";
 
 function App() {
   return (
@@ -29,6 +31,8 @@ function App() {
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/invoice" element={<InvoiceList />} />
         <Route path="/waybill" element={<WaybillList />} />
+        <Route path="/dash" element={<Dash/>} />
+        <Route path="/slider" element={<FeedbackSlider/>} />
       </Route>
     </Routes>
   );
@@ -48,6 +52,8 @@ function LayoutWithNavbar() {
         <Route path="/blog" element={<Blog />} />
         <Route path="/instruction" element={<InstructionPage />} />
         <Route path="/profile" element={<ProfilePage />} />
+        <Route path="/dash" element={<Dash/>} />
+        <Route path="/slider" element={<FeedbackSlider/>} />
       </Routes>
     </>
   );

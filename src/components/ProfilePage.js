@@ -53,13 +53,13 @@ function ProfilePage() {
         console.log(userId);
         const response = await axios.get(`http://localhost:5000/user/${userId}`);
 
-        console.log('User',response);
+        console.log('User', response);
         setUserData(response.data);
         if (response.data?.facilities) {
           const approvedFacilities = response.data.facilities
             .filter(facility => facility.approved)
             .map(facility => facility.name);
-  
+
           setSelectedFacilities(approvedFacilities);
 
         }
@@ -69,7 +69,7 @@ function ProfilePage() {
         setLoading(false);
       }
     };
-  
+
     const fetchFacilities = async () => {
       try {
         const response = await axios.get("http://localhost:5000/json/company_name");
@@ -108,21 +108,21 @@ function ProfilePage() {
     const interval = setInterval(async () => {
       const currentUserSession = JSON.parse(sessionStorage.getItem("userData"));
       const currentUserId = currentUserSession.id ? currentUserSession.id : currentUserSession._id;
-     
+
       if (!currentUserId) {
         console.error("User ID is undefined inside interval");
         return;
       }
-  
+
       try {
         const response = await axios.get(`http://localhost:5000/user/${currentUserId}`);
         const approvedFacilities = response.data?.facilities
           .filter(facility => facility.approved)
           .map(facility => facility.name);
-  
+
         setUserData(response.data);
         setSelectedFacilities(approvedFacilities);
-  
+
         if (response.data?.facilities.some(facility => facility.approved)) {
           window.location.reload();
         }
@@ -130,10 +130,10 @@ function ProfilePage() {
         console.error("Error checking facility approval:", err);
       }
     }, 3 * 60 * 1000);
-  
+
     return () => clearInterval(interval);
   }, []);
-  
+
 
   const handleSave = async () => {
     const formData = new FormData();
@@ -141,45 +141,42 @@ function ProfilePage() {
     formData.append("lastname", userData.lastname);
     formData.append("email", userData.email);
     formData.append("facilities", JSON.stringify(selectedFacilities));
-  
+
     if (imageFile) {
       formData.append("avatar", imageFile);
     }
-  
+
     try {
       // Send update request
       const response = await axios.put(`http://localhost:5000/user/edit/${userId}`, formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
-  
+
       // Fetch updated user data
       const updatedResponse = await axios.get(`http://localhost:5000/user/${userId}`);
       setUserData(updatedResponse.data);
-  
+
       const approvedFacilities = updatedResponse.data?.facilities
         .filter(facility => facility.approved)
         .map(facility => facility.name);
-  
+
       setSelectedFacilities(approvedFacilities);
-  
+
       setIsEditing(false);
       setSnackbar({
         open: true,
         message: "PROFILE CHANGES ARE SAVED SUCCESSFULLY",
         severity: "success",
       });
-  
-      // Check if any newly added facilities need approval
+
       if (response.data.newlyAddedFacilities.length > 0) {
         const facilityNames = response.data.newlyAddedFacilities;
-  
-        // Send approval request for each new facility
         for (const facilityName of facilityNames) {
           await axios.post(`http://localhost:5000/user/request-facility`, { userId, facilityName }, {
             headers: { "Content-Type": "application/json" },
           });
         }
-  
+
         setDialogMessage(`Facility ${facilityNames.join(", ")} has been sent for approval. It will be approved within 24 hours or up to 2 business days.`);
         setDialogOpen(true);
       }
@@ -188,7 +185,7 @@ function ProfilePage() {
       setError("Failed to update profile.");
     }
   };
-  
+
 
   if (loading) {
     return (
@@ -377,7 +374,12 @@ function ProfilePage() {
           {snackbar.message}
         </Alert>
       </Snackbar>
-
+      <Container maxWidth="lg">
+        <Paper elevation={4} sx={{ p: 4, borderRadius: 3 }}>
+          <Typography variant="h6" align="center" fontWeight="bold" mb={4}>Documents</Typography>
+          {error && <Typography color="error">{error}</Typography>}
+        </Paper>
+      </Container>
     </Box>
   );
 }
