@@ -374,12 +374,12 @@ function ProfilePage() {
           {snackbar.message}
         </Alert>
       </Snackbar>
-      <Container maxWidth="lg">
+      {/* <Container maxWidth="lg">
         <Paper elevation={4} sx={{ p: 4, borderRadius: 3 }}>
           <Typography variant="h6" align="center" fontWeight="bold" mb={4}>Documents</Typography>
           {error && <Typography color="error">{error}</Typography>}
         </Paper>
-      </Container>
+      </Container> */}
     </Box>
   );
 }

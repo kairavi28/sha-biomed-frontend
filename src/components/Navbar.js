@@ -270,12 +270,22 @@ const Navbar = () => {
                 <FileCopyIcon fontSize="small" />
                 <Typography variant="inherit">Invoices</Typography>
               </MenuItem>
+              <MenuItem
+                onClick={() => {
+                  handleMenuClose();
+                  navigate("/invoice");
+                }}
+                sx={{ display: "flex", gap: 1 }}
+              >
+                <FileCopyIcon fontSize="small" />
+                <Typography variant="inherit">Certificate of Destruction</Typography>
+              </MenuItem>
               <Divider />
               <MenuItem
                 onClick={() => {
                   handleMenuClose();
                   axios
-                    .post("http://35.182.166.248/logout")
+                    .post("http://localhost:5000/logout")
                     .then(() => {
                       navigate("/");
                     })
