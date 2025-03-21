@@ -14,6 +14,7 @@ import InvoiceList from "./components/InvoiceList";
 import WaybillList from "./components/WaybillList";
 import AuthCallback from "./components/AuthCallback";
 import Dash from "./components/Dash";
+import Cod from "./components/Cod";
 import FeedbackSlider from "./components/FeedbackSlider";
 
 function App() {
@@ -33,6 +34,7 @@ function App() {
         <Route path="/waybill" element={<WaybillList />} />
         <Route path="/dash" element={<Dash/>} />
         <Route path="/slider" element={<FeedbackSlider/>} />
+        <Route path="/cod" element={<Cod/>} />
       </Route>
     </Routes>
   );
@@ -54,6 +56,7 @@ function LayoutWithNavbar() {
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/dash" element={<Dash/>} />
         <Route path="/slider" element={<FeedbackSlider/>} />
+        <Route path="/cod" element={<Cod/>} />
       </Routes>
     </>
   );

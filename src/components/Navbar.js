@@ -273,7 +273,7 @@ const Navbar = () => {
               <MenuItem
                 onClick={() => {
                   handleMenuClose();
-                  navigate("/invoice");
+                  navigate("/cod");
                 }}
                 sx={{ display: "flex", gap: 1 }}
               >
