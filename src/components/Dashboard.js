@@ -245,12 +245,26 @@ function Dashboard() {
       {/* Hero Section */}
       <Box sx={{ background: "linear-gradient(to bottom, white, #f0f8ff)", minHeight: "100vh" }}>
         {/* Hero Section with Animation */}
-        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1 }}>
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 1, ease: "easeOut" }}
+        >
           <Box sx={{ position: "relative", textAlign: "center", color: "white", pb: 6 }}>
-            <AwesomeSlider bullets={false} play interval={4000} style={{ height: "700px" }}>
+            <AwesomeSlider
+              bullets={false}
+              play
+              interval={4000}
+              style={{ height: "700px" }}
+              organicArrows={true}
+              onTransitionStart={(event) => {
+                event.currentSlide.classList.add("zoom-effect");
+                setTimeout(() => event.currentSlide.classList.remove("zoom-effect"), 1000);
+              }}
+            >
               {[image1, image2].map((img, index) => (
-                <div key={index}>
-                  <img
+                <div key={index} className="slide-container">
+                  <motion.img
                     src={img}
                     alt={`Slide ${index + 1}`}
                     style={{
@@ -258,12 +272,26 @@ function Dashboard() {
                       objectFit: "cover",
                       display: "block",
                     }}
+                    initial={{ scale: 1.1 }}
+                    animate={{ scale: 1 }}
+                    transition={{ duration: 1 }}
                   />
-                </div>))}
+                </div>
+              ))}
             </AwesomeSlider>
-            <Typography variant="h5" sx={{ mt: 3, fontWeight: "bold" }}>Leading Biohazard Waste Disposal</Typography>
+
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.5, duration: 0.8 }}
+            >
+              <Typography variant="h5" sx={{ mt: 3, fontWeight: "bold" }}>
+                Leading Biohazard Waste Disposal
+              </Typography>
+            </motion.div>
           </Box>
         </motion.div>
+
         <Container sx={{ textAlign: "center" }}>
           {/* <Button
             variant="contained"
@@ -309,7 +337,7 @@ function Dashboard() {
                           borderRadius: "16px",
                           padding: "35px",
                           backdropFilter: "blur(10px)",
-                          WebkitBackdropFilter: "blur(10px)", // Safari Support
+                          WebkitBackdropFilter: "blur(10px)",
                           textAlign: "center",
                           border: "1px solid rgba(216, 232, 247, 0.91)",
                           display: "flex",
@@ -380,7 +408,7 @@ function Dashboard() {
                   overflow: "hidden",
                   padding: "10px",
                   transition: "all 0.3s ease-in-out",
-                  '&:hover': { transform: "scale(1.05)", boxShadow: "0px 10px 25px rgba(44, 56, 233, 0.5)" },
+                  '&:hover': { transform: "scale(1.02)", boxShadow: "0px 10px 25px rgba(44, 56, 233, 0.5)" },
                 }}
               >
                 <Swiper modules={[Autoplay]} autoplay={{ delay: 4000 }} spaceBetween={20} slidesPerView={1} style={{ width: "100%", height: "100%" }}>

@@ -218,18 +218,25 @@ const Navbar = () => {
             >
               Waste Packaging Guide
             </Button>
-            <Button onClick={handleResourceMenuOpen} sx={{
-              color: isActive("/instruction") ? "#C9CC3F" : "#003366",
-              fontWeight: isActive("/instruction") ? "bold" : "bold",
-              textTransform: "none",
-              fontSize: "16px",
-              borderBottom: isActive("/instruction") ? "2px solid #C9CC3F" : "none",
-              "&:hover": {
-                color: "#ffffff",
-                backgroundColor: "#C9CC3F",
-                borderRadius: "8px",
-              },
-            }}> Resources</Button>
+            {/* Resources Tab */}
+            <Button
+              onClick={handleResourceMenuOpen}
+              sx={{
+                color: isActive("/waybill") || isActive("/invoice") || isActive("/cod") ? "#C9CC3F" : "#003366",
+                fontWeight: (isActive("/waybill") || isActive("/invoice") || isActive("/cod")) ? "bold" : "bold",
+                textTransform: "none",
+                fontSize: "16px",
+                borderBottom: (isActive("/waybill") || isActive("/invoice") || isActive("/cod")) ? "2px solid #C9CC3F" : "none",
+                "&:hover": {
+                  color: "#ffffff",
+                  backgroundColor: "#C9CC3F",
+                  borderRadius: "8px",
+                },
+              }}
+            >
+              Resources
+            </Button>
+
             <Menu
               anchorEl={anchorElResources}
               open={Boolean(anchorElResources)}
@@ -243,21 +250,54 @@ const Navbar = () => {
                 },
               }}
             >
-              <MenuItem onClick={() => { navigate("/waybill"); handleResourceMenuClose(); }} sx={{ display: "flex", gap: 1 }} >
+              <MenuItem
+                onClick={() => { navigate("/waybill"); handleResourceMenuClose(); }}
+                sx={{
+                  display: "flex", gap: 1,
+                  backgroundColor: isActive("/waybill") ? "#C9CC3F" : "transparent",
+                  color: isActive("/waybill") ? "#ffffff" : "inherit",
+                  "&:hover": {
+                    backgroundColor: isActive("/waybill") ? "#C9CC3F" : "#f0f0f0",
+                  }
+                }}
+              >
                 <ReceiptIcon fontSize="small" />
                 <Typography variant="inherit">Waybill</Typography>
               </MenuItem>
-              <MenuItem onClick={() => { navigate("/invoice"); handleResourceMenuClose(); }} sx={{ display: "flex", gap: 1 }}>
+
+              <MenuItem
+                onClick={() => { navigate("/invoice"); handleResourceMenuClose(); }}
+                sx={{
+                  display: "flex", gap: 1,
+                  backgroundColor: isActive("/invoice") ? "#C9CC3F" : "transparent",
+                  color: isActive("/invoice") ? "#ffffff" : "inherit",
+                  "&:hover": {
+                    backgroundColor: isActive("/invoice") ? "#C9CC3F" : "#f0f0f0",
+                  }
+                }}
+              >
                 <FileCopyIcon fontSize="small" />
                 <Typography variant="inherit">Invoices</Typography>
               </MenuItem>
+
               <Divider />
-              <MenuItem onClick={() => { navigate("/cod"); handleResourceMenuClose(); }} sx={{ display: "flex", gap: 1 }}>
+
+              <MenuItem
+                onClick={() => { navigate("/cod"); handleResourceMenuClose(); }}
+                sx={{
+                  display: "flex", gap: 1,
+                  backgroundColor: isActive("/cod") ? "#C9CC3F" : "transparent",
+                  color: isActive("/cod") ? "#ffffff" : "inherit",
+                  "&:hover": {
+                    backgroundColor: isActive("/cod") ? "#C9CC3F" : "#f0f0f0",
+                  }
+                }}
+              >
                 <FileCopyIcon fontSize="small" />
                 <Typography variant="inherit">Certificate of Destruction</Typography>
               </MenuItem>
             </Menu>
-            
+
             {/* Profile Icon with Dropdown Menu */}
             <IconButton
               onClick={handleMenuOpen}

@@ -7,7 +7,7 @@ import ContactSlider from "./ContactSlider";
 
 const CallToAction = () => {
   return (
-    <Box sx={{ mt: 8, py: 4, background: "linear-gradient(to right,rgb(167, 211, 64), rgb(4, 23, 65))", borderRadius: 2 }}>
+    <Box sx={{ mt: 8, py: 4, background: "rgb(4, 23, 65)", borderRadius: 2 }}>
       <Container sx={{ mt: 1, mb: 1 }}>
         <Typography variant="h4" sx={{ mb: 4, fontWeight: "bold", color: "#fff", textAlign: "center" }}>Let's Talk!</Typography>
         {/* <Typography variant="body1" sx={{ mb: 3, color: "#fff" }}>
