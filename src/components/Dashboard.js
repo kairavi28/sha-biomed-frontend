@@ -14,25 +14,27 @@ import {
   CardContent,
   Snackbar,
   Link,
-  Alert
+  Alert,
+  CardActionArea
 } from "@mui/material";
 import { motion } from "framer-motion";
-import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
 import { FaRecycle, FaSyringe, FaPills, FaCalendarAlt, FaFileAlt, FaTruck, FaClipboardCheck, FaHospital } from "react-icons/fa";
 import { GiNuclearWaste } from "react-icons/gi";
 import axios from "axios";
+import { FaPrescriptionBottleMedical } from "react-icons/fa6";
 import AwesomeSlider from "react-awesome-slider";
 import "react-awesome-slider/dist/styles.css";
-import image1 from "../assets/images/bg_full_home.png";
-import image3 from "../assets/images/bg_full_2.png";
-import biomedman from "../assets/images/biomedman.png";
+import image1 from "../assets/images/background_1.png";
+import image2 from "../assets/images/background_2.png";
 import "react-international-phone/style.css";
 import { useNavigate } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/pagination";
-import { Pagination, Navigation } from "swiper/modules";
 import FeedbackSlider from "./FeedbackSlider";
+import ContentSlider from "./ContentSlider";
+import CallToAction from "./CallToAction";
+import { Navigation, Pagination, Autoplay } from "swiper/modules";
 
 const slides = [
   {
@@ -59,14 +61,6 @@ const slides = [
 
 const criticalRoleSlides = [
   {
-    "title": "Protection of Healthcare Workers",
-    "description": "Proper packaging prevents exposure, ensuring safety and accountability."
-  },
-  {
-    "title": "Preventing Disease Transmission",
-    "description": "Secure waste packaging stops infections, protecting workers and communities."
-  },
-  {
     "title": "Environmental Responsibility",
     "description": "Safe disposal prevents harm to nature, protecting soil, water, and wildlife."
   },
@@ -75,24 +69,24 @@ const criticalRoleSlides = [
     "description": "Following guidelines ensures safety, ethical responsibility, and legal compliance."
   },
   {
-    "title": "Community Well-being Commitment",
+    "title": "Community Well-being",
     "description": "Safe waste handling builds trust, protects lives, and upholds dignity."
-  }];
+  },
+  {
+    "title": "Protection of Healthcare Workers",
+    "description": "Proper packaging prevents exposure, ensuring safety and accountability."
+  },
+  {
+    "title": "Preventing Disease Transmission",
+    "description": "Secure waste packaging stops infections, protecting workers and communities."
+  },
+];
 
 const services = [
   { title: "Biomedical Waste Disposal", icon: <FaRecycle size={40} color="#003366" /> },
   { title: "Cytotoxic Waste Disposal", icon: <GiNuclearWaste size={40} color="#003366" /> },
-  { title: "Anatomical Waste Disposal", icon: <FaSyringe size={40} color="#003366" /> },
+  { title: "Anatomical Waste Disposal", icon: <FaPrescriptionBottleMedical size={40} color="#003366" /> },
   { title: "Pharmaceutical Waste Recovery", icon: <FaPills size={40} color="#003366" /> },
-  { title: "Customizable Pickup Schedules", icon: <FaCalendarAlt size={40} color="#003366" /> },
-  { title: "Compliance Assistance", icon: <FaFileAlt size={40} color="#003366" /> },
-];
-
-const complaintData = [
-  { month: "Apr", complaints: 2 },
-  { month: "May", complaints: 0 },
-  { month: "Jun", complaints: 0 },
-  { month: "Jul", complaints: 0 },
 ];
 
 const testimonials = [
@@ -252,9 +246,9 @@ function Dashboard() {
       <Box sx={{ background: "linear-gradient(to bottom, white, #f0f8ff)", minHeight: "100vh" }}>
         {/* Hero Section with Animation */}
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1 }}>
-          <Box sx={{ position: "relative", textAlign: "center", color: "white", pb: 6, pt: 4 }}>
-            <AwesomeSlider bullets={false} play interval={4000} style={{ height: "500px" }}>
-              {[image1, image3].map((img, index) => (
+          <Box sx={{ position: "relative", textAlign: "center", color: "white", pb: 6 }}>
+            <AwesomeSlider bullets={false} play interval={4000} style={{ height: "700px" }}>
+              {[image1, image2].map((img, index) => (
                 <div key={index}>
                   <img
                     src={img}
@@ -270,17 +264,152 @@ function Dashboard() {
             <Typography variant="h5" sx={{ mt: 3, fontWeight: "bold" }}>Leading Biohazard Waste Disposal</Typography>
           </Box>
         </motion.div>
+        <Container sx={{ textAlign: "center" }}>
+          {/* <Button
+            variant="contained"
+            sx={{ backgroundColor: "#A9AC2B", "&:hover": { backgroundColor: "#8C9A1B" } }}
+            onClick={() => setFormOpen(true)}
+          >
+            File a Complaint
+          </Button> */}
+        </Container>
+
+        {/* Image slider with content box */}
+        <Container maxWidth="lg" sx={{ py: 5 }}>
+          <Grid container spacing={5} alignItems="stretch">
+            {/* Right Content Slider */}
+            <Grid item xs={12} md={6} sx={{ display: "flex" }}>
+              <Box
+                sx={{
+                  width: "100%",
+                  height: "100%",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <Swiper
+                  modules={[Navigation, Autoplay]}
+                  navigation
+                  autoplay={{ delay: 3000 }}
+                  spaceBetween={20}
+                  slidesPerView={1}
+                  style={{ width: "100%", height: "100%" }}
+                >
+                  {[
+                    { title: "Biohazard Experts", text: "Specialists in safe, compliant waste disposal." },
+                    { title: "Saskatchewan-Based", text: "Family-owned, serving communities with excellence." },
+                    { title: "Leading Since 1992", text: "Western Canada’s trusted name in biohazard recovery." },
+                    { title: "Strategic Locations", text: "Operations in Regina, Saskatoon & Aberdeen, SK." },
+                  ].map((slide, index) => (
+                    <SwiperSlide key={index}>
+                      <Box
+                        sx={{
+                          backgroundColor: "#fff",
+                          borderRadius: "16px",
+                          padding: "35px",
+                          backdropFilter: "blur(10px)",
+                          WebkitBackdropFilter: "blur(10px)", // Safari Support
+                          textAlign: "center",
+                          border: "1px solid rgba(216, 232, 247, 0.91)",
+                          display: "flex",
+                          flexDirection: "column",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          minHeight: "320px",
+                          transition: "all 0.3s ease-in-out",
+                          '&:hover': {
+                            transform: "scale(1.03)",
+                            boxShadow: "0px 10px 25px rgba(44, 56, 233, 0.5)"
+                          }
+                        }}
+                      >
+                        <Typography
+                          variant="h5"
+                          sx={{
+                            fontWeight: "bold",
+                            mb: 2,
+                            background: " #092C74",
+                            WebkitBackgroundClip: "text",
+                            WebkitTextFillColor: "transparent",
+                          }}
+                        >
+                          {slide.title}
+                        </Typography>
+                        <Typography variant="body1" color="textSecondary">
+                          {slide.text}
+                        </Typography>
+                        <Button
+
+                          variant="contained"
+                          component="a"
+                          href="https://www.biomedwaste.com"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          sx={{
+                            mt: 3,
+                            background: "linear-gradient(to right, #BAC400, #E0E721)",
+                            color: "#092C74",
+                            px: 4,
+                            py: 1,
+                            borderRadius: "12px",
+                            boxShadow: "0px 4px 12px rgba(44, 56, 233, 0.4)",
+                            '&:hover': { background: "linear-gradient(135deg,rgb(98, 129, 233),rgb(164, 208, 231))" },
+                          }}
+                        ><b>
+                            Learn More</b>
+                        </Button>
+                      </Box>
+                    </SwiperSlide>
+                  ))}
+                </Swiper>
+              </Box>
+            </Grid>
+
+            {/* Left Image Slider */}
+            <Grid item xs={12} md={6} sx={{ display: "flex" }}>
+              <Box
+                sx={{
+                  width: "100%",
+                  height: "100%",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  borderRadius: "16px",
+                  boxShadow: "0px 6px 16px rgba(0, 0, 0, 0.15)",
+                  overflow: "hidden",
+                  padding: "10px",
+                  transition: "all 0.3s ease-in-out",
+                  '&:hover': { transform: "scale(1.05)", boxShadow: "0px 10px 25px rgba(44, 56, 233, 0.5)" },
+                }}
+              >
+                <Swiper modules={[Autoplay]} autoplay={{ delay: 4000 }} spaceBetween={20} slidesPerView={1} style={{ width: "100%", height: "100%" }}>
+                  <SwiperSlide>
+                    <ContentSlider />
+                  </SwiperSlide>
+                </Swiper>
+              </Box>
+            </Grid>
+          </Grid>
+        </Container>
+
 
         {/* Services Section with Animation */}
-        <Container>
-          <Typography variant="h5" sx={{ mt: 4, textAlign: "center", fontWeight: "bold", color: "#003366" }}>Our Services</Typography>
+        <Container sx={{ mt: 10 }}>
+          <Typography variant="h4" sx={{ mt: 4, textAlign: "center", fontWeight: "bold", color: "#003366" }}>
+            Biomedical Waste Management Services
+          </Typography>
           <Grid container spacing={3} sx={{ mt: 3 }}>
             {services.map((service, index) => (
-              <Grid item xs={12} md={4} key={index}>
+              <Grid item xs={12} sm={6} key={index}>
                 <motion.div whileHover={{ scale: 1.05 }}>
-                  <Card sx={{ textAlign: "center", boxShadow: 3, p: 3 }}>
-                    {service.icon}
-                    <Typography variant="h6" sx={{ mt: 2, fontWeight: "bold", color: "#003366" }}>{service.title}</Typography>
+                  <Card sx={{ textAlign: "center", boxShadow: 3, p: 3, '&:hover': { transform: "scale(1.00)", boxShadow: "5px 6px 16px rgb(44, 56, 233)", } }}>
+                    <CardActionArea component="a" href={`https://biomedwaste.com/services/`} target="_blank" rel="noopener noreferrer">
+                      {service.icon}
+                      <Typography variant="h6" sx={{ mt: 2, fontWeight: "bold", color: "#003366" }}>
+                        {service.title}
+                      </Typography>
+                    </CardActionArea>
                   </Card>
                 </motion.div>
               </Grid>
@@ -288,26 +417,6 @@ function Dashboard() {
           </Grid>
         </Container>
 
-        {/* Complaints Chart */}
-        <Container sx={{ mt: 6, textAlign: "center" }}>
-          <Typography variant="h5" sx={{ fontWeight: "bold", color: "#003366" }}>Monthly Complaints Overview</Typography>
-          <ResponsiveContainer width="100%" height={300}>
-            <BarChart data={complaintData}>
-              <XAxis dataKey="month" />
-              <YAxis />
-              <Tooltip />
-              <Bar dataKey="complaints" fill="#003366" />
-            </BarChart>
-          </ResponsiveContainer>
-
-          <Button
-            variant="contained"
-            sx={{ mt: 2, backgroundColor: "#A9AC2B", "&:hover": { backgroundColor: "#8C9A1B" } }}
-            onClick={() => setFormOpen(true)}
-          >
-            File a Complaint
-          </Button>
-        </Container>
         <Modal
           open={formOpen}
           onClose={handleFormClose}
@@ -493,12 +602,12 @@ function Dashboard() {
           Read a blog
         </Button>
 
-        <Box sx={{ mt: 8, py: 4, background: "linear-gradient(to right, #e0e721, #bac400, #306be3)", borderRadius: 2 }}>
+        <Box sx={{ mt: 8, py: 4, background: "rgb(4, 23, 65)", borderRadius: 2 }}>
           <Container sx={{ mt: 6, mb: 6, textAlign: "center" }}>
-            <Typography variant="h4" sx={{ mb: 4, fontWeight: "bold", color: "#003366" }}>
-              About
+            <Typography variant="h4" sx={{ mb: 4, fontWeight: "bold", color: "#fff" }}>
+              About Us
             </Typography>
-            <Typography variant="body1" sx={{ mb: 3, color: "#003366" }}>
+            <Typography variant="body1" sx={{ mb: 3, color: "#fff" }}>
               Properly packaging waste is essential to safeguarding health, ensuring regulatory compliance, and protecting the environment.
               This portal provides the tools and knowledge you need to adopt effective packaging practices that promote safety and sustainability.
             </Typography>
@@ -515,7 +624,7 @@ function Dashboard() {
             >
               {slides.map((item, index) => (
                 <SwiperSlide key={index}>
-                  <Card sx={{ textAlign: "center", boxShadow: 3, p: 2, borderRadius: 20 }}>
+                  <Card sx={{ textAlign: "center", cursor: "pointer", boxShadow: 3, p: 2, borderRadius: 20, '&:hover': { transform: "scale(1.00)", boxShadow: "5px 6px 16px rgb(44, 56, 233)", } }}>
                     <CardContent>
                       <Typography variant="h6" sx={{ fontWeight: "bold", color: "#003366" }}>
                         {item.title}
@@ -544,14 +653,14 @@ function Dashboard() {
       height: 20px;
       left: 577px;
       position: relative;
-      background-color: #306be3;
+      background-color: #fff;
     }
     .swiper-pagination-bullet-active {
-      background-color: #306be3;
+      background-color: #fff;
       transform: scale(1.3);
     }
     .swiper-button-prev, .swiper-button-next {
-      color: #306be3;
+      color: #fff;
       width: 40px;
       height: 40px;
     }
@@ -565,96 +674,85 @@ function Dashboard() {
               </style></div>
           </Container>
         </Box>
-        <Container sx={{ mt: 8 }}>
-          <Grid container spacing={4} alignItems="center">
+        <Container sx={{ mt: 8, textAlign: "center" }}>
+          <Typography
+            variant="h4"
+            sx={{
+              mb: 10,
+              textAlign: "center",
+              fontWeight: "bold",
+              color: "#003366",
+            }}
+          >
+            Services We Offer
+          </Typography>
+          <Grid container spacing={4} >
             {/* Services Section */}
-            <Grid item xs={12} md={8}>
-              <Typography
-                variant="h5"
-                sx={{
-                  mb: 4,
-                  textAlign: "center",
-                  fontWeight: "bold",
-                  color: "#003366",
-                }}
-              >
-                Services We Offer
-              </Typography>
-              <Grid container spacing={4}>
-                {[
-                  {
-                    title: "Biomedical Waste Disposal",
-                    description:
-                      "We process all types of biohazardous waste, ensuring safe and compliant disposal.",
-                    icon: <FaRecycle size={40} color="#003366" />,
-                  },
-                  {
-                    title: "Sharps Container Management",
-                    description:
-                      "Comprehensive management solutions for sharps containers in medical facilities.",
-                    icon: <FaSyringe size={40} color="#003366" />,
-                  },
-                  {
-                    title: "Pharmaceutical Waste Recovery",
-                    description:
-                      "Specialized recovery and disposal of expired or unused pharmaceuticals.",
-                    icon: <FaHospital size={40} color="#003366" />,
-                  },
-                  {
-                    title: "Customizable Pickup Schedules",
-                    description: "Flexible scheduling to suit your waste collection needs.",
-                    icon: <FaTruck size={40} color="#003366" />,
-                  },
-                  {
-                    title: "Compliance and Reporting Assistance",
-                    description:
-                      "Expert support in meeting regulatory compliance and reporting requirements.",
-                    icon: <FaClipboardCheck size={40} color="#003366" />,
-                  },
-                  {
-                    title: "Secure-A-Sharp® Service Program",
-                    description:
-                      "Providing peace of mind to restaurants, service stations, and small businesses.",
-                    icon: <FaSyringe size={40} color="#003366" />,
-                  },
-                  {
-                    title: "Cytotoxic Waste Disposal",
-                    description:
-                      "Safe and efficient handling of cytotoxic and hazardous medical waste.",
-                    icon: <FaRecycle size={40} color="#003366" />,
-                  },
-                  {
-                    title: "Anatomical Waste Disposal",
-                    description: "Ethical and secure disposal of anatomical waste with utmost care.",
-                    icon: <FaHospital size={40} color="#003366" />,
-                  },
-                  {
-                    title: "Terra™ Reusable Sharps Container Program",
-                    description:
-                      "Simple, cost-effective sharps management for clinical settings, prioritizing sustainability.",
-                    icon: <FaRecycle size={40} color="#003366" />,
-                  },
-                ].map((item, index) => (
-                  <Grid item xs={12} md={4} key={index}>
-                    <motion.div
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
-                      style={{ height: "100%" }}
-                    >
-                      <Card
-                        sx={{
-                          textAlign: "center",
-                          boxShadow: 3,
-                          borderRadius: 2,
-                          overflow: "hidden",
-                        }}
-                      >
+
+            <Grid container spacing={4}>
+              {[
+                {
+                  title: "Biomedical Waste Disposal",
+                  description: "We process all types of biohazardous waste, ensuring safe and compliant disposal.",
+                  icon: <FaRecycle size={40} color="#003366" />,
+                  link: "https://www.biomedwaste.com/",
+                },
+                {
+                  title: "Sharps Container Management",
+                  description: "Comprehensive management solutions for sharps containers in medical facilities.",
+                  icon: <FaSyringe size={40} color="#003366" />,
+                  link: "https://biomedwaste.com/services/secure-a-sharp-service-program/",
+                },
+                {
+                  title: "Pharmaceutical Waste Recovery",
+                  description: "Specialized recovery and disposal of expired or unused pharmaceuticals.",
+                  icon: <FaHospital size={40} color="#003366" />,
+                  link: "https://biomedwaste.com/product-category/recovery/",
+                },
+                {
+                  title: "Customizable Pickup Schedules",
+                  description: "Flexible scheduling to suit your waste collection needs. For booking a pickup, fill out a short form from our website.",
+                  icon: <FaTruck size={40} color="#003366" />,
+                  link: "https://biomedwaste.com/book-a-pickup/",
+                },
+                {
+                  title: "Compliance and Reporting Assistance",
+                  description: "Expert support in meeting regulatory compliance and reporting requirements.",
+                  icon: <FaClipboardCheck size={40} color="#003366" />,
+                  link: "https://www.biomedwaste.com/compliance-reporting-assistance",
+                },
+                {
+                  title: "Secure-A-Sharp® Service Program",
+                  description: "The Secure-A-Sharp® line of sharps containers, secure needle boxes and accessories are designed to reduce the risk of needle stick injuries in public and private spaces.",
+                  icon: <FaSyringe size={40} color="#003366" />,
+                  link: "https://biomedwaste.com/services/secure-a-sharp-service-program/",
+                },
+                {
+                  title: "Cytotoxic Waste Disposal",
+                  description: "Safe and efficient handling of cytotoxic and hazardous medical waste.",
+                  icon: <GiNuclearWaste size={40} color="#003366" />,
+                  link: "https://www.biomedwaste.com/",
+                },
+                {
+                  title: "Anatomical Waste Disposal",
+                  description: "Ethical and secure disposal of anatomical waste with utmost care.",
+                  icon: <FaPrescriptionBottleMedical size={40} color="#003366" />,
+                  link: "https://biomedwaste.com/product-category/recovery/",
+                },
+                {
+                  title: "Terra™ Program",
+                  description: "Simple, cost-effective sharps management for clinical settings, prioritizing sustainability.",
+                  icon: <FaRecycle size={40} color="#003366" />,
+                  link: "https://biomedwaste.com/product-category/terra/",
+                },
+              ].map((item, index) => (
+                <Grid item xs={12} md={4} key={index}>
+                  <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} style={{ height: "100%" }}>
+                    <a href={item.link} target="_blank" rel="noopener noreferrer" style={{ textDecoration: "none" }}>
+                      <Card sx={{ textAlign: "center", boxShadow: 3, borderRadius: 2, overflow: "hidden", cursor: "pointer", '&:hover': { transform: "scale(1.00)", boxShadow: "5px 6px 16px rgb(44, 56, 233)", } }}>
                         <CardContent>
                           <div style={{ marginBottom: "16px" }}>{item.icon}</div>
-                          <Typography
-                            variant="h6"
-                            sx={{ fontWeight: "bold", color: "#003366" }}
-                          >
+                          <Typography variant="h6" sx={{ fontWeight: "bold", color: "#003366" }}>
                             {item.title}
                           </Typography>
                           <Typography variant="body2" sx={{ mt: 2, color: "#555" }}>
@@ -662,40 +760,18 @@ function Dashboard() {
                           </Typography>
                         </CardContent>
                       </Card>
-                    </motion.div>
-                  </Grid>
-                ))}
-              </Grid>
+                    </a>
+                  </motion.div>
+                </Grid>
+              ))}
             </Grid>
             {/* Animated Image Section */}
-            <Grid item xs={12} md={4}>
-              <motion.div
-                animate={{ rotate: [0, 10, -10, 0], scale: [1, 1.1, 1, 1.1, 1] }}
-                transition={{ duration: 4, repeat: Infinity }}
-                style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  height: "100%",
-                }}
-              >
-                <img
-                  src={biomedman}
-                  alt="Animated Illustration"
-                  style={{
-                    width: "100%",
-                    height: "auto",
-                    borderRadius: "16px",
-                  }}
-                />
-              </motion.div>
-            </Grid>
           </Grid>
         </Container>
 
       </Box>
       {/* Proper Waste Packaging Section */}
-      <Box sx={{ mt: 8, py: 4, background: "linear-gradient(to right, #e0e721, #bac400, #306be3)", borderRadius: 2 }}>
+      <Box sx={{ mt: 8, py: 4, background: "rgb(172, 214, 72)", borderRadius: 2 }}>
         <Container sx={{ mt: 6, mb: 6 }}>
           <Typography variant="h4" sx={{ mb: 4, textAlign: "center", fontWeight: "bold", color: "#092d74" }}>
             The Critical Role of Proper Waste Packaging
@@ -717,7 +793,7 @@ function Dashboard() {
           >
             {criticalRoleSlides.map((item, index) => (
               <SwiperSlide key={index}>
-                <Card sx={{ textAlign: "center", boxShadow: 3, p: 2, borderRadius: 20 }}>
+                <Card sx={{ textAlign: "center", boxShadow: 3, p: 2, borderRadius: 20, '&:hover': { transform: "scale(1.00)", boxShadow: "5px 6px 16px rgb(59, 143, 4)", } }}>
                   <CardContent>
                     <Typography variant="h6" sx={{ fontWeight: "bold", color: "#003366" }}>
                       {item.title}
@@ -789,7 +865,7 @@ function Dashboard() {
         </Grid>
         <FeedbackSlider />
       </Container>
-
+      <CallToAction />
       {/* Footer */}
       <Box sx={{ backgroundColor: "#333", color: "#fff", textAlign: "center", py: 4 }}>
         <Typography variant="body2">

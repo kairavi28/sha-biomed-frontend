@@ -32,6 +32,7 @@ const Navbar = () => {
   const navigate = useNavigate();
   const location = useLocation(); // Get current route
   const [anchorEl, setAnchorEl] = useState(null);
+  const [anchorElResources, setAnchorElResources] = useState(null);
   const [openModal, setOpenModal] = useState(false); // State for modal open/close
   const [formData, setFormData] = useState({
     firstname: "",
@@ -57,6 +58,10 @@ const Navbar = () => {
   const handleMenuClose = () => {
     setAnchorEl(null);
   };
+
+  // Handle Resources menu open/close
+  const handleResourceMenuOpen = (event) => setAnchorElResources(event.currentTarget);
+  const handleResourceMenuClose = () => setAnchorElResources(null);
 
   // Handle modal open/close
   const handleModalOpen = () => setOpenModal(true);
@@ -109,7 +114,7 @@ const Navbar = () => {
   return (
     <>
       <AppBar
-        position="static"
+        position="sticky"
         sx={{
           backgroundColor: "#ffffff",
           color: "#003366",
@@ -213,6 +218,46 @@ const Navbar = () => {
             >
               Waste Packaging Guide
             </Button>
+            <Button onClick={handleResourceMenuOpen} sx={{
+              color: isActive("/instruction") ? "#C9CC3F" : "#003366",
+              fontWeight: isActive("/instruction") ? "bold" : "bold",
+              textTransform: "none",
+              fontSize: "16px",
+              borderBottom: isActive("/instruction") ? "2px solid #C9CC3F" : "none",
+              "&:hover": {
+                color: "#ffffff",
+                backgroundColor: "#C9CC3F",
+                borderRadius: "8px",
+              },
+            }}> Resources</Button>
+            <Menu
+              anchorEl={anchorElResources}
+              open={Boolean(anchorElResources)}
+              onClose={handleResourceMenuClose}
+              sx={{
+                mt: "5px",
+                "& .MuiPaper-root": {
+                  borderRadius: "8px",
+                  boxShadow: "0 4px 8px rgba(0,0,0,0.2)",
+                  minWidth: "180px",
+                },
+              }}
+            >
+              <MenuItem onClick={() => { navigate("/waybill"); handleResourceMenuClose(); }} sx={{ display: "flex", gap: 1 }} >
+                <ReceiptIcon fontSize="small" />
+                <Typography variant="inherit">Waybill</Typography>
+              </MenuItem>
+              <MenuItem onClick={() => { navigate("/invoice"); handleResourceMenuClose(); }} sx={{ display: "flex", gap: 1 }}>
+                <FileCopyIcon fontSize="small" />
+                <Typography variant="inherit">Invoices</Typography>
+              </MenuItem>
+              <Divider />
+              <MenuItem onClick={() => { navigate("/cod"); handleResourceMenuClose(); }} sx={{ display: "flex", gap: 1 }}>
+                <FileCopyIcon fontSize="small" />
+                <Typography variant="inherit">Certificate of Destruction</Typography>
+              </MenuItem>
+            </Menu>
+            
             {/* Profile Icon with Dropdown Menu */}
             <IconButton
               onClick={handleMenuOpen}
@@ -249,36 +294,6 @@ const Navbar = () => {
               >
                 <Person fontSize="small" />
                 <Typography variant="inherit">Profile</Typography>
-              </MenuItem>
-              <MenuItem
-                onClick={() => {
-                  handleMenuClose();
-                  navigate("/waybill");
-                }}
-                sx={{ display: "flex", gap: 1 }}
-              >
-                <ReceiptIcon fontSize="small" />
-                <Typography variant="inherit">Billing</Typography>
-              </MenuItem>
-              <MenuItem
-                onClick={() => {
-                  handleMenuClose();
-                  navigate("/invoice");
-                }}
-                sx={{ display: "flex", gap: 1 }}
-              >
-                <FileCopyIcon fontSize="small" />
-                <Typography variant="inherit">Invoices</Typography>
-              </MenuItem>
-              <MenuItem
-                onClick={() => {
-                  handleMenuClose();
-                  navigate("/cod");
-                }}
-                sx={{ display: "flex", gap: 1 }}
-              >
-                <FileCopyIcon fontSize="small" />
-                <Typography variant="inherit">Certificate of Destruction</Typography>
               </MenuItem>
               <Divider />
               <MenuItem

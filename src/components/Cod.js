@@ -53,7 +53,6 @@ function COD() {
 
         setUserData(response.data);
         setSelectedFacilities(approvedFacilities);
-        alert(approvedFacilities);
         setLoading(false);
       } catch (err) {
         console.error("Error fetching user data:", err);

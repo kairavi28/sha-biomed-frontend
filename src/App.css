@@ -4,4 +4,11 @@
   background-color: #f9f9f9;
   text-align: center;
 }
-
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
