@@ -15,6 +15,7 @@ import {
 } from "@mui/material";
 import axios from "axios";
 import Link from "@mui/material/Link";
+import complaint_bg from '../assets/images/complaint_bg.png';
 
 // Helper function to convert base64 to a File object
 const dataURLToFile = (dataURL, filename) => {
@@ -159,13 +160,11 @@ function Complaints() {
                     setError("Failed to load issues. Please try again.");
                     setLoading(false);
                 });
-    
             // Removed the auto-reload interval
             // intervalId = setInterval(() => {
             //     window.location.reload();
             // }, 10000);
         }
-    
         // No need to clear interval since it's removed
         return () => {};
     }, [isDialogOpen, isFormActive]);
@@ -228,15 +227,15 @@ function Complaints() {
             {/* Hero Section */}
             <Box
                 sx={{
-                    height: "60vh",
+                    height: "50vh",
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
-                    backgroundImage: "url('/images/complaint.jpg')",
+                    backgroundImage: `url(${complaint_bg})`,
                     backgroundSize: "cover",
                     backgroundPosition: "center",
                     textAlign: "center",
-                    color: "#fff",
+                    color: "#003366",
                 }}>
                 <Container>
                     <Typography variant="h3" fontWeight="bold">

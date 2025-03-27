@@ -19,7 +19,7 @@ import {
 } from "@mui/material";
 import { motion } from "framer-motion";
 import { FaRecycle, FaSyringe, FaPills, FaCalendarAlt, FaFileAlt, FaTruck, FaClipboardCheck, FaHospital } from "react-icons/fa";
-import { GiNuclearWaste } from "react-icons/gi";
+import { GiConsoleController, GiNuclearWaste } from "react-icons/gi";
 import axios from "axios";
 import { FaPrescriptionBottleMedical } from "react-icons/fa6";
 import AwesomeSlider from "react-awesome-slider";
@@ -96,14 +96,13 @@ const testimonials = [
 
 function Dashboard() {
   const navigate = useNavigate();
+  const [userData, setUserData] = useState(null);
   const [formOpen, setFormOpen] = useState(false);
   const handleFormOpen = () => setFormOpen(true);
   const handleFormClose = () => setFormOpen(false);
   const [setError] = useState("");
   const [loading, setLoading] = useState(true);
-  const [facilityName, setFacilityName] = useState();
-  const userSession = JSON.parse(sessionStorage.getItem('userData'));
-  const userId = userSession ? userSession.id : null;
+  const [facilityName, setFacilityName] = useState([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     contactNumber: "",
@@ -123,22 +122,38 @@ function Dashboard() {
   };
 
   useEffect(() => {
-    const userData = JSON.parse(sessionStorage.getItem('userData'));
-    if (userData) {
+    const fetchUserData = async () => {
       setLoading(false);
-      setFacilityName(userData.facility);
-    }
+      const currentUserSession = JSON.parse(sessionStorage.getItem("userData"));
+      const currentUserId = currentUserSession.id ? currentUserSession.id : currentUserSession._id;
 
-    setSnackbar({
-      open: true,
-      message: `Hello ${userData.facility}!`,
-      severity: "success",
-    });
-  }, [userId]);
+      if (!currentUserId) {
+        console.error("User ID is undefined inside interval");
+        return;
+      }
+
+      try {
+        const response = await axios.get(`http://localhost:5000/user/${currentUserId}`);
+        setUserData(response.data);
+        console.log(userData);
+        if (response.data?.facilities.some(facility => facility.approved)) {
+          setSnackbar({
+            open: true,
+            message: `Hello ${response.data.firstname}!`,
+            severity: "success",
+          });
+        }
+      } catch (err) {
+        console.error("Error checking facility approval:", err);
+      }
+    };
+
+    fetchUserData();
+  }, []);
+
 
   const handleFileChange = (event) => {
     const files = Array.from(event.target.files);
-
     const previews = files.map((file) => {
       const reader = new FileReader();
       reader.readAsDataURL(file);
@@ -170,9 +185,10 @@ function Dashboard() {
     );
   }
 
+  {/* File a complaint box */ }
   const handleFormSubmit = async (event) => {
     event.preventDefault();
-    setIsSubmitting(true); // ✅ Now it's properly defined
+    setIsSubmitting(true);
 
     if (!formData.contactNumber || !formData.description) {
       setError("Please fill out all required fields.");
@@ -182,22 +198,36 @@ function Dashboard() {
 
     try {
       const formDataToSend = new FormData();
+
+      // Get user data from session
+      const currentUserSession = JSON.parse(sessionStorage.getItem("userData"));
+
+      // Append basic user info 
+      console.log('currentUserSession', currentUserSession);
+      formDataToSend.append("firstname", currentUserSession.firstname);
+      formDataToSend.append("lastname", currentUserSession.lastname);
+      formDataToSend.append("email", currentUserSession.email);
+
+      // Append facility names as comma-separated string
+      const facilityNames = currentUserSession.facilities.map(f => f.name).join(", ");
+      formDataToSend.append("facilities", facilityNames);
+
+      // Append complaint form data
       formDataToSend.append("facility", facilityName);
       formDataToSend.append("contactNumber", formData.contactNumber);
       formDataToSend.append("description", formData.description);
 
+      // Append photos
       formData.photos.forEach((photo) => {
         formDataToSend.append("photos", photo.file);
       });
 
-      setLoading(true);
+      setLoading(false);
 
       const response = await axios.post(
-        `http://35.182.166.248/api/client-complaint/add`,
+        `http://localhost:5000/client-complaint/add`,
         formDataToSend,
-        {
-          headers: { "Content-Type": "multipart/form-data" },
-        }
+        { headers: { "Content-Type": "multipart/form-data" } }
       );
 
       setSnackbar({
@@ -209,6 +239,7 @@ function Dashboard() {
       setFormData({ contactNumber: "", description: "", photos: [] });
       localStorage.removeItem("formData");
       setLoading(false);
+      handleFormClose();
     } catch (err) {
       setSnackbar({
         open: true,
@@ -219,6 +250,7 @@ function Dashboard() {
       setIsSubmitting(false);
     }
   };
+
 
 
   const handleRemoveImage = (index) => {
@@ -292,15 +324,6 @@ function Dashboard() {
           </Box>
         </motion.div>
 
-        {/* <Button
-            variant="contained"
-            sx={{ backgroundColor: "#A9AC2B", "&:hover": { backgroundColor: "#8C9A1B" } }}
-            onClick={() => setFormOpen(true)}
-          >
-            File a Complaint
-          </Button> */}
-
-
         {/* Image slider with content box */}
         <Container maxWidth="lg">
           <Typography variant="h4" sx={{ mb: 4, textAlign: "center", fontWeight: "bold", color: "#003366" }}>
@@ -331,7 +354,7 @@ function Dashboard() {
                     { title: "Saskatchewan-Based", text: "Family-owned, serving communities with excellence." },
                     { title: "Leading Since 1992", text: "Western Canada’s trusted name in biohazard recovery." },
                     { title: "Strategic Locations", text: "Operations in Regina, Saskatoon & Aberdeen, SK." },
-                    { title: "Biomed Invex Portal", text: "" },
+                    { title: "Biomed Invex Portal", text: "This Biomed Invex portal would provide you invoices, waybills integrated with the complaint portal." },
                   ].map((slide, index) => (
                     <SwiperSlide key={index}>
                       <Box
@@ -374,7 +397,6 @@ function Dashboard() {
                           {slide.text}
                         </Typography>
                         <Button
-
                           variant="contained"
                           component="a"
                           href="https://www.biomedwaste.com"
@@ -393,6 +415,22 @@ function Dashboard() {
                         ><b>
                             Learn More</b>
                         </Button>
+                        {<Button
+                          variant="contained"
+                          sx={{
+                            mt: 3,
+                            background: "linear-gradient(to right, #BAC400, #E0E721)",
+                            color: "#092C74",
+                            px: 4,
+                            py: 1,
+                            borderRadius: "12px",
+                            boxShadow: "0px 4px 12px rgba(44, 56, 233, 0.4)",
+                            '&:hover': { background: "linear-gradient(135deg,rgb(98, 129, 233),rgb(164, 208, 231))" },
+                          }}
+                          onClick={() => setFormOpen(true)}
+                        ><b>
+                            File a Complaint </b>
+                        </Button>}
                       </Box>
                     </SwiperSlide>
                   ))}
