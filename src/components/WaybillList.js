@@ -18,13 +18,15 @@ import {
     DialogActions,
     DialogContent,
     DialogTitle,
-    Collapse
+    Collapse,
+    Box,
 } from "@mui/material";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import DownloadIcon from "@mui/icons-material/Download";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { Viewer, Worker } from "@react-pdf-viewer/core";
 import "@react-pdf-viewer/core/lib/styles/index.css";
+import bg_layout from "../assets/images/bg_layout_theme.png";
 
 const WaybillList = () => {
     const [groupedWaybills, setGroupedWaybills] = useState({});
@@ -103,9 +105,16 @@ const WaybillList = () => {
     };
 
     return (
+        <Box sx={{
+            background: `url(${bg_layout})`, backgroundSize: "cover",
+            backgroundRepeat: "no-repeat",
+            backgroundPosition: "center",
+            minHeight: "100vh",
+            py: 5
+          }}>
         <Card sx={{ maxWidth: 900, mx: "auto", mt: 4, p: 2, boxShadow: 3 }}>
             <CardHeader
-                title={<Typography variant="h5" color="primary" sx={{ fontWeight: "bold" }}>Waybills</Typography>}
+                title={<Typography variant="h5" color="#092C74" sx={{ fontWeight: "bold" }}>Waybills</Typography>}
             />
             <CardContent>
                 {loading ? (
@@ -115,7 +124,7 @@ const WaybillList = () => {
                         <Paper key={facility} sx={{ mb: 2, p: 2, boxShadow: 3 }}>
                             <Typography
                                 variant="h6"
-                                color="secondary"
+                                color="#092C74"
                                 onClick={() => toggleFacility(facility)}
                                 sx={{ cursor: "pointer", display: "flex", alignItems: "center" }}
                             >
@@ -184,6 +193,7 @@ const WaybillList = () => {
                 </DialogActions>
             </Dialog>
         </Card>
+        </Box>
     );
 };
 

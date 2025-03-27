@@ -292,18 +292,20 @@ function Dashboard() {
           </Box>
         </motion.div>
 
-        <Container sx={{ textAlign: "center" }}>
-          {/* <Button
+        {/* <Button
             variant="contained"
             sx={{ backgroundColor: "#A9AC2B", "&:hover": { backgroundColor: "#8C9A1B" } }}
             onClick={() => setFormOpen(true)}
           >
             File a Complaint
           </Button> */}
-        </Container>
+
 
         {/* Image slider with content box */}
-        <Container maxWidth="lg" sx={{ py: 5 }}>
+        <Container maxWidth="lg">
+          <Typography variant="h4" sx={{ mb: 4, textAlign: "center", fontWeight: "bold", color: "#003366" }}>
+            Featured Content
+          </Typography>
           <Grid container spacing={5} alignItems="stretch">
             {/* Right Content Slider */}
             <Grid item xs={12} md={6} sx={{ display: "flex" }}>
@@ -329,6 +331,7 @@ function Dashboard() {
                     { title: "Saskatchewan-Based", text: "Family-owned, serving communities with excellence." },
                     { title: "Leading Since 1992", text: "Western Canada’s trusted name in biohazard recovery." },
                     { title: "Strategic Locations", text: "Operations in Regina, Saskatoon & Aberdeen, SK." },
+                    { title: "Biomed Invex Portal", text: "" },
                   ].map((slide, index) => (
                     <SwiperSlide key={index}>
                       <Box
@@ -364,7 +367,10 @@ function Dashboard() {
                         >
                           {slide.title}
                         </Typography>
-                        <Typography variant="body1" color="textSecondary">
+                        <Typography sx={{
+                          fontSize: "20px",
+                          mb: 2,
+                        }} color="textSecondary">
                           {slide.text}
                         </Typography>
                         <Button

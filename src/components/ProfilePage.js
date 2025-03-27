@@ -199,7 +199,7 @@ function ProfilePage() {
     <Box sx={{ background: "#f3f4f6", minHeight: "100vh", py: 4 }}>
       <Container maxWidth="md">
         <Paper elevation={4} sx={{ p: 4, borderRadius: 3 }}>
-          <Typography variant="h5" align="center" fontWeight="bold" mb={4}>Profile</Typography>
+          <Typography variant="h5" align="center" fontWeight="bold" color="#092C74" mb={4}>Profile</Typography>
           {error && <Typography color="error">{error}</Typography>}
           <Grid container spacing={4} alignItems="center">
             <Grid item xs={12} md={4} textAlign="center">
