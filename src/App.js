@@ -22,7 +22,7 @@ function App() {
   return (
     <Routes>
       <Route path="/" element={<SignInSide />} />
-      <Route path="/auth/callback" element={<AuthCallback />} />
+       <Route path="/auth/callback" element={<AuthCallback />} /> 
       <Route path="/sign-up" element={<SignUp />} />
       <Route element={<LayoutWithNavbar />}>
         <Route path="/home" element={<Dashboard />} />
@@ -48,7 +48,7 @@ function LayoutWithNavbar() {
       <Navbar />
       <Routes>
         <Route path="/home" element={<Dashboard />} />
-        <Route path="/auth/callback" element={<AuthCallback />} />
+        <Route path="/auth/callback" element={<AuthCallback />} /> 
         <Route path="/services" element={<Complaints />} />
         <Route path="/blogs" element={<BlogPage />} />
         <Route path="/invoice" element={<InvoiceList />} />

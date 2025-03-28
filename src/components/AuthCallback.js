@@ -7,17 +7,34 @@ const AuthCallback = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    instance.handleRedirectPromise()
-      .then((response) => {
-        if (response) {
-          console.log("Redirect Login Success:", response);
-          sessionStorage.setItem("userData", JSON.stringify(response.account));
-          navigate("/home");
+    const handleAuthRedirect = async () => {
+      try {
+        const response = await instance.handleRedirectPromise();
+        let account = response?.account;
+        if (!account) {
+          // Check manually if an account exists
+          const accounts = instance.getAllAccounts();
+          console.log("All accounts:", accounts);
+          if (accounts.length > 0) {
+            account = accounts[0];
+          }
         }
-      })
-      .catch((error) => {
-        console.error("Redirect Login Failed:", error);
-      });
+
+        if (account) {
+          console.log("User authenticated:", account);
+          sessionStorage.setItem("userData", JSON.stringify(account));
+          navigate("/home");
+        } else {
+          console.warn("No response received or no account data.");
+          navigate("/");
+        }
+      } catch (error) {
+        console.error("Authentication error:", error);
+        navigate("/");
+      }
+    };
+
+    handleAuthRedirect();
   }, [instance, navigate]);
 
   return <div>Processing login...</div>;
