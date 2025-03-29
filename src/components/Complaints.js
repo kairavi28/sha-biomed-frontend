@@ -12,11 +12,16 @@ import {
     DialogActions,
     TextField,
     MenuItem,
+    IconButton
 } from "@mui/material";
 import axios from "axios";
 import Link from "@mui/material/Link";
 import complaint_bg from '../assets/images/complaint_bg.png';
 import { motion } from "framer-motion";
+import CallToAction from "./CallToAction";
+import PhotoCameraIcon from "@mui/icons-material/PhotoCamera";  // 📷 Upload icon
+import SendIcon from "@mui/icons-material/Send";  // 🚀 Submit icon
+import CloseIcon from "@mui/icons-material/Close";  // ❌ Remove icon
 
 // Helper function to convert base64 to a File object
 const dataURLToFile = (dataURL, filename) => {
@@ -167,7 +172,7 @@ function Complaints() {
             // }, 10000);
         }
         // No need to clear interval since it's removed
-        return () => {};
+        return () => { };
     }, [isDialogOpen, isFormActive]);
 
     useEffect(() => {
@@ -222,80 +227,100 @@ function Complaints() {
                 display: "flex",
                 flexDirection: "column",
                 minHeight: "100vh",
-                background: "#f9f9f9",
+                background: "#f0f8ff",
             }}
         >
             {/* Hero Section */}
             <Box
-      component={motion.div}
-      initial={{ opacity: 0, scale: 0.9 }}
-      animate={{ opacity: 1, scale: 1 }}
-      transition={{ duration: 1, ease: "easeOut" }}
-      sx={{
-        height: "50vh",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        backgroundImage: `url(${complaint_bg})`,
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-        textAlign: "center",
-        color: "#003366",
-      }}
-    >
-      <Container
-        component={motion.div}
-        initial={{ opacity: 0, y: 30 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 1, delay: 0.5, ease: "easeOut" }}
-      >
-        <Typography
-          variant="h3"
-          fontWeight="bold"
-          component={motion.div}
-          initial={{ opacity: 0, x: -30 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 1, delay: 0.7, ease: "easeOut" }}
-        >
-          Welcome to Our Complaint Portal
-        </Typography>
-        <Typography
-          variant="h6"
-          sx={{ mt: 2, mb: 4 }}
-          component={motion.p}
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, delay: 1, ease: "easeOut" }}
-        >
-          Stay updated with the latest insights, stories, and trends.
-        </Typography>
-      </Container>
-    </Box>
-
-            {/* About Us Section */}
-            <Box sx={{ py: 8, background: "#ffffff" }}>
-                <Container>
-                    <Typography variant="h4" align="center" sx={{ fontWeight: "bold", mb: 4 }}>
-                        About Us
+                component={motion.div}
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 1, ease: "easeOut" }}
+                sx={{
+                    height: "50vh",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    backgroundImage: `url(${complaint_bg})`,
+                    backgroundSize: "cover",
+                    backgroundPosition: "center",
+                    textAlign: "center",
+                    color: "#003366",
+                }}
+            >
+                <Container
+                    component={motion.div}
+                    initial={{ opacity: 0, y: 30 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 1, delay: 0.5, ease: "easeOut" }}
+                >
+                    <Typography
+                        variant="h3"
+                        fontWeight="bold"
+                        component={motion.div}
+                        initial={{ opacity: 0, x: -30 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ duration: 1, delay: 0.7, ease: "easeOut" }}
+                    >
+                        Welcome to Our Complaint Portal
                     </Typography>
-                    <Typography align="center" sx={{ color: "#555", mb: 4 }}>
-                        We are dedicated to providing valuable insights and fostering community engagement through our blog platform. Our mission is to empower individuals and businesses with the information they need to succeed.
+                    <Typography
+                        variant="h6"
+                        sx={{ mt: 2, mb: 4 }}
+                        component={motion.p}
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 1, delay: 1, ease: "easeOut" }}
+                    >
+                        Stay updated with the latest insights, stories, and trends.
                     </Typography>
                 </Container>
             </Box>
+
             <Box sx={{ py: 8 }}>
                 <Container>
-
-                    <Typography
-                        variant="h5"
-                        align="center"
-                        fontWeight="bold"
+                    {/* File a Complaint Section */}
+                    <Box
                         sx={{
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                            flexDirection: "column",
+                            textAlign: "center",
                             mb: 6,
-                            color: "#333"
+                            p: 4,
+                            background: "linear-gradient(135deg, #ffffff, #e3f2fd)",
+                            borderRadius: 3,
+                            boxShadow: 3,
                         }}
                     >
-                        Queries
+                        <Typography variant="h5" fontWeight="bold" sx={{ color: "#003366", mb: 2 }}>
+                            Need to Report an Issue?
+                        </Typography>
+                        <Typography variant="body1" sx={{ mb: 3, color: "#666" }}>
+                            If you have any concerns or complaints, please let us know. Click the button below to file a complaint.
+                        </Typography>
+                        <Button
+                            variant="contained"
+                            sx={{
+                                mt: 3,
+                                background: "linear-gradient(to right, #BAC400, #E0E721)",
+                                color: "#092C74",
+                                px: 4,
+                                py: 1,
+                                borderRadius: "12px",
+                                boxShadow: "0px 4px 12px rgba(44, 56, 233, 0.4)",
+                                '&:hover': { background: "linear-gradient(135deg,rgb(98, 129, 233),rgb(164, 208, 231))" },
+                            }}
+                        // onClick={handleFileComplaint}
+                        >
+                            <b>File a Complaint</b>
+                        </Button>
+                    </Box>
+
+                    {/* General Guidelines Section */}
+                    <Typography variant="h5" align="center" fontWeight="bold" sx={{ mb: 6, color: "#003366" }}>
+                        General Guidelines
                     </Typography>
                     <Grid container spacing={4}>
                         {issues.map((issue) => (
@@ -325,7 +350,6 @@ function Complaints() {
                                             mb: 2,
                                         }}
                                     >
-
                                         <img
                                             src={issue.photos}
                                             alt="Complaint Image"
@@ -347,35 +371,31 @@ function Complaints() {
                                         >
                                             {issue.facility}
                                         </Typography>
-                                        <Typography
-                                            variant="body2"
-                                            sx={{ color: "#666", lineHeight: 1 }}
-                                        >
+                                        <Typography variant="body2" sx={{ color: "#666", lineHeight: 1 }}>
                                             {issue.description.length > 100
                                                 ? `${issue.description.slice(0, 100)}...`
                                                 : issue.description}
                                         </Typography>
                                     </Box>
-                                    <Typography
-                                        variant="body2"
-                                        display="block"
-                                        sx={{ mt: 1, color: "#757575" }}
-                                    >
+                                    <Typography variant="body2" display="block" sx={{ mt: 1, color: "#757575" }}>
                                         {new Date(issue.createdAt).toLocaleString()}
                                     </Typography>
                                     <Button
                                         variant="contained"
                                         fullWidth
                                         sx={{
-                                            background: "linear-gradient(to right, #00796b, #48a999)",
+                                            mt: 3,
+                                            background: "linear-gradient(135deg,rgb(98, 129, 233),rgb(164, 208, 231))",
                                             color: "#fff",
-                                            "&:hover": {
-                                                background: "linear-gradient(to right, #00574b, #327e67)",
-                                            },
+                                            px: 4,
+                                            py: 1,
+                                            borderRadius: "12px",
+                                            boxShadow: "0px 4px 12px rgba(44, 56, 233, 0.4)",
+                                            "&:hover": { background: "linear-gradient(135deg,rgb(84, 185, 240),rgb(71, 96, 240))" },
                                         }}
                                         onClick={() => handleViewDetails(issue)}
                                     >
-                                        Read More
+                                        <b>Read More</b>
                                     </Button>
                                 </Paper>
                             </Grid>
@@ -419,145 +439,180 @@ function Complaints() {
                     )}
                 </DialogContent>
                 <DialogActions>
-                    <Button
-                        onClick={handleCloseDialog}
+                    <IconButton
+                        size="small"
                         sx={{
-                            background: "linear-gradient(to right, #00796b, #48a999)",
-                            color: "#fff",
-                            "&:hover": {
-                                background: "linear-gradient(to right, #00574b, #327e67)",
-                            },
+                            position: "absolute",
+                            top: "2px",
+                            right: "2px",
+                            background: "red",
+                            color: "white",
+                            borderRadius: "50%",
+                            "&:hover": { background: "darkred" },
                         }}
+                        onClick={handleCloseDialog}
                     >
-                        Close
-                    </Button>
+                        <CloseIcon />  {/* ❌ Remove image icon */}
+                    </IconButton>
                 </DialogActions>
             </Dialog>
-            <Box sx={{
-                mt: 6,
-                py: 4,
-                backgroundColor: '#f1f1f1',
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                textAlign: 'center',
-            }}>
-                <Container maxWidth="md" sx={{ mt: 4 }}>
-                    <Typography variant="h6" sx={{ mb: 2, fontWeight: "bold", textAlign: "center" }}>
-                        Report an Issue for Damaged Container (if any)
-                    </Typography>
+            {/* Report for damaged containers */}
+            <Box sx={{ mt: 6, py: 6, background: "linear-gradient(to bottom, #f9f9f9, #ffffff)" }}>
+                <Container maxWidth="sm">
+                    <Paper elevation={3} sx={{ p: 4, borderRadius: 3, boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.1)" }}>
+                        <Typography
+                            variant="h5"
+                            sx={{
+                                color: "#003366",
+                                mb: 3,
+                                fontWeight: "bold",
+                                textAlign: "center",
+                            }}
+                        >
+                            Report an Issue for Damaged Container
+                        </Typography>
 
-                    <form onSubmit={handleFormSubmit}>
-                        <Grid container spacing={2}>
-                            <Grid item xs={12}>
-                                <TextField
-                                    select
-                                    label="Product Type"
-                                    name="productType"
-                                    value={formData.productType}
-                                    onChange={handleInputChange}
-                                    fullWidth
-                                    required
-                                >
-                                    <MenuItem value="Carsons">Carsons</MenuItem>
-                                    <MenuItem value="General waste bio box">General Waste Bio Box</MenuItem>
-                                    <MenuItem value="Blue bins">Blue Bins</MenuItem>
-                                </TextField>
-                            </Grid>
-                            <Grid item xs={12}>
-                                <TextField
-                                    label="Description"
-                                    name="description"
-                                    value={formData.description}
-                                    onChange={handleInputChange}
-                                    fullWidth
-                                    multiline
-                                    rows={4}
-                                    required
-                                />
-                            </Grid>
-                            <Grid item xs={12}>
-                                <Button variant="outlined" component="label" fullWidth>
-                                    Upload Photos
-                                    <input
-                                        type="file"
-                                        hidden
-                                        accept="image/*"
-                                        multiple
-                                        onChange={handleFileChange}
+                        <form onSubmit={handleFormSubmit}>
+                            <Grid container spacing={3}>
+                                {/* Product Type Selection */}
+                                <Grid item xs={12}>
+                                    <TextField
+                                        select
+                                        label="Product Type"
+                                        name="productType"
+                                        value={formData.productType}
+                                        onChange={handleInputChange}
+                                        fullWidth
+                                        required
+                                        variant="outlined"
+                                    >
+                                        <MenuItem value="Carsons">Carsons</MenuItem>
+                                        <MenuItem value="General waste bio box">General Waste Bio Box</MenuItem>
+                                        <MenuItem value="Blue bins">Blue Bins</MenuItem>
+                                    </TextField>
+                                </Grid>
+
+                                {/* Description Field */}
+                                <Grid item xs={12}>
+                                    <TextField
+                                        label="Description"
+                                        name="description"
+                                        value={formData.description}
+                                        onChange={handleInputChange}
+                                        fullWidth
+                                        multiline
+                                        rows={4}
+                                        required
+                                        variant="outlined"
                                     />
-                                </Button>
-                            </Grid>
-                            <Grid item xs={12}>
-                                <div
-                                    style={{
-                                        display: "flex",
-                                        gap: "10px",
-                                        flexWrap: "wrap",
-                                        justifyContent: "center",
-                                        alignItems: "center",
-                                    }}
-                                >
-                                    {formData.photos.map((photo, index) => (
-                                        <div
-                                            key={index}
-                                            style={{
-                                                position: "relative",
+                                </Grid>
+
+                                {/* File Upload Button with Icon */}
+                                <Grid item xs={12}>
+                                    <Button
+                                        variant="contained"
+                                        component="label"
+                                        fullWidth
+                                        startIcon={<PhotoCameraIcon />}  // 📷 Icon added here
+                                        sx={{
+                                            background: "linear-gradient(135deg,rgb(98, 129, 233),rgb(164, 208, 231))",
+                                            color: "white",
+                                            fontWeight: "bold",
+                                            py: 1.5,
+                                            borderRadius: "8px",
+                                            "&:hover": { background: "linear-gradient(135deg,rgb(84, 185, 240),rgb(71, 96, 240))" },
+                                        }}
+                                    >
+                                        Upload Photos
+                                        <input
+                                            type="file"
+                                            hidden
+                                            accept="image/*"
+                                            multiple
+                                            onChange={handleFileChange}
+                                        />
+                                    </Button>
+                                </Grid>
+
+                                {/* Image Previews with Remove Icon */}
+                                {formData.photos.length > 0 && (
+                                    <Grid item xs={12}>
+                                        <Box
+                                            sx={{
                                                 display: "flex",
-                                                flexDirection: "column",
+                                                gap: "12px",
+                                                flexWrap: "wrap",
+                                                justifyContent: "center",
                                                 alignItems: "center",
+                                                p: 2,
+                                                border: "1px solid #ddd",
+                                                borderRadius: "8px",
+                                                background: "#f4f4f4",
                                             }}
                                         >
-                                            <img
-                                                src={photo.preview}
-                                                alt={`Preview ${index}`}
-                                                style={{
-                                                    width: "100px",
-                                                    height: "100px",
-                                                    objectFit: "cover",
-                                                    borderRadius: "8px",
-                                                }}
-                                            />
-                                            <button
-                                                onClick={() => handleRemoveImage(index)}
-                                                style={{
-                                                    position: "absolute",
-                                                    top: "-5px",
-                                                    right: "-5px",
-                                                    background: "red",
-                                                    color: "white",
-                                                    border: "none",
-                                                    borderRadius: "50%",
-                                                    cursor: "pointer",
-                                                }}
-                                            >
-                                                &times;
-                                            </button>
-                                        </div>
-                                    ))}
-                                </div>
+                                            {formData.photos.map((photo, index) => (
+                                                <Box key={index} sx={{ position: "relative" }}>
+                                                    <img
+                                                        src={photo.preview}
+                                                        alt={`Preview ${index}`}
+                                                        style={{
+                                                            width: "80px",
+                                                            height: "80px",
+                                                            objectFit: "cover",
+                                                            borderRadius: "8px",
+                                                            border: "2px solid #ddd",
+                                                        }}
+                                                    />
+                                                    <IconButton
+                                                        size="small"
+                                                        sx={{
+                                                            position: "absolute",
+                                                            top: "-5px",
+                                                            right: "-5px",
+                                                            background: "red",
+                                                            color: "white",
+                                                            borderRadius: "50%",
+                                                            "&:hover": { background: "darkred" },
+                                                        }}
+                                                        onClick={() => handleRemoveImage(index)}
+                                                    >
+                                                        <CloseIcon />  {/* ❌ Remove image icon */}
+                                                    </IconButton>
+                                                </Box>
+                                            ))}
+                                        </Box>
+                                    </Grid>
+                                )}
+
+                                {/* Submit Button with Send Icon */}
+                                <Grid item xs={12}>
+                                    <Button
+                                        type="submit"
+                                        variant="contained"
+                                        fullWidth
+                                        startIcon={<SendIcon />}  // 🚀 Icon added here
+                                        sx={{
+                                            mt: 3,
+                                            background: "linear-gradient(to right, #BAC400, #E0E721)",
+                                            color: "#092C74",
+                                            px: 4,
+                                            py: 1,
+                                            borderRadius: "12px",
+                                            boxShadow: "0px 4px 12px rgba(44, 56, 233, 0.4)",
+                                            '&:hover': { background: "linear-gradient(135deg,rgb(98, 129, 233),rgb(164, 208, 231))" },
+                                        }}
+                                        disabled={isSubmitting}
+                                    >
+                                        <b>{isSubmitting ? "Submitting..." : "Submit Report"}</b>
+                                    </Button>
+                                </Grid>
                             </Grid>
-                            <Grid item xs={12}>
-                                <Button
-                                    type="submit"
-                                    variant="contained"
-                                    fullWidth
-                                    sx={{
-                                        background: "linear-gradient(to right, #00796b, #48a999)",
-                                        color: "#fff",
-                                        "&:hover": {
-                                            background: "linear-gradient(to right, #00574b, #327e67)",
-                                        },
-                                    }}
-                                    disabled={isSubmitting}
-                                >
-                                    {isSubmitting ? "Submitting..." : "Submit"}
-                                </Button>
-                            </Grid>
-                        </Grid>
-                    </form>
+                        </form>
+                    </Paper>
                 </Container>
             </Box>
+
+            <CallToAction />
             {/* <button onClick={() => setAutoReload(!autoReload)}>
                 {autoReload ? "Pause Auto-Reload" : "Resume Auto-Reload"}
             </button> */}
