@@ -20,13 +20,14 @@ import {
   DialogContent,
   DialogTitle,
   CircularProgress,
+  Container,
   Grid,
 } from "@mui/material";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import DownloadIcon from "@mui/icons-material/Download";
 import { Viewer, Worker } from "@react-pdf-viewer/core";
 import "@react-pdf-viewer/core/lib/styles/index.css";
-import bg_layout from "../assets/images/bg_layout_theme.png";
+
 
 function COD() {
   const [cods, setCods] = useState({});
@@ -114,12 +115,13 @@ function COD() {
 
   return (
     <Box sx={{
-      background: `url(${bg_layout})`, backgroundSize: "cover",
-      backgroundRepeat: "no-repeat",
-      backgroundPosition: "center",
+      background: "linear-gradient(to right,rgb(226, 237, 240),rgb(222, 233, 247))",
       minHeight: "100vh",
-      py: 5
+      py: 5,
+      display: "flex",
+      flexDirection: "column",
     }}>
+      <Container maxWidth="lg" sx={{ py: 5 }}>
       <Card sx={{ maxWidth: 900, mx: "auto", mt: 4, p: 2, boxShadow: 3 }}>
         {selectedFacilities.map((facility) => (
           <Box key={facility} sx={{ mb: 3 }}>
@@ -148,7 +150,7 @@ function COD() {
                             </IconButton>
                           </TableCell>
                           <TableCell>
-                            <IconButton color="success" component="a" href={`http://localhost:5000/cod/${cod.fileName}`} download>
+                            <IconButton color="success" component="a" href={`http://localhost:5000/cod/${cod.fileName}`} download target="_blank" rel="noopener noreferrer">
                               <DownloadIcon />
                             </IconButton>
 
@@ -182,6 +184,7 @@ function COD() {
           </DialogActions>
         </Dialog>
       </Card>
+      </Container>
     </Box>
   );
 };

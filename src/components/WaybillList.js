@@ -27,7 +27,6 @@ import DownloadIcon from "@mui/icons-material/Download";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { Viewer, Worker } from "@react-pdf-viewer/core";
 import "@react-pdf-viewer/core/lib/styles/index.css";
-import bg_layout from "../assets/images/bg_layout_theme.png";
 
 const WaybillList = () => {
     const [groupedWaybills, setGroupedWaybills] = useState({});
