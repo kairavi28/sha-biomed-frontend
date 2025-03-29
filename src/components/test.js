@@ -27,6 +27,7 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import DownloadIcon from "@mui/icons-material/Download";
 import { Viewer, Worker } from "@react-pdf-viewer/core";
 import "@react-pdf-viewer/core/lib/styles/index.css";
+import bg_layout from "../assets/images/bg_layout_theme.png";
 
 const InvoiceList = () => {
   const [invoices, setInvoices] = useState({});
@@ -39,7 +40,7 @@ const InvoiceList = () => {
   useEffect(() => {
     const fetchUserData = async () => {
       const currentUserSession = JSON.parse(sessionStorage.getItem("userData"));
-      const currentUserId = currentUserSession.id || currentUserSession._id;
+      const currentUserId = currentUserSession.id ? currentUserSession.id : currentUserSession._id;
 
       if (!currentUserId) {
         console.error("User ID is undefined");
@@ -71,6 +72,8 @@ const InvoiceList = () => {
     const fetchInvoices = async () => {
       try {
         const invoicesData = {};
+
+        // Fetch invoices for all facilities
         const fetchPromises = selectedFacilities.map(async (facility) => {
           try {
             const response = await axios.get(`http://localhost:5000/invoice/${facility}`);
@@ -81,8 +84,12 @@ const InvoiceList = () => {
           }
         });
 
-        await Promise.all(fetchPromises);
-        setInvoices((prevInvoices) => ({ ...prevInvoices, ...invoicesData }));
+        await Promise.all(fetchPromises); // Wait for all requests to complete
+
+        setInvoices((prevInvoices) => ({
+          ...prevInvoices,
+          ...invoicesData,
+        }));
       } catch (error) {
         console.error("Error fetching invoices:", error);
       }
@@ -107,7 +114,7 @@ const InvoiceList = () => {
 
   if (loading) {
     return (
-      <Box display="flex" justifyContent="center" alignItems="center" height="100vh" sx={{ background: "#f9fafb" }}>
+      <Box display="flex" justifyContent="center" alignItems="center" height="100vh" sx={{ background: "#f3f4f6" }}>
         <CircularProgress />
       </Box>
     );
@@ -115,16 +122,16 @@ const InvoiceList = () => {
 
   return (
     <Box sx={{
-      background: "linear-gradient(to right,rgb(226, 237, 240),rgb(222, 233, 247))",
+      background: `url(${bg_layout})`, backgroundSize: "cover",
+      backgroundRepeat: "no-repeat",
+      backgroundPosition: "center",
       minHeight: "100vh",
-      py: 5,
-      display: "flex",
-      flexDirection: "column",
+      py: 5
     }}>
-      <Container maxWidth="lg" sx={{ py: 5 }}>
-        <Card sx={{ boxShadow: 3, p: 4, background: "#ffffff", borderRadius: "1em" }}>
-          <Typography variant="h5" sx={{ fontWeight: "bold", color: "#092C74", mb: 3 }}>Invoice Summary</Typography>
-          <Grid container spacing={2} sx={{ mb: 3, p: 2, background: "#e3f2fd", borderRadius: 2, boxShadow: 2 }}>
+      <Card sx={{ maxWidth: 900, mx: "auto", mt: 4, p: 2, boxShadow: 3 }}>
+        <Box sx={{ mb: 3, p: 2, background: "#e3f2fd", borderRadius: 2, boxShadow: 2 }}>
+          <Typography variant="h6" color="#092C74" sx={{ fontWeight: "bold" }}>Invoice Summary</Typography>
+          <Grid container spacing={2}>
             <Grid item xs={6}>
               <Typography variant="body1"><strong>Total Amount Due:</strong> ${totalAmountDue.toFixed(2)}</Typography>
             </Grid>
@@ -132,14 +139,17 @@ const InvoiceList = () => {
               <Typography variant="body1"><strong>Total Amount Paid:</strong> ${totalAmountPaid.toFixed(2)}</Typography>
             </Grid>
           </Grid>
-
-          {selectedFacilities.map((facility) => (
-            <Box key={facility} sx={{ mb: 3 }}>
-              <Typography variant="h6" sx={{ fontWeight: "bold", color: "#092C74", mb: 2 }}>Invoices for {facility}</Typography>
-              <TableContainer component={Paper} sx={{ boxShadow: 2, borderRadius: 2 }}>
+        </Box>
+        {selectedFacilities.map((facility) => (
+          <Box key={facility} sx={{ mb: 3 }}>
+            <CardHeader
+              title={<Typography variant="h6" color="#092C74" sx={{ fontWeight: "bold" }}>Invoices for {facility}</Typography>}
+            />
+            <CardContent>
+              <TableContainer component={Paper} sx={{ boxShadow: 2 }}>
                 <Table>
-                  <TableHead sx={{ backgroundColor: "#f5f5f5" }}>
-                    <TableRow>
+                  <TableHead>
+                    <TableRow sx={{ backgroundColor: "#f5f5f5" }}>
                       <TableCell><strong>File Name</strong></TableCell>
                       <TableCell><strong>Total Amount</strong></TableCell>
                       <TableCell><strong>Preview</strong></TableCell>
@@ -149,7 +159,7 @@ const InvoiceList = () => {
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {invoices[facility]?.length > 0 ? (
+                    {(invoices[facility] && invoices[facility].length > 0) ? (
                       invoices[facility].map((invoice) => (
                         <TableRow key={invoice._id} hover>
                           <TableCell>{invoice.fileName || "N/A"}</TableCell>
@@ -160,14 +170,7 @@ const InvoiceList = () => {
                             </IconButton>
                           </TableCell>
                           <TableCell>
-                            <IconButton
-                              color="success"
-                              component="a"
-                              href={`http://localhost:5000/invoices/${invoice.fileName}`}
-                              download
-                              target="_blank"
-                              rel="noopener noreferrer"
-                            >
+                            <IconButton color="success" component="a" href={`http://localhost:5000/invoices/${invoice.fileName}`} download>
                               <DownloadIcon />
                             </IconButton>
                           </TableCell>
@@ -183,24 +186,24 @@ const InvoiceList = () => {
                   </TableBody>
                 </Table>
               </TableContainer>
-            </Box>
-          ))}
-          {/* Dialog for PDF Preview */}
-          <Dialog open={openPreview} onClose={handlePreviewClose} maxWidth="md" fullWidth>
-            <DialogTitle>Invoice Preview</DialogTitle>
-            <DialogContent sx={{ display: "flex", justifyContent: "center", alignItems: "center", height: "80vh" }}>
-              {currentInvoice && (
-                <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.min.js">
-                  <Viewer fileUrl={`http://localhost:5000/invoices/${currentInvoice.fileName}`} />
-                </Worker>
-              )}
-            </DialogContent>
-            <DialogActions>
-              <Button onClick={handlePreviewClose}>Close</Button>
-            </DialogActions>
-          </Dialog>
-        </Card>
-      </Container>
+            </CardContent>
+          </Box>
+        ))}
+        {/* Dialog for PDF Preview */}
+        <Dialog open={openPreview} onClose={handlePreviewClose} maxWidth="md" fullWidth>
+          <DialogTitle>Invoice Preview</DialogTitle>
+          <DialogContent sx={{ display: "flex", justifyContent: "center", alignItems: "center", height: "80vh" }}>
+            {currentInvoice && (
+              <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.min.js">
+                <Viewer fileUrl={`http://localhost:5000/invoices/${currentInvoice.fileName}`} />
+              </Worker>
+            )}
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handlePreviewClose}>Close</Button>
+          </DialogActions>
+        </Dialog>
+      </Card>
     </Box>
   );
 };

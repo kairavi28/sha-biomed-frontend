@@ -13,6 +13,7 @@ import axios from "axios";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import WarningAmberIcon from "@mui/icons-material/WarningAmber";
 import { motion } from "framer-motion";
+import bgWaste from '../assets/images/bg-waste.png';
 
 function InstructionPage() {
     const [blogs, setBlogs] = useState([]);
@@ -79,33 +80,48 @@ function InstructionPage() {
         <Box sx={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}>
             {/* Hero Section */}
             <Box
-                sx={{
-                    height: "60vh",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    backgroundImage: "url('/images/waste-packaging.png')",
-                    backgroundSize: "cover",
-                    backgroundPosition: "center",
-                    textAlign: "center",
-                    color: "black",
-                    zIndex: 0.5,
-                }}
-            >
-                <Container>
-                    <Typography variant="h3" fontWeight="bold">
-                        Waste Packaging Guide
-                    </Typography>
-                    <Typography variant="h6" sx={{ mt: 2, mb: 4 }}>
-                        Proper waste packaging ensures a safer and more efficient disposal process.
-                    </Typography>
-                </Container>
-            </Box>
+      component={motion.div}
+      initial={{ opacity: 0, y: 50 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 1, ease: "easeOut" }}
+      sx={{
+        height: "50vh",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        backgroundImage: `url(${bgWaste})`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        textAlign: "center",
+        color: "#003366",
+      }}
+    >
+      <Container
+        component={motion.div}
+        initial={{ opacity: 0, scale: 0.8 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 1, delay: 0.5, ease: "easeOut" }}
+      >
+        <Typography variant="h3" fontWeight="bold">
+          Waste Packaging Guide
+        </Typography>
+        <Typography
+          variant="h6"
+          sx={{ mt: 2, mb: 4 }}
+          component={motion.p}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1, delay: 1 }}
+        >
+          Proper waste packaging ensures a safer and more efficient disposal process.
+        </Typography>
+      </Container>
+    </Box>
 
             {/* Steps to Package Waste Properly */}
             <Box sx={{ py: 8, backgroundColor: "#f9f9f9" }}>
                 <Container>
-                    <Typography variant="h4" align="center" fontWeight="bold" sx={{ mb: 4 }}>
+                    <Typography variant="h4" align="center" color="#003366" fontWeight="bold" sx={{ mb: 4 }}>
                         Steps for Proper Waste Packaging
                     </Typography>
 
@@ -163,6 +179,7 @@ function InstructionPage() {
                         variant="h4"
                         align="center"
                         fontWeight="bold"
+                        color="#003366"
                         sx={{ mb: 4 }}
                     >
                         Use of Biomed Products
@@ -243,7 +260,7 @@ function InstructionPage() {
                                             {/* YouTube Video Section */}
                                             <Box sx={{ py: 8, backgroundColor: "#f9f9f9" }}>
                                                 <Container>
-                                                    <Typography variant="h4" align="center" fontWeight="bold" sx={{ mb: 4 }}>
+                                                    <Typography variant="h5" align="center" color="#003366" fontWeight="bold" sx={{ mb: 4 }}>
                                                         Instructional Video
                                                     </Typography>
                                                     <Box

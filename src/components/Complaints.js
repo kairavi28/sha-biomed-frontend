@@ -16,6 +16,7 @@ import {
 import axios from "axios";
 import Link from "@mui/material/Link";
 import complaint_bg from '../assets/images/complaint_bg.png';
+import { motion } from "framer-motion";
 
 // Helper function to convert base64 to a File object
 const dataURLToFile = (dataURL, filename) => {
@@ -226,35 +227,50 @@ function Complaints() {
         >
             {/* Hero Section */}
             <Box
-                sx={{
-                    height: "50vh",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    backgroundImage: `url(${complaint_bg})`,
-                    backgroundSize: "cover",
-                    backgroundPosition: "center",
-                    textAlign: "center",
-                    color: "#003366",
-                }}>
-                <Container>
-                    <Typography variant="h3" fontWeight="bold">
-                        Welcome to Our Complaint Portal
-                    </Typography>
-                    <Typography variant="h6" sx={{ mt: 2, mb: 4 }}>
-                        Stay updated with the latest insights, stories, and trends.
-                    </Typography>
-                    {/* <Button
-                                  variant="contained"
-                                  sx={{
-                                    background: "#00796b",
-                                    "&:hover": { background: "#00574b" },
-                                  }}
-                                >
-                                  Learn More
-                                </Button> */}
-                </Container>
-            </Box>
+      component={motion.div}
+      initial={{ opacity: 0, scale: 0.9 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ duration: 1, ease: "easeOut" }}
+      sx={{
+        height: "50vh",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        backgroundImage: `url(${complaint_bg})`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        textAlign: "center",
+        color: "#003366",
+      }}
+    >
+      <Container
+        component={motion.div}
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 1, delay: 0.5, ease: "easeOut" }}
+      >
+        <Typography
+          variant="h3"
+          fontWeight="bold"
+          component={motion.div}
+          initial={{ opacity: 0, x: -30 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 1, delay: 0.7, ease: "easeOut" }}
+        >
+          Welcome to Our Complaint Portal
+        </Typography>
+        <Typography
+          variant="h6"
+          sx={{ mt: 2, mb: 4 }}
+          component={motion.p}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1, delay: 1, ease: "easeOut" }}
+        >
+          Stay updated with the latest insights, stories, and trends.
+        </Typography>
+      </Container>
+    </Box>
 
             {/* About Us Section */}
             <Box sx={{ py: 8, background: "#ffffff" }}>

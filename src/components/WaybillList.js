@@ -14,6 +14,7 @@ import {
     Paper,
     IconButton,
     Dialog,
+    Container,
     Button,
     DialogActions,
     DialogContent,
@@ -106,93 +107,102 @@ const WaybillList = () => {
 
     return (
         <Box sx={{
-            background: `url(${bg_layout})`, backgroundSize: "cover",
-            backgroundRepeat: "no-repeat",
-            backgroundPosition: "center",
+            background: "linear-gradient(to right,rgb(226, 237, 240),rgb(222, 233, 247))",
             minHeight: "100vh",
-            py: 5
-          }}>
-        <Card sx={{ maxWidth: 900, mx: "auto", mt: 4, p: 2, boxShadow: 3 }}>
-            <CardHeader
-                title={<Typography variant="h5" color="#092C74" sx={{ fontWeight: "bold" }}>Waybills</Typography>}
-            />
-            <CardContent>
-                {loading ? (
-                    <Typography variant="body2" color="textSecondary" align="center">Loading waybills...</Typography>
-                ) : selectedFacilities.length > 0 ? (
-                    selectedFacilities.map((facility) => (
-                        <Paper key={facility} sx={{ mb: 2, p: 2, boxShadow: 3 }}>
-                            <Typography
-                                variant="h6"
-                                color="#092C74"
-                                onClick={() => toggleFacility(facility)}
-                                sx={{ cursor: "pointer", display: "flex", alignItems: "center" }}
-                            >
-                                <ExpandMoreIcon sx={{ transform: expandedFacility === facility ? "rotate(180deg)" : "rotate(0deg)" }} />
-                                {facilityDetails[facility]?.name || facility}
-                            </Typography>
-                            <Collapse in={expandedFacility === facility} timeout="auto" unmountOnExit>
-                                <TableContainer component={Paper} sx={{ boxShadow: 2, mt: 1 }}>
-                                    <Table>
-                                        <TableHead>
-                                            <TableRow sx={{ backgroundColor: "#f5f5f5" }}>
-                                                <TableCell><strong>File Name</strong></TableCell>
-                                                <TableCell><strong>Preview</strong></TableCell>
-                                                <TableCell><strong>Download</strong></TableCell>
-                                                <TableCell><strong>Uploaded At</strong></TableCell>
-                                            </TableRow>
-                                        </TableHead>
-                                        <TableBody>
-                                            {groupedWaybills[facility]?.length > 0 ? (
-                                                groupedWaybills[facility].map((waybill) => (
-                                                    <TableRow key={waybill._id} hover>
-                                                        <TableCell>{waybill.fileName}</TableCell>
-                                                        <TableCell>
-                                                            <IconButton color="primary" onClick={() => handlePreviewOpen(waybill)}>
-                                                                <VisibilityIcon />
-                                                            </IconButton>
-                                                        </TableCell>
-                                                        <TableCell>
-                                                            <IconButton color="success" component="a" href={`http://localhost:5000/waybill/${waybill.fileName}`} download>
-                                                                <DownloadIcon />
-                                                            </IconButton>
-                                                        </TableCell>
-                                                        <TableCell>{new Date(waybill.uploadedAt).toLocaleString()}</TableCell>
+            py: 5,
+            display: "flex",
+            flexDirection: "column",
+        }}>
+            <Container maxWidth="lg" sx={{ py: 5 }}>
+                <Card sx={{ maxWidth: 900, mx: "auto", mt: 4, p: 2, boxShadow: 3 }}>
+                    <CardHeader
+                        title={<Typography variant="h5" color="#092C74" sx={{ fontWeight: "bold" }}>Waybills</Typography>}
+                    />
+                    <CardContent>
+                        {loading ? (
+                            <Typography variant="body2" color="textSecondary" align="center">Loading waybills...</Typography>
+                        ) : selectedFacilities.length > 0 ? (
+                            selectedFacilities.map((facility) => (
+                                <Paper key={facility} sx={{ mb: 2, p: 2, boxShadow: 3 }}>
+                                    <Typography
+                                        variant="h6"
+                                        color="#092C74"
+                                        onClick={() => toggleFacility(facility)}
+                                        sx={{ cursor: "pointer", display: "flex", alignItems: "center" }}
+                                    >
+                                        <ExpandMoreIcon sx={{ transform: expandedFacility === facility ? "rotate(180deg)" : "rotate(0deg)" }} />
+                                        {facilityDetails[facility]?.name || facility}
+                                    </Typography>
+                                    <Collapse in={expandedFacility === facility} timeout="auto" unmountOnExit>
+                                        <TableContainer component={Paper} sx={{ boxShadow: 2, mt: 1 }}>
+                                            <Table>
+                                                <TableHead>
+                                                    <TableRow sx={{ backgroundColor: "#f5f5f5" }}>
+                                                        <TableCell><strong>File Name</strong></TableCell>
+                                                        <TableCell><strong>Preview</strong></TableCell>
+                                                        <TableCell><strong>Download</strong></TableCell>
+                                                        <TableCell><strong>Uploaded At</strong></TableCell>
                                                     </TableRow>
-                                                ))
-                                            ) : (
-                                                <TableRow>
-                                                    <TableCell colSpan={4} align="center">
-                                                        <Typography variant="body2" color="textSecondary">No Waybills available.</Typography>
-                                                    </TableCell>
-                                                </TableRow>
-                                            )}
-                                        </TableBody>
-                                    </Table>
-                                </TableContainer>
-                            </Collapse>
-                        </Paper>
-                    ))
-                ) : (
-                    <Typography variant="body2" color="textSecondary" align="center">No waybills available.</Typography>
-                )}
-            </CardContent>
+                                                </TableHead>
+                                                <TableBody>
+                                                    {groupedWaybills[facility]?.length > 0 ? (
+                                                        groupedWaybills[facility].map((waybill) => (
+                                                            <TableRow key={waybill._id} hover>
+                                                                <TableCell>{waybill.fileName}</TableCell>
+                                                                <TableCell>
+                                                                    <IconButton color="primary" onClick={() => handlePreviewOpen(waybill)}>
+                                                                        <VisibilityIcon />
+                                                                    </IconButton>
+                                                                </TableCell>
+                                                                <TableCell>
+                                                                    <IconButton
+                                                                        color="success"
+                                                                        component="a"
+                                                                        href={`http://localhost:5000/waybills/${waybill.fileName}`}
+                                                                        download
+                                                                        target="_blank"
+                                                                        rel="noopener noreferrer"
+                                                                    >
+                                                                        <DownloadIcon />
+                                                                    </IconButton>
+                                                                </TableCell>
+                                                                <TableCell>{new Date(waybill.uploadedAt).toLocaleString()}</TableCell>
+                                                            </TableRow>
+                                                        ))
+                                                    ) : (
+                                                        <TableRow>
+                                                            <TableCell colSpan={4} align="center">
+                                                                <Typography variant="body2" color="textSecondary">No Waybills available.</Typography>
+                                                            </TableCell>
+                                                        </TableRow>
+                                                    )}
+                                                </TableBody>
+                                            </Table>
+                                        </TableContainer>
+                                    </Collapse>
+                                </Paper>
+                            ))
+                        ) : (
+                            <Typography variant="body2" color="textSecondary" align="center">No waybills available.</Typography>
+                        )}
+                    </CardContent>
 
-            {/* Dialog for PDF Preview */}
-            <Dialog open={openPreview} onClose={handlePreviewClose} maxWidth="md" fullWidth>
-                <DialogTitle>Waybill Preview</DialogTitle>
-                <DialogContent sx={{ display: "flex", justifyContent: "center", alignItems: "center", height: "80vh" }}>
-                    {currentWaybill && (
-                        <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.min.js">
-                            <Viewer fileUrl={`http://localhost:5000/waybills/${currentWaybill.fileName}`} />
-                        </Worker>
-                    )}
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={handlePreviewClose}>Close</Button>
-                </DialogActions>
-            </Dialog>
-        </Card>
+                    {/* Dialog for PDF Preview */}
+                    <Dialog open={openPreview} onClose={handlePreviewClose} maxWidth="md" fullWidth>
+                        <DialogTitle>Waybill Preview</DialogTitle>
+                        <DialogContent sx={{ display: "flex", justifyContent: "center", alignItems: "center", height: "80vh" }}>
+                            {currentWaybill && (
+                                <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.min.js">
+                                    <Viewer fileUrl={`http://localhost:5000/waybills/${currentWaybill.fileName}`} />
+                                </Worker>
+                            )}
+                        </DialogContent>
+                        <DialogActions>
+                            <Button onClick={handlePreviewClose}>Close</Button>
+                        </DialogActions>
+                    </Dialog>
+                </Card>
+            </Container>
         </Box>
     );
 };
