@@ -43,7 +43,6 @@ export default function SignInCard() {
   const { instance } = useMsal();
 
   const handleMicrosoftLogin = async () => {
-    console.log('handle microsoft login function triggered');
     try {
       const loginResponse = await instance.loginPopup({
         scopes: ["User.Read"], 
@@ -86,7 +85,6 @@ export default function SignInCard() {
     event.preventDefault();
     // Check for validation errors
     if (emailError || passwordError) {
-      console.log("Error popped up");
       return;
     }
     // Extract form data
@@ -95,7 +93,6 @@ export default function SignInCard() {
       email: data.get('email'),
       password: data.get('password'),
     };
-    console.log('Form Data:', formData);
 
     try {
       // Make API request for login
@@ -104,11 +101,9 @@ export default function SignInCard() {
           'Content-Type': 'application/json',
         },
       });
-      console.log('Login successful:', response.data);
       sessionStorage.setItem('userData', JSON.stringify(response.data));
 
       // Optionally check the stored data
-      console.log('Data stored in session:', sessionStorage.getItem('userData'));
       // Navigate to the home page
       navigate('/home');
     } catch (error) {
@@ -139,7 +134,7 @@ export default function SignInCard() {
   const validateInputs = () => {
     const email = document.getElementById('email');
     const password = document.getElementById('password');
-    console.log(email, password);
+
     let isValid = true;
 
     if (!email.value || !/\S+@\S+\.\S+/.test(email.value)) {

@@ -50,10 +50,7 @@ function ProfilePage() {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        console.log(userId);
         const response = await axios.get(`http://localhost:5000/user/${userId}`);
-
-        console.log('User', response);
         setUserData(response.data);
         if (response.data?.facilities) {
           const approvedFacilities = response.data.facilities

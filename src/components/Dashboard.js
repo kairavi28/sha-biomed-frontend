@@ -134,7 +134,6 @@ function Dashboard() {
       try {
         const response = await axios.get(`http://localhost:5000/user/${currentUserId}`);
         setUserData(response.data);
-        console.log(userData);
         if (response.data?.facilities.some(facility => facility.approved)) {
           setSnackbar({
             open: true,
@@ -201,7 +200,6 @@ function Dashboard() {
       const currentUserSession = JSON.parse(sessionStorage.getItem("userData"));
 
       // Append basic user info 
-      console.log('currentUserSession', currentUserSession);
       formDataToSend.append("firstname", currentUserSession.firstname);
       formDataToSend.append("lastname", currentUserSession.lastname);
       formDataToSend.append("email", currentUserSession.email);

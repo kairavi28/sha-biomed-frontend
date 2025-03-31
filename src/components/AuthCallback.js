@@ -14,14 +14,12 @@ const AuthCallback = () => {
         if (!account) {
           // Check manually if an account exists
           const accounts = instance.getAllAccounts();
-          console.log("All accounts:", accounts);
           if (accounts.length > 0) {
             account = accounts[0];
           }
         }
 
         if (account) {
-          console.log("User authenticated:", account);
           sessionStorage.setItem("userData", JSON.stringify(account));
           navigate("/home");
         } else {

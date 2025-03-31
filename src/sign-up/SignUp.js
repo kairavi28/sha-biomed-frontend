@@ -193,10 +193,8 @@ export default function SignUp() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    console.log('submit clicked');
     // Validate form errors
     if (firstNameError || lastNameError || emailError || passwordError) {
-      console.log('Error popped up');
       return;
     }
     const facilityValue =
@@ -212,7 +210,6 @@ export default function SignUp() {
       facilityType: selectedFacilityType,
       facility: facilityValue,
     };
-    console.log('Form Data:', formData);
 
     try {
       const response = await axios.post('http://localhost:5000/user/register', formData, {
@@ -220,7 +217,6 @@ export default function SignUp() {
           'Content-Type': 'application/json',
         },
       });
-      console.log('Registration successful:', response.data);
       setSnackbarMessage('Registration Successful! Please log in');
       setSnackbarSeverity('success');
       setSnackbarOpen(true);

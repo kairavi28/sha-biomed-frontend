@@ -15,7 +15,6 @@ const Blog = () => {
         ws.onmessage = (event) => {
             const message = JSON.parse(event.data);
             alert(message);
-            console.log(message);
             if (message.type === 'NEW_BLOG') {
                 setBlogs((prevBlogs) => [message.data, ...prevBlogs]);
             }

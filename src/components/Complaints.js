@@ -84,11 +84,11 @@ function Complaints() {
                 const userResponse = await axios.get(`http://localhost:5000/user/${currentUserId}`);
                 const userDataFromDB = userResponse.data;
                 setUserData(userDataFromDB); // ✅ Update state
-                console.log("User Data:", userDataFromDB);
+
 
                 // Fetch complaints
                 const complaintsResponse = await axios.get(`http://localhost:5000/complaints`);
-                console.log("Complaints Response:", complaintsResponse.data);
+              
 
                 if (Array.isArray(userDataFromDB?.facilities) && userDataFromDB.facilities.length > 0) {
                     const userFacilityNames = userDataFromDB.facilities
