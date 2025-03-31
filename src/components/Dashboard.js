@@ -147,7 +147,6 @@ function Dashboard() {
         console.error("Error checking facility approval:", err);
       }
     };
-
     fetchUserData();
   }, []);
 
@@ -250,8 +249,6 @@ function Dashboard() {
       setIsSubmitting(false);
     }
   };
-
-
 
   const handleRemoveImage = (index) => {
     setFormData((prev) => {

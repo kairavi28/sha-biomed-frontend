@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { PhoneInput } from "react-international-phone";
 import {
     Box,
     Typography,
@@ -12,6 +13,9 @@ import {
     DialogActions,
     TextField,
     MenuItem,
+    Snackbar,
+    Alert,
+    Modal,
     IconButton
 } from "@mui/material";
 import axios from "axios";
@@ -42,12 +46,25 @@ function Complaints() {
     const [selectedIssue, setSelectedIssue] = useState(null);
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const [isFormActive] = useState(false);
+    const [formOpen, setFormOpen] = useState(false);
+    const handleFormOpen = () => setFormOpen(true);
+    const handleFormClose = () => setFormOpen(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [formData, setFormData] = useState({
         productType: "",
         description: "", photos: []
     });
 
+    const [snackbar, setSnackbar] = useState({
+        open: false,
+        message: "",
+        severity: "success",
+    });
+
+    // Handle Snackbar close
+    const handleSnackbarClose = () => {
+        setSnackbar({ ...snackbar, open: false });
+    };
 
     const handleFileChange = (event) => {
         const files = Array.from(event.target.files);
@@ -107,42 +124,23 @@ function Complaints() {
             await axios.post(`http://35.182.166.248/api/issues/add`, formDataToSubmit, {
                 headers: { "Content-Type": "multipart/form-data" },
             });
-            alert("Issue submitted successfully.");
+            setSnackbar({
+                open: true,
+                message: `Issue has been successfully submitted!`,
+                severity: "success",
+            });
             setFormData({ productType: "", description: "", photos: [] });
             localStorage.removeItem("formData");
         } catch (error) {
-            console.error("Error submitting issue:", error);
-            alert("Failed to submit complaint.");
+            setSnackbar({
+                open: true,
+                message: `Error submitting the issue. Please try again.`,
+                severity: "error",
+            });
         } finally {
             setIsSubmitting(false);
         }
     };
-    // const handleFormSubmit = async (event) => {
-    //     event.preventDefault();
-    //     const formDataToSubmit = new FormData();
-    //     formDataToSubmit.append("productType", formData.productType);
-    //     formDataToSubmit.append("description", formData.description);
-
-    //     console.log('form data', formData);
-    //     if (formData.photos) {
-    //         console.log(formData.photo);
-    //         formDataToSubmit.append("photo", formData.photo);
-    //     }
-    //     try {
-    //         setIsSubmitting(true);
-    //         await axios.post("http://35.182.166.248/api/issues/add", formDataToSubmit, {
-    //             headers: { "Content-Type": "multipart/form-data" },
-    //         });
-    //         alert("Complaint submitted successfully.");
-    //         setFormData({ productType: "", description: "", photo: null });
-    //         localStorage.removeItem("formData"); 
-    //     } catch (error) {
-    //         console.error("Error submitting complaint:", error);
-    //         alert("Failed to submit complaint.");
-    //     } finally {
-    //         setIsSubmitting(false);
-    //     }
-    // };
 
     const handleInputChange = (event) => {
         const { name, value } = event.target;
@@ -166,12 +164,8 @@ function Complaints() {
                     setError("Failed to load issues. Please try again.");
                     setLoading(false);
                 });
-            // Removed the auto-reload interval
-            // intervalId = setInterval(() => {
-            //     window.location.reload();
-            // }, 10000);
         }
-        // No need to clear interval since it's removed
+
         return () => { };
     }, [isDialogOpen, isFormActive]);
 
@@ -312,7 +306,7 @@ function Complaints() {
                                 boxShadow: "0px 4px 12px rgba(44, 56, 233, 0.4)",
                                 '&:hover': { background: "linear-gradient(135deg,rgb(98, 129, 233),rgb(164, 208, 231))" },
                             }}
-                        // onClick={handleFileComplaint}
+                            onClick={() => setFormOpen(true)}
                         >
                             <b>File a Complaint</b>
                         </Button>
@@ -456,6 +450,179 @@ function Complaints() {
                     </IconButton>
                 </DialogActions>
             </Dialog>
+
+            {/* File a complaint modal popup*/}
+            <Modal
+                open={formOpen}
+                onClose={handleFormClose}
+                aria-labelledby="complaint-form-title"
+                aria-describedby="complaint-form-description"
+            >
+                <form onSubmit={handleFormSubmit}>
+                    <Box
+                        sx={{
+                            position: "absolute",
+                            top: "50%",
+                            left: "50%",
+                            transform: "translate(-50%, -50%)",
+                            width: "90%",
+                            maxWidth: 500,
+                            bgcolor: "background.paper",
+                            boxShadow: 24,
+                            p: 4,
+                            borderRadius: 3,
+                            outline: "none",
+                        }}
+                    >
+                        {/* Modal Title */}
+                        <Typography
+                            id="complaint-form-title"
+                            variant="h5"
+                            component="h2"
+                            sx={{
+                                mb: 3,
+                                textAlign: "center",
+                                fontWeight: "bold",
+                                color: "primary.main",
+                            }}
+                        >
+                            File a Complaint
+                        </Typography>
+                        {/* Phone Input */}
+                        <PhoneInput
+                            label="Contact"
+                            name="contactNumber"
+                            defaultCountry="ca"
+                            placeholder="Enter your phone number"
+                            value={formData.contactNumber || ""}
+                            onChange={(value) =>
+                                setFormData((prev) => ({
+                                    ...prev,
+                                    contactNumber: value,
+                                }))
+                            }
+                            style={{
+                                width: "95%",
+                                marginBottom: "16px",
+                                padding: "12px",
+                                borderRadius: "8px",
+                                border: "1px solid #ccc",
+                            }}
+                        />
+
+                        {/* Complaint Description */}
+                        <TextField
+                            fullWidth
+                            multiline
+                            rows={4}
+                            label="Description of Problem"
+                            name="description"
+                            variant="outlined"
+                            sx={{
+                                mb: 3,
+                                "& .MuiOutlinedInput-root": {
+                                    borderRadius: "8px",
+                                },
+                            }}
+                            value={formData.description || ""}
+                            onChange={handleInputChange}
+                        />
+
+                        {/* File Upload */}
+                        <Button
+                            variant="outlined"
+                            component="label"
+                            fullWidth
+                            sx={{
+                                mb: 3,
+                                borderRadius: "8px",
+                                borderColor: "primary.main",
+                                textTransform: "none",
+                            }}
+                        >
+                            Upload Attachment (Optional)
+                            <input hidden accept="image/*" type="file" multiple onChange={handleFileChange} />
+                        </Button>
+                        <Grid item xs={12}>
+                            <div
+                                style={{
+                                    display: "flex",
+                                    gap: "10px",
+                                    flexWrap: "wrap",
+                                    justifyContent: "center",
+                                    alignItems: "center",
+                                }}
+                            >
+                                {formData.photos.map((photo, index) => (
+                                    <div
+                                        key={index}
+                                        style={{
+                                            position: "relative",
+                                            display: "flex",
+                                            flexDirection: "column",
+                                            alignItems: "center",
+                                        }}
+                                    >
+                                        <img
+                                            src={photo.preview}
+                                            alt={`Preview ${index}`}
+                                            style={{
+                                                width: "100px",
+                                                height: "100px",
+                                                objectFit: "cover",
+                                                borderRadius: "8px",
+                                            }}
+                                        />
+                                        <button
+                                            onClick={() => handleRemoveImage(index)}
+                                            style={{
+                                                position: "absolute",
+                                                top: "-5px",
+                                                right: "-5px",
+                                                background: "red",
+                                                color: "white",
+                                                border: "none",
+                                                borderRadius: "50%",
+                                                cursor: "pointer",
+                                            }}
+                                        >
+                                            &times;
+                                        </button>
+                                    </div>
+                                ))}
+                            </div>
+                        </Grid>
+                        {/* Action Buttons */}
+                        <Box sx={{ textAlign: "center", display: "flex", gap: 2 }}>
+                            <Button
+                                variant="contained"
+                                sx={{
+                                    flex: 1,
+                                    borderRadius: "8px",
+                                    textTransform: "none",
+                                    backgroundColor: "primary.main",
+                                    "&:hover": { backgroundColor: "primary.dark" },
+                                }}
+                                onClick={handleFormSubmit}
+                            >
+                                Submit
+                            </Button>
+                            <Button
+                                variant="outlined"
+                                sx={{
+                                    flex: 1,
+                                    borderRadius: "8px",
+                                    textTransform: "none",
+                                    borderColor: "grey.500",
+                                }}
+                                onClick={handleFormClose}
+                            >
+                                Cancel
+                            </Button>
+                        </Box>
+                    </Box>
+                </form>
+            </Modal>
             {/* Report for damaged containers */}
             <Box sx={{ mt: 6, py: 6, background: "linear-gradient(to bottom, #f9f9f9, #ffffff)" }}>
                 <Container maxWidth="sm">
@@ -630,6 +797,17 @@ function Complaints() {
                     </Link>
                 </Box>
             </Box>
+            {/* Snackbar for Feedback */}
+            <Snackbar
+                open={snackbar.open}
+                autoHideDuration={6000}
+                onClose={handleSnackbarClose}
+                anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+            >
+                <Alert onClose={handleSnackbarClose} severity={snackbar.severity} sx={{ width: "100%" }}>
+                    {snackbar.message}
+                </Alert>
+            </Snackbar>
         </Box >
     );
 }
