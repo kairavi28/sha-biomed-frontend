@@ -47,12 +47,17 @@ function Complaints() {
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const [isFormActive] = useState(false);
     const [formOpen, setFormOpen] = useState(false);
-    const handleFormOpen = () => setFormOpen(true);
     const handleFormClose = () => setFormOpen(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [formData, setFormData] = useState({
         productType: "",
         description: "", photos: []
+    });
+
+    const [formDataComplaint, setFormDataComplaint] = useState({
+        contactNumber: "",
+        description: "",
+        photos: [],
     });
 
     const [snackbar, setSnackbar] = useState({
@@ -61,6 +66,66 @@ function Complaints() {
         severity: "success",
     });
 
+    {/* File a complaint box */ }
+    const handleFormSubmitComplaint = async (event) => {
+        event.preventDefault();
+        setIsSubmitting(true);
+        if (!formDataComplaint.contactNumber || !formDataComplaint.description) {
+            setError("Please fill out all required fields.");
+            setIsSubmitting(false);
+            return;
+        }
+
+        try {
+            const formDataToSend = new FormData();
+            // Get user data from session
+            const currentUserSession = JSON.parse(sessionStorage.getItem("userData"));
+            // Append basic user info 
+            formDataToSend.append("firstname", currentUserSession.firstname);
+            formDataToSend.append("lastname", currentUserSession.lastname);
+            formDataToSend.append("email", currentUserSession.email);
+
+            // Append facility names as comma-separated string
+            const facilityNames = currentUserSession.facilities.map(f => f.name).join(", ");
+            formDataToSend.append("facilities", facilityNames);
+
+            // Append complaint form data
+            formDataToSend.append("contactNumber", formDataComplaint.contactNumber);
+            formDataToSend.append("description", formDataComplaint.description);
+
+            // Append photos
+            formDataComplaint.photos.forEach((photo) => {
+                formDataToSend.append("photos", photo.file);
+            });
+
+            setLoading(false);
+
+            const response = await axios.post(
+                `http://localhost:5000/client-complaint/add`,
+                formDataToSend,
+                { headers: { "Content-Type": "multipart/form-data" } }
+            );
+
+            setSnackbar({
+                open: true,
+                message: "New complaint submitted successfully!",
+                severity: "success",
+            });
+
+            setFormDataComplaint({ contactNumber: "", description: "", photos: [] });
+            localStorage.removeItem("formDataComplaint");
+            setLoading(false);
+            handleFormClose();
+        } catch (err) {
+            setSnackbar({
+                open: true,
+                message: "Error submitting the request. Please try again.",
+                severity: "error",
+            });
+        } finally {
+            setIsSubmitting(false);
+        }
+    };
     // Handle Snackbar close
     const handleSnackbarClose = () => {
         setSnackbar({ ...snackbar, open: false });
@@ -88,6 +153,29 @@ function Complaints() {
         });
     };
 
+    {/* Complaint Pop up */}
+    const handleFileChangeComplaint = (event) => {
+        const files = Array.from(event.target.files);
+        const previews = files.map((file) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            return new Promise((resolve) => {
+                reader.onloadend = () => resolve({ file, preview: reader.result });
+            });
+        });
+
+        Promise.all(previews).then((uploadedImages) => {
+            setFormDataComplaint((prev) => {
+                const updatedForm = {
+                    ...prev,
+                    photos: [...(prev.photos || []), ...uploadedImages],
+                };
+                localStorage.setItem("formDataComplaint", JSON.stringify(updatedForm));
+                return updatedForm;
+            });
+        });
+    };
+
     const handleRemoveImage = (index) => {
         setFormData((prev) => {
             const updatedPhotos = [...prev.photos];
@@ -97,6 +185,17 @@ function Complaints() {
             return updatedForm;
         });
     };
+
+    
+    const handleRemoveImageComplaint = (index) => {
+        setFormDataComplaint((prev) => {
+          const updatedPhotos = [...prev.photos];
+          updatedPhotos.splice(index, 1);
+          const updatedForm = { ...prev, photos: updatedPhotos };
+          localStorage.setItem("formDataComplaint", JSON.stringify(updatedForm));
+          return updatedForm;
+        });
+      };
 
     const handleFormSubmit = async (event) => {
         event.preventDefault();
@@ -115,9 +214,9 @@ function Complaints() {
         }
 
         // Log FormData contents
-        for (let pair of formDataToSubmit.entries()) {
-            console.log(`${pair[0]}:`, pair[1]);
-        }
+        // for (let pair of formDataToSubmit.entries()) {
+        //     console.log(`${pair[0]}:`, pair[1]);
+        // }
 
         try {
             setIsSubmitting(true);
@@ -151,6 +250,14 @@ function Complaints() {
         });
     };
 
+    const handleInputChangeComplaint = (e) => {
+        const { name, value } = e.target;
+        setFormDataComplaint((prevData) => ({
+          ...prevData,
+          [name]: value,
+        }));
+      };
+    
     useEffect(() => {
         if (!isDialogOpen && !isFormActive) {
             setLoading(true);
@@ -458,7 +565,7 @@ function Complaints() {
                 aria-labelledby="complaint-form-title"
                 aria-describedby="complaint-form-description"
             >
-                <form onSubmit={handleFormSubmit}>
+                <form onSubmit={handleFormSubmitComplaint}>
                     <Box
                         sx={{
                             position: "absolute",
@@ -494,9 +601,9 @@ function Complaints() {
                             name="contactNumber"
                             defaultCountry="ca"
                             placeholder="Enter your phone number"
-                            value={formData.contactNumber || ""}
+                            value={formDataComplaint.contactNumber || ""}
                             onChange={(value) =>
-                                setFormData((prev) => ({
+                                setFormDataComplaint((prev) => ({
                                     ...prev,
                                     contactNumber: value,
                                 }))
@@ -524,8 +631,8 @@ function Complaints() {
                                     borderRadius: "8px",
                                 },
                             }}
-                            value={formData.description || ""}
-                            onChange={handleInputChange}
+                            value={formDataComplaint.description || ""}
+                            onChange={handleInputChangeComplaint}
                         />
 
                         {/* File Upload */}
@@ -541,7 +648,7 @@ function Complaints() {
                             }}
                         >
                             Upload Attachment (Optional)
-                            <input hidden accept="image/*" type="file" multiple onChange={handleFileChange} />
+                            <input hidden accept="image/*" type="file" multiple onChange={handleFileChangeComplaint} />
                         </Button>
                         <Grid item xs={12}>
                             <div
@@ -553,7 +660,7 @@ function Complaints() {
                                     alignItems: "center",
                                 }}
                             >
-                                {formData.photos.map((photo, index) => (
+                                {formDataComplaint.photos.map((photo, index) => (
                                     <div
                                         key={index}
                                         style={{
@@ -574,7 +681,7 @@ function Complaints() {
                                             }}
                                         />
                                         <button
-                                            onClick={() => handleRemoveImage(index)}
+                                            onClick={() => handleRemoveImageComplaint(index)}
                                             style={{
                                                 position: "absolute",
                                                 top: "-5px",
@@ -603,7 +710,7 @@ function Complaints() {
                                     backgroundColor: "primary.main",
                                     "&:hover": { backgroundColor: "primary.dark" },
                                 }}
-                                onClick={handleFormSubmit}
+                                onClick={handleFormSubmitComplaint}
                             >
                                 Submit
                             </Button>

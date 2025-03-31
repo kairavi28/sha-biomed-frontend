@@ -102,7 +102,6 @@ function Dashboard() {
   const handleFormClose = () => setFormOpen(false);
   const [setError] = useState("");
   const [loading, setLoading] = useState(true);
-  const [facilityName, setFacilityName] = useState([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     contactNumber: "",
@@ -212,7 +211,6 @@ function Dashboard() {
       formDataToSend.append("facilities", facilityNames);
 
       // Append complaint form data
-      formDataToSend.append("facility", facilityName);
       formDataToSend.append("contactNumber", formData.contactNumber);
       formDataToSend.append("description", formData.description);
 
