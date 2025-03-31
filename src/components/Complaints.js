@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { PhoneInput } from "react-international-phone";
+import { useMemo } from "react";
 import {
     Box,
     Typography,
@@ -9,6 +10,7 @@ import {
     CircularProgress,
     Button,
     Dialog,
+    DialogTitle,
     DialogContent,
     DialogActions,
     TextField,
@@ -43,12 +45,14 @@ function Complaints() {
     const [issues, setIssues] = useState([]);
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(true);
-    const [selectedIssue, setSelectedIssue] = useState(null);
     const [isDialogOpen, setIsDialogOpen] = useState(false);
+    const [selectedIssue, setSelectedIssue] = useState(null); // Store selected complaint
     const [isFormActive] = useState(false);
     const [formOpen, setFormOpen] = useState(false);
     const handleFormClose = () => setFormOpen(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [userData, setUserData] = useState(null);
+    const currentUserSession = JSON.parse(sessionStorage.getItem("userData"));
     const [formData, setFormData] = useState({
         productType: "",
         description: "", photos: []
@@ -66,9 +70,66 @@ function Complaints() {
         severity: "success",
     });
 
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                setLoading(true);
+                const currentUserId = currentUserSession?.id || currentUserSession?._id;
+                if (!currentUserId) {
+                    console.error("User ID is undefined.");
+                    setLoading(false);
+                    return;
+                }
+
+                const userResponse = await axios.get(`http://localhost:5000/user/${currentUserId}`);
+                const userDataFromDB = userResponse.data;
+                setUserData(userDataFromDB); // ✅ Update state
+                console.log("User Data:", userDataFromDB);
+
+                // Fetch complaints
+                const complaintsResponse = await axios.get(`http://localhost:5000/complaints`);
+                console.log("Complaints Response:", complaintsResponse.data);
+
+                if (Array.isArray(userDataFromDB?.facilities) && userDataFromDB.facilities.length > 0) {
+                    const userFacilityNames = userDataFromDB.facilities
+                        .filter(facility => facility.approved)
+                        .map(facility => facility.name);
+
+                    if (userFacilityNames.length === 0) {
+                        console.warn("No approved facilities found.");
+                        setIssues([]);
+                        setLoading(false);
+                        return;
+                    }
+
+                    // ✅ Use `response.data.facilities` instead of `userData`
+                    const filteredComplaints = complaintsResponse.data.filter(
+                        (complaint) => userFacilityNames.includes(complaint.facility)
+                    );
+
+                    console.log("Filtered Complaints:", filteredComplaints);
+                    setIssues(filteredComplaints);
+                } else {
+                    console.warn("User has no assigned facilities.");
+                    setIssues([]);
+                }
+
+                setLoading(false);
+            } catch (err) {
+                console.error("Error fetching data:", err);
+                setError("Failed to load issues. Please try again.");
+                setLoading(false);
+            }
+        };
+
+        fetchData();
+    }, []); // ✅ Runs once on mount
+
+
     {/* File a complaint box */ }
     const handleFormSubmitComplaint = async (event) => {
         event.preventDefault();
+        setLoading(true);
         setIsSubmitting(true);
         if (!formDataComplaint.contactNumber || !formDataComplaint.description) {
             setError("Please fill out all required fields.");
@@ -79,7 +140,7 @@ function Complaints() {
         try {
             const formDataToSend = new FormData();
             // Get user data from session
-            const currentUserSession = JSON.parse(sessionStorage.getItem("userData"));
+
             // Append basic user info 
             formDataToSend.append("firstname", currentUserSession.firstname);
             formDataToSend.append("lastname", currentUserSession.lastname);
@@ -116,6 +177,7 @@ function Complaints() {
             localStorage.removeItem("formDataComplaint");
             setLoading(false);
             handleFormClose();
+
         } catch (err) {
             setSnackbar({
                 open: true,
@@ -153,7 +215,7 @@ function Complaints() {
         });
     };
 
-    {/* Complaint Pop up */}
+    {/* Complaint Pop up */ }
     const handleFileChangeComplaint = (event) => {
         const files = Array.from(event.target.files);
         const previews = files.map((file) => {
@@ -186,16 +248,16 @@ function Complaints() {
         });
     };
 
-    
+
     const handleRemoveImageComplaint = (index) => {
         setFormDataComplaint((prev) => {
-          const updatedPhotos = [...prev.photos];
-          updatedPhotos.splice(index, 1);
-          const updatedForm = { ...prev, photos: updatedPhotos };
-          localStorage.setItem("formDataComplaint", JSON.stringify(updatedForm));
-          return updatedForm;
+            const updatedPhotos = [...prev.photos];
+            updatedPhotos.splice(index, 1);
+            const updatedForm = { ...prev, photos: updatedPhotos };
+            localStorage.setItem("formDataComplaint", JSON.stringify(updatedForm));
+            return updatedForm;
         });
-      };
+    };
 
     const handleFormSubmit = async (event) => {
         event.preventDefault();
@@ -253,28 +315,10 @@ function Complaints() {
     const handleInputChangeComplaint = (e) => {
         const { name, value } = e.target;
         setFormDataComplaint((prevData) => ({
-          ...prevData,
-          [name]: value,
+            ...prevData,
+            [name]: value,
         }));
-      };
-    
-    useEffect(() => {
-        if (!isDialogOpen && !isFormActive) {
-            setLoading(true);
-            axios
-                .get(`http://35.182.166.248/api/complaints`)
-                .then((response) => {
-                    setIssues(response.data);
-                    setLoading(false);
-                })
-                .catch(() => {
-                    setError("Failed to load issues. Please try again.");
-                    setLoading(false);
-                });
-        }
-
-        return () => { };
-    }, [isDialogOpen, isFormActive]);
+    };
 
     useEffect(() => {
         const savedFormData = JSON.parse(localStorage.getItem("formData"));
@@ -284,7 +328,11 @@ function Complaints() {
     }, []);
 
     const handleViewDetails = (issue) => {
-        setSelectedIssue(issue);
+        if (!issue) return;
+        setSelectedIssue({
+            ...issue,
+            photos: Array.isArray(issue.photos) ? issue.photos : [issue.photos], // Ensure it's an array
+        });
         setIsDialogOpen(true);
     };
 
@@ -420,144 +468,174 @@ function Complaints() {
                     </Box>
 
                     {/* General Guidelines Section */}
+                    {/* General Guidelines Section */}
                     <Typography variant="h5" align="center" fontWeight="bold" sx={{ mb: 6, color: "#003366" }}>
                         General Guidelines
                     </Typography>
-                    <Grid container spacing={4}>
-                        {issues.map((issue) => (
-                            <Grid item xs={12} sm={6} md={4} key={issue.id}>
-                                <Paper
-                                    elevation={5}
-                                    sx={{
-                                        p: 2,
-                                        borderRadius: 3,
-                                        height: "100%",
-                                        display: "flex",
-                                        flexDirection: "column",
-                                        justifyContent: "space-between",
-                                        background: "linear-gradient(135deg, #ffffff, #f3f4f6)",
-                                        transition: "transform 0.3s, box-shadow 0.3s",
-                                        "&:hover": {
-                                            transform: "translateY(-5px)",
-                                            boxShadow: "0px 10px 20px rgba(0, 0, 0, 0.15)",
-                                        },
-                                    }}
-                                >
-                                    <Box
+
+                    {issues.length === 0 ? (
+                        <Box
+                            sx={{
+                                textAlign: "center",
+                                p: 4,
+                                borderRadius: 3,
+                                background: "linear-gradient(135deg, #f8f9fa, #e0e7ff)",
+                                boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.1)",
+                            }}
+                        >
+                            <Typography variant="h6" fontWeight="bold" sx={{ color: "#374151" }}>
+                                No complaints reported in this section.
+                            </Typography>
+                            <Typography variant="body1" sx={{ color: "#6b7280", mt: 1 }}>
+                                If you have any concerns, please file a complaint using the form.
+                            </Typography>
+                        </Box>
+                    ) : (
+                        <Grid container spacing={4}>
+                            {issues.map((issue) => (
+                                <Grid item xs={12} sm={6} md={4} key={issue.id}>
+                                    <Paper
+                                        elevation={5}
                                         sx={{
-                                            height: "200px",
-                                            overflow: "hidden",
-                                            borderRadius: 2,
-                                            mb: 2,
+                                            p: 2,
+                                            borderRadius: 3,
+                                            height: "100%",
+                                            display: "flex",
+                                            flexDirection: "column",
+                                            justifyContent: "space-between",
+                                            background: "linear-gradient(135deg, #ffffff, #f3f4f6)",
+                                            transition: "transform 0.3s, box-shadow 0.3s",
+                                            "&:hover": {
+                                                transform: "translateY(-5px)",
+                                                boxShadow: "0px 10px 20px rgba(0, 0, 0, 0.15)",
+                                            },
                                         }}
                                     >
-                                        <img
-                                            src={issue.photos}
-                                            alt="Complaint Image"
-                                            style={{ width: "100%", height: "100%", objectFit: "cover" }}
-                                            loading="lazy"
-                                        />
-                                    </Box>
-                                    <Box sx={{ flexGrow: 0.5 }}>
-                                        <Typography
-                                            variant="h6"
+                                        {/* Image container with conditional styles */}
+                                        <Box
                                             sx={{
-                                                fontWeight: "bold",
-                                                mb: 1,
-                                                color: "#00796b",
-                                                textOverflow: "ellipsis",
-                                                overflow: "hidden",
+                                                height: "200px",
+                                                overflowX: issue.photos?.length > 1 ? "auto" : "hidden",
                                                 whiteSpace: "nowrap",
+                                                borderRadius: 2,
+                                                mb: 2,
+                                                display: "flex",
+                                                gap: 1,
+                                                justifyContent: issue.photos?.length === 1 ? "center" : "flex-start",
                                             }}
                                         >
-                                            {issue.facility}
+                                            {issue.photos?.length > 0 ? (
+                                                issue.photos.map((photo, i) => (
+                                                    <img
+                                                        key={i}
+                                                        src={photo}
+                                                        alt={`Issue Image ${i + 1}`}
+                                                        style={{
+                                                            height: issue.photos?.length === 1 ? "100%" : "auto",
+                                                            width: issue.photos?.length === 1 ? "100%" : "auto",
+                                                            objectFit: "cover",
+                                                            borderRadius: "4px",
+                                                        }}
+                                                        loading="lazy"
+                                                    />
+                                                ))
+                                            ) : (
+                                                <img
+                                                    src="/placeholder.jpg"
+                                                    alt="No image available"
+                                                    style={{ width: "100%", height: "100%", objectFit: "cover", borderRadius: "4px" }}
+                                                    loading="lazy"
+                                                />
+                                            )}
+                                        </Box>
+
+                                        <Box sx={{ flexGrow: 0.5 }}>
+                                            <Typography
+                                                variant="h6"
+                                                sx={{
+                                                    fontWeight: "bold",
+                                                    mb: 1,
+                                                    color: "#00796b",
+                                                    textOverflow: "ellipsis",
+                                                    overflow: "hidden",
+                                                    whiteSpace: "nowrap",
+                                                }}
+                                            >
+                                                {issue.title}
+                                            </Typography>
+                                            <Typography variant="body2" sx={{ color: "#666", lineHeight: 1 }}>
+                                                {issue.description.length > 100
+                                                    ? `${issue.description.slice(0, 100)}...`
+                                                    : issue.description}
+                                            </Typography>
+                                        </Box>
+
+                                        <Typography variant="body2" display="block" sx={{ mt: 1, color: "#757575" }}>
+                                            {new Date(issue.createdAt).toLocaleString()}
                                         </Typography>
-                                        <Typography variant="body2" sx={{ color: "#666", lineHeight: 1 }}>
-                                            {issue.description.length > 100
-                                                ? `${issue.description.slice(0, 100)}...`
-                                                : issue.description}
-                                        </Typography>
-                                    </Box>
-                                    <Typography variant="body2" display="block" sx={{ mt: 1, color: "#757575" }}>
-                                        {new Date(issue.createdAt).toLocaleString()}
-                                    </Typography>
-                                    <Button
-                                        variant="contained"
-                                        fullWidth
-                                        sx={{
-                                            mt: 3,
-                                            background: "linear-gradient(135deg,rgb(98, 129, 233),rgb(164, 208, 231))",
-                                            color: "#fff",
-                                            px: 4,
-                                            py: 1,
-                                            borderRadius: "12px",
-                                            boxShadow: "0px 4px 12px rgba(44, 56, 233, 0.4)",
-                                            "&:hover": { background: "linear-gradient(135deg,rgb(84, 185, 240),rgb(71, 96, 240))" },
-                                        }}
-                                        onClick={() => handleViewDetails(issue)}
-                                    >
-                                        <b>Read More</b>
-                                    </Button>
-                                </Paper>
-                            </Grid>
-                        ))}
-                    </Grid>
+
+                                        <Button
+                                            variant="contained"
+                                            fullWidth
+                                            sx={{
+                                                mt: 3,
+                                                background: "linear-gradient(135deg,rgb(98, 129, 233),rgb(164, 208, 231))",
+                                                color: "#fff",
+                                                px: 4,
+                                                py: 1,
+                                                borderRadius: "12px",
+                                                boxShadow: "0px 4px 12px rgba(44, 56, 233, 0.4)",
+                                                "&:hover": { background: "linear-gradient(135deg,rgb(84, 185, 240),rgb(71, 96, 240))" },
+                                            }}
+                                            onClick={() => handleViewDetails(issue)}
+                                        >
+                                            <b>Read More</b>
+                                        </Button>
+                                    </Paper>
+                                </Grid>
+                            ))}
+                        </Grid>
+                    )}
                 </Container>
             </Box>
             {/* Popup Dialog for Viewing Full Complaint */}
-            <Dialog
-                open={isDialogOpen}
-                onClose={handleCloseDialog}
-                maxWidth="sm"
-                fullWidth
-            >
-                {/* <DialogTitle sx={{ fontWeight: "bold", textAlign: "center" }}>
-          Details
-        </DialogTitle> */}
+            <Dialog open={isDialogOpen} onClose={() => setIsDialogOpen(false)} maxWidth="md" fullWidth>
+                <DialogTitle>{selectedIssue?.facility || "Complaint Details"}</DialogTitle>
                 <DialogContent>
-                    {selectedIssue && (
-                        <Box>
-                            <img
-                                src={selectedIssue.photos}
-                                alt={selectedIssue.facility}
-                                style={{
-                                    width: "100%",
-                                    borderRadius: "8px",
-                                    marginBottom: "20px",
-                                }}
-                            />
-                            <Typography variant="h6" sx={{ fontWeight: "bold", mb: 1 }}>
-                                Facility: {selectedIssue.facility}
-                            </Typography>
-                            <Typography variant="body1" sx={{ mb: 1 }}>
-                                {selectedIssue.description}
-                            </Typography>
-                            <Typography variant="body1" color="text.secondary">
-                                Submitted on:{" "}
-                                {new Date(selectedIssue.createdAt).toLocaleString()}
-                            </Typography>
+                    {selectedIssue?.photos?.length > 0 ? (
+                        <Box sx={{ display: "flex", gap: 2, flexWrap: "wrap", justifyContent: "center" }}>
+                            {selectedIssue.photos.map((photo, index) => (
+                                <img
+                                    key={index}
+                                    src={photo}
+                                    alt={`Complaint Image ${index + 1}`}
+                                    style={{
+                                        width: "300px", // Set a larger width
+                                        height: "auto", // Keep aspect ratio
+                                        borderRadius: "8px", // Rounded corners for a smoother look
+                                        objectFit: "cover", // Ensure image fits within the dimensions
+                                        maxHeight: "300px", // Set max height if needed
+                                        boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)", // Optional: Add shadow for better visuals
+                                    }}
+                                />
+                            ))}
                         </Box>
+                    ) : (
+                        <Typography>No images available</Typography>
                     )}
+
+                    <Typography variant="body2" sx={{ mt: 2, color: "#666" }}>
+                        {selectedIssue?.description}
+                    </Typography>
+
+                    <Typography variant="caption" sx={{ display: "block", mt: 1, color: "#757575" }}>
+                        {new Date(selectedIssue?.createdAt).toLocaleString()}
+                    </Typography>
                 </DialogContent>
                 <DialogActions>
-                    <IconButton
-                        size="small"
-                        sx={{
-                            position: "absolute",
-                            top: "2px",
-                            right: "2px",
-                            background: "red",
-                            color: "white",
-                            borderRadius: "50%",
-                            "&:hover": { background: "darkred" },
-                        }}
-                        onClick={handleCloseDialog}
-                    >
-                        <CloseIcon />  {/* ❌ Remove image icon */}
-                    </IconButton>
+                    <Button onClick={() => setIsDialogOpen(false)}>Close</Button>
                 </DialogActions>
             </Dialog>
-
             {/* File a complaint modal popup*/}
             <Modal
                 open={formOpen}
