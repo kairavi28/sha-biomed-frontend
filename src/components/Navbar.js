@@ -80,7 +80,7 @@ const Navbar = () => {
   // Handle form submission
   const handleSubmit = () => {
     axios
-      .post("http://www.biomedwaste.net/api/quote/add", formData)
+      .post("https://www.biomedwaste.net/api/quote/add", formData)
       .then((res) => {
         setSnackbar({
           open: true,
@@ -339,7 +339,7 @@ const Navbar = () => {
                 onClick={() => {
                   handleMenuClose();
                   axios
-                    .post("http://www.biomedwaste.net/api/logout", {}, { withCredentials: true }) // Ensure credentials are included
+                    .post("https://www.biomedwaste.net/api/logout", {}, { withCredentials: true }) // Ensure credentials are included
                     .then(() => {
                       sessionStorage.clear(); // Clear sessionStorage if used
                       localStorage.clear(); // Clear localStorage if used

@@ -48,7 +48,7 @@ function COD() {
       }
 
       try {
-        const response = await axios.get(`http://www.biomedwaste.net/api/user/${currentUserId}`);
+        const response = await axios.get(`https://www.biomedwaste.net/api/user/${currentUserId}`);
         const approvedFacilities = response.data?.facilities
           .filter(facility => facility.approved)
           .map(facility => facility.name);
@@ -73,7 +73,7 @@ function COD() {
         const codsData = {};
         const fetchPromises = selectedFacilities.map(async (facility) => {
           try {
-            const response = await axios.get(`http://www.biomedwaste.net/api/cod/${facility}`);
+            const response = await axios.get(`https://www.biomedwaste.net/api/cod/${facility}`);
             codsData[facility] = response.data.length ? response.data : [];
           } catch (error) {
             console.error(`Error fetching CODs for ${facility}:`, error);
@@ -150,7 +150,7 @@ function COD() {
                             </IconButton>
                           </TableCell>
                           <TableCell>
-                            <IconButton color="success" component="a" href={`http://www.biomedwaste.net/api/cod/${cod.fileName}`} download target="_blank" rel="noopener noreferrer">
+                            <IconButton color="success" component="a" href={`https://www.biomedwaste.net/api/cod/${cod.fileName}`} download target="_blank" rel="noopener noreferrer">
                               <DownloadIcon />
                             </IconButton>
 
@@ -175,7 +175,7 @@ function COD() {
           <DialogContent sx={{ display: "flex", justifyContent: "center", alignItems: "center", height: "80vh" }}>
             {currentCod && (
               <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.min.js">
-                <Viewer fileUrl={`http://www.biomedwaste.net/api/cod/${currentCod.fileName}`} />
+                <Viewer fileUrl={`https://www.biomedwaste.net/api/cod/${currentCod.fileName}`} />
               </Worker>
             )}
           </DialogContent>

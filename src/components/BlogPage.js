@@ -58,7 +58,7 @@ function BlogPage() {
     if (autoReload) {
       setLoading(true);
       axios
-        .get("http://www.biomedwaste.net/api/blogs")
+        .get("https://www.biomedwaste.net/api/blogs")
         .then((response) => {
           setBlogs(response.data);
           setLoading(false);

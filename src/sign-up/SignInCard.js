@@ -48,7 +48,7 @@ export default function SignInCard() {
         scopes: ["User.Read"], 
       });
       //store in db 
-      const responseObj = await axios.post(`http://www.biomedwaste.net/api/user/microsoft-signin`, loginResponse.account, {
+      const responseObj = await axios.post(`https://www.biomedwaste.net/api/user/microsoft-signin`, loginResponse.account, {
         headers: { "Content-Type": "application/json" },
       });
       sessionStorage.setItem("userData", JSON.stringify(responseObj.data.user));
@@ -96,7 +96,7 @@ export default function SignInCard() {
 
     try {
       // Make API request for login
-      const response = await axios.post(`http://www.biomedwaste.net/api/user/login`, JSON.stringify(formData), {
+      const response = await axios.post(`https://www.biomedwaste.net/api/user/login`, JSON.stringify(formData), {
         headers: {
           'Content-Type': 'application/json',
         },

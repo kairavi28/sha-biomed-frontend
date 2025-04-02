@@ -5,7 +5,7 @@ const Blog = () => {
 
     useEffect(() => {
         // Fetch initial blogs
-        fetch('http://www.biomedwaste.net/api/blogs')
+        fetch('https://www.biomedwaste.net/api/blogs')
             .then(response => response.json())
             .then(data => setBlogs(data));
 
