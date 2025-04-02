@@ -49,7 +49,7 @@ const InvoiceList = () => {
       }
 
       try {
-        const response = await axios.get(`http://localhost:5000/user/${currentUserId}`);
+        const response = await axios.get(`http://www.biomedwaste.net/api/user/${currentUserId}`);
         const approvedFacilities = response.data?.facilities
           .filter(facility => facility.approved)
           .map(facility => facility.name);
@@ -76,7 +76,7 @@ const InvoiceList = () => {
         // Fetch invoices for all facilities
         const fetchPromises = selectedFacilities.map(async (facility) => {
           try {
-            const response = await axios.get(`http://localhost:5000/invoice/${facility}`);
+            const response = await axios.get(`http://www.biomedwaste.net/api/invoice/${facility}`);
             invoicesData[facility] = response.data.length ? response.data : [];
           } catch (error) {
             console.error(`Error fetching invoices for ${facility}:`, error);
@@ -170,7 +170,7 @@ const InvoiceList = () => {
                             </IconButton>
                           </TableCell>
                           <TableCell>
-                            <IconButton color="success" component="a" href={`http://localhost:5000/invoices/${invoice.fileName}`} download>
+                            <IconButton color="success" component="a" href={`http://www.biomedwaste.net/api/invoices/${invoice.fileName}`} download>
                               <DownloadIcon />
                             </IconButton>
                           </TableCell>
@@ -195,7 +195,7 @@ const InvoiceList = () => {
           <DialogContent sx={{ display: "flex", justifyContent: "center", alignItems: "center", height: "80vh" }}>
             {currentInvoice && (
               <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.min.js">
-                <Viewer fileUrl={`http://localhost:5000/invoices/${currentInvoice.fileName}`} />
+                <Viewer fileUrl={`http://www.biomedwaste.net/api/invoices/${currentInvoice.fileName}`} />
               </Worker>
             )}
           </DialogContent>

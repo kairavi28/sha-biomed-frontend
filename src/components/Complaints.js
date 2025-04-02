@@ -81,13 +81,13 @@ function Complaints() {
                     return;
                 }
 
-                const userResponse = await axios.get(`http://localhost:5000/user/${currentUserId}`);
+                const userResponse = await axios.get(`http://www.biomedwaste.net/api/user/${currentUserId}`);
                 const userDataFromDB = userResponse.data;
                 setUserData(userDataFromDB); // ✅ Update state
 
 
                 // Fetch complaints
-                const complaintsResponse = await axios.get(`http://localhost:5000/complaints`);
+                const complaintsResponse = await axios.get(`http://www.biomedwaste.net/api/complaints`);
               
 
                 if (Array.isArray(userDataFromDB?.facilities) && userDataFromDB.facilities.length > 0) {
@@ -162,7 +162,7 @@ function Complaints() {
             setLoading(false);
 
             const response = await axios.post(
-                `http://localhost:5000/client-complaint/add`,
+                `http://www.biomedwaste.net/api/client-complaint/add`,
                 formDataToSend,
                 { headers: { "Content-Type": "multipart/form-data" } }
             );
