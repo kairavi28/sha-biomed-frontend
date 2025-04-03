@@ -66,11 +66,12 @@ function InstructionPage() {
     const [error, setError] = useState("");
     const [open, setOpen] = useState(false);
     const [selectedBlog, setSelectedBlog] = useState(null);
-
+    const API_BASE_URL = process.env.REACT_APP_API_URL;
+    
     useEffect(() => {
         setLoading(true);
         axios
-            .get("https://biomedwaste.net/blogs")
+            .get(`${API_BASE_URL}/blogs`)
             .then((response) => {
                 setBlogs(response.data);
                 setLoading(false);

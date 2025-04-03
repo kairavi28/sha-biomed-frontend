@@ -15,6 +15,7 @@ import {
 import axios from "axios";
 import Link from "@mui/material/Link";
 
+
 function BlogPage() {
   const [blogs, setBlogs] = useState([]);
   const [autoReload, setAutoReload] = useState(true);
@@ -22,6 +23,7 @@ function BlogPage() {
   const [error, setError] = useState("");
   const [open, setOpen] = useState(false);
   const [selectedBlog, setSelectedBlog] = useState(null);
+  const API_BASE_URL = process.env.REACT_APP_API_URL;
   // const [quoteData, setQuoteData] = useState({
   //   name: '',
   //   email: '',
@@ -58,7 +60,7 @@ function BlogPage() {
     if (autoReload) {
       setLoading(true);
       axios
-        .get("https://biomedwaste.net/blogs")
+        .get(`${API_BASE_URL}/blogs`)
         .then((response) => {
           setBlogs(response.data);
           setLoading(false);

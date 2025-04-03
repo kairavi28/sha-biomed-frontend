@@ -36,6 +36,7 @@ import ContentSlider from "./ContentSlider";
 import CallToAction from "./CallToAction";
 import { Navigation, Pagination, Autoplay } from "swiper/modules";
 
+
 const slides = [
   {
     "title": "Worker Safety",
@@ -95,6 +96,7 @@ const testimonials = [
 ];
 
 function Dashboard() {
+  const API_BASE_URL = process.env.REACT_APP_API_URL;
   const navigate = useNavigate();
   const [userData, setUserData] = useState(null);
   const [formOpen, setFormOpen] = useState(false);
@@ -132,7 +134,7 @@ function Dashboard() {
       }
 
       try {
-        const response = await axios.get(`https://biomedwaste.net/user/${currentUserId}`);
+        const response = await axios.get(`${API_BASE_URL}/user/${currentUserId}`);
         setUserData(response.data);
         if (response.data?.facilities.some(facility => facility.approved)) {
           setSnackbar({
@@ -220,7 +222,7 @@ function Dashboard() {
       setLoading(false);
 
       const response = await axios.post(
-        `https://biomedwaste.net/client-complaint/add`,
+        `${API_BASE_URL}/client-complaint/add`,
         formDataToSend,
         { headers: { "Content-Type": "multipart/form-data" } }
       );

@@ -36,6 +36,7 @@ const WaybillList = () => {
     const [currentWaybill, setCurrentWaybill] = useState(null);
     const [expandedFacility, setExpandedFacility] = useState(null);
     const [loading, setLoading] = useState(true);
+    const API_BASE_URL = process.env.REACT_APP_API_URL;
 
     useEffect(() => {
         const fetchUserData = async () => {
@@ -50,7 +51,7 @@ const WaybillList = () => {
                 return;
             }
             try {
-                const response = await axios.get(`https://biomedwaste.net/user/${currentUserId}`);
+                const response = await axios.get(`${API_BASE_URL}/user/${currentUserId}`);
                 const approvedFacilities = response.data?.facilities
                     .filter(facility => facility.approved)
                     .map(facility => facility.name) || [];
@@ -75,7 +76,7 @@ const WaybillList = () => {
                 const waybillData = {};
                 for (const facility of selectedFacilities) {
                     try {
-                        const waybillResponse = await axios.get(`https://biomedwaste.net/waybill/${facility}`)
+                        const waybillResponse = await axios.get(`${API_BASE_URL}/waybill/${facility}`)
                         waybillData[facility] = waybillResponse.data;
                     } catch (error) {
                         console.error(`Error fetching data for facility: ${facility}`, error);
@@ -157,7 +158,7 @@ const WaybillList = () => {
                                                                     <IconButton
                                                                         color="success"
                                                                         component="a"
-                                                                        href={`https://biomedwaste.net/waybills/${waybill.fileName}`}
+                                                                        href={`${API_BASE_URL}/waybills/${waybill.fileName}`}
                                                                         download
                                                                         target="_blank"
                                                                         rel="noopener noreferrer"
@@ -192,7 +193,7 @@ const WaybillList = () => {
                         <DialogContent sx={{ display: "flex", justifyContent: "center", alignItems: "center", height: "80vh" }}>
                             {currentWaybill && (
                                 <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.min.js">
-                                    <Viewer fileUrl={`https://biomedwaste.net/waybills/${currentWaybill.fileName}`} />
+                                    <Viewer fileUrl={`${API_BASE_URL}/waybills/${currentWaybill.fileName}`} />
                                 </Worker>
                             )}
                         </DialogContent>

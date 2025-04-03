@@ -35,6 +35,7 @@ const InvoiceList = () => {
   const [loading, setLoading] = useState(true);
   const [currentInvoice, setCurrentInvoice] = useState(null);
   const [selectedFacilities, setSelectedFacilities] = useState([]);
+  const API_BASE_URL = process.env.REACT_APP_API_URL;
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -48,7 +49,7 @@ const InvoiceList = () => {
       }
 
       try {
-        const response = await axios.get(`https://biomedwaste.net/user/${currentUserId}`);
+        const response = await axios.get(`${API_BASE_URL}/user/${currentUserId}`);
         const approvedFacilities = response.data?.facilities
           .filter(facility => facility.approved)
           .map(facility => facility.name);
@@ -73,7 +74,7 @@ const InvoiceList = () => {
         const invoicesData = {};
         const fetchPromises = selectedFacilities.map(async (facility) => {
           try {
-            const response = await axios.get(`https://biomedwaste.net/invoice/${facility}`);
+            const response = await axios.get(`${API_BASE_URL}/invoice/${facility}`);
             invoicesData[facility] = response.data.length ? response.data : [];
           } catch (error) {
             console.error(`Error fetching invoices for ${facility}:`, error);
@@ -163,7 +164,7 @@ const InvoiceList = () => {
                             <IconButton
                               color="success"
                               component="a"
-                              href={`https://biomedwaste.net/invoices/${invoice.fileName}`}
+                              href={`${API_BASE_URL}/invoices/${invoice.fileName}`}
                               download
                               target="_blank"
                               rel="noopener noreferrer"
@@ -191,7 +192,7 @@ const InvoiceList = () => {
             <DialogContent sx={{ display: "flex", justifyContent: "center", alignItems: "center", height: "80vh" }}>
               {currentInvoice && (
                 <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.min.js">
-                  <Viewer fileUrl={`https://biomedwaste.net/invoices/${currentInvoice.fileName}`} />
+                  <Viewer fileUrl={`${API_BASE_URL}/invoices/${currentInvoice.fileName}`} />
                 </Worker>
               )}
             </DialogContent>

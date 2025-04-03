@@ -28,7 +28,6 @@ import DownloadIcon from "@mui/icons-material/Download";
 import { Viewer, Worker } from "@react-pdf-viewer/core";
 import "@react-pdf-viewer/core/lib/styles/index.css";
 
-
 function COD() {
   const [cods, setCods] = useState({});
   const [openPreview, setOpenPreview] = useState(false);
@@ -36,6 +35,7 @@ function COD() {
   const [loading, setLoading] = useState(true);
   const [currentCod, setCurrentCod] = useState(null);
   const [selectedFacilities, setSelectedFacilities] = useState([]);
+  const API_BASE_URL = process.env.REACT_APP_API_URL;
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -48,7 +48,7 @@ function COD() {
       }
 
       try {
-        const response = await axios.get(`https://biomedwaste.net/user/${currentUserId}`);
+        const response = await axios.get(`${API_BASE_URL}/user/${currentUserId}`);
         const approvedFacilities = response.data?.facilities
           .filter(facility => facility.approved)
           .map(facility => facility.name);
@@ -73,7 +73,7 @@ function COD() {
         const codsData = {};
         const fetchPromises = selectedFacilities.map(async (facility) => {
           try {
-            const response = await axios.get(`https://biomedwaste.net/cod/${facility}`);
+            const response = await axios.get(`${API_BASE_URL}/cod/${facility}`);
             codsData[facility] = response.data.length ? response.data : [];
           } catch (error) {
             console.error(`Error fetching CODs for ${facility}:`, error);
@@ -150,7 +150,7 @@ function COD() {
                             </IconButton>
                           </TableCell>
                           <TableCell>
-                            <IconButton color="success" component="a" href={`https://biomedwaste.net/cod/${cod.fileName}`} download target="_blank" rel="noopener noreferrer">
+                            <IconButton color="success" component="a" href={`${API_BASE_URL}/cod/${cod.fileName}`} download target="_blank" rel="noopener noreferrer">
                               <DownloadIcon />
                             </IconButton>
 
@@ -175,7 +175,7 @@ function COD() {
           <DialogContent sx={{ display: "flex", justifyContent: "center", alignItems: "center", height: "80vh" }}>
             {currentCod && (
               <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.min.js">
-                <Viewer fileUrl={`https://biomedwaste.net/cod/${currentCod.fileName}`} />
+                <Viewer fileUrl={`${API_BASE_URL}/cod/${currentCod.fileName}`} />
               </Worker>
             )}
           </DialogContent>

@@ -42,6 +42,7 @@ const dataURLToFile = (dataURL, filename) => {
 };
 
 function Complaints() {
+    const API_BASE_URL = process.env.REACT_APP_API_URL;
     const [issues, setIssues] = useState([]);
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(true);
@@ -81,13 +82,13 @@ function Complaints() {
                     return;
                 }
 
-                const userResponse = await axios.get(`https://biomedwaste.net/user/${currentUserId}`);
+                const userResponse = await axios.get(`${API_BASE_URL}/user/${currentUserId}`);
                 const userDataFromDB = userResponse.data;
                 setUserData(userDataFromDB); // ✅ Update state
 
 
                 // Fetch complaints
-                const complaintsResponse = await axios.get(`https://biomedwaste.net/complaints`);
+                const complaintsResponse = await axios.get(`${API_BASE_URL}/complaints`);
               
 
                 if (Array.isArray(userDataFromDB?.facilities) && userDataFromDB.facilities.length > 0) {
@@ -162,7 +163,7 @@ function Complaints() {
             setLoading(false);
 
             const response = await axios.post(
-                `https://biomedwaste.net/client-complaint/add`,
+                `${API_BASE_URL}/client-complaint/add`,
                 formDataToSend,
                 { headers: { "Content-Type": "multipart/form-data" } }
             );
@@ -282,7 +283,7 @@ function Complaints() {
 
         try {
             setIsSubmitting(true);
-            await axios.post(`https://biomedwaste.net/issues/add`, formDataToSubmit, {
+            await axios.post(`${API_BASE_URL}/issues/add`, formDataToSubmit, {
                 headers: { "Content-Type": "multipart/form-data" },
             });
             setSnackbar({

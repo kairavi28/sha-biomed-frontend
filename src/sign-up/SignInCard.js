@@ -41,6 +41,7 @@ export default function SignInCard() {
   const [passwordErrorMessage, setPasswordErrorMessage] = React.useState('');
   const [open, setOpen] = React.useState(false);
   const { instance } = useMsal();
+  const API_BASE_URL = process.env.REACT_APP_API_URL;
 
   const handleMicrosoftLogin = async () => {
     try {
@@ -48,7 +49,7 @@ export default function SignInCard() {
         scopes: ["User.Read"], 
       });
       //store in db 
-      const responseObj = await axios.post(`https://biomedwaste.net/user/microsoft-signin`, loginResponse.account, {
+      const responseObj = await axios.post(`${API_BASE_URL}/user/microsoft-signin`, loginResponse.account, {
         headers: { "Content-Type": "application/json" },
       });
       sessionStorage.setItem("userData", JSON.stringify(responseObj.data.user));
@@ -96,7 +97,7 @@ export default function SignInCard() {
 
     try {
       // Make API request for login
-      const response = await axios.post(`https://biomedwaste.net/user/login`, JSON.stringify(formData), {
+      const response = await axios.post(`${API_BASE_URL}/user/login`, JSON.stringify(formData), {
         headers: {
           'Content-Type': 'application/json',
         },

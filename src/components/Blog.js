@@ -1,16 +1,18 @@
 import React, { useEffect, useState } from 'react';
 
+
 const Blog = () => {
     const [blogs, setBlogs] = useState([]);
+    const API_BASE_URL = process.env.REACT_APP_API_URL;
 
     useEffect(() => {
         // Fetch initial blogs
-        fetch('https://biomedwaste.net/blogs')
+        fetch(`${API_BASE_URL}/blogs`)
             .then(response => response.json())
             .then(data => setBlogs(data));
 
         // Set up WebSocket connection
-        const ws = new WebSocket('ws://biomedwaste.net/');
+        const ws = new WebSocket('ws://biomedwaste.net/api/');
 
         ws.onmessage = (event) => {
             const message = JSON.parse(event.data);

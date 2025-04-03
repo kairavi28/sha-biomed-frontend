@@ -51,6 +51,7 @@ const SignUpContainer = styled(Stack)(({ theme }) => ({
 }));
 
 export default function SignUp() {
+  const API_BASE_URL = process.env.REACT_APP_API_URL;
   const [mode, setMode] = React.useState('light');
   const defaultTheme = createTheme({ palette: { mode } });
   const [firstNameError, setFirstNameError] = React.useState(false);
@@ -212,7 +213,7 @@ export default function SignUp() {
     };
 
     try {
-      const response = await axios.post('https://biomedwaste.net/user/register', formData, {
+      const response = await axios.post(`${API_BASE_URL}/user/register`, formData, {
         headers: {
           'Content-Type': 'application/json',
         },
