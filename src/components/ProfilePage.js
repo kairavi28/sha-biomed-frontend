@@ -50,7 +50,7 @@ function ProfilePage() {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await axios.get(`https://biomedwaste.net/api/user/${userId}`);
+        const response = await axios.get(`https://biomedwaste.net/user/${userId}`);
         setUserData(response.data);
         if (response.data?.facilities) {
           const approvedFacilities = response.data.facilities
@@ -69,7 +69,7 @@ function ProfilePage() {
 
     const fetchFacilities = async () => {
       try {
-        const response = await axios.get("https://biomedwaste.net/api/json/company_name");
+        const response = await axios.get("https://biomedwaste.net/json/company_name");
         const facilityNames = [...new Set(response.data.map(facility => facility.CompanyName))];
         setAvailableFacilities(facilityNames);
       } catch (err) {
@@ -112,7 +112,7 @@ function ProfilePage() {
       }
 
       try {
-        const response = await axios.get(`https://biomedwaste.net/api/user/${currentUserId}`);
+        const response = await axios.get(`https://biomedwaste.net/user/${currentUserId}`);
         const approvedFacilities = response.data?.facilities
           .filter(facility => facility.approved)
           .map(facility => facility.name);
@@ -145,12 +145,12 @@ function ProfilePage() {
 
     try {
       // Send update request
-      const response = await axios.put(`https://biomedwaste.net/api/user/edit/${userId}`, formData, {
+      const response = await axios.put(`https://biomedwaste.net/user/edit/${userId}`, formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
 
       // Fetch updated user data
-      const updatedResponse = await axios.get(`https://biomedwaste.net/api/user/${userId}`);
+      const updatedResponse = await axios.get(`https://biomedwaste.net/user/${userId}`);
       setUserData(updatedResponse.data);
 
       const approvedFacilities = updatedResponse.data?.facilities
@@ -169,7 +169,7 @@ function ProfilePage() {
       if (response.data.newlyAddedFacilities.length > 0) {
         const facilityNames = response.data.newlyAddedFacilities;
         for (const facilityName of facilityNames) {
-          await axios.post(`https://biomedwaste.net/api/user/request-facility`, { userId, facilityName }, {
+          await axios.post(`https://biomedwaste.net/user/request-facility`, { userId, facilityName }, {
             headers: { "Content-Type": "application/json" },
           });
         }
