@@ -212,7 +212,7 @@ export default function SignUp() {
     };
 
     try {
-      const response = await axios.post('https://www.biomedwaste.net/api/user/register', formData, {
+      const response = await axios.post('https://biomedwaste.net/api/user/register', formData, {
         headers: {
           'Content-Type': 'application/json',
         },

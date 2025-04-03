@@ -132,7 +132,7 @@ function Dashboard() {
       }
 
       try {
-        const response = await axios.get(`https://www.biomedwaste.net/api/user/${currentUserId}`);
+        const response = await axios.get(`https://biomedwaste.net/api/user/${currentUserId}`);
         setUserData(response.data);
         if (response.data?.facilities.some(facility => facility.approved)) {
           setSnackbar({
@@ -220,7 +220,7 @@ function Dashboard() {
       setLoading(false);
 
       const response = await axios.post(
-        `https://www.biomedwaste.net/api/client-complaint/add`,
+        `https://biomedwaste.net/api/client-complaint/add`,
         formDataToSend,
         { headers: { "Content-Type": "multipart/form-data" } }
       );

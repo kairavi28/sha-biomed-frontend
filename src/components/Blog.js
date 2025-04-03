@@ -5,12 +5,12 @@ const Blog = () => {
 
     useEffect(() => {
         // Fetch initial blogs
-        fetch('https://www.biomedwaste.net/api/blogs')
+        fetch('https://biomedwaste.net/api/blogs')
             .then(response => response.json())
             .then(data => setBlogs(data));
 
         // Set up WebSocket connection
-        const ws = new WebSocket('ws://www.biomedwaste.net/api/');
+        const ws = new WebSocket('ws://biomedwaste.net/api/');
 
         ws.onmessage = (event) => {
             const message = JSON.parse(event.data);

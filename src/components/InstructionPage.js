@@ -70,7 +70,7 @@ function InstructionPage() {
     useEffect(() => {
         setLoading(true);
         axios
-            .get("https://www.biomedwaste.net/api/blogs")
+            .get("https://biomedwaste.net/api/blogs")
             .then((response) => {
                 setBlogs(response.data);
                 setLoading(false);
