@@ -337,18 +337,17 @@ const Navbar = () => {
               </MenuItem>
               <Divider />
               <MenuItem
-                onClick={() => {
+                onClick={async () => {
                   handleMenuClose();
-                  axios
-                    .post(`${API_BASE_URL}/logout`, {}, { withCredentials: true }) // Ensure credentials are included
-                    .then(() => {
-                      sessionStorage.clear(); // Clear sessionStorage if used
-                      localStorage.clear(); // Clear localStorage if used
-                      navigate("/"); // Redirect to login/home
-                    })
-                    .catch(() => {
-                      alert("There was an error logging out.");
-                    });
+                  try {
+                    await axios.post(`${API_BASE_URL}/logout`, {}, { withCredentials: true });
+                    sessionStorage.clear();
+                    localStorage.clear();
+                    navigate("/");
+                  } catch (err) {
+                    console.error("Logout failed:", err);
+                    alert("There was an error logging out.");
+                  }
                 }}
                 sx={{ display: "flex", gap: 1 }}
               >

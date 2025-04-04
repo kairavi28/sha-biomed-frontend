@@ -70,7 +70,7 @@ function ProfilePage() {
 
     const fetchFacilities = async () => {
       try {
-        const response = await axios.get("${API_BASE_URL}/json/company_name");
+        const response = await axios.get(`${API_BASE_URL}/json/company_name`);
         const facilityNames = [...new Set(response.data.map(facility => facility.CompanyName))];
         setAvailableFacilities(facilityNames);
       } catch (err) {
