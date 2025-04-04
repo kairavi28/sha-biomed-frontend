@@ -28,7 +28,6 @@ const AuthCallback = () => {
         }
       } catch (error) {
         console.error("Authentication error:", error);
-        navigate("/");
       }
     };
 

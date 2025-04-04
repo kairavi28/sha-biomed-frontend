@@ -169,26 +169,11 @@ function Dashboard() {
     });
   };
 
-
-  if (loading) {
-    return (
-      <Box
-        display="flex"
-        justifyContent="center"
-        alignItems="center"
-        height="100vh"
-        sx={{ background: "#f3f4f6" }}
-      >
-        <CircularProgress />
-      </Box>
-    );
-  }
-
   {/* File a complaint box */ }
   const handleFormSubmit = async (event) => {
     event.preventDefault();
     setIsSubmitting(true);
-  
+    setLoading(true);
     if (!formData.contactNumber || !formData.description) {
       setError("Please fill out all required fields.");
       setIsSubmitting(false);
@@ -197,7 +182,6 @@ function Dashboard() {
   
     try {
       const formDataToSend = new FormData();
-  
       // Use fetched userData from state instead of sessionStorage
       formDataToSend.append("firstname", userData.firstname);
       formDataToSend.append("lastname", userData.lastname);
@@ -261,6 +245,19 @@ function Dashboard() {
     }));
   };
 
+  if (loading) {
+    return (
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        height="100vh"
+        sx={{ background: "#f3f4f6" }}
+      >
+        <CircularProgress />
+      </Box>
+    );
+  }
 
   return (
     <Box sx={{ background: "linear-gradient(to bottom, white, #f0f8ff)", minHeight: "100vh" }}>
