@@ -7,9 +7,9 @@ import App from "./App";
 
 const msalConfig = {
   auth: {
-    clientId: process.env.REACT_APP_CLIENT_ID, 
-    authority: `https://login.microsoftonline.com/${process.env.REACT_APP_TENANT_ID}`, 
-    redirectUri: process.env.REACT_APP_REDIRECT_URI,
+    clientId: `bba349cc-ea7f-454b-b50c-8e5567009324`, 
+    authority: `https://login.microsoftonline.com/8e46f333-ee3f-4f9b-aab9-36ab81142f78`, 
+    redirectUri: `https://biomedwaste.net/auth/callback`,
   },
   cache: {
     cacheLocation: "sessionStorage",

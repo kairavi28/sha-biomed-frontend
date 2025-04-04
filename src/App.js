@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Routes, Route } from "react-router-dom";
 import "./App.css";
 import SignInSide from "./sign-up/SignInSide";
@@ -19,6 +19,14 @@ import FeedbackSlider from "./components/FeedbackSlider";
 import CallToAction from "./components/CallToAction";
 
 function App() {
+
+  useEffect(() => {
+    if (window.location.hostname === "www.biomedwaste.net") {
+      const newUrl = window.location.href.replace("www.", "");
+      window.location.replace(newUrl);
+    }
+  }, []);
+  
   return (
     <Routes>
       <Route path="/" element={<SignInSide />} />

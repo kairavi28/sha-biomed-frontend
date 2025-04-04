@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { useMsal } from "@azure/msal-react";
 import { useNavigate } from "react-router-dom";
+import CircularProgress from "@mui/material/CircularProgress";
 
 const AuthCallback = () => {
   const { instance } = useMsal();
@@ -12,7 +13,6 @@ const AuthCallback = () => {
         const response = await instance.handleRedirectPromise();
         let account = response?.account;
         if (!account) {
-          // Check manually if an account exists
           const accounts = instance.getAllAccounts();
           if (accounts.length > 0) {
             account = accounts[0];
@@ -35,7 +35,11 @@ const AuthCallback = () => {
     handleAuthRedirect();
   }, [instance, navigate]);
 
-  return <div>Processing login...</div>;
+  return (
+    <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "80vh" }}>
+      <CircularProgress />
+    </div>
+  );
 };
 
 export default AuthCallback;

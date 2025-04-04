@@ -188,54 +188,49 @@ function Dashboard() {
   const handleFormSubmit = async (event) => {
     event.preventDefault();
     setIsSubmitting(true);
-
+  
     if (!formData.contactNumber || !formData.description) {
       setError("Please fill out all required fields.");
       setIsSubmitting(false);
       return;
     }
-
+  
     try {
       const formDataToSend = new FormData();
-
-      // Get user data from session
-      const currentUserSession = JSON.parse(sessionStorage.getItem("userData"));
-
-      // Append basic user info 
-      formDataToSend.append("firstname", currentUserSession.firstname);
-      formDataToSend.append("lastname", currentUserSession.lastname);
-      formDataToSend.append("email", currentUserSession.email);
-
-      // Append facility names as comma-separated string
-      const facilityNames = currentUserSession.facilities.map(f => f.name).join(", ");
+  
+      // Use fetched userData from state instead of sessionStorage
+      formDataToSend.append("firstname", userData.firstname);
+      formDataToSend.append("lastname", userData.lastname);
+      formDataToSend.append("email", userData.email);
+  
+      const facilityNames = (userData.facilities || [])
+        .map(f => f.name)
+        .join(", ");
       formDataToSend.append("facilities", facilityNames);
-
-      // Append complaint form data
+  
       formDataToSend.append("contactNumber", formData.contactNumber);
       formDataToSend.append("description", formData.description);
-
-      // Append photos
+  
       formData.photos.forEach((photo) => {
         formDataToSend.append("photos", photo.file);
       });
-
+  
       setLoading(false);
-
+  
       const response = await axios.post(
         `${API_BASE_URL}/client-complaint/add`,
         formDataToSend,
         { headers: { "Content-Type": "multipart/form-data" } }
       );
-
+  
       setSnackbar({
         open: true,
         message: "New complaint submitted successfully!",
         severity: "success",
       });
-
+  
       setFormData({ contactNumber: "", description: "", photos: [] });
       localStorage.removeItem("formData");
-      setLoading(false);
       handleFormClose();
     } catch (err) {
       setSnackbar({
@@ -247,7 +242,7 @@ function Dashboard() {
       setIsSubmitting(false);
     }
   };
-
+  
   const handleRemoveImage = (index) => {
     setFormData((prev) => {
       const updatedPhotos = [...prev.photos];

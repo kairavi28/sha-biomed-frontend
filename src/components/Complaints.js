@@ -53,10 +53,10 @@ function Complaints() {
     const handleFormClose = () => setFormOpen(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [userData, setUserData] = useState(null);
-    const currentUserSession = JSON.parse(sessionStorage.getItem("userData"));
     const [formData, setFormData] = useState({
         productType: "",
-        description: "", photos: []
+        description: "",
+        photos: []
     });
 
     const [formDataComplaint, setFormDataComplaint] = useState({
@@ -71,11 +71,18 @@ function Complaints() {
         severity: "success",
     });
 
+    // Fetch user data once on mount
     useEffect(() => {
         const fetchData = async () => {
             try {
                 setLoading(true);
-                const currentUserId = currentUserSession?.id || currentUserSession?._id;
+                if (!userData) {
+                    console.error("User data is missing.");
+                    setLoading(false);
+                    return;
+                }
+
+                const currentUserId = userData?.id || userData?._id;
                 if (!currentUserId) {
                     console.error("User ID is undefined.");
                     setLoading(false);
@@ -84,12 +91,10 @@ function Complaints() {
 
                 const userResponse = await axios.get(`${API_BASE_URL}/user/${currentUserId}`);
                 const userDataFromDB = userResponse.data;
-                setUserData(userDataFromDB); // ✅ Update state
-
+                setUserData(userDataFromDB); // ✅ Update state with user data from DB
 
                 // Fetch complaints
                 const complaintsResponse = await axios.get(`${API_BASE_URL}/complaints`);
-              
 
                 if (Array.isArray(userDataFromDB?.facilities) && userDataFromDB.facilities.length > 0) {
                     const userFacilityNames = userDataFromDB.facilities
@@ -103,7 +108,7 @@ function Complaints() {
                         return;
                     }
 
-                    // ✅ Use `response.data.facilities` instead of `userData`
+                    // ✅ Use `complaintsResponse.data.facilities` instead of `userData`
                     const filteredComplaints = complaintsResponse.data.filter(
                         (complaint) => userFacilityNames.includes(complaint.facility)
                     );
@@ -124,10 +129,9 @@ function Complaints() {
         };
 
         fetchData();
-    }, []); // ✅ Runs once on mount
+    }, [userData]); // ✅ Depend on userData to fetch user details on state update
 
-
-    {/* File a complaint box */ }
+    // File a complaint box
     const handleFormSubmitComplaint = async (event) => {
         event.preventDefault();
         setLoading(true);
@@ -140,16 +144,17 @@ function Complaints() {
 
         try {
             const formDataToSend = new FormData();
-            // Get user data from session
 
-            // Append basic user info 
-            formDataToSend.append("firstname", currentUserSession.firstname);
-            formDataToSend.append("lastname", currentUserSession.lastname);
-            formDataToSend.append("email", currentUserSession.email);
+            // Use userData from state for user information
+            if (userData) {
+                formDataToSend.append("firstname", userData.firstname);
+                formDataToSend.append("lastname", userData.lastname);
+                formDataToSend.append("email", userData.email);
 
-            // Append facility names as comma-separated string
-            const facilityNames = currentUserSession.facilities.map(f => f.name).join(", ");
-            formDataToSend.append("facilities", facilityNames);
+                // Append facility names as comma-separated string
+                const facilityNames = userData.facilities.map(f => f.name).join(", ");
+                formDataToSend.append("facilities", facilityNames);
+            }
 
             // Append complaint form data
             formDataToSend.append("contactNumber", formDataComplaint.contactNumber);
@@ -159,8 +164,6 @@ function Complaints() {
             formDataComplaint.photos.forEach((photo) => {
                 formDataToSend.append("photos", photo.file);
             });
-
-            setLoading(false);
 
             const response = await axios.post(
                 `${API_BASE_URL}/client-complaint/add`,
@@ -189,6 +192,7 @@ function Complaints() {
             setIsSubmitting(false);
         }
     };
+
     // Handle Snackbar close
     const handleSnackbarClose = () => {
         setSnackbar({ ...snackbar, open: false });
