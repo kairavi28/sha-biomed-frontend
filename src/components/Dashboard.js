@@ -127,7 +127,7 @@ function Dashboard() {
     const fetchUserData = async () => {
       const currentUserSession = JSON.parse(sessionStorage.getItem("userData"));
       const currentUserId = currentUserSession.id ? currentUserSession.id : currentUserSession._id;
-
+      setLoading(false);
       if (!currentUserId) {
         console.error("User ID is undefined inside interval");
         return;
