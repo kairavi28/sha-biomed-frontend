@@ -68,6 +68,7 @@ function COD() {
   }, []);
 
   useEffect(() => {
+    setLoading(true);
     const fetchCods = async () => {
       try {
         const codsData = {};
@@ -122,68 +123,71 @@ function COD() {
       flexDirection: "column",
     }}>
       <Container maxWidth="lg" sx={{ py: 5 }}>
-      <Card sx={{ maxWidth: 900, mx: "auto", mt: 4, p: 2, boxShadow: 3 }}>
-        {selectedFacilities.map((facility) => (
-          <Box key={facility} sx={{ mb: 3 }}>
-            <CardHeader
-              title={<Typography variant="h6" color="#092C74" sx={{ fontWeight: "bold" }}>Certificate of Destruction for {facility}</Typography>}
-            />
-            <CardContent>
-              <TableContainer component={Paper} sx={{ boxShadow: 2 }}>
-                <Table>
-                  <TableHead>
-                    <TableRow sx={{ backgroundColor: "#f5f5f5" }}>
-                      <TableCell><strong>File Name</strong></TableCell>
-                      <TableCell><strong>Preview</strong></TableCell>
-                      <TableCell><strong>Download</strong></TableCell>
-                      <TableCell><strong>Uploaded At</strong></TableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {(cods[facility] && cods[facility].length > 0) ? (
-                      cods[facility].map((cod) => (
-                        <TableRow key={cod._id} hover>
-                          <TableCell>{cod.fileName || "N/A"}</TableCell>
-                          <TableCell>
-                            <IconButton color="primary" onClick={() => handlePreviewOpen(cod)}>
-                              <VisibilityIcon />
-                            </IconButton>
-                          </TableCell>
-                          <TableCell>
-                            <IconButton color="success" component="a" href={`${API_BASE_URL}/cod/${cod.fileName}`} download target="_blank" rel="noopener noreferrer">
-                              <DownloadIcon />
-                            </IconButton>
-
-                          </TableCell>
-                          <TableCell>{cod.uploadedAt ? new Date(cod.uploadedAt).toLocaleString() : "N/A"}</TableCell>
-                        </TableRow>
-                      ))
-                    ) : (
-                      <TableRow>
-                        <TableCell colSpan={4} align="center">No CODs available.</TableCell>
+        <Card sx={{ maxWidth: 900, mx: "auto", mt: 4, p: 2, boxShadow: 3 }}>
+          {selectedFacilities.map((facility) => (
+            <Box key={facility} sx={{ mb: 3 }}>
+              <CardHeader
+                title={<Typography variant="h5" color="#092C74" sx={{ fontWeight: "bold" }}>Certificate of Destruction</Typography>}
+              />
+              <CardHeader
+                title={<Typography variant="h6" color="#092C74" sx={{ fontWeight: "bold" }}>{facility}</Typography>}
+              />
+              <CardContent>
+                <TableContainer component={Paper} sx={{ boxShadow: 2 }}>
+                  <Table>
+                    <TableHead>
+                      <TableRow sx={{ backgroundColor: "#f5f5f5" }}>
+                        <TableCell><strong>File Name</strong></TableCell>
+                        <TableCell><strong>Preview</strong></TableCell>
+                        <TableCell><strong>Download</strong></TableCell>
+                        <TableCell><strong>Uploaded At</strong></TableCell>
                       </TableRow>
-                    )}
-                  </TableBody>
-                </Table>
-              </TableContainer>
-            </CardContent>
-          </Box>
-        ))}
-        {/* Dialog for PDF Preview */}
-        <Dialog open={openPreview} onClose={handlePreviewClose} maxWidth="md" fullWidth>
-          <DialogTitle>Certificate of Destruction</DialogTitle>
-          <DialogContent sx={{ display: "flex", justifyContent: "center", alignItems: "center", height: "80vh" }}>
-            {currentCod && (
-              <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.min.js">
-                <Viewer fileUrl={`${API_BASE_URL}/cod/${currentCod.fileName}`} />
-              </Worker>
-            )}
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={handlePreviewClose}>Close</Button>
-          </DialogActions>
-        </Dialog>
-      </Card>
+                    </TableHead>
+                    <TableBody>
+                      {(cods[facility] && cods[facility].length > 0) ? (
+                        cods[facility].map((cod) => (
+                          <TableRow key={cod._id} hover>
+                            <TableCell>{cod.fileName || "N/A"}</TableCell>
+                            <TableCell>
+                              <IconButton color="primary" onClick={() => handlePreviewOpen(cod)}>
+                                <VisibilityIcon />
+                              </IconButton>
+                            </TableCell>
+                            <TableCell>
+                              <IconButton color="success" component="a" href={`${API_BASE_URL}/cod/${cod.fileName}`} download target="_blank" rel="noopener noreferrer">
+                                <DownloadIcon />
+                              </IconButton>
+
+                            </TableCell>
+                            <TableCell>{cod.uploadedAt ? new Date(cod.uploadedAt).toLocaleString() : "N/A"}</TableCell>
+                          </TableRow>
+                        ))
+                      ) : (
+                        <TableRow>
+                          <TableCell colSpan={4} align="center">No CODs available.</TableCell>
+                        </TableRow>
+                      )}
+                    </TableBody>
+                  </Table>
+                </TableContainer>
+              </CardContent>
+            </Box>
+          ))}
+          {/* Dialog for PDF Preview */}
+          <Dialog open={openPreview} onClose={handlePreviewClose} maxWidth="md" fullWidth>
+            <DialogTitle>Certificate of Destruction</DialogTitle>
+            <DialogContent sx={{ display: "flex", justifyContent: "center", alignItems: "center", height: "80vh" }}>
+              {currentCod && (
+                <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.min.js">
+                  <Viewer fileUrl={`${API_BASE_URL}/cod/${currentCod.fileName}`} />
+                </Worker>
+              )}
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={handlePreviewClose}>Close</Button>
+            </DialogActions>
+          </Dialog>
+        </Card>
       </Container>
     </Box>
   );
