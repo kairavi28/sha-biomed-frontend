@@ -129,7 +129,7 @@ const WaybillList = () => {
                             <Card sx={{ maxWidth: 700, mx: "auto", mt: 2, p: 4, textAlign: "center", boxShadow: 3 }}>
                                 <PersonPinCircle sx={{ fontSize: 50, color: "#092C74", mb: 2 }} />
                                 <Typography variant="h4" sx={{ fontWeight: "bold", color: "#092C74", mb: 1 }}>
-                                    Invoices
+                                    Waybills
                                 </Typography>
                                 <Typography variant="body1" sx={{ mb: 3 }}>
                                     No facility has been selected. Please navigate to your profile section to add facilities.
