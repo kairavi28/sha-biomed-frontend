@@ -73,21 +73,24 @@ const WaybillList = () => {
 
         const fetchWaybills = async () => {
             try {
-                const waybillData = {};
-                for (const facility of selectedFacilities) {
-                    try {
-                        const waybillResponse = await axios.get(`${API_BASE_URL}/waybill/${facility}`)
-                        waybillData[facility] = waybillResponse.data;
-                    } catch (error) {
-                        console.error(`Error fetching data for facility: ${facility}`, error);
-                    }
-                }
+                const requests = selectedFacilities.map(facility =>
+                    axios.get(`${API_BASE_URL}/waybill/${facility}`)
+                        .then(res => ({ facility, data: res.data }))
+                        .catch(err => {
+                            console.error(`Error fetching data for facility: ${facility}`, err);
+                            return { facility, data: [] };
+                        })
+                );
+                const results = await Promise.all(requests);
+                const waybillData = results.reduce((acc, { facility, data }) => {
+                    acc[facility] = data;
+                    return acc;
+                }, {});
                 setGroupedWaybills(waybillData);
             } catch (error) {
-                console.error("Error fetching waybills or facilities:", error);
+                console.error("Error fetching waybills:", error);
             }
         };
-
         fetchWaybills();
     }, [selectedFacilities]);
 
@@ -121,7 +124,16 @@ const WaybillList = () => {
                     <CardContent>
                         {loading ? (
                             <Typography variant="body2" color="textSecondary" align="center">Loading waybills...</Typography>
-                        ) : selectedFacilities.length > 0 ? (
+                        ) : selectedFacilities.length === 0 ? (
+                            <Typography
+                                variant="body1"
+                                color="error"
+                                align="center"
+                                sx={{ mt: 2, fontWeight: 500 }}
+                            >
+                                You do not have any facilities selected in your profile. Please update your profile to access waybills.
+                            </Typography>
+                        ) : (
                             selectedFacilities.map((facility) => (
                                 <Paper key={facility} sx={{ mb: 2, p: 2, boxShadow: 3 }}>
                                     <Typography
@@ -182,8 +194,6 @@ const WaybillList = () => {
                                     </Collapse>
                                 </Paper>
                             ))
-                        ) : (
-                            <Typography variant="body2" color="textSecondary" align="center">No waybills available.</Typography>
                         )}
                     </CardContent>
 

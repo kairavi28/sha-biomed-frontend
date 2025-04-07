@@ -27,6 +27,7 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import DownloadIcon from "@mui/icons-material/Download";
 import { Viewer, Worker } from "@react-pdf-viewer/core";
 import "@react-pdf-viewer/core/lib/styles/index.css";
+import { PersonPinCircle } from "@mui/icons-material";
 
 function COD() {
   const [cods, setCods] = useState({});
@@ -68,7 +69,6 @@ function COD() {
   }, []);
 
   useEffect(() => {
-    setLoading(true);
     const fetchCods = async () => {
       try {
         const codsData = {};
@@ -81,7 +81,6 @@ function COD() {
             codsData[facility] = [];
           }
         });
-
         await Promise.all(fetchPromises);
         setCods((prevCods) => ({
           ...prevCods,
@@ -115,82 +114,135 @@ function COD() {
   }
 
   return (
-    <Box sx={{
-      background: "linear-gradient(to right,rgb(226, 237, 240),rgb(222, 233, 247))",
-      minHeight: "100vh",
-      py: 5,
-      display: "flex",
-      flexDirection: "column",
-    }}>
-      <Container maxWidth="lg" sx={{ py: 5 }}>
-        <Card sx={{ maxWidth: 900, mx: "auto", mt: 4, p: 2, boxShadow: 3 }}>
-          {selectedFacilities.map((facility) => (
-            <Box key={facility} sx={{ mb: 3 }}>
-              <CardHeader
-                title={<Typography variant="h5" color="#092C74" sx={{ fontWeight: "bold" }}>Certificate of Destruction</Typography>}
-              />
-              <CardHeader
-                title={<Typography variant="h6" color="#092C74" sx={{ fontWeight: "bold" }}>{facility}</Typography>}
-              />
-              <CardContent>
-                <TableContainer component={Paper} sx={{ boxShadow: 2 }}>
-                  <Table>
-                    <TableHead>
-                      <TableRow sx={{ backgroundColor: "#f5f5f5" }}>
-                        <TableCell><strong>File Name</strong></TableCell>
-                        <TableCell><strong>Preview</strong></TableCell>
-                        <TableCell><strong>Download</strong></TableCell>
-                        <TableCell><strong>Uploaded At</strong></TableCell>
-                      </TableRow>
-                    </TableHead>
-                    <TableBody>
-                      {(cods[facility] && cods[facility].length > 0) ? (
-                        cods[facility].map((cod) => (
-                          <TableRow key={cod._id} hover>
-                            <TableCell>{cod.fileName || "N/A"}</TableCell>
-                            <TableCell>
-                              <IconButton color="primary" onClick={() => handlePreviewOpen(cod)}>
-                                <VisibilityIcon />
-                              </IconButton>
-                            </TableCell>
-                            <TableCell>
-                              <IconButton color="success" component="a" href={`${API_BASE_URL}/cod/${cod.fileName}`} download target="_blank" rel="noopener noreferrer">
-                                <DownloadIcon />
-                              </IconButton>
-
-                            </TableCell>
-                            <TableCell>{cod.uploadedAt ? new Date(cod.uploadedAt).toLocaleString() : "N/A"}</TableCell>
-                          </TableRow>
-                        ))
-                      ) : (
-                        <TableRow>
-                          <TableCell colSpan={4} align="center">No CODs available.</TableCell>
+    <Box
+      sx={{
+        background: "linear-gradient(to right, #e2edf0, #dee9f7)",
+        minHeight: "100vh",
+        py: 5,
+        display: "flex",
+        flexDirection: "column",
+      }}
+    >
+      <Container maxWidth="lg">
+        {selectedFacilities.length === 0 ? (
+          <Card sx={{ maxWidth: 700, mx: "auto", mt: 10, p: 4, textAlign: "center", boxShadow: 3 }}>
+            <PersonPinCircle sx={{ fontSize: 50, color: "#092C74", mb: 2 }} />
+            <Typography variant="h4" sx={{ fontWeight: "bold", color: "#092C74", mb: 1 }}>
+              Certificate of Destruction
+            </Typography>
+            <Typography variant="body1" sx={{ mb: 3 }}>
+              No facility has been selected. Please navigate to your profile section to add facilities.
+            </Typography>
+            <Button
+              variant="contained"
+              sx={{
+                backgroundColor: "#092C74",
+                "&:hover": { backgroundColor: "#051a4d" },
+                textTransform: "none",
+                px: 4,
+              }}
+              href="/profile"
+            >
+              Go to Profile
+            </Button>
+          </Card>
+        ) : (
+          <Card sx={{ maxWidth: 900, mx: "auto", mt: 4, p: 2, boxShadow: 3 }}>
+            {selectedFacilities.map((facility) => (
+              <Box key={facility} sx={{ mb: 3 }}>
+                <CardHeader
+                  title={
+                    <Typography variant="h5" color="#092C74" sx={{ fontWeight: "bold" }}>
+                      Certificate of Destruction
+                    </Typography>
+                  }
+                />
+                <CardHeader
+                  title={
+                    <Typography variant="h6" color="#092C74" sx={{ fontWeight: "bold" }}>
+                      {facility}
+                    </Typography>
+                  }
+                />
+                <CardContent>
+                  <TableContainer component={Paper} sx={{ boxShadow: 2 }}>
+                    <Table>
+                      <TableHead>
+                        <TableRow sx={{ backgroundColor: "#f5f5f5" }}>
+                          <TableCell>
+                            <strong>File Name</strong>
+                          </TableCell>
+                          <TableCell>
+                            <strong>Preview</strong>
+                          </TableCell>
+                          <TableCell>
+                            <strong>Download</strong>
+                          </TableCell>
+                          <TableCell>
+                            <strong>Uploaded At</strong>
+                          </TableCell>
                         </TableRow>
-                      )}
-                    </TableBody>
-                  </Table>
-                </TableContainer>
-              </CardContent>
-            </Box>
-          ))}
-          {/* Dialog for PDF Preview */}
-          <Dialog open={openPreview} onClose={handlePreviewClose} maxWidth="md" fullWidth>
-            <DialogTitle>Certificate of Destruction</DialogTitle>
-            <DialogContent sx={{ display: "flex", justifyContent: "center", alignItems: "center", height: "80vh" }}>
-              {currentCod && (
-                <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.min.js">
-                  <Viewer fileUrl={`${API_BASE_URL}/cod/${currentCod.fileName}`} />
-                </Worker>
-              )}
-            </DialogContent>
-            <DialogActions>
-              <Button onClick={handlePreviewClose}>Close</Button>
-            </DialogActions>
-          </Dialog>
-        </Card>
+                      </TableHead>
+                      <TableBody>
+                        {cods[facility] && cods[facility].length > 0 ? (
+                          cods[facility].map((cod) => (
+                            <TableRow key={cod._id} hover>
+                              <TableCell>{cod.fileName || "N/A"}</TableCell>
+                              <TableCell>
+                                <IconButton color="primary" onClick={() => handlePreviewOpen(cod)}>
+                                  <VisibilityIcon />
+                                </IconButton>
+                              </TableCell>
+                              <TableCell>
+                                <IconButton
+                                  color="success"
+                                  component="a"
+                                  href={`${API_BASE_URL}/cod/${cod.fileName}`}
+                                  download
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                >
+                                  <DownloadIcon />
+                                </IconButton>
+                              </TableCell>
+                              <TableCell>
+                                {cod.uploadedAt ? new Date(cod.uploadedAt).toLocaleString() : "N/A"}
+                              </TableCell>
+                            </TableRow>
+                          ))
+                        ) : (
+                          <TableRow>
+                            <TableCell colSpan={4} align="center">
+                              No CODs available.
+                            </TableCell>
+                          </TableRow>
+                        )}
+                      </TableBody>
+                    </Table>
+                  </TableContainer>
+                </CardContent>
+              </Box>
+            ))}
+          </Card>
+        )}
       </Container>
+  
+      {/* PDF Preview Dialog */}
+      <Dialog open={openPreview} onClose={handlePreviewClose} maxWidth="md" fullWidth>
+        <DialogTitle>Certificate of Destruction</DialogTitle>
+        <DialogContent sx={{ display: "flex", justifyContent: "center", alignItems: "center", height: "80vh" }}>
+          {currentCod && (
+            <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.min.js">
+              <Viewer fileUrl={`${API_BASE_URL}/cod/${currentCod.fileName}`} />
+            </Worker>
+          )}
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handlePreviewClose}>Close</Button>
+        </DialogActions>
+      </Dialog>
     </Box>
-  );
+  );  
 };
 
 export default COD;

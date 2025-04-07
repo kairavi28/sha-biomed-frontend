@@ -133,7 +133,11 @@ const InvoiceList = () => {
               <Typography variant="body1"><strong>Total Amount Paid:</strong> ${totalAmountPaid.toFixed(2)}</Typography>
             </Grid>
           </Grid>
-
+          <Box sx={{ p: 2, mb: 4, background: "#fff3cd", border: "1px solid #ffeeba", borderRadius: 2 }}>
+            <Typography variant="body1" sx={{ fontWeight: "medium", color: "#856404" }}>
+              📌 <strong>Notice:</strong> Invoices are updated every 3 minutes. If you do not see your latest invoice, please wait or contact support.
+            </Typography>
+          </Box>
           {selectedFacilities.map((facility) => (
             <Box key={facility} sx={{ mb: 3 }}>
               <Typography variant="h6" sx={{ fontWeight: "bold", color: "#092C74", mb: 2 }}>Invoices for {facility}</Typography>
