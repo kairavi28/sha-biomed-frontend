@@ -123,8 +123,8 @@ function Dashboard() {
   };
 
   useEffect(() => {
+    setLoading(true);
     const fetchUserData = async () => {
-      setLoading(false);
       const currentUserSession = JSON.parse(sessionStorage.getItem("userData"));
       const currentUserId = currentUserSession.id ? currentUserSession.id : currentUserSession._id;
 
