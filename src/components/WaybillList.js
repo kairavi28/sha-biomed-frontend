@@ -27,6 +27,7 @@ import DownloadIcon from "@mui/icons-material/Download";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { Viewer, Worker } from "@react-pdf-viewer/core";
 import "@react-pdf-viewer/core/lib/styles/index.css";
+import { PersonPinCircle } from "@mui/icons-material";
 
 const WaybillList = () => {
     const API_BASE_URL = process.env.REACT_APP_API_URL;
@@ -37,7 +38,7 @@ const WaybillList = () => {
     const [currentWaybill, setCurrentWaybill] = useState(null);
     const [expandedFacility, setExpandedFacility] = useState(null);
     const [loading, setLoading] = useState(true);
-  
+
     useEffect(() => {
         const fetchUserData = async () => {
             setLoading(true);
@@ -125,14 +126,27 @@ const WaybillList = () => {
                         {loading ? (
                             <Typography variant="body2" color="textSecondary" align="center">Loading waybills...</Typography>
                         ) : selectedFacilities.length === 0 ? (
-                            <Typography
-                                variant="body1"
-                                color="error"
-                                align="center"
-                                sx={{ mt: 2, fontWeight: 500 }}
-                            >
-                                You do not have any facilities selected in your profile. Please update your profile to access waybills.
-                            </Typography>
+                            <Card sx={{ maxWidth: 700, mx: "auto", mt: 2, p: 4, textAlign: "center", boxShadow: 3 }}>
+                                <PersonPinCircle sx={{ fontSize: 50, color: "#092C74", mb: 2 }} />
+                                <Typography variant="h4" sx={{ fontWeight: "bold", color: "#092C74", mb: 1 }}>
+                                    Invoices
+                                </Typography>
+                                <Typography variant="body1" sx={{ mb: 3 }}>
+                                    No facility has been selected. Please navigate to your profile section to add facilities.
+                                </Typography>
+                                <Button
+                                    variant="contained"
+                                    sx={{
+                                        backgroundColor: "#092C74",
+                                        "&:hover": { backgroundColor: "#051a4d" },
+                                        textTransform: "none",
+                                        px: 4,
+                                    }}
+                                    href="/profile"
+                                >
+                                    Go to Profile
+                                </Button>
+                            </Card>
                         ) : (
                             selectedFacilities.map((facility) => (
                                 <Paper key={facility} sx={{ mb: 2, p: 2, boxShadow: 3 }}>

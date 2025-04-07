@@ -27,6 +27,7 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import DownloadIcon from "@mui/icons-material/Download";
 import { Viewer, Worker } from "@react-pdf-viewer/core";
 import "@react-pdf-viewer/core/lib/styles/index.css";
+import { PersonPinCircle } from "@mui/icons-material";
 
 const InvoiceList = () => {
   const [invoices, setInvoices] = useState({});
@@ -122,8 +123,30 @@ const InvoiceList = () => {
       display: "flex",
       flexDirection: "column",
     }}>
-      <Container maxWidth="lg" sx={{ py: 5 }}>
-        <Card sx={{ boxShadow: 3, p: 4, background: "#ffffff", borderRadius: "1em" }}>
+      <Container maxWidth="lg">
+        {selectedFacilities.length === 0 ? (
+          <Card sx={{ maxWidth: 700, mx: "auto", mt: 10, p: 4, textAlign: "center", boxShadow: 3 }}>
+            <PersonPinCircle sx={{ fontSize: 50, color: "#092C74", mb: 2 }} />
+            <Typography variant="h4" sx={{ fontWeight: "bold", color: "#092C74", mb: 1 }}>
+              Invoices
+            </Typography>
+            <Typography variant="body1" sx={{ mb: 3 }}>
+              No facility has been selected. Please navigate to your profile section to add facilities.
+            </Typography>
+            <Button
+              variant="contained"
+              sx={{
+                backgroundColor: "#092C74",
+                "&:hover": { backgroundColor: "#051a4d" },
+                textTransform: "none",
+                px: 4,
+              }}
+              href="/profile"
+            >
+              Go to Profile
+            </Button>
+          </Card>
+        ) : <Card sx={{ boxShadow: 3, p: 4, background: "#ffffff", borderRadius: "1em" }}>
           <Typography variant="h5" sx={{ fontWeight: "bold", color: "#092C74", mb: 3 }}>Invoice Summary</Typography>
           <Grid container spacing={2} sx={{ mb: 3, p: 2, background: "#e3f2fd", borderRadius: 2, boxShadow: 2 }}>
             <Grid item xs={6}>
@@ -204,8 +227,9 @@ const InvoiceList = () => {
               <Button onClick={handlePreviewClose}>Close</Button>
             </DialogActions>
           </Dialog>
-        </Card>
+        </Card>};
       </Container>
+
     </Box>
   );
 };
