@@ -29,6 +29,7 @@ import { Viewer, Worker } from "@react-pdf-viewer/core";
 import "@react-pdf-viewer/core/lib/styles/index.css";
 
 const WaybillList = () => {
+    const API_BASE_URL = process.env.REACT_APP_API_URL;
     const [groupedWaybills, setGroupedWaybills] = useState({});
     const [facilityDetails, setFacilityDetails] = useState({});
     const [selectedFacilities, setSelectedFacilities] = useState([]);
@@ -36,8 +37,7 @@ const WaybillList = () => {
     const [currentWaybill, setCurrentWaybill] = useState(null);
     const [expandedFacility, setExpandedFacility] = useState(null);
     const [loading, setLoading] = useState(true);
-    const API_BASE_URL = process.env.REACT_APP_API_URL;
-
+  
     useEffect(() => {
         const fetchUserData = async () => {
             setLoading(true);

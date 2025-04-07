@@ -3,6 +3,7 @@ import ReactDOM from "react-dom";
 import { PublicClientApplication } from "@azure/msal-browser";
 import { MsalProvider } from "@azure/msal-react";
 import { BrowserRouter } from "react-router-dom";
+import ScrollToTop from "./components/ScrollToTop";
 import App from "./App";
 
 const msalConfig = {
@@ -24,6 +25,7 @@ msalInstance.initialize().then(() => {
   ReactDOM.render(
     <MsalProvider instance={msalInstance}>
       <BrowserRouter>
+      <ScrollToTop />
       <App />
       </BrowserRouter>
     </MsalProvider>,
