@@ -164,7 +164,7 @@ const WaybillList = () => {
                                             <Table>
                                                 <TableHead>
                                                     <TableRow sx={{ backgroundColor: "#f5f5f5" }}>
-                                                        <TableCell><strong>File Name</strong></TableCell>
+                                                        <TableCell><strong>Waybill Number</strong></TableCell>
                                                         <TableCell><strong>Preview</strong></TableCell>
                                                         <TableCell><strong>Download</strong></TableCell>
                                                         <TableCell><strong>Uploaded At</strong></TableCell>

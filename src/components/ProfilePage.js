@@ -18,6 +18,7 @@ import {
   DialogContentText,
   DialogTitle
 } from "@mui/material";
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Chip } from "@mui/material";
 import axios from "axios";
 import EditIcon from "@mui/icons-material/Edit";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
@@ -36,7 +37,10 @@ function ProfilePage() {
   const userSession = JSON.parse(sessionStorage.getItem("userData"));
   const userId = userSession.id ? userSession.id : userSession._id;
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [complaints, setComplaints] = useState([]);
   const [dialogMessage, setDialogMessage] = useState("");
+  const [filteredComplaints, setFilteredComplaints] = useState([]);
+
   //Snackbar for notifications
   const [snackbar, setSnackbar] = useState({
     open: false,
@@ -83,6 +87,20 @@ function ProfilePage() {
     }
   }, [userId]);
 
+  useEffect(() => {
+    fetch(`${API_BASE_URL}/client-complaint`)
+      .then((response) => response.json())
+      .then((data) => {
+        setComplaints(data);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error("Error fetching complaints:", error);
+        setLoading(false);
+      });
+  }, []);
+
+  
   const handleEditProfile = () => {
     setIsEditing(!isEditing);
   };
@@ -132,6 +150,16 @@ function ProfilePage() {
     return () => clearInterval(interval);
   }, []);
 
+
+  useEffect(() => {
+    if (userData && complaints.length > 0) {
+      const filtered = complaints.filter(
+        (complaint) => complaint.userEmail === userData.email
+      );
+      setFilteredComplaints(filtered);
+    }
+  }, [userData, complaints]);
+  
 
   const handleSave = async () => {
     const formData = new FormData();
@@ -184,6 +212,7 @@ function ProfilePage() {
     }
   };
 
+  
 
   if (loading) {
     return (
@@ -378,6 +407,78 @@ function ProfilePage() {
           {error && <Typography color="error">{error}</Typography>}
         </Paper>
       </Container> */}
+      <Box
+        sx={{
+          maxWidth: "1000px",
+          margin: "40px auto",
+          padding: 4,
+          backgroundColor: "#fff",
+          borderRadius: 4,
+          boxShadow: 3,
+        }}
+      >
+        <Typography variant="h5" fontWeight="bold" gutterBottom>
+          📝 Complaints
+        </Typography>
+        <Typography variant="body2" color="text.secondary" mb={3}>
+          Here’s a list of all the submitted complaints by you.
+        </Typography>
+
+        {loading ? (
+          <Box display="flex" justifyContent="center" alignItems="center" py={6}>
+            <CircularProgress />
+          </Box>
+        ) : (
+          <TableContainer component={Paper} sx={{ boxShadow: "none" }}>
+            <Table>
+              <TableHead>
+                <TableRow sx={{ backgroundColor: "#f0f4ff" }}>
+                  <TableCell>Complaint #</TableCell>
+                  <TableCell>Complaint Description</TableCell>
+                  <TableCell>Submitted on Date</TableCell>
+                  <TableCell>Status</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {filteredComplaints.length > 0 ? (
+                  filteredComplaints.map((complaint, index) => (
+                    <TableRow
+                      key={index}
+                      sx={{ "&:hover": { backgroundColor: "#f9f9f9" } }}
+                    >
+                      <TableCell>{index + 1}</TableCell>
+                      <TableCell>{complaint.description}</TableCell>
+                      <TableCell>
+                        {new Date(complaint.createdAt).toLocaleDateString("en-US", {
+                          year: "numeric",
+                          month: "short", 
+                          day: "numeric"
+                        })}
+                      </TableCell>
+                      <TableCell>
+                        <Chip
+                          label={complaint.status}
+                          color={
+                            complaint.status === "resolved" ? "success" : "error"
+                          }
+                          size="small"
+                          variant="outlined"
+                        />
+                      </TableCell>
+                    </TableRow>
+                  ))
+                ) : (
+                  <TableRow>
+                    <TableCell colSpan={5} align="center">
+                      No complaints found.
+                    </TableCell>
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        )}
+      </Box>
     </Box>
   );
 }

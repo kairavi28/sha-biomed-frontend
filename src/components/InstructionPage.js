@@ -57,7 +57,6 @@ const products = [
         features: ["Hospitals", "Pharmacies", "Research laboratories"],
         warning: "Do not dispose of non-medical waste, chemical waste, or radioactive materials in Bioboxes."
     }
-
 ];
 
 function InstructionPage() {

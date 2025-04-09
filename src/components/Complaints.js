@@ -28,7 +28,6 @@ import CallToAction from "./CallToAction";
 import PhotoCameraIcon from "@mui/icons-material/PhotoCamera";  // 📷 Upload icon
 import SendIcon from "@mui/icons-material/Send";  // 🚀 Submit icon
 import CloseIcon from "@mui/icons-material/Close";  // ❌ Remove icon
-
 // Helper function to convert base64 to a File object
 const dataURLToFile = (dataURL, filename) => {
     const [header, base64String] = dataURL.split(",");
@@ -89,7 +88,7 @@ function Complaints() {
 
                 // Fetch complaints
                 const complaintsResponse = await axios.get(`${API_BASE_URL}/complaints`);
-              
+
 
                 if (Array.isArray(userDataFromDB?.facilities) && userDataFromDB.facilities.length > 0) {
                     const userFacilityNames = userDataFromDB.facilities
@@ -122,7 +121,6 @@ function Complaints() {
                 setLoading(false);
             }
         };
-
         fetchData();
     }, []); // ✅ Runs once on mount
 
@@ -131,6 +129,8 @@ function Complaints() {
         event.preventDefault();
         setIsSubmitting(true);
         setLoading(true);
+        console.log(formDataComplaint.contactNumber, formDataComplaint.description);
+        console.log('logging user session', currentUserSession);
         if (!formDataComplaint.contactNumber || !formDataComplaint.description) {
             setError("Please fill out all required fields.");
             setIsSubmitting(false);
@@ -142,12 +142,15 @@ function Complaints() {
             // Get user data from session
 
             // Append basic user info 
-            formDataToSend.append("firstname", currentUserSession.firstname);
-            formDataToSend.append("lastname", currentUserSession.lastname);
-            formDataToSend.append("email", currentUserSession.email);
+            formDataToSend.append("firstname", userData.firstname);
+            formDataToSend.append("lastname", userData.lastname);
+            formDataToSend.append("email", userData.email);
 
             // Append facility names as comma-separated string
-            const facilityNames = currentUserSession.facilities.map(f => f.name).join(", ");
+
+            const facilityNames = (userData.facilities || [])
+                .map(f => f.name)
+                .join(", ");
             formDataToSend.append("facilities", facilityNames);
 
             // Append complaint form data

@@ -168,7 +168,7 @@ const InvoiceList = () => {
                 <Table>
                   <TableHead sx={{ backgroundColor: "#f5f5f5" }}>
                     <TableRow>
-                      <TableCell><strong>File Name</strong></TableCell>
+                      <TableCell><strong>Invoice Number</strong></TableCell>
                       <TableCell><strong>Total Amount</strong></TableCell>
                       <TableCell><strong>Preview</strong></TableCell>
                       <TableCell><strong>Download</strong></TableCell>
