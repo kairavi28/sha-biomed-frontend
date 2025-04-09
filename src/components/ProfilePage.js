@@ -433,10 +433,10 @@ function ProfilePage() {
             <Table>
               <TableHead>
                 <TableRow sx={{ backgroundColor: "#f0f4ff" }}>
-                  <TableCell>Complaint #</TableCell>
-                  <TableCell>Complaint Description</TableCell>
-                  <TableCell>Submitted on Date</TableCell>
-                  <TableCell>Status</TableCell>
+                  <TableCell><strong>Complaint #</strong></TableCell>
+                  <TableCell><strong>Complaint Description</strong></TableCell>
+                  <TableCell><strong>Submitted on Date</strong></TableCell>
+                  <TableCell><strong>Status</strong></TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>

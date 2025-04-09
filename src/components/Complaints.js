@@ -840,9 +840,12 @@ function Complaints() {
                                         required
                                         variant="outlined"
                                     >
-                                        <MenuItem value="Carsons">Carsons</MenuItem>
-                                        <MenuItem value="General waste bio box">General Waste Bio Box</MenuItem>
-                                        <MenuItem value="Blue bins">Blue Bins</MenuItem>
+                                        <MenuItem value="secure-a-sharp">Secure-A-Sharp</MenuItem>
+                                        <MenuItem value="Terra">Terra</MenuItem>
+                                        <MenuItem value="Recovery">Recovery</MenuItem>
+                                        <MenuItem value="ap-medical">AP Medical</MenuItem>
+                                        <MenuItem value="accessories">Accessories</MenuItem>
+                                        <MenuItem value="other">Other</MenuItem>
                                     </TextField>
                                 </Grid>
 

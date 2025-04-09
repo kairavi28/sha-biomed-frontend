@@ -903,25 +903,8 @@ function Dashboard() {
       {/* Testimonials Section */}
       <Container sx={{ mt: 6, mb: 6 }}>
         <Typography variant="h4" sx={{ mb: 4, textAlign: "center", fontWeight: "bold", color: "#003366" }}>
-          What Our Clients Say
+        Trusted by Industry Leaders
         </Typography>
-        <Grid container spacing={4}>
-          {testimonials.map((testimonial, index) => (
-            <Grid item xs={12} md={6} key={index}>
-              <Paper
-                elevation={3}
-                sx={{ p: 3, backgroundColor: "#f9f9f9", borderRadius: 2, textAlign: "center" }}
-              >
-                <Typography variant="body1" sx={{ fontStyle: "italic" }}>
-                  "{testimonial.feedback}"
-                </Typography>
-                <Typography variant="h6" sx={{ mt: 2, fontWeight: "bold" }}>
-                  - {testimonial.name}
-                </Typography>
-              </Paper>
-            </Grid>
-          ))}
-        </Grid>
         <FeedbackSlider />
       </Container>
       <CallToAction />

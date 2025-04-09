@@ -340,7 +340,7 @@ const Navbar = () => {
                 onClick={async () => {
                   handleMenuClose();
                   try {
-                    await axios.post(`${API_BASE_URL}/logout`, {}, { withCredentials: true });
+                    // await axios.post(`${API_BASE_URL}/logout`, {}, { withCredentials: true });
                     sessionStorage.clear();
                     localStorage.clear();
                     navigate("/");
