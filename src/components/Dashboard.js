@@ -778,7 +778,7 @@ function Dashboard() {
                   title: "Compliance and Reporting Assistance",
                   description: "Expert support in meeting regulatory compliance and reporting requirements.",
                   icon: <FaClipboardCheck size={40} color="#003366" />,
-                  link: "https://www.biomedwaste.com/compliance-reporting-assistance",
+                  link: "https://biomedwaste.com/contact/",
                 },
                 {
                   title: "Secure-A-Sharp® Service Program",

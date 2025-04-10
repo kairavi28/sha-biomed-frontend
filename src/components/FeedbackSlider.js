@@ -12,6 +12,7 @@ import image6 from "../assets/images/saskatchewan_cancer_agency_logo.jpg";
 import image7 from "../assets/images/ISC.jpg";
 import image8 from "../assets/images/NeighbourlyLogo.png";
 import image9 from "../assets/images/Shoppers-Drug-Mart-Logo.png";
+import image10 from "../assets/images/Saskatoon_Co-op_Logo.png";
 
 const slides = [
   { title: "University of Saskatchewan", image: image1 },
@@ -23,6 +24,7 @@ const slides = [
   { title: "Indigenous Services Canada", image: image7},
   { title: "Neighbourly Pharmacy", image: image8},
   { title: "Shoppers Drug Mart", image: image9},
+  { title: "Co-op Pharmacy", image: image10},
 ];
 
 const FeedbackSlider = () => {
