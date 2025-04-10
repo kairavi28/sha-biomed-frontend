@@ -5,7 +5,6 @@ import {
   Typography,
   Container,
   Grid,
-  Paper,
   Button,
   TextField,
   CircularProgress,
@@ -18,8 +17,8 @@ import {
   CardActionArea
 } from "@mui/material";
 import { motion } from "framer-motion";
-import { FaRecycle, FaSyringe, FaPills, FaCalendarAlt, FaFileAlt, FaTruck, FaClipboardCheck, FaHospital } from "react-icons/fa";
-import { GiConsoleController, GiNuclearWaste } from "react-icons/gi";
+import { FaRecycle, FaSyringe, FaPills, FaTruck, FaClipboardCheck, FaHospital } from "react-icons/fa";
+import { GiNuclearWaste } from "react-icons/gi";
 import axios from "axios";
 import { FaPrescriptionBottleMedical } from "react-icons/fa6";
 import AwesomeSlider from "react-awesome-slider";
@@ -36,7 +35,7 @@ import ContentSlider from "./ContentSlider";
 import CallToAction from "./CallToAction";
 import { Navigation, Pagination, Autoplay } from "swiper/modules";
 
-
+const API_BASE_URL = process.env.REACT_APP_API_URL;
 const slides = [
   {
     "title": "Worker Safety",
@@ -90,17 +89,11 @@ const services = [
   { title: "Pharmaceutical Waste Recovery", icon: <FaPills size={40} color="#003366" /> },
 ];
 
-const testimonials = [
-  { name: "John Doe", feedback: "Biomed’s services exceeded our expectations!" },
-  { name: "Jane Smith", feedback: "Highly reliable and professional team!" },
-];
 
 function Dashboard() {
-  const API_BASE_URL = process.env.REACT_APP_API_URL;
   const navigate = useNavigate();
   const [userData, setUserData] = useState(null);
   const [formOpen, setFormOpen] = useState(false);
-  const handleFormOpen = () => setFormOpen(true);
   const handleFormClose = () => setFormOpen(false);
   const [setError] = useState("");
   const [loading, setLoading] = useState(true);
@@ -148,7 +141,8 @@ function Dashboard() {
       }
     };
     fetchUserData();
-  }, []);
+  }, [API_BASE_URL]);
+
 
 
   const handleFileChange = (event) => {
@@ -179,40 +173,40 @@ function Dashboard() {
       setIsSubmitting(false);
       return;
     }
-  
+
     try {
       const formDataToSend = new FormData();
       // Use fetched userData from state instead of sessionStorage
       formDataToSend.append("firstname", userData.firstname);
       formDataToSend.append("lastname", userData.lastname);
       formDataToSend.append("email", userData.email);
-  
+
       const facilityNames = (userData.facilities || [])
         .map(f => f.name)
         .join(", ");
       formDataToSend.append("facilities", facilityNames);
-  
+
       formDataToSend.append("contactNumber", formData.contactNumber);
       formDataToSend.append("description", formData.description);
-  
+
       formData.photos.forEach((photo) => {
         formDataToSend.append("photos", photo.file);
       });
-  
+
       setLoading(false);
-  
+
       const response = await axios.post(
         `${API_BASE_URL}/client-complaint/add`,
         formDataToSend,
         { headers: { "Content-Type": "multipart/form-data" } }
       );
-  
+
       setSnackbar({
         open: true,
         message: "New complaint submitted successfully!",
         severity: "success",
       });
-  
+
       setFormData({ contactNumber: "", description: "", photos: [] });
       localStorage.removeItem("formData");
       handleFormClose();
@@ -226,7 +220,7 @@ function Dashboard() {
       setIsSubmitting(false);
     }
   };
-  
+
   const handleRemoveImage = (index) => {
     setFormData((prev) => {
       const updatedPhotos = [...prev.photos];
@@ -903,7 +897,7 @@ function Dashboard() {
       {/* Testimonials Section */}
       <Container sx={{ mt: 6, mb: 6 }}>
         <Typography variant="h4" sx={{ mb: 4, textAlign: "center", fontWeight: "bold", color: "#003366" }}>
-        Trusted by Industry Leaders
+          Trusted by Industry Leaders
         </Typography>
         <FeedbackSlider />
       </Container>

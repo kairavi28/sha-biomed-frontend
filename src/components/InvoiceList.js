@@ -3,8 +3,6 @@ import axios from "axios";
 import {
   Box,
   Card,
-  CardContent,
-  CardHeader,
   Typography,
   Table,
   TableHead,
@@ -29,6 +27,7 @@ import { Viewer, Worker } from "@react-pdf-viewer/core";
 import "@react-pdf-viewer/core/lib/styles/index.css";
 import { PersonPinCircle } from "@mui/icons-material";
 
+const API_BASE_URL = process.env.REACT_APP_API_URL;
 const InvoiceList = () => {
   const [invoices, setInvoices] = useState({});
   const [openPreview, setOpenPreview] = useState(false);
@@ -36,8 +35,6 @@ const InvoiceList = () => {
   const [loading, setLoading] = useState(true);
   const [currentInvoice, setCurrentInvoice] = useState(null);
   const [selectedFacilities, setSelectedFacilities] = useState([]);
-  const API_BASE_URL = process.env.REACT_APP_API_URL;
-
   useEffect(() => {
     const fetchUserData = async () => {
       const currentUserSession = JSON.parse(sessionStorage.getItem("userData"));

@@ -29,8 +29,8 @@ import { Viewer, Worker } from "@react-pdf-viewer/core";
 import "@react-pdf-viewer/core/lib/styles/index.css";
 import { PersonPinCircle } from "@mui/icons-material";
 
+const API_BASE_URL = process.env.REACT_APP_API_URL;
 const WaybillList = () => {
-    const API_BASE_URL = process.env.REACT_APP_API_URL;
     const [groupedWaybills, setGroupedWaybills] = useState({});
     const [facilityDetails, setFacilityDetails] = useState({});
     const [selectedFacilities, setSelectedFacilities] = useState([]);

@@ -22,6 +22,7 @@ import {
   Alert,
 } from "@mui/material";
 import { AccountCircle, Logout, Person } from "@mui/icons-material";
+import CloseIcon from '@mui/icons-material/Close';
 import { useNavigate, useLocation } from "react-router-dom";
 import logo from "../assets/images/logo.png";
 import axios from "axios";
@@ -33,6 +34,8 @@ const Navbar = () => {
   const API_BASE_URL = process.env.REACT_APP_API_URL;
   const location = useLocation(); // Get current route
   const [anchorEl, setAnchorEl] = useState(null);
+  const [open, setOpen] = useState(false);
+  const composeUrl = "https://outlook.office.com/mail/deeplink/compose?to=support@biomedwaste.com";
   const [anchorElResources, setAnchorElResources] = useState(null);
   const [openModal, setOpenModal] = useState(false); // State for modal open/close
   const [formData, setFormData] = useState({
@@ -50,6 +53,13 @@ const Navbar = () => {
     message: "",
     severity: "success", // can be "success", "error", "warning", "info"
   });
+
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+  const handleOpenOutlook = () => {
+    window.open(composeUrl, "_blank", "noopener,noreferrer");
+    handleClose(); // optional: close modal after opening Outlook
+  };
   // Handle menu open
   const handleMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -149,7 +159,49 @@ const Navbar = () => {
               gap: 1,
             }}
           >
-            <span>📧</span> support@biomedwaste.com
+            <Typography
+              variant="body2"
+              onClick={handleOpen}
+              sx={{
+                color: "#666",
+                cursor: "pointer",
+                display: "inline-flex",
+                alignItems: "center",
+                "&:hover": {
+                  color: "#333",
+                },
+              }}
+            >
+              <strong> <span>📧</span> support@biomedwaste.com</strong>
+            </Typography>
+
+            <Dialog open={open} onClose={handleClose} maxWidth="sm" fullWidth>
+              <DialogTitle sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                Send an Email
+                <IconButton onClick={handleClose}>
+                  <CloseIcon />
+                </IconButton>
+              </DialogTitle>
+
+              <DialogContent dividers>
+                <Typography gutterBottom>
+                  You’re about to send an email to <strong>support@biomedwaste.com</strong>.
+                </Typography>
+                <Typography variant="body2" color="textSecondary">
+                  Click the button below to open Outlook Web and compose your message.
+                </Typography>
+              </DialogContent>
+
+              <DialogActions>
+                <Button onClick={handleOpenOutlook} variant="contained" color="primary">
+                  Open Outlook
+                </Button>
+                <Button onClick={handleClose} variant="outlined">
+                  Cancel
+                </Button>
+              </DialogActions>
+            </Dialog>
+
           </Typography>
           <Button
             onClick={() => handleModalOpen()}
@@ -357,10 +409,10 @@ const Navbar = () => {
             </Menu>
           </Box>
         </Toolbar>
-      </AppBar>
+      </AppBar >
 
       {/* Modal for Request Quote */}
-      <Dialog
+      < Dialog
         open={openModal}
         onClose={handleModalClose}
         fullWidth
@@ -371,7 +423,8 @@ const Navbar = () => {
             boxShadow: "0 8px 16px rgba(0, 0, 0, 0.2)",
             padding: "16px",
           },
-        }}
+        }
+        }
       >
         <DialogTitle
           sx={{
@@ -516,10 +569,10 @@ const Navbar = () => {
             Submit
           </Button>
         </DialogActions>
-      </Dialog>
+      </Dialog >
 
       {/* Snackbar for Feedback */}
-      <Snackbar
+      < Snackbar
         open={snackbar.open}
         autoHideDuration={6000}
         onClose={handleSnackbarClose}
@@ -528,7 +581,7 @@ const Navbar = () => {
         <Alert onClose={handleSnackbarClose} severity={snackbar.severity} sx={{ width: "100%" }}>
           {snackbar.message}
         </Alert>
-      </Snackbar>
+      </Snackbar >
     </>
   );
 };

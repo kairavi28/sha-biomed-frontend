@@ -15,6 +15,7 @@ import {
 import axios from "axios";
 import Link from "@mui/material/Link";
 
+const API_BASE_URL = process.env.REACT_APP_API_URL;
 
 function BlogPage() {
   const [blogs, setBlogs] = useState([]);
@@ -23,7 +24,6 @@ function BlogPage() {
   const [error, setError] = useState("");
   const [open, setOpen] = useState(false);
   const [selectedBlog, setSelectedBlog] = useState(null);
-  const API_BASE_URL = process.env.REACT_APP_API_URL;
   // const [quoteData, setQuoteData] = useState({
   //   name: '',
   //   email: '',
