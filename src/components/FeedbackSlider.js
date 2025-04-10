@@ -9,6 +9,9 @@ import image3 from "../assets/images/NorthwestCollege_Logo.jpg";
 import image4 from "../assets/images/PrinceAlbert_Grand_logo.jpg";
 import image5 from "../assets/images/Suncrest-Logo.webp";
 import image6 from "../assets/images/saskatchewan_cancer_agency_logo.jpg";
+import image7 from "../assets/images/ISC.jpg";
+import image8 from "../assets/images/NeighbourlyLogo.png";
+import image9 from "../assets/images/Shoppers-Drug-Mart-Logo.png";
 
 const slides = [
   { title: "University of Saskatchewan", image: image1 },
@@ -17,6 +20,9 @@ const slides = [
   { title: "Prince Albert Grand Council", image: image4 },
   { title: "Suncrest College", image: image5 },
   { title: "Saskatchewan Cancer Agency", image: image6 },
+  { title: "Indigenous Services Canada", image: image7},
+  { title: "Neighbourly Pharmacy", image: image8},
+  { title: "Shoppers Drug Mart", image: image9},
 ];
 
 const FeedbackSlider = () => {

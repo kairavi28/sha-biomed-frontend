@@ -16,9 +16,6 @@ const CallToAction = () => {
       </Container>
 
       {/* Button Section */}
-      <button className="bg-gray-900 text-white px-6 py-3 rounded-full font-semibold shadow-md hover:bg-gray-700 transition">
-        REQUEST A FREE PROPOSAL
-      </button>
       <Container>
         <ContactSlider />
       </Container>
