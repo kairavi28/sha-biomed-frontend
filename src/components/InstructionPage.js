@@ -42,20 +42,20 @@ const products = [
         videoId: "UJ5bVZ8x3O8",
         description: [
             "SHARPS | Secure-A-Sharp®",
-            "Our Bioboxes Program offers safe storage and transportation of biomedical waste, designed for various healthcare institutions.",
+            "Our Secure-A-Sharp Program offers safe storage and transportation of biomedical waste, designed for various healthcare institutions.",
         ],
         features: ["Hospitals", "Pharmacies", "Research laboratories"],
-        warning: "Do not dispose of non-medical waste, chemical waste, or radioactive materials in Bioboxes."
+        warning: "Dispose of used sharps (needles, syringes, lancets, etc.) only in the designated puncture-resistant sharps container."
     },
     {
         title: "TERRA",
         videoId: "_YvEAe0FZgM",
         description: [
             "TYSC40 | TYSC68",
-            "Our Bioboxes Program offers safe storage and transportation of biomedical waste, designed for various healthcare institutions.",
+            "Our Terra Program provides a range of containers specifically designed for the safe disposal of sharps. Ideal for:",
         ],
         features: ["Hospitals", "Pharmacies", "Research laboratories"],
-        warning: "Do not dispose of non-medical waste, chemical waste, or radioactive materials in Bioboxes."
+        warning: "Avoid placing large quantities of liquid, large knives, anatomical waste, batteries, and drug paraphernalia in Terra containers."
     }
 ];
 
@@ -358,23 +358,13 @@ function InstructionPage() {
                     </Grid>
                 </Container>
             </Box> */}
-
             {/* FAQ Section */}
             <CallToAction />
-
             {/* Footer */}
             <Box sx={{ backgroundColor: "#333", color: "#fff", textAlign: "center", py: 4 }}>
                 <Typography variant="body2">
                     © 2025 Biomed Waste Recovery and Disposal Ltd. All rights reserved.
                 </Typography>
-                <Box sx={{ mt: 2 }}>
-                    <Link href="/privacy-policy" color="inherit" sx={{ mx: 2 }}>
-                        Privacy Policy
-                    </Link>
-                    <Link href="/terms-and-conditions" color="inherit" sx={{ mx: 2 }}>
-                        Terms & Conditions
-                    </Link>
-                </Box>
             </Box>
         </Box>
     );

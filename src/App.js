@@ -1,6 +1,8 @@
 import React, { useEffect } from "react";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useLocation, Outlet } from "react-router-dom";
 import "./App.css";
+
+// Pages & Components
 import SignInSide from "./sign-up/SignInSide";
 import SignUp from "./sign-up/SignUp";
 import Navbar from "./components/Navbar";
@@ -16,57 +18,62 @@ import AuthCallback from "./components/AuthCallback";
 import Cod from "./components/Cod";
 import FeedbackSlider from "./components/FeedbackSlider";
 import CallToAction from "./components/CallToAction";
+import { PrivacyProvider, usePrivacy } from './components/PrivacyContext';
+import PrivacyPopup from './components/PrivacyPopup';
 
-function App() {
+function RouteGuard() {
+  const location = useLocation();
+  const { showPrivacyPopup } = usePrivacy();
 
   useEffect(() => {
-    if (window.location.hostname === "www.biomedwaste.net") {
-      const newUrl = window.location.href.replace("www.", "");
-      window.location.replace(newUrl);
+    if (!localStorage.getItem('privacyAccepted')) {
+      showPrivacyPopup(location.pathname);
     }
-  }, []);
-  
-  return (
-    <Routes>
-      <Route path="/" element={<SignInSide />} />
-       <Route path="/auth/callback" element={<AuthCallback />} /> 
-      <Route path="/sign-up" element={<SignUp />} />
-      <Route element={<LayoutWithNavbar />}>
-        <Route path="/home" element={<Dashboard />} />
-        <Route path="/services" element={<Complaints />} />
-        <Route path="/instruction" element={<InstructionPage />} />
-        <Route path="/blogs" element={<BlogPage />} />
-        <Route path="/blog" element={<Blog />} />
-        <Route path="/profile" element={<ProfilePage />} />
-        <Route path="/invoice" element={<InvoiceList />} />
-        <Route path="/waybill" element={<WaybillList />} />
-        <Route path="/slider" element={<FeedbackSlider/>} />
-        <Route path="/cod" element={<Cod/>} />
-        <Route path="/calltoaction" element={<CallToAction/>} />
-      </Route>
-    </Routes>
-  );
+  }, [location.pathname, showPrivacyPopup]);
+
+  return null;
 }
 
 function LayoutWithNavbar() {
   return (
     <>
       <Navbar />
-      <Routes>
-        <Route path="/home" element={<Dashboard />} />
-        <Route path="/auth/callback" element={<AuthCallback />} /> 
-        <Route path="/services" element={<Complaints />} />
-        <Route path="/blogs" element={<BlogPage />} />
-        <Route path="/invoice" element={<InvoiceList />} />
-        <Route path="/waybill" element={<WaybillList />} />
-        <Route path="/blog" element={<Blog />} />
-        <Route path="/instruction" element={<InstructionPage />} />
-        <Route path="/profile" element={<ProfilePage />} />
-        <Route path="/slider" element={<FeedbackSlider/>} />
-        <Route path="/cod" element={<Cod/>} />
-        <Route path="/calltoaction" element={<CallToAction/>} />
-      </Routes>
+      <Outlet />
     </>
+  );
+}
+
+function App() {
+  useEffect(() => {
+    if (window.location.hostname === "www.biomedwaste.net") {
+      const newUrl = window.location.href.replace("www.", "");
+      window.location.replace(newUrl);
+    }
+  }, []);
+
+  return (
+    <PrivacyProvider>
+      <RouteGuard />
+      <PrivacyPopup />
+      <Routes>
+        <Route path="/" element={<SignInSide />} />
+        <Route path="/sign-up" element={<SignUp />} />
+        <Route path="/auth/callback" element={<AuthCallback />} />
+        <Route element={<LayoutWithNavbar />}>
+          <Route path="/home" element={<Dashboard />} />
+          <Route path="/services" element={<Complaints />} />
+          <Route path="/instruction" element={<InstructionPage />} />
+          <Route path="/blogs" element={<BlogPage />} />
+          <Route path="/blog" element={<Blog />} />
+          <Route path="/profile" element={<ProfilePage />} />
+          <Route path="/invoice" element={<InvoiceList />} />
+          <Route path="/waybill" element={<WaybillList />} />
+          <Route path="/slider" element={<FeedbackSlider />} />
+          <Route path="/cod" element={<Cod />} />
+          <Route path="/calltoaction" element={<CallToAction />} />
+        </Route>
+      </Routes>
+    </PrivacyProvider>
   );
 }
 

@@ -148,15 +148,16 @@ function COD() {
           </Card>
         ) : (
           <Card sx={{ maxWidth: 900, mx: "auto", mt: 4, p: 2, boxShadow: 3 }}>
+            <CardHeader
+              title={
+                <Typography variant="h5" color="#092C74" sx={{ fontWeight: "bold" }}>
+                  Certificate of Destruction
+                </Typography>
+              }
+            />
             {selectedFacilities.map((facility) => (
               <Box key={facility} sx={{ mb: 3 }}>
-                <CardHeader
-                  title={
-                    <Typography variant="h5" color="#092C74" sx={{ fontWeight: "bold" }}>
-                      Certificate of Destruction
-                    </Typography>
-                  }
-                />
+
                 <CardHeader
                   title={
                     <Typography variant="h6" color="#092C74" sx={{ fontWeight: "bold" }}>
@@ -226,7 +227,7 @@ function COD() {
           </Card>
         )}
       </Container>
-  
+
       {/* PDF Preview Dialog */}
       <Dialog open={openPreview} onClose={handlePreviewClose} maxWidth="md" fullWidth>
         <DialogTitle>Certificate of Destruction</DialogTitle>
@@ -242,7 +243,7 @@ function COD() {
         </DialogActions>
       </Dialog>
     </Box>
-  );  
+  );
 };
 
 export default COD;
