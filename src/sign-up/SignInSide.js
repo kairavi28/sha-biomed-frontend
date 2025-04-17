@@ -47,7 +47,7 @@ export default function SignInSide() {
           sx={[
             {
               justifyContent: 'space-between',
-              height: { xs: 'auto', md: '100%' },
+              minHeight: '100vh',
             },
             (theme) => ({
               backgroundImage:
@@ -69,6 +69,7 @@ export default function SignInSide() {
               m: 'auto',
             }}
           >
+
             <Content />
             <SignInCard />
           </Stack>

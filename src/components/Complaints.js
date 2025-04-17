@@ -389,7 +389,9 @@ function Complaints() {
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 1, ease: "easeOut" }}
                 sx={{
-                    height: "50vh",
+                    minHeight: { xs: "60vh", sm: "50vh" },
+                    textAlign: "center",
+                    px: 2,
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
@@ -478,6 +480,7 @@ function Complaints() {
                     {issues.length === 0 ? (
                         <Box
                             sx={{
+                                px: { xs: 2, md: 4 },
                                 textAlign: "center",
                                 p: 4,
                                 borderRadius: 3,
@@ -495,7 +498,12 @@ function Complaints() {
                     ) : (
                         <Grid container spacing={4}>
                             {issues.map((issue) => (
-                                <Grid item xs={12} sm={6} md={4} key={issue.id}>
+                                <Grid
+                                    item
+                                    xs={12}
+                                    sm={6}
+                                    md={4}
+                                    sx={{ display: 'flex', justifyContent: 'center' }} key={issue.id}>
                                     <Paper
                                         elevation={5}
                                         sx={{
@@ -533,8 +541,8 @@ function Complaints() {
                                                         src={photo}
                                                         alt={`Issue Image ${i + 1}`}
                                                         style={{
-                                                            height: issue.photos?.length === 1 ? "100%" : "auto",
-                                                            width: issue.photos?.length === 1 ? "100%" : "auto",
+                                                            maxWidth: "100%",
+                                                            maxHeight: "200px",
                                                             objectFit: "cover",
                                                             borderRadius: "4px",
                                                         }}
@@ -612,7 +620,8 @@ function Complaints() {
                                     src={photo}
                                     alt={`Complaint Image ${index + 1}`}
                                     style={{
-                                        width: "300px", // Set a larger width
+                                        width: "100%",
+                                        maxWidth: "300px", // Set a larger width
                                         height: "auto", // Keep aspect ratio
                                         borderRadius: "8px", // Rounded corners for a smoother look
                                         objectFit: "cover", // Ensure image fits within the dimensions
@@ -654,6 +663,8 @@ function Complaints() {
                             transform: "translate(-50%, -50%)",
                             width: "90%",
                             maxWidth: 500,
+                            maxHeight: "90vh",
+                            overflowY: "auto",
                             bgcolor: "background.paper",
                             boxShadow: 24,
                             p: 4,
@@ -730,7 +741,12 @@ function Complaints() {
                             Upload Attachment (Optional)
                             <input hidden accept="image/*" type="file" multiple onChange={handleFileChangeComplaint} />
                         </Button>
-                        <Grid item xs={12}>
+                        <Grid
+                            item
+                            xs={12}
+                            sm={6}
+                            md={4}
+                            sx={{ display: 'flex', justifyContent: 'center' }}>
                             <div
                                 style={{
                                     display: "flex",
@@ -812,8 +828,15 @@ function Complaints() {
             </Modal>
             {/* Report for damaged containers */}
             <Box sx={{ mt: 6, py: 6, background: "linear-gradient(to bottom, #f9f9f9, #ffffff)" }}>
-                <Container maxWidth="sm">
-                    <Paper elevation={3} sx={{ p: 4, borderRadius: 3, boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.1)" }}>
+                <Container maxWidth="md">
+                    <Paper
+                        elevation={3}
+                        sx={{
+                            p: { xs: 2, sm: 4 },
+                            borderRadius: 3,
+                            boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.1)",
+                        }}
+                    >
                         <Typography
                             variant="h5"
                             sx={{
@@ -829,7 +852,7 @@ function Complaints() {
                         <form onSubmit={handleFormSubmit}>
                             <Grid container spacing={3}>
                                 {/* Product Type Selection */}
-                                <Grid item xs={12}>
+                                <Grid item xs={12} md={6}>
                                     <TextField
                                         select
                                         label="Product Type"
@@ -850,7 +873,7 @@ function Complaints() {
                                 </Grid>
 
                                 {/* Description Field */}
-                                <Grid item xs={12}>
+                                <Grid item xs={12} md={6}>
                                     <TextField
                                         label="Description"
                                         name="description"
@@ -864,20 +887,22 @@ function Complaints() {
                                     />
                                 </Grid>
 
-                                {/* File Upload Button with Icon */}
+                                {/* File Upload Button */}
                                 <Grid item xs={12}>
                                     <Button
                                         variant="contained"
                                         component="label"
                                         fullWidth
-                                        startIcon={<PhotoCameraIcon />}  // 📷 Icon added here
+                                        startIcon={<PhotoCameraIcon />}
                                         sx={{
                                             background: "linear-gradient(135deg,rgb(98, 129, 233),rgb(164, 208, 231))",
                                             color: "white",
                                             fontWeight: "bold",
                                             py: 1.5,
                                             borderRadius: "8px",
-                                            "&:hover": { background: "linear-gradient(135deg,rgb(84, 185, 240),rgb(71, 96, 240))" },
+                                            "&:hover": {
+                                                background: "linear-gradient(135deg,rgb(84, 185, 240),rgb(71, 96, 240))",
+                                            },
                                         }}
                                     >
                                         Upload Photos
@@ -891,7 +916,7 @@ function Complaints() {
                                     </Button>
                                 </Grid>
 
-                                {/* Image Previews with Remove Icon */}
+                                {/* Image Previews */}
                                 {formData.photos.length > 0 && (
                                     <Grid item xs={12}>
                                         <Box
@@ -933,7 +958,7 @@ function Complaints() {
                                                         }}
                                                         onClick={() => handleRemoveImage(index)}
                                                     >
-                                                        <CloseIcon />  {/* ❌ Remove image icon */}
+                                                        <CloseIcon />
                                                     </IconButton>
                                                 </Box>
                                             ))}
@@ -941,13 +966,13 @@ function Complaints() {
                                     </Grid>
                                 )}
 
-                                {/* Submit Button with Send Icon */}
+                                {/* Submit Button */}
                                 <Grid item xs={12}>
                                     <Button
                                         type="submit"
                                         variant="contained"
                                         fullWidth
-                                        startIcon={<SendIcon />}  // 🚀 Icon added here
+                                        startIcon={<SendIcon />}
                                         sx={{
                                             mt: 3,
                                             background: "linear-gradient(to right, #BAC400, #E0E721)",
@@ -956,7 +981,9 @@ function Complaints() {
                                             py: 1,
                                             borderRadius: "12px",
                                             boxShadow: "0px 4px 12px rgba(44, 56, 233, 0.4)",
-                                            '&:hover': { background: "linear-gradient(135deg,rgb(98, 129, 233),rgb(164, 208, 231))" },
+                                            "&:hover": {
+                                                background: "linear-gradient(135deg,rgb(98, 129, 233),rgb(164, 208, 231))",
+                                            },
                                         }}
                                         disabled={isSubmitting}
                                     >
@@ -969,6 +996,7 @@ function Complaints() {
                 </Container>
             </Box>
 
+            <Box sx={{ height: { xs: 40, md: 60 } }} />
             <CallToAction />
             {/* <button onClick={() => setAutoReload(!autoReload)}>
                 {autoReload ? "Pause Auto-Reload" : "Resume Auto-Reload"}
