@@ -101,21 +101,53 @@ export default function SignInCard() {
     return isValid;
   };
 
+  const getUserLocation = () => {
+    return new Promise((resolve, reject) => {
+      if (!navigator.geolocation) {
+        return reject(new Error('Geolocation is not supported'));
+      }
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          resolve({
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude,
+          });
+        },
+        (error) => {
+          reject(error);
+        }
+      );
+    });
+  };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     if (emailError || passwordError) return;
-
+  
     const data = new FormData(event.currentTarget);
     const formData = {
       email: data.get('email'),
       password: data.get('password'),
     };
-
+  
     try {
       const response = await axios.post(`${API_BASE_URL}/user/login`, JSON.stringify(formData), {
         headers: { 'Content-Type': 'application/json' },
       });
+  
       sessionStorage.setItem('userData', JSON.stringify(response.data));
+  
+      // Try to get location and store it
+      try {
+        const location = await getUserLocation();
+        await axios.post(`${API_BASE_URL}/user/location`, {
+          userId: response.data.id, // make sure to send ID or auth token
+          ...location,
+        });
+      } catch (locError) {
+        console.warn('Could not fetch user location:', locError.message);
+      }
+  
       navigate('/home');
     } catch (error) {
       const { status, data } = error.response || {};
