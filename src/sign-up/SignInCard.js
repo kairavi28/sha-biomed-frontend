@@ -134,7 +134,6 @@ export default function SignInCard() {
       const response = await axios.post(`${API_BASE_URL}/user/login`, JSON.stringify(formData), {
         headers: { 'Content-Type': 'application/json' },
       });
-  
       sessionStorage.setItem('userData', JSON.stringify(response.data));
   
       // Try to get location and store it
@@ -142,6 +141,7 @@ export default function SignInCard() {
         const location = await getUserLocation();
         await axios.post(`${API_BASE_URL}/user/location`, {
           userId: response.data.id, // make sure to send ID or auth token
+          userEmail: response.data.email,
           ...location,
         });
       } catch (locError) {
