@@ -258,57 +258,68 @@ function Dashboard() {
       {/* Hero Section */}
       <Box sx={{ background: "linear-gradient(to bottom, white, #f0f8ff)", minHeight: "100vh" }}>
         {/* Hero Section with Animation */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 1, ease: "easeOut" }}
+        <Box
+          sx={{
+            position: "relative",
+            height: "100vh",
+            overflow: "hidden",
+            zIndex: 1,
+            width: "100vw",           // <-- Add this
+            marginLeft: "calc(-50vw + 50%)", // <-- Add this to stretch full width even inside Container
+          }}
         >
-          <Box sx={{ position: "relative", textAlign: "center", color: "white", pb: 6 }}>
-            <AwesomeSlider
-              bullets={false}
-              play
-              interval={4000}
-              style={{ height: "700px" }}
-              organicArrows={true}
-              onTransitionStart={(event) => {
-                event.currentSlide.classList.add("zoom-effect");
-                setTimeout(() => event.currentSlide.classList.remove("zoom-effect"), 1000);
-              }}
-            >
-              {[image1, image2].map((img, index) => (
-                <div key={index} className="slide-container">
-                  <motion.img
-                    src={img}
-                    alt={`Slide ${index + 1}`}
-                    style={{
-                      width: "100%",
-                      objectFit: "cover",
-                      display: "block",
-                    }}
-                    initial={{ scale: 1.1 }}
-                    animate={{ scale: 1 }}
-                    transition={{ duration: 1 }}
-                  />
-                </div>
-              ))}
-            </AwesomeSlider>
+          
+          <AwesomeSlider
+            bullets={false}
+            play
+            interval={4000}
+            style={{ height: "100vh", width: "100vw" }} // <-- Stretch full width
+            organicArrows={false}
+          >
+            {[image1, image2].map((img, index) => (
+              <div key={index} className="slide-container">
+                <motion.img
+                  src={img}
+                  alt={`Slide ${index + 1}`}
+                  style={{
+                    width: "100vw",
+                    height: "100vh",
+                    objectFit: "cover", // Make sure the image fills the area
+                  }}
+                  initial={{ scale: 1.1 }}
+                  animate={{ scale: 1 }}
+                  transition={{ duration: 1 }}
+                />
 
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.5, duration: 0.8 }}
-            >
-              <Typography variant="h5" sx={{ mt: 3, fontWeight: "bold" }}>
-                Leading Biohazard Waste Disposal
-              </Typography>
-            </motion.div>
+              </div>
+            ))}
+          </AwesomeSlider>
+
+          {/* Optional overlay text */}
+          <Box
+            sx={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              height: "100%",
+              width: "100%",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              color: "#fff",
+              zIndex: 2,
+              textAlign: "center",
+              px: 2
+            }}
+          >
+           
           </Box>
-        </motion.div>
+        </Box>
 
         {/* Image slider with content box */}
         <Container maxWidth="lg">
-          <Typography variant="h4" sx={{ mb: 4, textAlign: "center", fontWeight: "bold", color: "#003366" }}>
-            Featured Content
+          <Typography variant="h4" sx={{ mb: 4 }}>
+
           </Typography>
           <Grid container spacing={5} alignItems="stretch">
             {/* Right Content Slider */}
@@ -449,7 +460,7 @@ function Dashboard() {
 
         {/* Services Section with Animation */}
         <Container sx={{ mt: 10 }}>
-          <Typography variant="h4" sx={{ mt: 4, textAlign: "center", fontWeight: "bold", color: "#003366" }}>
+          <Typography variant="h5" sx={{ mt: 4, textAlign: "center", fontWeight: "bold", color: "#003366" }}>
             Biomedical Waste Management Services
           </Typography>
           <Grid container spacing={3} sx={{ mt: 3 }}>

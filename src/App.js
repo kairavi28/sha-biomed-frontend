@@ -20,6 +20,7 @@ import FeedbackSlider from "./components/FeedbackSlider";
 import CallToAction from "./components/CallToAction";
 import { PrivacyProvider, usePrivacy } from './components/PrivacyContext';
 import PrivacyPopup from './components/PrivacyPopup';
+import BusinessInfoForm from "./components/BusinessInfoForm";
 
 function RouteGuard() {
   const location = useLocation();
@@ -70,6 +71,7 @@ function App() {
           <Route path="/waybill" element={<WaybillList />} />
           <Route path="/slider" element={<FeedbackSlider />} />
           <Route path="/cod" element={<Cod />} />
+          <Route path="/Business" element={<BusinessInfoForm/>} />
           <Route path="/calltoaction" element={<CallToAction />} />
         </Route>
       </Routes>

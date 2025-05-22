@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   AppBar,
   Toolbar,
@@ -88,6 +88,21 @@ const Navbar = () => {
   const handleSnackbarClose = () => {
     setSnackbar({ ...snackbar, open: false });
   };
+
+  useEffect(() => {
+    const navbar = document.getElementById("navbar");
+    const handleScroll = () => {
+      if (window.scrollY > 100) {
+        navbar.classList.add("scrolled");
+      } else {
+        navbar.classList.remove("scrolled");
+      }
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  
   // Handle form submission
   const handleSubmit = () => {
     axios
@@ -124,13 +139,23 @@ const Navbar = () => {
   return (
     <>
       <AppBar
-        position="sticky"
+        position="absolute"
         sx={{
-          backgroundColor: "#ffffff",
-          color: "#003366",
-          boxShadow: "0 4px 10px rgba(0, 0, 0, 0.1)",
-          borderBottom: "3px solid #C9CC3F",
+          top: 0,
+          width: '100%',
+          backgroundColor: "transparent",
+          color: "#ffffff",
+          boxShadow: "none",
+          transition: "all 0.3s ease-in-out",
+          "&.scrolled": {
+            backgroundColor: "#ffffff",
+            color: "#003366",
+            position: "fixed",
+            boxShadow: "0 4px 10px rgba(0, 0, 0, 0.1)",
+            borderBottom: "3px solid #C9CC3F",
+          }
         }}
+        id="navbar"
       >
         {/* Contact Info Row */}
         <Box

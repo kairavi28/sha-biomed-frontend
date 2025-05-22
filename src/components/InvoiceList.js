@@ -35,6 +35,7 @@ const InvoiceList = () => {
   const [loading, setLoading] = useState(true);
   const [currentInvoice, setCurrentInvoice] = useState(null);
   const [selectedFacilities, setSelectedFacilities] = useState([]);
+  
   useEffect(() => {
     const fetchUserData = async () => {
       const currentUserSession = JSON.parse(sessionStorage.getItem("userData"));
@@ -116,7 +117,7 @@ const InvoiceList = () => {
     <Box sx={{
       background: "linear-gradient(to right,rgb(226, 237, 240),rgb(222, 233, 247))",
       minHeight: "100vh",
-      py: 5,
+      py: 20,
       display: "flex",
       flexDirection: "column",
     }}>
