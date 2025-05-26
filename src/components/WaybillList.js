@@ -32,7 +32,6 @@ import { PersonPinCircle } from "@mui/icons-material";
 const API_BASE_URL = process.env.REACT_APP_API_URL;
 const WaybillList = () => {
     const [groupedWaybills, setGroupedWaybills] = useState({});
-    const [facilityDetails, setFacilityDetails] = useState({});
     const [selectedFacilities, setSelectedFacilities] = useState([]);
     const [openPreview, setOpenPreview] = useState(false);
     const [currentWaybill, setCurrentWaybill] = useState(null);
@@ -117,7 +116,7 @@ const WaybillList = () => {
             display: "flex",
             flexDirection: "column",
         }}>
-            <Container maxWidth="lg" sx={{ py: 5 }}>
+            <Container maxWidth="lg" sx={{ py: 10 }}>
                 <Card sx={{ maxWidth: 900, mx: "auto", mt: 4, p: 2, boxShadow: 3 }}>
                     <CardHeader
                         title={<Typography variant="h5" color="#092C74" sx={{ fontWeight: "bold" }}>Waybills</Typography>}
@@ -157,7 +156,7 @@ const WaybillList = () => {
                                         sx={{ cursor: "pointer", display: "flex", alignItems: "center" }}
                                     >
                                         <ExpandMoreIcon sx={{ transform: expandedFacility === facility ? "rotate(180deg)" : "rotate(0deg)" }} />
-                                        {facilityDetails[facility]?.name || facility}
+                                        { facility }
                                     </Typography>
                                     <Collapse in={expandedFacility === facility} timeout="auto" unmountOnExit>
                                         <TableContainer component={Paper} sx={{ boxShadow: 2, mt: 1 }}>

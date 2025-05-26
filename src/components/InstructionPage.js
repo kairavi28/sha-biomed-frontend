@@ -130,7 +130,7 @@ function InstructionPage() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 1, ease: "easeOut" }}
                 sx={{
-                    height: "50vh",
+                    height: "60vh",
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
@@ -147,7 +147,7 @@ function InstructionPage() {
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ duration: 1, delay: 0.5, ease: "easeOut" }}
                 >
-                    <Typography variant="h3" fontWeight="bold">
+                    <Typography variant="h4" fontWeight="bold">
                         Waste Packaging Guide
                     </Typography>
                     <Typography

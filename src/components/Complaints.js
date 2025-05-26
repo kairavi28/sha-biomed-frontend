@@ -46,7 +46,7 @@ function Complaints() {
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(true);
     const [isDialogOpen, setIsDialogOpen] = useState(false);
-    const [selectedIssue, setSelectedIssue] = useState(null); // Store selected complaint
+    const [selectedIssue, setSelectedIssue] = useState(null); 
     const [isFormActive] = useState(false);
     const [formOpen, setFormOpen] = useState(false);
     const handleFormClose = () => setFormOpen(false);
@@ -409,7 +409,7 @@ function Complaints() {
                     transition={{ duration: 1, delay: 0.5, ease: "easeOut" }}
                 >
                     <Typography
-                        variant="h3"
+                        variant="h4"
                         fontWeight="bold"
                         component={motion.div}
                         initial={{ opacity: 0, x: -30 }}
