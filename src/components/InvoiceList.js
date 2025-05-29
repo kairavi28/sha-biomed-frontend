@@ -15,6 +15,7 @@ import {
   Dialog,
   Button,
   DialogActions,
+  TextField,
   DialogContent,
   DialogTitle,
   CircularProgress,
@@ -35,7 +36,11 @@ const InvoiceList = () => {
   const [loading, setLoading] = useState(true);
   const [currentInvoice, setCurrentInvoice] = useState(null);
   const [selectedFacilities, setSelectedFacilities] = useState([]);
-  
+  //Dispute
+  const [openDispute, setOpenDispute] = useState(false);
+  const [disputeInvoice, setDisputeInvoice] = useState(null);
+  const [disputeReason, setDisputeReason] = useState("");
+
   useEffect(() => {
     const fetchUserData = async () => {
       const currentUserSession = JSON.parse(sessionStorage.getItem("userData"));
@@ -172,6 +177,7 @@ const InvoiceList = () => {
                       <TableCell><strong>Download</strong></TableCell>
                       <TableCell><strong>Balance Due</strong></TableCell>
                       <TableCell><strong>Uploaded At</strong></TableCell>
+                      <TableCell><strong>Action</strong></TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
@@ -199,6 +205,19 @@ const InvoiceList = () => {
                           </TableCell>
                           <TableCell>${invoice.balanceDue?.toFixed(2) || "N/A"}</TableCell>
                           <TableCell>{invoice.uploadedAt ? new Date(invoice.uploadedAt).toLocaleString() : "N/A"}</TableCell>
+                          <TableCell>
+                            <Button
+                              variant="outlined"
+                              color="error"
+                              size="small"
+                              onClick={() => {
+                                setDisputeInvoice(invoice);
+                                setOpenDispute(true);
+                              }}
+                            >
+                              File Dispute
+                            </Button>
+                          </TableCell>
                         </TableRow>
                       ))
                     ) : (
@@ -211,6 +230,97 @@ const InvoiceList = () => {
               </TableContainer>
             </Box>
           ))}
+          {/* Dialog for filing Invoice Dispute */}
+          <Dialog
+            open={openDispute}
+            onClose={() => setOpenDispute(false)}
+            maxWidth="sm"
+            fullWidth
+            PaperProps={{
+              sx: {
+                borderRadius: 3,
+                p: 2,
+                background: "#fefefe",
+                boxShadow: 5,
+              },
+            }}
+          >
+            <DialogTitle sx={{ fontWeight: 'bold', color: '#d32f2f', borderBottom: '1px solid #eee' }}>
+              File a Dispute
+            </DialogTitle>
+
+            <DialogContent sx={{ mt: 2 }}>
+              <Box sx={{ mb: 2 }}>
+                <Typography variant="subtitle2" color="text.secondary">
+                  Invoice Number
+                </Typography>
+                <Typography variant="body1" sx={{ fontWeight: 500 }}>
+                  {disputeInvoice?.fileName || "N/A"}
+                </Typography>
+              </Box>
+
+              <Box>
+                <Typography variant="subtitle2" color="text.secondary" gutterBottom>
+                  Reason for Dispute <span style={{ color: "red" }}>*</span>
+                </Typography>
+                <TextField
+                  multiline
+                  minRows={4}
+                  fullWidth
+                  variant="outlined"
+                  placeholder="Please describe the issue or concern with this invoice..."
+                  value={disputeReason}
+                  onChange={(e) => setDisputeReason(e.target.value)}
+                  sx={{
+                    background: "#fafafa",
+                    borderRadius: 1,
+                  }}
+                />
+              </Box>
+            </DialogContent>
+
+            <DialogActions sx={{ mt: 2, borderTop: '1px solid #eee', pt: 2 }}>
+              <Button
+                onClick={() => setOpenDispute(false)}
+                variant="outlined"
+                color="inherit"
+                sx={{ textTransform: "none", borderRadius: 2 }}
+              >
+                Cancel
+              </Button>
+              <Button
+                variant="contained"
+                color="error"
+                sx={{ textTransform: "none", borderRadius: 2 }}
+                onClick={async () => {
+                  try {
+                    const disputePayload = {
+                      customerId: userData?._id,
+                      customerName: userData?.firstname + " " + userData?.lastname,
+                      facility: disputeInvoice?.facility,
+                      invoiceNumber: disputeInvoice?.fileName,
+                      disputeDescription: disputeReason,
+                      disputeDate: new Date().toISOString(), // ISO format
+                    };
+                    console.log(disputePayload);
+                    await axios.post(`${API_BASE_URL}/invoice/dispute`, disputePayload);
+
+                    alert("Dispute filed successfully.");
+                    setOpenDispute(false);
+                    setDisputeReason("");
+                  } catch (err) {
+                    console.error("Error filing dispute:", err);
+                    alert("Failed to file dispute. Please try again.");
+                  }
+                }}
+
+                disabled={!disputeReason.trim()}
+              >
+                Submit Dispute
+              </Button>
+            </DialogActions>
+          </Dialog>
+
           {/* Dialog for PDF Preview */}
           <Dialog open={openPreview} onClose={handlePreviewClose} maxWidth="md" fullWidth>
             <DialogTitle>Invoice Preview</DialogTitle>
