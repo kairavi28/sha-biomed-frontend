@@ -102,7 +102,7 @@ const Navbar = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  
+
   // Handle form submission
   const handleSubmit = () => {
     axios
@@ -357,6 +357,20 @@ const Navbar = () => {
                 <Typography variant="inherit">Invoices</Typography>
               </MenuItem>
 
+              <MenuItem
+                onClick={() => { navigate("/request-products"); handleResourceMenuClose(); }}
+                sx={{
+                  display: "flex", gap: 1,
+                  backgroundColor: isActive("/request-products") ? "#C9CC3F" : "transparent",
+                  color: isActive("/request-products") ? "#ffffff" : "inherit",
+                  "&:hover": {
+                    backgroundColor: isActive("/request-products") ? "#C9CC3F" : "#f0f0f0",
+                  }
+                }}
+              >
+                <FileCopyIcon fontSize="small" />
+                <Typography variant="inherit">Request Product / Service</Typography>
+              </MenuItem>
               <Divider />
 
               <MenuItem

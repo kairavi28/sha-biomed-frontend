@@ -21,6 +21,7 @@ import CallToAction from "./components/CallToAction";
 import { PrivacyProvider, usePrivacy } from './components/PrivacyContext';
 import PrivacyPopup from './components/PrivacyPopup';
 import BusinessInfoForm from "./components/BusinessInfoForm";
+import RequestProduct from "./components/RequestProduct";
 
 function RouteGuard() {
   const location = useLocation();
@@ -73,6 +74,7 @@ function App() {
           <Route path="/cod" element={<Cod />} />
           <Route path="/Business" element={<BusinessInfoForm/>} />
           <Route path="/calltoaction" element={<CallToAction />} />
+          <Route path="/request-products" element={<RequestProduct />} />
         </Route>
       </Routes>
     </PrivacyProvider>

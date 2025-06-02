@@ -223,7 +223,7 @@ function ProfilePage() {
   }
 
   return (
-    <Box sx={{ background: "#f3f4f6", minHeight: "100vh", py: 4 }}>
+    <Box sx={{ background: "#f3f4f6", minHeight: "100vh", py: 18 }}>
       <Container maxWidth="md">
         <Paper elevation={4} sx={{ p: 4, borderRadius: 3 }}>
           <Typography variant="h5" align="center" fontWeight="bold" color="#092C74" mb={4}>Profile</Typography>
