@@ -123,9 +123,9 @@ function COD() {
         flexDirection: "column",
       }}
     >
-      <Container maxWidth="lg">
+      <Container maxWidth="lg"  sx={{ py: 10 }}>
         {selectedFacilities.length === 0 ? (
-          <Card sx={{ maxWidth: 700, mx: "auto", mt: 10, p: 4, textAlign: "center", boxShadow: 3 }}>
+          <Card sx={{ maxWidth: 900, mx: "auto", mt: 4, p: 2, textAlign: "center", boxShadow: 3 }}>
             <PersonPinCircle sx={{ fontSize: 50, color: "#092C74", mb: 2 }} />
             <Typography variant="h4" sx={{ fontWeight: "bold", color: "#092C74", mb: 1 }}>
               Certificate of Destruction
