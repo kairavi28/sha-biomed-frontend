@@ -118,18 +118,35 @@ function Dashboard() {
   useEffect(() => {
     setLoading(true);
     const fetchUserData = async () => {
-      const currentUserSession = JSON.parse(sessionStorage.getItem("userData"));
-      const currentUserId = currentUserSession.id ? currentUserSession.id : currentUserSession._id;
-      setLoading(false);
-      if (!currentUserId) {
-        console.error("User ID is undefined inside interval");
-        return;
-      }
-
       try {
+        const storedUser = sessionStorage.getItem("userData");
+        if (!storedUser) {
+          console.error("No user data found in sessionStorage");
+          setLoading(false);
+          return;
+        }
+
+        let currentUserSession;
+        try {
+          currentUserSession = JSON.parse(storedUser);
+        } catch (e) {
+          console.error("Invalid JSON in sessionStorage:", storedUser);
+          sessionStorage.removeItem("userData");
+          setLoading(false);
+          return;
+        }
+
+        const currentUserId = currentUserSession.id || currentUserSession._id;
+        if (!currentUserId) {
+          console.error("User ID is undefined inside interval");
+          setLoading(false);
+          return;
+        }
+
         const response = await axios.get(`${API_BASE_URL}/user/${currentUserId}`);
         setUserData(response.data);
-        if (response.data?.facilities.some(facility => facility.approved)) {
+
+        if (response.data?.facilities?.some(facility => facility.approved)) {
           setSnackbar({
             open: true,
             message: `Hello ${response.data.firstname}!`,
@@ -138,12 +155,13 @@ function Dashboard() {
         }
       } catch (err) {
         console.error("Error checking facility approval:", err);
+      } finally {
+        setLoading(false);
       }
     };
+
     fetchUserData();
   }, [API_BASE_URL]);
-
-
 
   const handleFileChange = (event) => {
     const files = Array.from(event.target.files);
@@ -268,7 +286,7 @@ function Dashboard() {
             marginLeft: "calc(-50vw + 50%)", // <-- Add this to stretch full width even inside Container
           }}
         >
-          
+
           <AwesomeSlider
             bullets={false}
             play
@@ -312,7 +330,7 @@ function Dashboard() {
               px: 2
             }}
           >
-           
+
           </Box>
         </Box>
 
