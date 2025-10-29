@@ -59,6 +59,7 @@ export default function SignInCard() {
       const responseObj = await axios.post(`${API_BASE_URL}/user/microsoft-signin`, loginResponse.account, {
         headers: { "Content-Type": "application/json" },
       });
+      
       sessionStorage.setItem("userData", JSON.stringify(responseObj.data.user));
       if (responseObj) {
         window.location.href = "/home";
