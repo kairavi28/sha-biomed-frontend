@@ -75,7 +75,6 @@ function Complaints() {
             try {
                 setLoading(true);
                 const currentUserId = currentUserSession?.id || currentUserSession?._id;
-                console.log('current User Id: ', currentUserId);
                 if (!currentUserId) {
                     console.error("User ID is undefined.");
                     setLoading(false);
@@ -83,8 +82,7 @@ function Complaints() {
                 }
 
                 const userResponse = await axios.get(`${API_BASE_URL}/user/${currentUserId}`);
-                console.log(userResponse);
-                
+
                 const userDataFromDB = userResponse.data;
                 setUserData(userDataFromDB); // ✅ Update state
 

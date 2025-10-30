@@ -15,7 +15,7 @@ import {
 import axios from "axios";
 import Link from "@mui/material/Link";
 
-const API_BASE_URL = process.env.REACT_APP_API_URL;
+const API_BASE_URL = process.env.REACT_APP_API_URL || "https://biomedwaste.net/api";
 
 function BlogPage() {
   const [blogs, setBlogs] = useState([]);

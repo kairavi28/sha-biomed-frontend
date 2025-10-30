@@ -26,7 +26,7 @@ import Autocomplete from "@mui/material/Autocomplete";
 
 function ProfilePage() {
   const [userData, setUserData] = useState(null);
-  const API_BASE_URL = process.env.REACT_APP_API_URL;
+  const API_BASE_URL = process.env.REACT_APP_API_URL || "https://biomedwaste.net/api";
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState(0);
   const [error, setError] = useState(null);

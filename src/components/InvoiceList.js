@@ -28,7 +28,7 @@ import { Viewer, Worker } from "@react-pdf-viewer/core";
 import "@react-pdf-viewer/core/lib/styles/index.css";
 import { PersonPinCircle } from "@mui/icons-material";
 
-const API_BASE_URL = process.env.REACT_APP_API_URL;
+const API_BASE_URL = process.env.REACT_APP_API_URL || "https://biomedwaste.net/api";
 const InvoiceList = () => {
   const [invoices, setInvoices] = useState({});
   const [openPreview, setOpenPreview] = useState(false);

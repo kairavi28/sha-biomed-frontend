@@ -35,7 +35,7 @@ import ContentSlider from "./ContentSlider";
 import CallToAction from "./CallToAction";
 import { Navigation, Pagination, Autoplay } from "swiper/modules";
 
-const API_BASE_URL = process.env.REACT_APP_API_URL;
+const API_BASE_URL = process.env.REACT_APP_API_URL || "https://biomedwaste.net/api";
 const slides = [
   {
     "title": "Worker Safety",

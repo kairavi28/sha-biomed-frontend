@@ -49,7 +49,7 @@ const SignUpContainer = styled(Stack)(({ theme }) => ({
 }));
 
 export default function SignUp() {
-  const API_BASE_URL = process.env.REACT_APP_API_URL;
+  const API_BASE_URL = process.env.REACT_APP_API_URL || "https://biomedwaste.net/api";
   const [mode, setMode] = React.useState('light');
   const defaultTheme = createTheme({ palette: { mode } });
   const [firstNameError, setFirstNameError] = React.useState(false);

@@ -36,7 +36,7 @@ function COD() {
   const [loading, setLoading] = useState(true);
   const [currentCod, setCurrentCod] = useState(null);
   const [selectedFacilities, setSelectedFacilities] = useState([]);
-  const API_BASE_URL = process.env.REACT_APP_API_URL;
+  const API_BASE_URL = process.env.REACT_APP_API_URL || "https://biomedwaste.net/api";
 
   useEffect(() => {
     const fetchUserData = async () => {

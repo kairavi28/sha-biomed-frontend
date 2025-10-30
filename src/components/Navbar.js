@@ -31,7 +31,7 @@ import FileCopyIcon from '@mui/icons-material/FileCopy';;
 
 const Navbar = () => {
   const navigate = useNavigate();
-  const API_BASE_URL = process.env.REACT_APP_API_URL;
+  const API_BASE_URL = process.env.REACT_APP_API_URL || "https://biomedwaste.net/api";
   const location = useLocation(); // Get current route
   const [anchorEl, setAnchorEl] = useState(null);
   const [open, setOpen] = useState(false);

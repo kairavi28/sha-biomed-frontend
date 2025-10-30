@@ -3,7 +3,7 @@ import { Box, Typography, List, ListItem, Paper } from '@mui/material';
 
 const Blog = () => {
     const [blogs, setBlogs] = useState([]);
-    const API_BASE_URL = process.env.REACT_APP_API_URL;
+    const API_BASE_URL = process.env.REACT_APP_API_URL || "https://biomedwaste.net/api";
 
     useEffect(() => {
         fetch(`${API_BASE_URL}/blogs`)
