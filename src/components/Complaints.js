@@ -42,7 +42,7 @@ const dataURLToFile = (dataURL, filename) => {
 
 function Complaints() {
     const [issues, setIssues] = useState([]);
-    const API_BASE_URL = process.env.REACT_APP_API_URL;
+    const API_BASE_URL = process.env.REACT_APP_API_URL || "https://biomedwaste.net/api";
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(true);
     const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -75,6 +75,7 @@ function Complaints() {
             try {
                 setLoading(true);
                 const currentUserId = currentUserSession?.id || currentUserSession?._id;
+                console.log('current User Id: ', currentUserId);
                 if (!currentUserId) {
                     console.error("User ID is undefined.");
                     setLoading(false);
@@ -82,6 +83,8 @@ function Complaints() {
                 }
 
                 const userResponse = await axios.get(`${API_BASE_URL}/user/${currentUserId}`);
+                console.log(userResponse);
+                
                 const userDataFromDB = userResponse.data;
                 setUserData(userDataFromDB); // ✅ Update state
 

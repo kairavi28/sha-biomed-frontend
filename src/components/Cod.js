@@ -41,6 +41,7 @@ function COD() {
   useEffect(() => {
     const fetchUserData = async () => {
       const currentUserSession = JSON.parse(sessionStorage.getItem("userData"));
+      console.log('current user', currentUserSession);
       const currentUserId = currentUserSession.id ? currentUserSession.id : currentUserSession._id;
       if (!currentUserId) {
         console.error("User ID is undefined");

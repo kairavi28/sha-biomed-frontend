@@ -54,23 +54,23 @@ export default function SignInCard() {
   const navigate = useNavigate();
 
   const handleMicrosoftLogin = async () => {
-  try {
-    const loginResponse = await instance.loginPopup({ scopes: ["User.Read"] });
-    if (!loginResponse?.account) {
-      console.error("No account info from Microsoft login");
-      return;
+    try {
+      const loginResponse = await instance.loginPopup({ scopes: ["User.Read"] });
+      if (!loginResponse?.account) {
+        console.error("No account info from Microsoft login");
+        return;
+      }
+
+      const responseObj = await axios.post(`${API_BASE_URL}/user/microsoft-signin`, loginResponse.account, {
+        headers: { "Content-Type": "application/json" },
+      });
+
+      sessionStorage.setItem("userData", JSON.stringify(responseObj.data.user));
+      navigate("/home");
+    } catch (error) {
+      console.error("Login Failed:", error);
     }
-
-    const responseObj = await axios.post(`${API_BASE_URL}/user/microsoft-signin`, loginResponse.account, {
-      headers: { "Content-Type": "application/json" },
-    });
-
-    sessionStorage.setItem("userData", JSON.stringify(responseObj.data.user));
-    navigate("/home");
-  } catch (error) {
-    console.error("Login Failed:", error);
-  }
-};
+  };
 
   const handleClickOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -125,19 +125,19 @@ export default function SignInCard() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     if (emailError || passwordError) return;
-  
+
     const data = new FormData(event.currentTarget);
     const formData = {
       email: data.get('email'),
       password: data.get('password'),
     };
-  
+
     try {
       const response = await axios.post(`${API_BASE_URL}/user/login`, JSON.stringify(formData), {
         headers: { 'Content-Type': 'application/json' },
       });
       sessionStorage.setItem('userData', JSON.stringify(response.data));
-  
+
       // Try to get location and store it
       try {
         const location = await getUserLocation();
@@ -149,7 +149,7 @@ export default function SignInCard() {
       } catch (locError) {
         console.warn('Could not fetch user location:', locError.message);
       }
-  
+
       navigate('/home');
     } catch (error) {
       const { status, data } = error.response || {};
