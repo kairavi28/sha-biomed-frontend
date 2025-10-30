@@ -21,7 +21,7 @@ const AuthCallback = () => {
 
         if (account) {
           sessionStorage.setItem("userData", JSON.stringify(account));
-          navigate("/home");
+          window.location.href = "/home";
         } else {
           console.warn("No response received or no account data.");
           navigate("/");
