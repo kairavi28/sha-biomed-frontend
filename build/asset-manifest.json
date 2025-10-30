@@ -1,0 +1,35 @@
+{
+  "files": {
+    "main.css": "/static/css/main.1d99e2cd.css",
+    "main.js": "/static/js/main.31b6b6f2.js",
+    "static/media/background_2.png": "/static/media/background_2.e54aa9c1eb76509d4f07.png",
+    "static/media/background_1.png": "/static/media/background_1.a383f85d0a0c93624a46.png",
+    "static/media/bg-waste.png": "/static/media/bg-waste.67efed421c7f88a59a11.png",
+    "static/media/complaint_bg.png": "/static/media/complaint_bg.1bc1cc90f4352810630c.png",
+    "static/media/saskatoon.jpg": "/static/media/saskatoon.5eee4df4fb859dc96798.jpg",
+    "static/media/terra.png": "/static/media/terra.364de410d0d546156f29.png",
+    "static/media/transport.png": "/static/media/transport.04c5d14c1f30acff94a4.png",
+    "static/media/hazardous.png": "/static/media/hazardous.5074b793b62c246a485b.png",
+    "static/media/sharps.webp": "/static/media/sharps.214c58f69227e54a675c.webp",
+    "static/media/medical.jpg": "/static/media/medical.095255a3e4234144dd22.jpg",
+    "static/media/University_of_Regina_Logo.jpg": "/static/media/University_of_Regina_Logo.73213379fa843e1fe77f.jpg",
+    "static/media/Saskatoon_Co-op_Logo.png": "/static/media/Saskatoon_Co-op_Logo.f67a55851a48cc2f2ad9.png",
+    "static/media/Shoppers-Drug-Mart-Logo.png": "/static/media/Shoppers-Drug-Mart-Logo.701046c2b8b3fc40f7c6.png",
+    "static/media/NeighbourlyLogo.png": "/static/media/NeighbourlyLogo.40168ce29fc6a0c769f2.png",
+    "static/media/PrinceAlbert_Grand_logo.jpg": "/static/media/PrinceAlbert_Grand_logo.54d8d9815e998234663a.jpg",
+    "static/media/logo.png": "/static/media/logo.8dd4c2e26567d486f017.png",
+    "static/media/Suncrest-Logo.webp": "/static/media/Suncrest-Logo.84525058ed6b07b4b2f2.webp",
+    "static/media/NorthwestCollege_Logo.jpg": "/static/media/NorthwestCollege_Logo.d34dd0b68deff30898da.jpg",
+    "static/media/slick.svg": "/static/media/slick.2630a3e3eab21c607e21.svg",
+    "static/media/slick.eot": "/static/media/slick.a4e97f5a2a64f0ab1323.eot",
+    "static/media/slick.ttf": "/static/media/slick.c94f7671dcc99dce43e2.ttf",
+    "static/media/slick.woff": "/static/media/slick.295183786cd8a1389865.woff",
+    "index.html": "/index.html",
+    "main.1d99e2cd.css.map": "/static/css/main.1d99e2cd.css.map",
+    "main.31b6b6f2.js.map": "/static/js/main.31b6b6f2.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.1d99e2cd.css",
+    "static/js/main.31b6b6f2.js"
+  ]
+}
