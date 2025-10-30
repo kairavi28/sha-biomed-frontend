@@ -24,7 +24,7 @@ const AuthCallback = () => {
           window.location.href = "/home";
         } else {
           console.warn("No response received or no account data.");
-          navigate("/");
+          window.location.href = "/";
         }
       } catch (error) {
         console.error("Authentication error:", error);
