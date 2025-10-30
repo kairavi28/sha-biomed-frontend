@@ -62,7 +62,8 @@ export default function SignInCard() {
       
       sessionStorage.setItem("userData", JSON.stringify(responseObj.data.user));
       if (responseObj) {
-        window.location.href = "/home";
+        console.log(responseObj);
+        // window.location.href = "/home";
       } else {
         alert("Error while logging in");
       }
