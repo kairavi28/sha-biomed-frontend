@@ -22,10 +22,10 @@ const AuthCallback = () => {
         if (account) {
           console.log('account', account)
           sessionStorage.setItem("userData", JSON.stringify(account));
-          // window.location.href = "/home";
+          navigate("/home");
         } else {
           console.warn("No response received or no account data.");
-          // window.location.href = "/";
+          navigate("/home");
         }
       } catch (error) {
         console.error("Authentication error:", error);

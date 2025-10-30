@@ -50,27 +50,27 @@ export default function SignInCard() {
   const [passwordErrorMessage, setPasswordErrorMessage] = useState('');
   const [open, setOpen] = useState(false);
   const { instance } = useMsal();
-  const API_BASE_URL = process.env.REACT_APP_API_URL;
+  const API_BASE_URL = process.env.REACT_APP_API_URL || "https://biomedwaste.net/api";
   const navigate = useNavigate();
 
   const handleMicrosoftLogin = async () => {
-    try {
-      const loginResponse = await instance.loginPopup({ scopes: ["User.Read"] });
-      const responseObj = await axios.post(`${API_BASE_URL}/user/microsoft-signin`, loginResponse.account, {
-        headers: { "Content-Type": "application/json" },
-      });
-      
-      sessionStorage.setItem("userData", JSON.stringify(responseObj.data.user));
-      if (responseObj) {
-        console.log(responseObj);
-        // window.location.href = "/home";
-      } else {
-        alert("Error while logging in");
-      }
-    } catch (error) {
-      console.error("Login Failed:", error);
+  try {
+    const loginResponse = await instance.loginPopup({ scopes: ["User.Read"] });
+    if (!loginResponse?.account) {
+      console.error("No account info from Microsoft login");
+      return;
     }
-  };
+
+    const responseObj = await axios.post(`${API_BASE_URL}/user/microsoft-signin`, loginResponse.account, {
+      headers: { "Content-Type": "application/json" },
+    });
+
+    sessionStorage.setItem("userData", JSON.stringify(responseObj.data.user));
+    navigate("/home");
+  } catch (error) {
+    console.error("Login Failed:", error);
+  }
+};
 
   const handleClickOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
