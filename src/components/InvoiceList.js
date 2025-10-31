@@ -31,6 +31,7 @@ import { useNavigate } from "react-router-dom";
 
 const API_BASE_URL = process.env.REACT_APP_API_URL || "https://biomedwaste.net/api";
 const InvoiceList = () => {
+  const navigate = useNavigate();
   const [invoices, setInvoices] = useState({});
   const [openPreview, setOpenPreview] = useState(false);
   const [userData, setUserData] = useState(null);
