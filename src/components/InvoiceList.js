@@ -144,7 +144,7 @@ const InvoiceList = () => {
                 textTransform: "none",
                 px: 4,
               }}
-              href="/profile"
+              onClick={() => navigate("/profile")}
             >
               Go to Profile
             </Button>

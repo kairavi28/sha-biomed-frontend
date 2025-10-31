@@ -141,7 +141,7 @@ const WaybillList = () => {
                                         textTransform: "none",
                                         px: 4,
                                     }}
-                                    href="/profile"
+                                    onClick={() => navigate("/profile")}
                                 >
                                     Go to Profile
                                 </Button>
@@ -156,7 +156,7 @@ const WaybillList = () => {
                                         sx={{ cursor: "pointer", display: "flex", alignItems: "center" }}
                                     >
                                         <ExpandMoreIcon sx={{ transform: expandedFacility === facility ? "rotate(180deg)" : "rotate(0deg)" }} />
-                                        { facility }
+                                        {facility}
                                     </Typography>
                                     <Collapse in={expandedFacility === facility} timeout="auto" unmountOnExit>
                                         <TableContainer component={Paper} sx={{ boxShadow: 2, mt: 1 }}>
