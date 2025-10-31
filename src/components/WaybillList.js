@@ -32,6 +32,7 @@ import { useNavigate } from "react-router-dom";
 
 const API_BASE_URL = process.env.REACT_APP_API_URL || "https://biomedwaste.net/api";
 const WaybillList = () => {
+    const navigate = useNavigate();
     const [groupedWaybills, setGroupedWaybills] = useState({});
     const [selectedFacilities, setSelectedFacilities] = useState([]);
     const [openPreview, setOpenPreview] = useState(false);
