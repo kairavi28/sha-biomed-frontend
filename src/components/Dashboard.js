@@ -591,18 +591,31 @@ function Dashboard() {
       {/* About Us Section */}
       <Box sx={{ py: { xs: 5, md: 8 }, backgroundColor: "#f8f9fa" }}>
         <Container maxWidth="lg">
-          <Typography
-            variant="h4"
-            sx={{
-              textAlign: "center",
-              fontWeight: 700,
-              color: "#1a2744",
-              mb: 2,
-              fontSize: { xs: "1.5rem", md: "2.125rem" },
-            }}
-          >
-            About Us
-          </Typography>
+          <Box sx={{ textAlign: "center", mb: 2 }}>
+            <Typography
+              variant="h4"
+              sx={{
+                fontWeight: 700,
+                color: "#0D2477",
+                mb: 1,
+                fontSize: { xs: "1.5rem", md: "2.125rem" },
+                display: "inline-block",
+                position: "relative",
+                "&::after": {
+                  content: '""',
+                  position: "absolute",
+                  bottom: -8,
+                  left: "50%",
+                  transform: "translateX(-50%)",
+                  width: "60px",
+                  height: "3px",
+                  backgroundColor: "#0D2477",
+                },
+              }}
+            >
+              About Us
+            </Typography>
+          </Box>
           <Typography
             variant="body1"
             sx={{
@@ -613,55 +626,135 @@ function Dashboard() {
               mx: "auto",
               px: { xs: 2, md: 0 },
               fontSize: { xs: "0.9rem", md: "1rem" },
+              lineHeight: 1.8,
+              mt: 4,
             }}
           >
-            Biomed serves as a leader in biomedical waste management solutions. Our key healthcare facilities and medical practices across Canada trust us for safe, compliant and environmentally responsible disposal of biomedical waste, including sharps, pharmaceuticals, anatomical, and cytotoxic waste.
+            Biomed Invex is a leader in biomedical waste management solutions. We help healthcare facilities across Canada maintain the highest standards of safety and regulatory compliance. Proper waste packaging isn't just a regulatory obligation—it's essential for protecting healthcare workers, patients, and the environment.
           </Typography>
-          <Grid container spacing={4} justifyContent="center">
-            <Grid item xs={12} sm={6} md={3}>
-              <motion.div whileHover={{ scale: 1.05 }}>
+          
+          {/* First row - 3 cards */}
+          <Grid container spacing={3} justifyContent="center" sx={{ mb: 3 }}>
+            <Grid item xs={12} sm={6} md={4}>
+              <motion.div whileHover={{ scale: 1.02 }} style={{ height: "100%" }}>
                 <Card
                   sx={{
                     textAlign: "center",
-                    p: 3,
+                    p: { xs: 3, md: 4 },
                     borderRadius: "12px",
-                    boxShadow: "0 4px 20px rgba(0,0,0,0.08)",
+                    boxShadow: "0 2px 12px rgba(0,0,0,0.06)",
                     height: "100%",
+                    backgroundColor: "#ffffff",
                   }}
                 >
-                  <FaShieldAlt size={40} color="#ABB738" />
                   <Typography
                     variant="h6"
-                    sx={{ mt: 2, fontWeight: 600, color: "#1a2744" }}
+                    sx={{ fontWeight: 600, color: "#0D2477", mb: 1.8, fontSize: { xs: "1rem", md: "1.1rem" } }}
                   >
-                    Legal Compliance
+                    Worker Safety
                   </Typography>
-                  <Typography variant="body2" sx={{ mt: 1, color: "#666" }}>
-                    Ensuring full regulatory compliance with Canadian healthcare waste disposal laws.
+                  <Typography variant="body2" sx={{ color: "#666", lineHeight: 1.6, fontSize: { xs: "0.85rem", md: "0.9rem" } }}>
+                    Proper packaging limits exposure, ensuring safety and accountability in healthcare.
                   </Typography>
                 </Card>
               </motion.div>
             </Grid>
-            <Grid item xs={12} sm={6} md={3}>
-              <motion.div whileHover={{ scale: 1.05 }}>
+            <Grid item xs={12} sm={6} md={4}>
+              <motion.div whileHover={{ scale: 1.02 }} style={{ height: "100%" }}>
                 <Card
                   sx={{
                     textAlign: "center",
-                    p: 3,
+                    p: { xs: 3, md: 4 },
                     borderRadius: "12px",
-                    boxShadow: "0 4px 20px rgba(0,0,0,0.08)",
+                    boxShadow: "0 2px 12px rgba(0,0,0,0.06)",
                     height: "100%",
+                    backgroundColor: "#ffffff",
                   }}
                 >
-                  <FaHandshake size={40} color="#ABB738" />
                   <Typography
                     variant="h6"
-                    sx={{ mt: 2, fontWeight: 600, color: "#1a2744" }}
+                    sx={{ fontWeight: 600, color: "#0D2477", mb: 1.5, fontSize: { xs: "1rem", md: "1.1rem" } }}
+                  >
+                    Infection Control
+                  </Typography>
+                  <Typography variant="body2" sx={{ color: "#666", lineHeight: 1.6, fontSize: { xs: "0.85rem", md: "0.9rem" } }}>
+                    Secure waste containment prevents disease spread, protecting workers and communities.
+                  </Typography>
+                </Card>
+              </motion.div>
+            </Grid>
+            <Grid item xs={12} sm={6} md={4}>
+              <motion.div whileHover={{ scale: 1.02 }} style={{ height: "100%" }}>
+                <Card
+                  sx={{
+                    textAlign: "center",
+                    p: { xs: 3, md: 4 },
+                    borderRadius: "12px",
+                    boxShadow: "0 2px 12px rgba(0,0,0,0.06)",
+                    height: "100%",
+                    backgroundColor: "#ffffff",
+                  }}
+                >
+                  <Typography
+                    variant="h6"
+                    sx={{ fontWeight: 600, color: "#0D2477", mb: 1.5, fontSize: { xs: "1rem", md: "1.1rem" } }}
+                  >
+                    Eco Protection
+                  </Typography>
+                  <Typography variant="body2" sx={{ color: "#666", lineHeight: 1.6, fontSize: { xs: "0.85rem", md: "0.9rem" } }}>
+                    Responsible disposal safeguards soil, water, wildlife, and promotes sustainability.
+                  </Typography>
+                </Card>
+              </motion.div>
+            </Grid>
+          </Grid>
+          
+          {/* Second row - 2 cards centered */}
+          <Grid container spacing={3} justifyContent="center">
+            <Grid item xs={12} sm={6} md={4}>
+              <motion.div whileHover={{ scale: 1.02 }} style={{ height: "100%" }}>
+                <Card
+                  sx={{
+                    textAlign: "center",
+                    p: { xs: 3, md: 4 },
+                    borderRadius: "12px",
+                    boxShadow: "0 2px 12px rgba(0,0,0,0.06)",
+                    height: "100%",
+                    backgroundColor: "#ffffff",
+                  }}
+                >
+                  <Typography
+                    variant="h6"
+                    sx={{ fontWeight: 600, color: "#0D2477", mb: 1.5, fontSize: { xs: "1rem", md: "1.1rem" } }}
+                  >
+                    Legal Compliance
+                  </Typography>
+                  <Typography variant="body2" sx={{ color: "#666", lineHeight: 1.6, fontSize: { xs: "0.85rem", md: "0.9rem" } }}>
+                    Adhering to guidelines ensures public safety, ethical duty, and prevents penalties.
+                  </Typography>
+                </Card>
+              </motion.div>
+            </Grid>
+            <Grid item xs={12} sm={6} md={4}>
+              <motion.div whileHover={{ scale: 1.02 }} style={{ height: "100%" }}>
+                <Card
+                  sx={{
+                    textAlign: "center",
+                    p: { xs: 3, md: 4 },
+                    borderRadius: "12px",
+                    boxShadow: "0 2px 12px rgba(0,0,0,0.06)",
+                    height: "100%",
+                    backgroundColor: "#ffffff",
+                  }}
+                >
+                  <Typography
+                    variant="h6"
+                    sx={{ fontWeight: 600, color: "#0D2477", mb: 1.5, fontSize: { xs: "1rem", md: "1.1rem" } }}
                   >
                     Public Trust
                   </Typography>
-                  <Typography variant="body2" sx={{ mt: 1, color: "#666" }}>
-                    Building confidence through transparent and ethical waste management practices.
+                  <Typography variant="body2" sx={{ color: "#666", lineHeight: 1.6, fontSize: { xs: "0.85rem", md: "0.9rem" } }}>
+                    Safe waste handling protects communities, upholds dignity, and fosters confidence.
                   </Typography>
                 </Card>
               </motion.div>
