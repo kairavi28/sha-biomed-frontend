@@ -1,80 +1,122 @@
 import * as React from 'react';
 import CssBaseline from '@mui/material/CssBaseline';
-import Stack from '@mui/material/Stack';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import SignInCard from './SignInCard';
 import Content from './Content';
-import TemplateFrame from './TemplateFrame';
+import logo from '../assets/images/logo.png';
+
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: '#D4A018',
+    },
+  },
+  typography: {
+    fontFamily: '"Inter", "Roboto", "Helvetica", "Arial", sans-serif',
+  },
+});
 
 export default function SignInSide() {
-  const [mode, setMode] = React.useState('light');
-  const [showCustomTheme, setShowCustomTheme] = React.useState(true);
-  const defaultTheme = createTheme({ palette: { mode } });
-  React.useEffect(() => {
-    const savedMode = localStorage.getItem('themeMode');
-    if (savedMode) {
-      setMode(savedMode);
-    } else {
-      const systemPrefersDark = window.matchMedia(
-        '(prefers-color-scheme: dark)',
-      ).matches;
-      setMode(systemPrefersDark ? 'dark' : 'light');
-    }
-  }, []);
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
-  const toggleColorMode = () => {
-    const newMode = mode === 'dark' ? 'light' : 'dark';
-    setMode(newMode);
-    localStorage.setItem('themeMode', newMode);
-  };
-
-  const toggleCustomTheme = () => {
-    setShowCustomTheme((prev) => !prev);
-  };
+  if (isMobile) {
+    return (
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'flex-start',
+            backgroundColor: '#1a2744',
+            minHeight: '100vh',
+            padding: 0,
+            position: 'relative',
+            overflow: 'hidden',
+          }}
+        >
+          <Box
+            sx={{
+              position: 'absolute',
+              bottom: 0,
+              right: 0,
+              width: '100%',
+              height: '40%',
+              backgroundImage: 'url(/logo.png)',
+              backgroundSize: 'contain',
+              backgroundPosition: 'bottom right',
+              backgroundRepeat: 'no-repeat',
+              opacity: 0.1,
+            }}
+          />
+          
+          <Box sx={{ pt: 6, pb: 3, textAlign: 'center', zIndex: 1 }}>
+            <img src={logo} alt="Biomed Logo" style={{ width: '160px', height: 'auto' }} />
+            <Typography
+              variant="caption"
+              sx={{
+                color: '#ABB738',
+                display: 'block',
+                mt: 0.5,
+                fontStyle: 'italic',
+                letterSpacing: 1,
+                fontSize: '0.75rem',
+              }}
+            >
+              The Biohazard Professionals
+            </Typography>
+          </Box>
+          
+          <Box sx={{ width: '100%', px: 2, zIndex: 1, flex: 1 }}>
+            <SignInCard />
+          </Box>
+        </Box>
+      </ThemeProvider>
+    );
+  }
 
   return (
-    <TemplateFrame
-      toggleCustomTheme={toggleCustomTheme}
-      showCustomTheme={showCustomTheme}
-      mode={mode}
-      toggleColorMode={toggleColorMode}
-    >
-      <ThemeProvider theme={defaultTheme}>
-        <CssBaseline enableColorScheme />
-        <Stack
-          direction="column"
-          component="main"
-          sx={[
-            {
-              justifyContent: 'space-between',
-              minHeight: '100vh',
-            },
-            (theme) => ({
-              backgroundImage:
-                'radial-gradient(ellipse at 70% 51%, hsl(210, 100%, 97%), hsl(0, 0%, 100%))',
-              backgroundSize: 'cover',
-              ...theme.applyStyles('dark', {
-                backgroundImage:
-                  'radial-gradient(at 70% 51%, hsla(210, 100%, 16%, 0.5), hsl(220, 30%, 5%))',
-              }),
-            }),
-          ]}
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <Box
+        sx={{
+          display: 'flex',
+          minHeight: '100vh',
+          flexDirection: 'row',
+        }}
+      >
+        <Box
+          sx={{
+            flex: 1,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            backgroundColor: '#1a2744',
+            padding: 6,
+            minHeight: '100vh',
+          }}
         >
-          <Stack
-            direction={{ xs: 'column-reverse', md: 'row' }}
-            sx={{
-              justifyContent: 'center',
-              gap: { xs: 6, sm: 12 },
-              p: { xs: 2, sm: 4 },
-              m: 'auto',
-            }}
-          >
+          <Content />
+        </Box>
 
-            <Content />
-            <SignInCard />
-          </Stack>
-        </Stack>
-      </ThemeProvider>
-    </TemplateFrame>
+        <Box
+          sx={{
+            flex: 1,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            backgroundColor: '#ffffff',
+            padding: 4,
+            minHeight: '100vh',
+          }}
+        >
+          <SignInCard />
+        </Box>
+      </Box>
+    </ThemeProvider>
   );
 }

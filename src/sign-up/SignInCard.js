@@ -26,19 +26,34 @@ const Card = styled(MuiCard)(({ theme }) => ({
   flexDirection: 'column',
   alignSelf: 'center',
   width: '100%',
-  padding: theme.spacing(3),
-  margin: theme.spacing(2),
+  padding: theme.spacing(4),
   gap: theme.spacing(2),
-  boxShadow:
-    'hsla(220, 30%, 5%, 0.05) 0px 5px 15px 0px, hsla(220, 25%, 10%, 0.05) 0px 15px 35px -5px',
+  backgroundColor: '#ffffff',
+  borderRadius: '12px',
+  boxShadow: '0 4px 20px rgba(0, 0, 0, 0.08)',
+  border: 'none',
   [theme.breakpoints.up('sm')]: {
-    width: '450px',
-    margin: 'auto',
+    width: '420px',
   },
-  ...theme.applyStyles?.('dark', {
-    boxShadow:
-      'hsla(220, 30%, 5%, 0.5) 0px 5px 15px 0px, hsla(220, 25%, 10%, 0.08) 0px 15px 35px -5px',
-  }),
+}));
+
+const StyledTextField = styled(TextField)(({ theme }) => ({
+  '& .MuiOutlinedInput-root': {
+    backgroundColor: '#f8f9fa',
+    borderRadius: '8px',
+    '& fieldset': {
+      borderColor: '#e0e0e0',
+    },
+    '&:hover fieldset': {
+      borderColor: '#D4A018',
+    },
+    '&.Mui-focused fieldset': {
+      borderColor: '#D4A018',
+    },
+  },
+  '& .MuiInputBase-input': {
+    padding: '14px 16px',
+  },
 }));
 
 export default function SignInCard() {
@@ -138,11 +153,10 @@ export default function SignInCard() {
       });
       sessionStorage.setItem('userData', JSON.stringify(response.data));
 
-      // Try to get location and store it
       try {
         const location = await getUserLocation();
         await axios.post(`${API_BASE_URL}/user/location`, {
-          userId: response.data.id, // make sure to send ID or auth token
+          userId: response.data.id,
           userEmail: response.data.email,
           ...location,
         });
@@ -160,139 +174,186 @@ export default function SignInCard() {
   };
 
   return (
-    <Box sx={{ width: '100%', display: 'flex', justifyContent: 'center', px: 2 }}>
-      <Card variant="outlined">
-        <Box sx={{ display: { xs: 'flex', md: 'none' }, justifyContent: 'center' }}>
-          <img
-            src={logo}
-            alt="Logo"
-            style={{ maxWidth: '100%', height: 'auto', marginBottom: '16px' }}
-          />
-        </Box>
+    <Card variant="outlined">
 
-        <Typography
-          component="h1"
-          variant="h5"
+      <Typography
+        component="h1"
+        variant="h5"
+        sx={{
+          width: '100%',
+          fontSize: '1.75rem',
+          fontWeight: 600,
+          textAlign: 'center',
+          color: '#1a2744',
+          mb: 1,
+        }}
+      >
+        Sign In
+      </Typography>
+
+      <Box
+        component="form"
+        onSubmit={handleSubmit}
+        noValidate
+        sx={{ display: 'flex', flexDirection: 'column', width: '100%', gap: 2 }}
+      >
+        <FormControl>
+          <FormLabel
+            htmlFor="email"
+            sx={{ mb: 0.5, color: '#333', fontWeight: 500, fontSize: '0.875rem' }}
+          >
+            Email
+          </FormLabel>
+          <StyledTextField
+            error={emailError}
+            helperText={emailErrorMessage}
+            id="email"
+            type="email"
+            name="email"
+            placeholder="your@email.com"
+            autoComplete="email"
+            required
+            fullWidth
+            variant="outlined"
+            size="small"
+          />
+        </FormControl>
+
+        <FormControl>
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 0.5 }}>
+            <FormLabel
+              htmlFor="password"
+              sx={{ color: '#333', fontWeight: 500, fontSize: '0.875rem' }}
+            >
+              Password
+            </FormLabel>
+            <Typography
+              component="button"
+              type="button"
+              onClick={handleClickOpen}
+              sx={{
+                background: 'none',
+                border: 'none',
+                color: '#0D2477',
+                cursor: 'pointer',
+                fontSize: '0.8rem',
+                fontWeight: 500,
+                '&:hover': { textDecoration: 'underline' },
+              }}
+            >
+              Forgot your password?
+            </Typography>
+          </Box>
+
+          <StyledTextField
+            required
+            fullWidth
+            name="password"
+            placeholder="••••••"
+            type={showPassword ? 'text' : 'password'}
+            id="password"
+            autoComplete="current-password"
+            variant="outlined"
+            size="small"
+            error={passwordError}
+            helperText={passwordErrorMessage}
+            value={password}
+            onChange={handlePasswordChange}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton onClick={togglePasswordVisibility} edge="end" size="small">
+                    {showPassword ? <Visibility fontSize="small" /> : <VisibilityOff fontSize="small" />}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
+          />
+        </FormControl>
+
+        <FormControlLabel
+          control={
+            <Checkbox
+              value="remember"
+              sx={{
+                color: '#ccc',
+                '&.Mui-checked': { color: '#D4A018' },
+              }}
+            />
+          }
+          label={<Typography sx={{ fontSize: '0.875rem', color: '#666' }}>Remember me</Typography>}
+        />
+
+        <ForgotPassword open={open} handleClose={handleClose} />
+
+        <Button
+          type="submit"
+          fullWidth
+          variant="contained"
+          onClick={validateInputs}
           sx={{
-            width: '100%',
-            fontSize: 'clamp(1.5rem, 6vw, 2rem)',
-            textAlign: 'center',
+            mt: 1,
+            py: 1.5,
+            backgroundColor: '#D9DE38',
+            color: '#1a2744',
+            fontWeight: 600,
+            fontSize: '1rem',
+            textTransform: 'none',
+            borderRadius: '8px',
+            boxShadow: 'none',
+            '&:hover': {
+              backgroundColor: '#c5ca2f',
+              boxShadow: '0 4px 12px rgba(217, 222, 56, 0.3)',
+            },
           }}
         >
           Sign In
-        </Typography>
+        </Button>
 
-        <Box
-          component="form"
-          onSubmit={handleSubmit}
-          noValidate
-          sx={{ display: 'flex', flexDirection: 'column', width: '100%', gap: 2 }}
-        >
-          <FormControl>
-            <FormLabel htmlFor="email">Email</FormLabel>
-            <TextField
-              error={emailError}
-              helperText={emailErrorMessage}
-              id="email"
-              type="email"
-              name="email"
-              placeholder="your@email.com"
-              autoComplete="email"
-              required
-              fullWidth
-              variant="outlined"
-              color={emailError ? 'error' : 'primary'}
-            />
-          </FormControl>
-
-          <FormControl>
-            <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-              <FormLabel htmlFor="password">Password</FormLabel>
-              <Link component="button" type="button" onClick={handleClickOpen} variant="body2">
-                Forgot your password?
-              </Link>
-            </Box>
-
-            <TextField
-              required
-              fullWidth
-              name="password"
-              placeholder="••••••"
-              type={showPassword ? 'text' : 'password'}
-              id="password"
-              autoComplete="current-password"
-              variant="outlined"
-              error={passwordError}
-              helperText={passwordErrorMessage}
-              color={passwordError ? 'error' : 'primary'}
-              value={password}
-              onChange={handlePasswordChange}
-              InputProps={{
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <IconButton onClick={togglePasswordVisibility} edge="end">
-                      {showPassword ? <Visibility /> : <VisibilityOff />}
-                    </IconButton>
-                  </InputAdornment>
-                ),
-              }}
-            />
-          </FormControl>
-
-          <FormControlLabel
-            control={<Checkbox value="remember" color="primary" />}
-            label="Remember me"
-          />
-
-          <ForgotPassword open={open} handleClose={handleClose} />
-
-          <Button type="submit" fullWidth variant="contained" onClick={validateInputs} sx={{ mt: 2 }}>
-            Sign in
-          </Button>
-
-          <Typography sx={{ textAlign: 'center' }}>
-            Don&apos;t have an account?{' '}
-            <Link to="/sign-up" variant="body2">
-              Sign up
-            </Link>
-          </Typography>
-        </Box>
-
-        <Divider>or</Divider>
-
-        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-          <Button
-            fullWidth
-            variant="outlined"
-            onClick={handleMicrosoftLogin}
-            startIcon={
-              <img
-                src="https://upload.wikimedia.org/wikipedia/commons/4/44/Microsoft_logo.svg"
-                alt="Microsoft Logo"
-                width="20"
-              />
-            }
-            sx={{
-              textTransform: 'none',
-              fontSize: '16px',
-              fontWeight: 'bold',
-              color: '#333',
-              borderColor: '#999',
-              '&:hover': {
-                borderColor: '#0078D4',
-                backgroundColor: 'rgba(0, 120, 212, 0.1)',
-              },
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              gap: 1,
-              padding: '10px',
+        <Typography sx={{ textAlign: 'center', fontSize: '0.875rem', color: '#666' }}>
+          Don&apos;t have an account?{' '}
+          <Link
+            to="/sign-up"
+            style={{
+              color: '#0D2477',
+              fontWeight: 600,
+              textDecoration: 'none',
             }}
           >
-            Sign in with Microsoft
-          </Button>
-        </Box>
-      </Card>
-    </Box>
+            Sign Up
+          </Link>
+        </Typography>
+      </Box>
+
+      <Divider sx={{ my: 1, color: '#999', fontSize: '0.8rem' }}>or</Divider>
+
+      <Button
+        fullWidth
+        variant="outlined"
+        onClick={handleMicrosoftLogin}
+        startIcon={
+          <img
+            src="https://upload.wikimedia.org/wikipedia/commons/4/44/Microsoft_logo.svg"
+            alt="Microsoft Logo"
+            width="18"
+          />
+        }
+        sx={{
+          textTransform: 'none',
+          fontSize: '0.9rem',
+          fontWeight: 500,
+          color: '#333',
+          borderColor: '#ddd',
+          borderRadius: '8px',
+          py: 1.2,
+          '&:hover': {
+            borderColor: '#D4A018',
+            backgroundColor: 'rgba(212, 160, 24, 0.05)',
+          },
+        }}
+      >
+        Sign in with Microsoft
+      </Button>
+    </Card>
   );
 }

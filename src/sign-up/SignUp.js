@@ -6,13 +6,24 @@ import Checkbox from '@mui/material/Checkbox';
 import CssBaseline from '@mui/material/CssBaseline';
 import { FormControl, FormControlLabel, FormLabel, TextField, IconButton, InputAdornment, Snackbar, Alert } from '@mui/material';
 import Typography from '@mui/material/Typography';
-import Stack from '@mui/material/Stack';
 import MuiCard from '@mui/material/Card';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import { createTheme, ThemeProvider, styled } from '@mui/material/styles';
 import logo from '../assets/images/logo.png';
-import TemplateFrame from './TemplateFrame';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { Link, useNavigate } from 'react-router-dom';
+import Content from './Content';
+
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: '#D9DE38',
+    },
+  },
+  typography: {
+    fontFamily: '"Inter", "Roboto", "Helvetica", "Arial", sans-serif',
+  },
+});
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: 'flex',
@@ -21,114 +32,57 @@ const Card = styled(MuiCard)(({ theme }) => ({
   width: '100%',
   padding: theme.spacing(4),
   gap: theme.spacing(2),
-  margin: 'auto',
-  boxShadow:
-    'hsla(220, 30%, 5%, 0.05) 0px 5px 15px 0px, hsla(220, 25%, 10%, 0.05) 0px 15px 35px -5px',
+  backgroundColor: '#ffffff',
+  borderRadius: '12px',
+  boxShadow: '0 4px 20px rgba(0, 0, 0, 0.08)',
+  border: 'none',
   [theme.breakpoints.up('sm')]: {
-    width: '450px',
+    width: '420px',
   },
-  ...theme.applyStyles('dark', {
-    boxShadow:
-      'hsla(220, 30%, 5%, 0.5) 0px 5px 15px 0px, hsla(220, 25%, 10%, 0.08) 0px 15px 35px -5px',
-  }),
 }));
 
-const SignUpContainer = styled(Stack)(({ theme }) => ({
-  minHeight: '100%',
-  padding: theme.spacing(2),
-  [theme.breakpoints.up('sm')]: {
-    padding: theme.spacing(4),
+const StyledTextField = styled(TextField)(({ theme }) => ({
+  '& .MuiOutlinedInput-root': {
+    backgroundColor: '#f8f9fa',
+    borderRadius: '8px',
+    '& fieldset': {
+      borderColor: '#e0e0e0',
+    },
+    '&:hover fieldset': {
+      borderColor: '#D9DE38',
+    },
+    '&.Mui-focused fieldset': {
+      borderColor: '#D9DE38',
+    },
   },
-  backgroundImage:
-    'radial-gradient(ellipse at 50% 50%, hsl(210, 100%, 97%), hsl(0, 0%, 100%))',
-  backgroundRepeat: 'no-repeat',
-  ...theme.applyStyles('dark', {
-    backgroundImage:
-      'radial-gradient(at 50% 50%, hsla(210, 100%, 16%, 0.5), hsl(220, 30%, 5%))',
-  }),
+  '& .MuiInputBase-input': {
+    padding: '14px 16px',
+  },
 }));
 
 export default function SignUp() {
   const API_BASE_URL = process.env.REACT_APP_API_URL || "https://biomedwaste.net/api";
-  const [mode, setMode] = React.useState('light');
-  const defaultTheme = createTheme({ palette: { mode } });
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const [firstNameError, setFirstNameError] = React.useState(false);
   const [firstNameErrorMessage, setFirstNameErrorMessage] = React.useState('');
   const [lastNameError, setLastNameError] = React.useState(false);
   const [lastNameErrorMessage, setLastNameErrorMessage] = React.useState('');
   const [emailError, setEmailError] = React.useState(false);
   const [emailErrorMessage, setEmailErrorMessage] = React.useState('');
-  //password
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [passwordError, setPasswordError] = React.useState(false);
   const [passwordErrorMessage, setPasswordErrorMessage] = React.useState('');
-  //facility
-  const [facilities, setFacilities] = React.useState([]);
-  const [facilityTypes, setFacilityTypes] = React.useState([]);
-  const [selectedFacility, setSelectedFacility] = React.useState('');
-  const [selectedFacilityType, setSelectedFacilityType] = React.useState('');
-  const [facilityError, setFacilityError] = useState(false);
-  const [facilityErrorMessage, setFacilityErrorMessage] = useState('');
-  const [facilityTypeError, setFacilityTypeError] = useState(false);
-  const [facilityTypeErrorMessage, setFacilityTypeErrorMessage] = useState('');
-
-  //snackbar - notifications
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
   const [snackbarSeverity, setSnackbarSeverity] = useState('success');
-
-  //text field
-  const [otherFacility, setOtherFacility] = React.useState(''); // State for custom facility input
   const navigate = useNavigate();
-
-  React.useEffect(() => {
-    // Fetch facility options
-    axios.get('/data/facilities.json')
-      .then((response) => {
-        setFacilities(response.data);
-      })
-      .catch((error) => {
-        console.error('Error fetching facilities:', error);
-      });
-
-    // Fetch facility type options
-    axios.get('/data/facilityTypes.json')
-      .then((response) => {
-        setFacilityTypes(response.data);
-      })
-      .catch((error) => {
-        console.error('Error fetching facility types:', error);
-      });
-  }, []);
-
-  React.useEffect(() => {
-    // Check if there is a preferred mode in localStorage
-    const savedMode = localStorage.getItem('themeMode');
-
-    if (savedMode) {
-      setMode(savedMode);
-    } else {
-      // If no preference is found, it uses system preference
-      const systemPrefersDark = window.matchMedia(
-        '(prefers-color-scheme: dark)',
-      ).matches;
-      setMode(systemPrefersDark ? 'dark' : 'light');
-    }
-  }, []);
-
-  const toggleColorMode = () => {
-    const newMode = mode === 'dark' ? 'light' : 'dark';
-    setMode(newMode);
-    localStorage.setItem('themeMode', newMode);
-  };
 
   const validateInputs = () => {
     const email = document.getElementById('email');
     const password = document.getElementById('password');
     const firstname = document.getElementById('firstname');
     const lastname = document.getElementById('lastname');
-  
     let isValid = true;
 
     if (!email.value || !/\S+@\S+\.\S+/.test(email.value)) {
@@ -149,34 +103,22 @@ export default function SignUp() {
       setPasswordErrorMessage('');
     }
 
-    if(!firstname) {
+    if (!firstname.value) {
       setFirstNameError(true);
       setFirstNameErrorMessage('First Name is Required');
       isValid = false;
+    } else {
+      setFirstNameError(false);
+      setFirstNameErrorMessage('');
     }
 
-    if(!lastname) {
+    if (!lastname.value) {
       setLastNameError(true);
       setLastNameErrorMessage('Last Name is Required');
       isValid = false;
-    }
-
-    if (!selectedFacility) {
-      setFacilityError(true);
-      setFacilityErrorMessage('Please select a facility.');
-      isValid = false;
     } else {
-      setFacilityError(false);
-      setFacilityErrorMessage('');
-    }
-
-    if (!selectedFacilityType) {
-      setFacilityTypeError(true);
-      setFacilityTypeErrorMessage('Please select a facility type.');
-      isValid = false;
-    } else {
-      setFacilityTypeError(false);
-      setFacilityTypeErrorMessage('');
+      setLastNameError(false);
+      setLastNameErrorMessage('');
     }
 
     return isValid;
@@ -192,29 +134,21 @@ export default function SignUp() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    // Validate form errors
     if (firstNameError || lastNameError || emailError || passwordError) {
       return;
     }
-    const facilityValue =
-      selectedFacility === 'Other' ? otherFacility : selectedFacility;
 
-    // Extract form data
     const data = new FormData(event.currentTarget);
     const formData = {
       firstname: data.get('firstname'),
       lastname: data.get('lastname'),
       email: data.get('email'),
       password: data.get('password'),
-      facilityType: selectedFacilityType,
-      facility: facilityValue,
     };
 
     try {
-      const response = await axios.post(`${API_BASE_URL}/user/register`, formData, {
-        headers: {
-          'Content-Type': 'application/json',
-        },
+      await axios.post(`${API_BASE_URL}/user/register`, formData, {
+        headers: { 'Content-Type': 'application/json' },
       });
       setSnackbarMessage('Registration Successful! Please log in');
       setSnackbarSeverity('success');
@@ -224,27 +158,18 @@ export default function SignUp() {
       }, 3000);
     } catch (error) {
       console.error('Error during registration:', error);
-
-      // Check for API-specific errors
       if (error.response) {
         const { status, data } = error.response;
-
-        // Handle "existing admin" error
-        if (status === 409 && data.message === 'Admin already exists') {
-          setSnackbarMessage('Admin already exists. Please try logging in.');
+        if (status === 409) {
+          setSnackbarMessage('User already exists. Please try logging in.');
         } else if (status === 400) {
           setSnackbarMessage('Invalid input. Please check your details.');
         } else {
           setSnackbarMessage(data.message || 'An error occurred. Please try again.');
         }
-      } else if (error.request) {
-        // Handle network or server errors
-        setSnackbarMessage('Unable to reach the server. Please try again later.');
       } else {
-        // Handle unknown errors
-        setSnackbarMessage('An unexpected error occurred.');
+        setSnackbarMessage('Unable to reach the server. Please try again later.');
       }
-      // Display error message
       setSnackbarSeverity('error');
       setSnackbarOpen(true);
     }
@@ -254,199 +179,243 @@ export default function SignUp() {
     setSnackbarOpen(false);
   };
 
-  return (
-    <TemplateFrame
-      mode={mode}
-      toggleColorMode={toggleColorMode}
-    >
-      <ThemeProvider theme={defaultTheme}>
-        <CssBaseline enableColorScheme />
-        <SignUpContainer direction="column" justifyContent="space-between">
-          <Card variant="outlined">
-            <img src={logo} alt="Logo" style={{ width: '100px', height: 'auto' }} />
+  const SignUpForm = () => (
+    <Card variant="outlined">
+      <Typography
+        component="h1"
+        variant="h5"
+        sx={{
+          width: '100%',
+          fontSize: '1.75rem',
+          fontWeight: 600,
+          textAlign: 'center',
+          color: '#1a2744',
+          mb: 1,
+        }}
+      >
+        Sign Up
+      </Typography>
+
+      <Box
+        component="form"
+        onSubmit={handleSubmit}
+        sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}
+      >
+        <FormControl>
+          <FormLabel htmlFor="firstname" sx={{ mb: 0.5, color: '#333', fontWeight: 500, fontSize: '0.875rem' }}>
+            First Name
+          </FormLabel>
+          <StyledTextField
+            required
+            autoComplete="firstname"
+            name="firstname"
+            fullWidth
+            id="firstname"
+            placeholder="First name"
+            error={firstNameError}
+            helperText={firstNameErrorMessage}
+            size="small"
+          />
+        </FormControl>
+
+        <FormControl>
+          <FormLabel htmlFor="lastname" sx={{ mb: 0.5, color: '#333', fontWeight: 500, fontSize: '0.875rem' }}>
+            Last Name
+          </FormLabel>
+          <StyledTextField
+            required
+            autoComplete="lastname"
+            name="lastname"
+            fullWidth
+            id="lastname"
+            placeholder="Last name"
+            error={lastNameError}
+            helperText={lastNameErrorMessage}
+            size="small"
+          />
+        </FormControl>
+
+        <FormControl>
+          <FormLabel htmlFor="email" sx={{ mb: 0.5, color: '#333', fontWeight: 500, fontSize: '0.875rem' }}>
+            Email
+          </FormLabel>
+          <StyledTextField
+            required
+            fullWidth
+            id="email"
+            placeholder="your@email.com"
+            name="email"
+            autoComplete="email"
+            error={emailError}
+            helperText={emailErrorMessage}
+            size="small"
+          />
+        </FormControl>
+
+        <FormControl>
+          <FormLabel htmlFor="password" sx={{ mb: 0.5, color: '#333', fontWeight: 500, fontSize: '0.875rem' }}>
+            Password
+          </FormLabel>
+          <StyledTextField
+            required
+            fullWidth
+            name="password"
+            placeholder="••••••"
+            type={showPassword ? 'text' : 'password'}
+            id="password"
+            autoComplete="new-password"
+            error={passwordError}
+            helperText={passwordErrorMessage}
+            value={password}
+            onChange={handlePasswordChange}
+            size="small"
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton onClick={togglePasswordVisibility} edge="end" size="small">
+                    {showPassword ? <Visibility fontSize="small" /> : <VisibilityOff fontSize="small" />}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
+          />
+        </FormControl>
+
+        <FormControlLabel
+          control={
+            <Checkbox
+              value="allowExtraEmails"
+              sx={{ color: '#ccc', '&.Mui-checked': { color: '#D9DE38' } }}
+            />
+          }
+          label={<Typography sx={{ fontSize: '0.875rem', color: '#666' }}>I want to receive updates via email.</Typography>}
+        />
+
+        <Button
+          type="submit"
+          fullWidth
+          variant="contained"
+          onClick={validateInputs}
+          sx={{
+            mt: 1,
+            py: 1.5,
+            backgroundColor: '#D9DE38',
+            color: '#1a2744',
+            fontWeight: 600,
+            fontSize: '1rem',
+            textTransform: 'none',
+            borderRadius: '8px',
+            boxShadow: 'none',
+            '&:hover': {
+              backgroundColor: '#c5ca2f',
+              boxShadow: '0 4px 12px rgba(217, 222, 56, 0.3)',
+            },
+          }}
+        >
+          Sign Up
+        </Button>
+
+        <Typography sx={{ textAlign: 'center', fontSize: '0.875rem', color: '#666' }}>
+          Already have an account?{' '}
+          <Link to="/" style={{ color: '#0D2477', fontWeight: 600, textDecoration: 'none' }}>
+            Sign In
+          </Link>
+        </Typography>
+      </Box>
+    </Card>
+  );
+
+  if (isMobile) {
+    return (
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'flex-start',
+            backgroundColor: '#1a2744',
+            minHeight: '100vh',
+            padding: 0,
+            position: 'relative',
+            overflow: 'auto',
+          }}
+        >
+          <Box sx={{ pt: 4, pb: 2, textAlign: 'center', zIndex: 1 }}>
+            <img src={logo} alt="Biomed Logo" style={{ width: '140px', height: 'auto' }} />
             <Typography
-              component="h1"
-              variant="h4"
-              sx={{ width: '100%', fontSize: 'clamp(1.8rem, 10vw, 1.8rem)' }}
+              variant="caption"
+              sx={{
+                color: '#ABB738',
+                display: 'block',
+                mt: 0.5,
+                fontStyle: 'italic',
+                letterSpacing: 1,
+                fontSize: '0.75rem',
+              }}
             >
-              Sign up
+              The Biohazard Professionals
             </Typography>
-            <Box
-              component="form"
-              onSubmit={handleSubmit}
-              sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}
-            >
-              <FormControl>
-                <FormLabel htmlFor="firstname">First Name</FormLabel>
-                <TextField
-                  required
-                  autoComplete="firstname"
-                  name="firstname"
-                  fullWidth
-                  id="firstname"
-                  placeholder="first name"
-                  error={firstNameError}
-                  helperText={firstNameErrorMessage}
-                  color={firstNameError ? 'error' : 'primary'}
-                />
-              </FormControl>
-              <FormControl>
-                <FormLabel htmlFor="lastname">Last Name</FormLabel>
-                <TextField
-                  required
-                  autoComplete="lastname"
-                  name="lastname"
-                  fullWidth
-                  id="lastname"
-                  placeholder="last name"
-                  error={lastNameError}
-                  helperText={lastNameErrorMessage}
-                  color={lastNameError ? 'error' : 'primary'}
-                />
-              </FormControl>
-              <FormControl>
-                <FormLabel htmlFor="email">Email</FormLabel>
-                <TextField
-                  required
-                  fullWidth
-                  id="email"
-                  placeholder="your@email.com"
-                  name="email"
-                  autoComplete="email"
-                  variant="outlined"
-                  error={emailError}
-                  helperText={emailErrorMessage}
-                  color={passwordError ? 'error' : 'primary'}
-                />
-              </FormControl>
+          </Box>
 
-              <FormControl fullWidth required>
-                <FormLabel htmlFor="password">Password</FormLabel>
-                <TextField
-                  required
-                  fullWidth
-                  name="password"
-                  placeholder="••••••"
-                  type={showPassword ? 'text' : 'password'}
-                  id="password"
-                  autoComplete="new-password"
-                  variant="outlined"
-                  error={passwordError}
-                  helperText={passwordErrorMessage}
-                  color={passwordError ? 'error' : 'primary'}
-                  value={password}
-                  onChange={handlePasswordChange}
-                  InputProps={{
-                    endAdornment: (
-                      <InputAdornment position="end">
-                        <IconButton
-                          aria-label="toggle password visibility"
-                          onClick={togglePasswordVisibility}
-                          edge="end"
-                        >
-                          {showPassword ? <Visibility /> : <VisibilityOff />}
-                        </IconButton>
-                      </InputAdornment>
-                    ),
-                  }}
-                />
-              </FormControl>
-
-              {/* <FormControl fullWidth>
-                <FormLabel htmlFor="facilityType">Facility Type</FormLabel>
-                <TextField
-                  select
-                  id="facilityType"
-                  value={selectedFacilityType}
-                  onChange={(event) => setSelectedFacilityType(event.target.value)}
-                  SelectProps={{
-                    native: true,
-                    width: '300px'
-                  }}
-                  variant="outlined"
-                  error={facilityTypeError}
-                  helperText={facilityTypeError ? 'Please select a facility type' : ''}
-                  color={facilityTypeError ? 'error' : 'primary'}
-                >
-                  <option value="">Select a Facility Type</option>
-                  {facilityTypes.map((type, index) => (
-                    <option key={`${type.id}-${index}`} value={type.id}>
-                      {type.name}
-                    </option>
-                  ))}
-
-                </TextField>
-              </FormControl>
-
-              <FormControl fullWidth>
-                <FormLabel htmlFor="facility">Facility</FormLabel>
-                <TextField
-                  select
-                  id="facility"
-                  value={selectedFacility}
-                  onChange={(event) => setSelectedFacility(event.target.value)}
-                  SelectProps={{
-                    native: true,
-                  }}
-                  variant="outlined"
-                  error={facilityError}
-                  helperText={facilityErrorMessage}
-                  color={facilityError ? 'error' : 'primary'}
-                >
-                  <option value="">Select a Facility</option>
-                  {facilities.map((facility) => (
-                    <option key={facility.id} value={facility.name}>
-                      {facility.name}
-                    </option>
-                  ))}
-                  <option value="Other">Other</option>
-                </TextField>
-                {selectedFacility === 'Other' && (
-                  <TextField
-                    fullWidth
-                    id="otherFacility"
-                    placeholder="Enter facility name"
-                    value={otherFacility}
-                    onChange={(event) => setOtherFacility(event.target.value)}
-                    variant="outlined"
-                    margin="normal"
-                  />
-                )}
-              </FormControl> */}
-              <FormControlLabel
-                control={<Checkbox value="allowExtraEmails" color="primary" />}
-                label="I want to receive updates via email."
-              />
-              <Button
-                type="submit"
-                fullWidth
-                variant="contained"
-                onClick={validateInputs}
-              >
-                Sign up
-              </Button>
-              <Typography sx={{ textAlign: 'center' }}>
-                Already have an account?{' '}
-                <span>
-                  <Link
-                    to="/"
-                    variant="body2"
-                    sx={{ alignSelf: 'center' }}
-                  >
-                    Sign in
-                  </Link>
-                </span>
-              </Typography>
-            </Box>
-          </Card>
-        </SignUpContainer>
+          <Box sx={{ width: '100%', px: 2, zIndex: 1, pb: 4 }}>
+            <SignUpForm />
+          </Box>
+        </Box>
+        <Snackbar open={snackbarOpen} autoHideDuration={6000} onClose={handleSnackbarClose}>
+          <Alert onClose={handleSnackbarClose} severity={snackbarSeverity} sx={{ width: '100%' }}>
+            {snackbarMessage}
+          </Alert>
+        </Snackbar>
       </ThemeProvider>
-      {/* Snackbar for notifications */}
+    );
+  }
+
+  return (
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <Box
+        sx={{
+          display: 'flex',
+          minHeight: '100vh',
+          flexDirection: 'row',
+        }}
+      >
+        <Box
+          sx={{
+            flex: 1,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            backgroundColor: '#1a2744',
+            padding: 6,
+            minHeight: '100vh',
+          }}
+        >
+          <Content />
+        </Box>
+
+        <Box
+          sx={{
+            flex: 1,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            backgroundColor: '#ffffff',
+            padding: 4,
+            minHeight: '100vh',
+            overflow: 'auto',
+          }}
+        >
+          <SignUpForm />
+        </Box>
+      </Box>
       <Snackbar open={snackbarOpen} autoHideDuration={6000} onClose={handleSnackbarClose}>
         <Alert onClose={handleSnackbarClose} severity={snackbarSeverity} sx={{ width: '100%' }}>
           {snackbarMessage}
         </Alert>
       </Snackbar>
-    </TemplateFrame>
+    </ThemeProvider>
   );
 }

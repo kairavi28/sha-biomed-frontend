@@ -20,24 +20,37 @@ import {
   FormControl,
   DialogActions,
   Alert,
+  Drawer,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+  Collapse,
+  useMediaQuery,
+  useTheme,
 } from "@mui/material";
-import { AccountCircle, Logout, Person } from "@mui/icons-material";
+import { AccountCircle, Logout, Person, Search, ShoppingCart, Phone, Email, KeyboardArrowDown, Menu as MenuIcon, Close, ExpandLess, ExpandMore } from "@mui/icons-material";
 import CloseIcon from '@mui/icons-material/Close';
 import { useNavigate, useLocation } from "react-router-dom";
 import logo from "../assets/images/logo.png";
 import axios from "axios";
-import ReceiptIcon from '@mui/icons-material/Receipt'
-import FileCopyIcon from '@mui/icons-material/FileCopy';;
+import ReceiptIcon from '@mui/icons-material/Receipt';
+import FileCopyIcon from '@mui/icons-material/FileCopy';
 
 const Navbar = () => {
   const navigate = useNavigate();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const API_BASE_URL = process.env.REACT_APP_API_URL || "https://biomedwaste.net/api";
-  const location = useLocation(); // Get current route
+  const location = useLocation();
   const [anchorEl, setAnchorEl] = useState(null);
   const [open, setOpen] = useState(false);
+  const [mobileDrawerOpen, setMobileDrawerOpen] = useState(false);
+  const [resourcesExpanded, setResourcesExpanded] = useState(false);
   const composeUrl = "https://outlook.office.com/mail/deeplink/compose?to=support@biomedwaste.com";
   const [anchorElResources, setAnchorElResources] = useState(null);
-  const [openModal, setOpenModal] = useState(false); // State for modal open/close
+  const [openModal, setOpenModal] = useState(false);
   const [formData, setFormData] = useState({
     firstname: "",
     lastname: "",
@@ -51,40 +64,35 @@ const Navbar = () => {
   const [snackbar, setSnackbar] = useState({
     open: false,
     message: "",
-    severity: "success", // can be "success", "error", "warning", "info"
+    severity: "success",
   });
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const handleOpenOutlook = () => {
     window.open(composeUrl, "_blank", "noopener,noreferrer");
-    handleClose(); // optional: close modal after opening Outlook
+    handleClose();
   };
-  // Handle menu open
+
   const handleMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
   };
 
-  // Handle menu close
   const handleMenuClose = () => {
     setAnchorEl(null);
   };
 
-  // Handle Resources menu open/close
   const handleResourceMenuOpen = (event) => setAnchorElResources(event.currentTarget);
   const handleResourceMenuClose = () => setAnchorElResources(null);
 
-  // Handle modal open/close
   const handleModalOpen = () => setOpenModal(true);
   const handleModalClose = () => setOpenModal(false);
 
-  // Handle form field changes
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
-  // Handle Snackbar close
   const handleSnackbarClose = () => {
     setSnackbar({ ...snackbar, open: false });
   };
@@ -102,8 +110,6 @@ const Navbar = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-
-  // Handle form submission
   const handleSubmit = () => {
     axios
       .post(`${API_BASE_URL}/quote/add`, formData)
@@ -134,145 +140,291 @@ const Navbar = () => {
       });
   };
 
-  // Helper function to check if the route is active
   const isActive = (path) => location.pathname === path;
+
+  const handleMobileDrawerToggle = () => {
+    setMobileDrawerOpen(!mobileDrawerOpen);
+  };
+
+  const handleMobileNavClick = (path) => {
+    navigate(path);
+    setMobileDrawerOpen(false);
+  };
+
+  const handleResourcesToggle = () => {
+    setResourcesExpanded(!resourcesExpanded);
+  };
+
+  // Mobile Drawer Content
+  const mobileDrawer = (
+    <Box sx={{ width: 280 }}>
+      <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", p: 2, borderBottom: "1px solid #e5e7eb" }}>
+        <img src={logo} alt="Biomed Logo" style={{ height: "40px", width: "auto" }} />
+        <IconButton onClick={handleMobileDrawerToggle}>
+          <Close />
+        </IconButton>
+      </Box>
+      <List sx={{ pt: 2 }}>
+        <ListItem disablePadding>
+          <ListItemButton
+            onClick={() => handleMobileNavClick("/services")}
+            sx={{
+              py: 1.5,
+              backgroundColor: isActive("/services") ? "rgba(217, 222, 56, 0.15)" : "transparent",
+            }}
+          >
+            <ListItemText
+              primary="Complaint Services"
+              sx={{ "& .MuiTypography-root": { color: isActive("/services") ? "#D9DE38" : "#1a2744", fontWeight: 500 } }}
+            />
+          </ListItemButton>
+        </ListItem>
+        <ListItem disablePadding>
+          <ListItemButton
+            onClick={() => handleMobileNavClick("/instruction")}
+            sx={{
+              py: 1.5,
+              backgroundColor: isActive("/instruction") ? "rgba(217, 222, 56, 0.15)" : "transparent",
+            }}
+          >
+            <ListItemText
+              primary="Waste Packaging Guide"
+              sx={{ "& .MuiTypography-root": { color: isActive("/instruction") ? "#D9DE38" : "#1a2744", fontWeight: 500 } }}
+            />
+          </ListItemButton>
+        </ListItem>
+        <ListItem disablePadding>
+          <ListItemButton onClick={handleResourcesToggle} sx={{ py: 1.5 }}>
+            <ListItemText primary="Resources" sx={{ "& .MuiTypography-root": { color: "#1a2744", fontWeight: 500 } }} />
+            {resourcesExpanded ? <ExpandLess /> : <ExpandMore />}
+          </ListItemButton>
+        </ListItem>
+        <Collapse in={resourcesExpanded} timeout="auto" unmountOnExit>
+          <List component="div" disablePadding>
+            <ListItemButton
+              sx={{ pl: 4, py: 1.5, backgroundColor: isActive("/waybill") ? "rgba(217, 222, 56, 0.15)" : "transparent" }}
+              onClick={() => handleMobileNavClick("/waybill")}
+            >
+              <ListItemIcon sx={{ minWidth: 36 }}><ReceiptIcon fontSize="small" /></ListItemIcon>
+              <ListItemText primary="Waybill" sx={{ "& .MuiTypography-root": { fontSize: "14px" } }} />
+            </ListItemButton>
+            <ListItemButton
+              sx={{ pl: 4, py: 1.5, backgroundColor: isActive("/invoice") ? "rgba(217, 222, 56, 0.15)" : "transparent" }}
+              onClick={() => handleMobileNavClick("/invoice")}
+            >
+              <ListItemIcon sx={{ minWidth: 36 }}><FileCopyIcon fontSize="small" /></ListItemIcon>
+              <ListItemText primary="Invoices" sx={{ "& .MuiTypography-root": { fontSize: "14px" } }} />
+            </ListItemButton>
+            <ListItemButton
+              sx={{ pl: 4, py: 1.5, backgroundColor: isActive("/request-products") ? "rgba(217, 222, 56, 0.15)" : "transparent" }}
+              onClick={() => handleMobileNavClick("/request-products")}
+            >
+              <ListItemIcon sx={{ minWidth: 36 }}><FileCopyIcon fontSize="small" /></ListItemIcon>
+              <ListItemText primary="Request Product / Service" sx={{ "& .MuiTypography-root": { fontSize: "14px" } }} />
+            </ListItemButton>
+            <ListItemButton
+              sx={{ pl: 4, py: 1.5, backgroundColor: isActive("/cod") ? "rgba(217, 222, 56, 0.15)" : "transparent" }}
+              onClick={() => handleMobileNavClick("/cod")}
+            >
+              <ListItemIcon sx={{ minWidth: 36 }}><FileCopyIcon fontSize="small" /></ListItemIcon>
+              <ListItemText primary="Certificate of Destruction" sx={{ "& .MuiTypography-root": { fontSize: "14px" } }} />
+            </ListItemButton>
+          </List>
+        </Collapse>
+        <Divider sx={{ my: 2 }} />
+        <ListItem disablePadding>
+          <ListItemButton
+            onClick={() => handleMobileNavClick("/profile")}
+            sx={{ py: 1.5 }}
+          >
+            <ListItemIcon sx={{ minWidth: 36 }}><Person /></ListItemIcon>
+            <ListItemText primary="Profile" sx={{ "& .MuiTypography-root": { fontWeight: 500 } }} />
+          </ListItemButton>
+        </ListItem>
+        <ListItem disablePadding>
+          <ListItemButton
+            onClick={() => {
+              sessionStorage.clear();
+              localStorage.clear();
+              navigate("/");
+              setMobileDrawerOpen(false);
+            }}
+            sx={{ py: 1.5 }}
+          >
+            <ListItemIcon sx={{ minWidth: 36 }}><Logout /></ListItemIcon>
+            <ListItemText primary="Logout" sx={{ "& .MuiTypography-root": { fontWeight: 500 } }} />
+          </ListItemButton>
+        </ListItem>
+      </List>
+      <Box sx={{ p: 2 }}>
+        <Button
+          onClick={() => { handleModalOpen(); setMobileDrawerOpen(false); }}
+          variant="contained"
+          fullWidth
+          sx={{
+            backgroundColor: "#D9DE38",
+            color: "#1a2744",
+            fontWeight: 600,
+            textTransform: "none",
+            borderRadius: "24px",
+            py: 1.5,
+            "&:hover": {
+              backgroundColor: "#c5ca32",
+            },
+          }}
+        >
+          Request Free Quote
+        </Button>
+      </Box>
+      <Box sx={{ p: 2, pt: 0 }}>
+        <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 1 }}>
+          <Phone sx={{ fontSize: 16, color: "#1a2744" }} />
+          <Typography variant="body2" sx={{ color: "#1a2744", fontWeight: 500 }}>+1-866-288-3298</Typography>
+        </Box>
+        <Box
+          onClick={() => { handleOpen(); setMobileDrawerOpen(false); }}
+          sx={{ display: "flex", alignItems: "center", gap: 1, cursor: "pointer" }}
+        >
+          <Email sx={{ fontSize: 16, color: "#1a2744" }} />
+          <Typography variant="body2" sx={{ color: "#1a2744", fontWeight: 500 }}>support@biomedwaste.com</Typography>
+        </Box>
+      </Box>
+    </Box>
+  );
+
   return (
     <>
       <AppBar
-        position="absolute"
+        position="fixed"
         sx={{
           top: 0,
           width: '100%',
-          backgroundColor: "transparent",
-          color: "#ffffff",
-          boxShadow: "none",
+          backgroundColor: "#ffffff",
+          color: "#1a2744",
+          boxShadow: "0 2px 4px rgba(0,0,0,0.08)",
           transition: "all 0.3s ease-in-out",
-          "&.scrolled": {
-            backgroundColor: "#ffffff",
-            color: "#003366",
-            position: "fixed",
-            boxShadow: "0 4px 10px rgba(0, 0, 0, 0.1)",
-            borderBottom: "3px solid #C9CC3F",
-          }
         }}
         id="navbar"
       >
-        {/* Contact Info Row */}
+        {/* Top Contact Bar - Hidden on Mobile */}
         <Box
           sx={{
-            backgroundColor: "#F3F4F6",
-            padding: "8px 0",
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            paddingX: 2,
+            backgroundColor: "#ffffff",
+            borderBottom: "1px solid #e5e7eb",
+            py: 1,
+            px: { xs: 2, md: 4 },
+            display: { xs: "none", md: "block" },
           }}
         >
-          <Typography
-            variant="body2"
-            sx={{ color: "#003366", fontWeight: "bold", display: "flex", alignItems: "center", gap: 1 }}
-          >
-            <span>📞</span> +1-866-288-3298
-          </Typography>
-          <Typography
-            variant="body2"
+          <Box
             sx={{
-              color: "#003366",
-              fontWeight: "bold",
               display: "flex",
+              justifyContent: "flex-end",
               alignItems: "center",
-              gap: 1,
+              gap: 3,
+              maxWidth: "1200px",
+              mx: "auto",
             }}
           >
-            <Typography
-              variant="body2"
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                gap: 0.5,
+                color: "#1a2744",
+              }}
+            >
+              <Phone sx={{ fontSize: 16, color: "#1a2744" }} />
+              <Typography
+                variant="body2"
+                sx={{
+                  color: "#1a2744",
+                  fontWeight: 500,
+                  fontSize: "14px",
+                }}
+              >
+                +1-866-288-3298
+              </Typography>
+            </Box>
+            <Box
               onClick={handleOpen}
               sx={{
-                color: "#666",
-                cursor: "pointer",
-                display: "inline-flex",
+                display: "flex",
                 alignItems: "center",
+                gap: 0.5,
+                color: "#1a2744",
+                cursor: "pointer",
                 "&:hover": {
-                  color: "#333",
+                  color: "#D9DE38",
                 },
               }}
             >
-              <strong> <span>📧</span> support@biomedwaste.com</strong>
-            </Typography>
-
-            <Dialog open={open} onClose={handleClose} maxWidth="sm" fullWidth>
-              <DialogTitle sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                Send an Email
-                <IconButton onClick={handleClose}>
-                  <CloseIcon />
-                </IconButton>
-              </DialogTitle>
-
-              <DialogContent dividers>
-                <Typography gutterBottom>
-                  You’re about to send an email to <strong>support@biomedwaste.com</strong>.
-                </Typography>
-                <Typography variant="body2" color="textSecondary">
-                  Click the button below to open Outlook Web and compose your message.
-                </Typography>
-              </DialogContent>
-
-              <DialogActions>
-                <Button onClick={handleOpenOutlook} variant="contained" color="primary">
-                  Open Outlook
-                </Button>
-                <Button onClick={handleClose} variant="outlined">
-                  Cancel
-                </Button>
-              </DialogActions>
-            </Dialog>
-
-          </Typography>
-          <Button
-            onClick={() => handleModalOpen()}
-            variant="contained"
-            sx={{
-              backgroundColor: "#C9CC3F",
-              color: "#003366",
-              fontWeight: "bold",
-              textTransform: "none",
-              "&:hover": {
-                backgroundColor: "#A9AC2B",
-              },
-            }}
-          >
-            Request Free Quote
-          </Button>
+              <Email sx={{ fontSize: 16 }} />
+              <Typography
+                variant="body2"
+                sx={{
+                  fontWeight: 500,
+                  fontSize: "14px",
+                }}
+              >
+                support@biomedwaste.com
+              </Typography>
+            </Box>
+          </Box>
         </Box>
 
-        {/* Main Navbar Row */}
+        {/* Main Navbar */}
         <Toolbar
           sx={{
             display: "flex",
             justifyContent: "space-between",
-            paddingX: 2,
+            alignItems: "center",
+            px: { xs: 2, md: 4 },
+            py: 1,
+            maxWidth: "1200px",
+            mx: "auto",
+            width: "100%",
           }}
         >
+          {/* Mobile Hamburger Menu */}
+          <IconButton
+            onClick={handleMobileDrawerToggle}
+            aria-label="Open navigation menu"
+            sx={{
+              display: { xs: "flex", md: "none" },
+              color: "#1a2744",
+            }}
+          >
+            <MenuIcon />
+          </IconButton>
+
           {/* Logo */}
-          <Box component="div" sx={{ cursor: "pointer" }} onClick={() => navigate("/home")}>
-            <img src={logo} alt="Logo" style={{ width: "120px", height: "auto" }} />
+          <Box
+            component="div"
+            sx={{ cursor: "pointer", display: "flex", alignItems: "center" }}
+            onClick={() => navigate("/home")}
+          >
+            <Box
+              component="img"
+              src={logo}
+              alt="Biomed Logo"
+              sx={{ height: { xs: "40px", md: "50px" }, width: "auto" }}
+            />
           </Box>
 
-          {/* Menu Items */}
-          <Box display="flex" alignItems="center" gap={4}>
-            {/* Buttons */}
+          {/* Navigation Links - Desktop Only */}
+          <Box sx={{ display: { xs: "none", md: "flex" }, alignItems: "center", gap: 1 }}>
             <Button
               onClick={() => navigate("/services")}
               sx={{
-                color: isActive("/services") ? "#C9CC3F" : "#003366",
-                fontWeight: isActive("/services") ? "bold" : "bold",
+                color: isActive("/services") ? "#D9DE38" : "#1a2744",
+                fontWeight: 500,
                 textTransform: "none",
-                fontSize: "16px",
-                borderBottom: isActive("/services") ? "2px solid #C9CC3F" : "none",
+                fontSize: "15px",
+                px: 2,
                 "&:hover": {
-                  color: "#ffffff",
-                  backgroundColor: "#C9CC3F",
-                  borderRadius: "8px",
+                  backgroundColor: "transparent",
+                  color: "#D9DE38",
                 },
               }}
             >
@@ -281,33 +433,31 @@ const Navbar = () => {
             <Button
               onClick={() => navigate("/instruction")}
               sx={{
-                color: isActive("/instruction") ? "#C9CC3F" : "#003366",
-                fontWeight: isActive("/instruction") ? "bold" : "bold",
+                color: isActive("/instruction") ? "#D9DE38" : "#1a2744",
+                fontWeight: 500,
                 textTransform: "none",
-                fontSize: "16px",
-                borderBottom: isActive("/instruction") ? "2px solid #C9CC3F" : "none",
+                fontSize: "15px",
+                px: 2,
                 "&:hover": {
-                  color: "#ffffff",
-                  backgroundColor: "#C9CC3F",
-                  borderRadius: "8px",
+                  backgroundColor: "transparent",
+                  color: "#D9DE38",
                 },
               }}
             >
               Waste Packaging Guide
             </Button>
-            {/* Resources Tab */}
             <Button
               onClick={handleResourceMenuOpen}
+              endIcon={<KeyboardArrowDown />}
               sx={{
-                color: isActive("/waybill") || isActive("/invoice") || isActive("/cod") ? "#C9CC3F" : "#003366",
-                fontWeight: (isActive("/waybill") || isActive("/invoice") || isActive("/cod")) ? "bold" : "bold",
+                color: isActive("/waybill") || isActive("/invoice") || isActive("/cod") ? "#D9DE38" : "#1a2744",
+                fontWeight: 500,
                 textTransform: "none",
-                fontSize: "16px",
-                borderBottom: (isActive("/waybill") || isActive("/invoice") || isActive("/cod")) ? "2px solid #C9CC3F" : "none",
+                fontSize: "15px",
+                px: 2,
                 "&:hover": {
-                  color: "#ffffff",
-                  backgroundColor: "#C9CC3F",
-                  borderRadius: "8px",
+                  backgroundColor: "transparent",
+                  color: "#D9DE38",
                 },
               }}
             >
@@ -319,52 +469,56 @@ const Navbar = () => {
               open={Boolean(anchorElResources)}
               onClose={handleResourceMenuClose}
               sx={{
-                mt: "5px",
+                mt: "8px",
                 "& .MuiPaper-root": {
                   borderRadius: "8px",
-                  boxShadow: "0 4px 8px rgba(0,0,0,0.2)",
-                  minWidth: "180px",
+                  boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
+                  minWidth: "200px",
                 },
               }}
             >
               <MenuItem
                 onClick={() => { navigate("/waybill"); handleResourceMenuClose(); }}
                 sx={{
-                  display: "flex", gap: 1,
-                  backgroundColor: isActive("/waybill") ? "#C9CC3F" : "transparent",
-                  color: isActive("/waybill") ? "#ffffff" : "inherit",
+                  display: "flex",
+                  gap: 1,
+                  py: 1.5,
+                  backgroundColor: isActive("/waybill") ? "#D9DE38" : "transparent",
+                  color: isActive("/waybill") ? "#1a2744" : "inherit",
                   "&:hover": {
-                    backgroundColor: isActive("/waybill") ? "#C9CC3F" : "#f0f0f0",
+                    backgroundColor: isActive("/waybill") ? "#D9DE38" : "#f5f5f5",
                   }
                 }}
               >
                 <ReceiptIcon fontSize="small" />
                 <Typography variant="inherit">Waybill</Typography>
               </MenuItem>
-
               <MenuItem
                 onClick={() => { navigate("/invoice"); handleResourceMenuClose(); }}
                 sx={{
-                  display: "flex", gap: 1,
-                  backgroundColor: isActive("/invoice") ? "#C9CC3F" : "transparent",
-                  color: isActive("/invoice") ? "#ffffff" : "inherit",
+                  display: "flex",
+                  gap: 1,
+                  py: 1.5,
+                  backgroundColor: isActive("/invoice") ? "#D9DE38" : "transparent",
+                  color: isActive("/invoice") ? "#1a2744" : "inherit",
                   "&:hover": {
-                    backgroundColor: isActive("/invoice") ? "#C9CC3F" : "#f0f0f0",
+                    backgroundColor: isActive("/invoice") ? "#D9DE38" : "#f5f5f5",
                   }
                 }}
               >
                 <FileCopyIcon fontSize="small" />
                 <Typography variant="inherit">Invoices</Typography>
               </MenuItem>
-
               <MenuItem
                 onClick={() => { navigate("/request-products"); handleResourceMenuClose(); }}
                 sx={{
-                  display: "flex", gap: 1,
-                  backgroundColor: isActive("/request-products") ? "#C9CC3F" : "transparent",
-                  color: isActive("/request-products") ? "#ffffff" : "inherit",
+                  display: "flex",
+                  gap: 1,
+                  py: 1.5,
+                  backgroundColor: isActive("/request-products") ? "#D9DE38" : "transparent",
+                  color: isActive("/request-products") ? "#1a2744" : "inherit",
                   "&:hover": {
-                    backgroundColor: isActive("/request-products") ? "#C9CC3F" : "#f0f0f0",
+                    backgroundColor: isActive("/request-products") ? "#D9DE38" : "#f5f5f5",
                   }
                 }}
               >
@@ -372,15 +526,16 @@ const Navbar = () => {
                 <Typography variant="inherit">Request Product / Service</Typography>
               </MenuItem>
               <Divider />
-
               <MenuItem
                 onClick={() => { navigate("/cod"); handleResourceMenuClose(); }}
                 sx={{
-                  display: "flex", gap: 1,
-                  backgroundColor: isActive("/cod") ? "#C9CC3F" : "transparent",
-                  color: isActive("/cod") ? "#ffffff" : "inherit",
+                  display: "flex",
+                  gap: 1,
+                  py: 1.5,
+                  backgroundColor: isActive("/cod") ? "#D9DE38" : "transparent",
+                  color: isActive("/cod") ? "#1a2744" : "inherit",
                   "&:hover": {
-                    backgroundColor: isActive("/cod") ? "#C9CC3F" : "#f0f0f0",
+                    backgroundColor: isActive("/cod") ? "#D9DE38" : "#f5f5f5",
                   }
                 }}
               >
@@ -388,31 +543,76 @@ const Navbar = () => {
                 <Typography variant="inherit">Certificate of Destruction</Typography>
               </MenuItem>
             </Menu>
+          </Box>
 
-            {/* Profile Icon with Dropdown Menu */}
-            <IconButton
-              onClick={handleMenuOpen}
+          {/* Right Side: Quote Button, Search, Cart, Profile */}
+          <Box sx={{ display: "flex", alignItems: "center", gap: { xs: 0.5, md: 1 } }}>
+            {/* Desktop Only - Quote Button */}
+            <Button
+              onClick={handleModalOpen}
+              variant="contained"
               sx={{
-                color: "#003366",
+                display: { xs: "none", md: "flex" },
+                backgroundColor: "#D9DE38",
+                color: "#1a2744",
+                fontWeight: 600,
+                textTransform: "none",
+                borderRadius: "24px",
+                px: 3,
+                py: 1,
                 "&:hover": {
-                  color: "#ffffff",
-                  backgroundColor: "#C9CC3F",
-                  borderRadius: "50%",
+                  backgroundColor: "#c5ca32",
                 },
               }}
             >
-              <AccountCircle fontSize="large" />
+              Request Free Quote
+            </Button>
+            {/* Desktop Only - Search */}
+            <IconButton
+              sx={{
+                display: { xs: "none", md: "flex" },
+                color: "#1a2744",
+                "&:hover": {
+                  color: "#D9DE38",
+                },
+              }}
+            >
+              <Search />
+            </IconButton>
+            {/* Mobile & Desktop - Cart */}
+            <IconButton
+              sx={{
+                color: "#1a2744",
+                "&:hover": {
+                  color: "#D9DE38",
+                },
+              }}
+            >
+              <ShoppingCart />
+            </IconButton>
+            {/* Desktop Only - Profile */}
+            <IconButton
+              onClick={handleMenuOpen}
+              sx={{
+                display: { xs: "none", md: "flex" },
+                color: "#1a2744",
+                "&:hover": {
+                  color: "#D9DE38",
+                },
+              }}
+            >
+              <AccountCircle />
             </IconButton>
             <Menu
               anchorEl={anchorEl}
               open={Boolean(anchorEl)}
               onClose={handleMenuClose}
               sx={{
-                mt: "5px",
+                mt: "8px",
                 "& .MuiPaper-root": {
                   borderRadius: "8px",
-                  boxShadow: "0 4px 8px rgba(0,0,0,0.2)",
-                  minWidth: "180px",
+                  boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
+                  minWidth: "160px",
                 },
               }}
             >
@@ -421,7 +621,7 @@ const Navbar = () => {
                   handleMenuClose();
                   navigate("/profile");
                 }}
-                sx={{ display: "flex", gap: 1 }}
+                sx={{ display: "flex", gap: 1, py: 1.5 }}
               >
                 <Person fontSize="small" />
                 <Typography variant="inherit">Profile</Typography>
@@ -431,7 +631,6 @@ const Navbar = () => {
                 onClick={async () => {
                   handleMenuClose();
                   try {
-                    // await axios.post(`${API_BASE_URL}/logout`, {}, { withCredentials: true });
                     sessionStorage.clear();
                     localStorage.clear();
                     navigate("/");
@@ -440,7 +639,7 @@ const Navbar = () => {
                     alert("There was an error logging out.");
                   }
                 }}
-                sx={{ display: "flex", gap: 1 }}
+                sx={{ display: "flex", gap: 1, py: 1.5 }}
               >
                 <Logout fontSize="small" />
                 <Typography variant="inherit">Logout</Typography>
@@ -448,10 +647,52 @@ const Navbar = () => {
             </Menu>
           </Box>
         </Toolbar>
-      </AppBar >
+      </AppBar>
 
-      {/* Modal for Request Quote */}
-      < Dialog
+      {/* Mobile Drawer */}
+      <Drawer
+        anchor="left"
+        open={mobileDrawerOpen}
+        onClose={handleMobileDrawerToggle}
+        sx={{
+          display: { xs: "block", md: "none" },
+          "& .MuiDrawer-paper": {
+            boxSizing: "border-box",
+            width: 280,
+          },
+        }}
+      >
+        {mobileDrawer}
+      </Drawer>
+
+      {/* Email Dialog */}
+      <Dialog open={open} onClose={handleClose} maxWidth="sm" fullWidth>
+        <DialogTitle sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+          Send an Email
+          <IconButton onClick={handleClose}>
+            <CloseIcon />
+          </IconButton>
+        </DialogTitle>
+        <DialogContent dividers>
+          <Typography gutterBottom>
+            You're about to send an email to <strong>support@biomedwaste.com</strong>.
+          </Typography>
+          <Typography variant="body2" color="textSecondary">
+            Click the button below to open Outlook Web and compose your message.
+          </Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleOpenOutlook} variant="contained" sx={{ backgroundColor: "#D9DE38", color: "#1a2744", "&:hover": { backgroundColor: "#c5ca32" } }}>
+            Open Outlook
+          </Button>
+          <Button onClick={handleClose} variant="outlined" sx={{ borderColor: "#1a2744", color: "#1a2744" }}>
+            Cancel
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      {/* Quote Request Modal */}
+      <Dialog
         open={openModal}
         onClose={handleModalClose}
         fullWidth
@@ -459,20 +700,19 @@ const Navbar = () => {
         sx={{
           "& .MuiPaper-root": {
             borderRadius: "12px",
-            boxShadow: "0 8px 16px rgba(0, 0, 0, 0.2)",
+            boxShadow: "0 8px 24px rgba(0, 0, 0, 0.15)",
             padding: "16px",
           },
-        }
-        }
+        }}
       >
         <DialogTitle
           sx={{
             fontSize: "1.5rem",
             fontWeight: "bold",
-            color: "#003366",
+            color: "#1a2744",
             textAlign: "center",
-            borderBottom: "1px solid #f0f0f0",
-            marginBottom: "16px",
+            borderBottom: "1px solid #e5e7eb",
+            mb: 2,
           }}
         >
           Request Free Quote
@@ -484,57 +724,17 @@ const Navbar = () => {
               display: "flex",
               flexDirection: "column",
               gap: "16px",
-              paddingX: "8px",
+              pt: 1,
             }}
           >
-            <TextField
-              label="First Name"
-              name="firstname"
-              value={formData.firstname}
-              onChange={handleChange}
-              fullWidth
-              variant="outlined"
-            />
-            <TextField
-              label="Last Name"
-              name="lastname"
-              value={formData.lastname}
-              onChange={handleChange}
-              fullWidth
-              variant="outlined"
-            />
-            <TextField
-              label="Company"
-              name="company"
-              value={formData.company}
-              onChange={handleChange}
-              fullWidth
-              variant="outlined"
-            />
-            <TextField
-              label="Phone"
-              name="phone"
-              value={formData.phone}
-              onChange={handleChange}
-              fullWidth
-              variant="outlined"
-            />
-            <TextField
-              label="Email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              fullWidth
-              variant="outlined"
-            />
+            <TextField label="First Name" name="firstname" value={formData.firstname} onChange={handleChange} fullWidth variant="outlined" />
+            <TextField label="Last Name" name="lastname" value={formData.lastname} onChange={handleChange} fullWidth variant="outlined" />
+            <TextField label="Company" name="company" value={formData.company} onChange={handleChange} fullWidth variant="outlined" />
+            <TextField label="Phone" name="phone" value={formData.phone} onChange={handleChange} fullWidth variant="outlined" />
+            <TextField label="Email" name="email" value={formData.email} onChange={handleChange} fullWidth variant="outlined" />
             <FormControl fullWidth>
               <InputLabel>Province</InputLabel>
-              <Select
-                name="province"
-                value={formData.province}
-                onChange={handleChange}
-                variant="outlined"
-              >
+              <Select name="province" value={formData.province} onChange={handleChange} variant="outlined" label="Province">
                 <DropdownItem value="Alberta">Alberta</DropdownItem>
                 <DropdownItem value="British Columbia">British Columbia</DropdownItem>
                 <DropdownItem value="Manitoba">Manitoba</DropdownItem>
@@ -550,24 +750,8 @@ const Navbar = () => {
                 <DropdownItem value="Yukon">Yukon</DropdownItem>
               </Select>
             </FormControl>
-            <TextField
-              label="Postal Code"
-              name="postalCode"
-              value={formData.postalCode}
-              onChange={handleChange}
-              fullWidth
-              variant="outlined"
-            />
-            <TextField
-              label="Tell us about your service needs"
-              name="description"
-              value={formData.description}
-              onChange={handleChange}
-              fullWidth
-              multiline
-              rows={4}
-              variant="outlined"
-            />
+            <TextField label="Postal Code" name="postalCode" value={formData.postalCode} onChange={handleChange} fullWidth variant="outlined" />
+            <TextField label="Tell us about your service needs" name="description" value={formData.description} onChange={handleChange} fullWidth multiline rows={4} variant="outlined" />
           </Box>
         </DialogContent>
         <DialogActions
@@ -575,19 +759,19 @@ const Navbar = () => {
             display: "flex",
             justifyContent: "space-between",
             padding: "16px",
-            borderTop: "1px solid #f0f0f0",
+            borderTop: "1px solid #e5e7eb",
           }}
         >
           <Button
             onClick={handleModalClose}
             variant="outlined"
             sx={{
-              borderColor: "#C9CC3F",
-              color: "#003366",
+              borderColor: "#1a2744",
+              color: "#1a2744",
               textTransform: "none",
               "&:hover": {
-                backgroundColor: "#F3F4F6",
-                borderColor: "#A9AC2B",
+                backgroundColor: "#f5f5f5",
+                borderColor: "#1a2744",
               },
             }}
           >
@@ -597,21 +781,22 @@ const Navbar = () => {
             onClick={handleSubmit}
             variant="contained"
             sx={{
-              backgroundColor: "#C9CC3F",
-              color: "#ffffff",
+              backgroundColor: "#D9DE38",
+              color: "#1a2744",
+              fontWeight: 600,
               textTransform: "none",
               "&:hover": {
-                backgroundColor: "#A9AC2B",
+                backgroundColor: "#c5ca32",
               },
             }}
           >
             Submit
           </Button>
         </DialogActions>
-      </Dialog >
+      </Dialog>
 
-      {/* Snackbar for Feedback */}
-      < Snackbar
+      {/* Snackbar */}
+      <Snackbar
         open={snackbar.open}
         autoHideDuration={6000}
         onClose={handleSnackbarClose}
@@ -620,7 +805,7 @@ const Navbar = () => {
         <Alert onClose={handleSnackbarClose} severity={snackbar.severity} sx={{ width: "100%" }}>
           {snackbar.message}
         </Alert>
-      </Snackbar >
+      </Snackbar>
     </>
   );
 };

@@ -10,92 +10,94 @@ import {
   CircularProgress,
   Modal,
   Card,
-  CardContent,
   Snackbar,
   Link,
   Alert,
-  CardActionArea
 } from "@mui/material";
 import { motion } from "framer-motion";
-import { FaRecycle, FaSyringe, FaPills, FaTruck, FaClipboardCheck, FaHospital } from "react-icons/fa";
+import { FaRecycle, FaSyringe, FaPills, FaTruck, FaShieldAlt, FaLeaf, FaHandshake, FaBoxOpen } from "react-icons/fa";
 import { GiNuclearWaste } from "react-icons/gi";
+import { MdLocalHospital, MdScience, MdCheckCircle, MdWaterDrop, MdVerifiedUser } from "react-icons/md";
 import axios from "axios";
 import { FaPrescriptionBottleMedical } from "react-icons/fa6";
-import AwesomeSlider from "react-awesome-slider";
-import "react-awesome-slider/dist/styles.css";
-import image1 from "../assets/images/background_1.png";
-import image2 from "../assets/images/background_2.png";
 import "react-international-phone/style.css";
-import { useNavigate } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/pagination";
-import FeedbackSlider from "./FeedbackSlider";
-import ContentSlider from "./ContentSlider";
-import CallToAction from "./CallToAction";
-import { Navigation, Pagination, Autoplay } from "swiper/modules";
+import "swiper/css/navigation";
+import { Navigation, Autoplay } from "swiper/modules";
 
 const API_BASE_URL = process.env.REACT_APP_API_URL || "https://biomedwaste.net/api";
-const slides = [
-  {
-    "title": "Worker Safety",
-    "description": "Proper packaging limits exposure, ensuring safety and accountability in healthcare."
-  },
-  {
-    "title": "Infection Control",
-    "description": "Secure waste containment prevents disease spread, protecting workers and communities."
-  },
-  {
-    "title": "Eco Protection",
-    "description": "Responsible disposal safeguards soil, water, wildlife, and promotes sustainability."
-  },
-  {
-    "title": "Legal Compliance",
-    "description": "Adhering to guidelines ensures public safety, ethical duty, and prevents penalties."
-  },
-  {
-    "title": "Public Trust",
-    "description": "Safe waste handling protects communities, upholds dignity, and fosters confidence."
-  }
+
+const wasteDisposalCards = [
+  { title: "Biomedical", subtitle: "Waste Disposal", icon: <FaRecycle size={36} color="#D9DE38" /> },
+  { title: "Container", subtitle: "Waste Disposal", icon: <MdWaterDrop size={36} color="#D9DE38" /> },
+  { title: "Anatomical", subtitle: "Waste Disposal", icon: <MdVerifiedUser size={36} color="#D9DE38" /> },
+  { title: "Pharmaceutical", subtitle: "Waste Services", icon: <FaBoxOpen size={36} color="#D9DE38" /> },
 ];
 
-const criticalRoleSlides = [
+const servicesData = [
   {
-    "title": "Environmental Responsibility",
-    "description": "Safe disposal prevents harm to nature, protecting soil, water, and wildlife."
+    title: "Biomedical Waste Disposal",
+    description: "We process all types of biohazardous waste, ensuring safe and compliant disposal.",
+    icon: <FaRecycle size={40} color="#1a2744" />,
+    link: "https://www.biomedwaste.com/",
   },
   {
-    "title": "Regulatory Compliance",
-    "description": "Following guidelines ensures safety, ethical responsibility, and legal compliance."
+    title: "Biomedical Waste Transport",
+    description: "Safe and reliable transportation of biomedical waste across Canada.",
+    icon: <FaTruck size={40} color="#1a2744" />,
+    link: "https://biomedwaste.com/services/",
   },
   {
-    "title": "Community Well-being",
-    "description": "Safe waste handling builds trust, protects lives, and upholds dignity."
+    title: "Waste Container Management",
+    description: "Comprehensive management solutions for waste containers in medical facilities.",
+    icon: <MdLocalHospital size={40} color="#1a2744" />,
+    link: "https://biomedwaste.com/services/",
   },
   {
-    "title": "Protection of Healthcare Workers",
-    "description": "Proper packaging prevents exposure, ensuring safety and accountability."
+    title: "Waste Recycling Solutions",
+    description: "Eco-friendly recycling solutions for medical and pharmaceutical waste.",
+    icon: <FaLeaf size={40} color="#1a2744" />,
+    link: "https://biomedwaste.com/services/",
   },
   {
-    "title": "Preventing Disease Transmission",
-    "description": "Secure waste packaging stops infections, protecting workers and communities."
+    title: "Contamination Cleanup Activities",
+    description: "Professional cleanup and decontamination services for healthcare facilities.",
+    icon: <MdScience size={40} color="#1a2744" />,
+    link: "https://biomedwaste.com/services/",
+  },
+  {
+    title: "Anatomical Waste Disposal",
+    description: "Ethical and secure disposal of anatomical waste with utmost care.",
+    icon: <FaPrescriptionBottleMedical size={40} color="#1a2744" />,
+    link: "https://biomedwaste.com/services/",
   },
 ];
 
-const services = [
-  { title: "Biomedical Waste Disposal", icon: <FaRecycle size={40} color="#003366" /> },
-  { title: "Cytotoxic Waste Disposal", icon: <GiNuclearWaste size={40} color="#003366" /> },
-  { title: "Anatomical Waste Disposal", icon: <FaPrescriptionBottleMedical size={40} color="#003366" /> },
-  { title: "Pharmaceutical Waste Recovery", icon: <FaPills size={40} color="#003366" /> },
+const criticalRoleItems = [
+  { number: "1", title: "Regulatory Compliance", description: "Following guidelines ensures safety, ethical responsibility, and legal compliance." },
+  { number: "2", title: "Environmental Responsibility", description: "Safe disposal prevents harm to nature, protecting soil, water, and wildlife." },
+  { number: "3", title: "Protection of Healthcare Workers", description: "Proper packaging prevents exposure, ensuring safety and accountability." },
+  { number: "4", title: "Preventing Disease Transmission", description: "Secure waste packaging stops infections, protecting workers and communities." },
+  { number: "5", title: "Protecting Human Dignity", description: "Ethical handling of anatomical waste respects patients and families." },
 ];
 
+const partnerLogos = [
+  { name: "Sask Health", logo: "https://via.placeholder.com/150x60?text=Sask+Health" },
+  { name: "Canadian Medical", logo: "https://via.placeholder.com/150x60?text=Canadian+Medical" },
+  { name: "Veterinary Association", logo: "https://via.placeholder.com/150x60?text=Vet+Association" },
+  { name: "Healthcare Standards", logo: "https://via.placeholder.com/150x60?text=Healthcare" },
+];
 
 function Dashboard() {
-  const navigate = useNavigate();
   const [userData, setUserData] = useState(null);
   const [formOpen, setFormOpen] = useState(false);
-  const handleFormClose = () => setFormOpen(false);
-  const [setError] = useState("");
+  const handleFormClose = () => {
+    setFormOpen(false);
+    setError("");
+  };
+  const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
@@ -110,7 +112,6 @@ function Dashboard() {
     severity: "success",
   });
 
-  // Handle Snackbar close
   const handleSnackbarClose = () => {
     setSnackbar({ ...snackbar, open: false });
   };
@@ -161,7 +162,7 @@ function Dashboard() {
     };
 
     fetchUserData();
-  }, [API_BASE_URL]);
+  }, []);
 
   const handleFileChange = (event) => {
     const files = Array.from(event.target.files);
@@ -181,7 +182,6 @@ function Dashboard() {
     });
   };
 
-  {/* File a complaint box */ }
   const handleFormSubmit = async (event) => {
     event.preventDefault();
     setIsSubmitting(true);
@@ -189,12 +189,12 @@ function Dashboard() {
     if (!formData.contactNumber || !formData.description) {
       setError("Please fill out all required fields.");
       setIsSubmitting(false);
+      setLoading(false);
       return;
     }
 
     try {
       const formDataToSend = new FormData();
-      // Use fetched userData from state instead of sessionStorage
       formDataToSend.append("firstname", userData.firstname);
       formDataToSend.append("lastname", userData.lastname);
       formDataToSend.append("email", userData.email);
@@ -213,7 +213,7 @@ function Dashboard() {
 
       setLoading(false);
 
-      const response = await axios.post(
+      await axios.post(
         `${API_BASE_URL}/client-complaint/add`,
         formDataToSend,
         { headers: { "Content-Type": "multipart/form-data" } }
@@ -266,677 +266,869 @@ function Dashboard() {
         height="100vh"
         sx={{ background: "#f3f4f6" }}
       >
-        <CircularProgress />
+        <CircularProgress sx={{ color: "#1a2744" }} />
       </Box>
     );
   }
 
   return (
-    <Box sx={{ background: "linear-gradient(to bottom, white, #f0f8ff)", minHeight: "100vh" }}>
+    <Box sx={{ background: "#ffffff", minHeight: "100vh" }}>
       {/* Hero Section */}
-      <Box sx={{ background: "linear-gradient(to bottom, white, #f0f8ff)", minHeight: "100vh" }}>
-        {/* Hero Section with Animation */}
-        <Box
-          sx={{
-            position: "relative",
-            height: "100vh",
-            overflow: "hidden",
+      <Box
+        sx={{
+          position: "relative",
+          minHeight: { xs: "auto", md: "400px" },
+          backgroundImage: "url('/hero-bg.jpg')",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          mt: { xs: "100px", md: "110px" },
+          py: { xs: 6, md: 8 },
+          px: { xs: 2, md: 4 },
+          "&::before": {
+            content: '""',
+            position: "absolute",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backgroundColor: "rgba(26, 39, 68, 0.85)",
             zIndex: 1,
-            width: "100vw",           // <-- Add this
-            marginLeft: "calc(-50vw + 50%)", // <-- Add this to stretch full width even inside Container
-          }}
-        >
-
-          <AwesomeSlider
-            bullets={false}
-            play
-            interval={4000}
-            style={{ height: "100vh", width: "100vw" }} // <-- Stretch full width
-            organicArrows={false}
-          >
-            {[image1, image2].map((img, index) => (
-              <div key={index} className="slide-container">
-                <motion.img
-                  src={img}
-                  alt={`Slide ${index + 1}`}
-                  style={{
-                    width: "100vw",
-                    height: "100vh",
-                    objectFit: "cover", // Make sure the image fills the area
-                  }}
-                  initial={{ scale: 1.1 }}
-                  animate={{ scale: 1 }}
-                  transition={{ duration: 1 }}
-                />
-
-              </div>
-            ))}
-          </AwesomeSlider>
-
-          {/* Optional overlay text */}
-          <Box
-            sx={{
-              position: "absolute",
-              top: 0,
-              left: 0,
-              height: "100%",
-              width: "100%",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              color: "#fff",
-              zIndex: 2,
-              textAlign: "center",
-              px: 2
-            }}
-          >
-
-          </Box>
-        </Box>
-
-        {/* Image slider with content box */}
-        <Container maxWidth="lg">
-          <Typography variant="h4" sx={{ mb: 4 }}>
-
-          </Typography>
-          <Grid container spacing={5} alignItems="stretch">
-            {/* Right Content Slider */}
-            <Grid item xs={12} md={6} sx={{ display: "flex" }}>
+          },
+        }}
+      >
+        <Container maxWidth="lg" sx={{ position: "relative", zIndex: 2 }}>
+          <Grid container spacing={4} alignItems="center">
+            <Grid item xs={12} md={6}>
               <Box
                 sx={{
-                  width: "100%",
-                  height: "100%",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
+                  display: "inline-block",
+                  backgroundColor: "#D9DE38",
+                  color: "#1a2744",
+                  px: 2,
+                  py: 0.5,
+                  borderRadius: "4px",
+                  fontSize: "12px",
+                  fontWeight: 600,
+                  mb: 2,
                 }}
               >
-                <Swiper
-                  modules={[Navigation, Autoplay]}
-                  navigation
-                  autoplay={{ delay: 3000 }}
-                  spaceBetween={20}
-                  slidesPerView={1}
-                  style={{ width: "100%", height: "100%" }}
+                Welcome Back
+              </Box>
+              <Typography
+                variant="h3"
+                sx={{
+                  color: "#ffffff",
+                  fontWeight: 700,
+                  mb: 2,
+                  fontSize: { xs: "1.8rem", md: "2.5rem" },
+                  lineHeight: 1.2,
+                }}
+              >
+                Welcome to Biomed<br />Invex Portal
+              </Typography>
+              <Typography
+                variant="body1"
+                sx={{
+                  color: "rgba(255,255,255,0.85)",
+                  mb: 4,
+                  lineHeight: 1.7,
+                  maxWidth: "450px",
+                }}
+              >
+                Manage your biomedical waste services, schedule pickups, and access compliance documents all in one place.
+              </Typography>
+              <Box sx={{ display: "flex", gap: 2, flexWrap: "wrap" }}>
+                <Button
+                  variant="contained"
+                  onClick={() => setFormOpen(true)}
+                  sx={{
+                    backgroundColor: "#D9DE38",
+                    color: "#1a2744",
+                    fontWeight: 600,
+                    px: 3,
+                    py: 1.2,
+                    borderRadius: "24px",
+                    textTransform: "none",
+                    "&:hover": {
+                      backgroundColor: "#D9DE38",
+                    },
+                  }}
                 >
-                  {[
-                    { title: "Biohazard Experts", text: "Specialists in safe, compliant waste disposal." },
-                    { title: "Saskatchewan-Based", text: "Family-owned, serving communities with excellence." },
-                    { title: "Leading Since 1992", text: "Western Canada’s trusted name in biohazard recovery." },
-                    { title: "Strategic Locations", text: "Operations in Regina, Saskatoon & Aberdeen, SK." },
-                    { title: "Biomed Invex Portal", text: "This Biomed Invex portal would provide you invoices, waybills integrated with the complaint portal." },
-                  ].map((slide, index) => (
-                    <SwiperSlide key={index}>
-                      <Box
-                        sx={{
-                          backgroundColor: "#fff",
-                          borderRadius: "16px",
-                          padding: "35px",
-                          backdropFilter: "blur(10px)",
-                          WebkitBackdropFilter: "blur(10px)",
-                          textAlign: "center",
-                          border: "1px solid rgba(216, 232, 247, 0.91)",
-                          display: "flex",
-                          flexDirection: "column",
-                          alignItems: "center",
-                          justifyContent: "center",
-                          minHeight: "320px",
-                          transition: "all 0.3s ease-in-out",
-                          '&:hover': {
-                            transform: "scale(1.03)",
-                            boxShadow: "0px 10px 25px rgba(44, 56, 233, 0.5)"
-                          }
-                        }}
-                      >
-                        <Typography
-                          variant="h5"
-                          sx={{
-                            fontWeight: "bold",
-                            mb: 2,
-                            background: " #092C74",
-                            WebkitBackgroundClip: "text",
-                            WebkitTextFillColor: "transparent",
-                          }}
-                        >
-                          {slide.title}
-                        </Typography>
-                        <Typography sx={{
-                          fontSize: "20px",
-                          mb: 2,
-                        }} color="textSecondary">
-                          {slide.text}
-                        </Typography>
-                        <Button
-                          variant="contained"
-                          component="a"
-                          href="https://www.biomedwaste.com"
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          sx={{
-                            mt: 3,
-                            background: "linear-gradient(to right, #BAC400, #E0E721)",
-                            color: "#092C74",
-                            px: 4,
-                            py: 1,
-                            borderRadius: "12px",
-                            boxShadow: "0px 4px 12px rgba(44, 56, 233, 0.4)",
-                            '&:hover': { background: "linear-gradient(135deg,rgb(98, 129, 233),rgb(164, 208, 231))" },
-                          }}
-                        ><b>
-                            Learn More</b>
-                        </Button>
-                        {<Button
-                          variant="contained"
-                          sx={{
-                            mt: 3,
-                            background: "linear-gradient(to right, #BAC400, #E0E721)",
-                            color: "#092C74",
-                            px: 4,
-                            py: 1,
-                            borderRadius: "12px",
-                            boxShadow: "0px 4px 12px rgba(44, 56, 233, 0.4)",
-                            '&:hover': { background: "linear-gradient(135deg,rgb(98, 129, 233),rgb(164, 208, 231))" },
-                          }}
-                          onClick={() => setFormOpen(true)}
-                        ><b>
-                            File a Complaint </b>
-                        </Button>}
-                      </Box>
-                    </SwiperSlide>
-                  ))}
-                </Swiper>
+                  File a Complaint
+                </Button>
+                <Button
+                  variant="outlined"
+                  href="https://biomedwaste.com/services/"
+                  target="_blank"
+                  sx={{
+                    borderColor: "#1a2744",
+                    backgroundColor: "#1a2744",
+                    color: "#ffffff",
+                    fontWeight: 600,
+                    px: 3,
+                    py: 1.2,
+                    borderRadius: "24px",
+                    textTransform: "none",
+                    "&:hover": {
+                      backgroundColor: "#2a3754",
+                      borderColor: "#2a3754",
+                    },
+                  }}
+                >
+                  Learn More
+                </Button>
               </Box>
             </Grid>
-
-            {/* Left Image Slider */}
-            <Grid item xs={12} md={6} sx={{ display: "flex" }}>
-              <Box
-                sx={{
-                  width: "100%",
-                  height: "100%",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  borderRadius: "16px",
-                  boxShadow: "0px 6px 16px rgba(0, 0, 0, 0.15)",
-                  overflow: "hidden",
-                  padding: "10px",
-                  transition: "all 0.3s ease-in-out",
-                  '&:hover': { transform: "scale(1.02)", boxShadow: "0px 10px 25px rgba(44, 56, 233, 0.5)" },
-                }}
+            <Grid item xs={12} md={6}>
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
               >
-                <Swiper modules={[Autoplay]} autoplay={{ delay: 4000 }} spaceBetween={20} slidesPerView={1} style={{ width: "100%", height: "100%" }}>
-                  <SwiperSlide>
-                    <ContentSlider />
-                  </SwiperSlide>
-                </Swiper>
-              </Box>
+                <Card
+                  sx={{
+                    backgroundColor: "#ffffff",
+                    borderRadius: "16px",
+                    boxShadow: "0 8px 32px rgba(0,0,0,0.15)",
+                    p: 0,
+                    overflow: "hidden",
+                    maxWidth: "380px",
+                    ml: { xs: 0, md: "auto" },
+                  }}
+                >
+                  <Box sx={{ p: 3, borderBottom: "1px solid #e5e7eb" }}>
+                    <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+                      <Box
+                        sx={{
+                          width: 40,
+                          height: 40,
+                          borderRadius: "50%",
+                          backgroundColor: "rgba(171, 183, 56, 0.15)",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                        }}
+                      >
+                        <MdCheckCircle size={24} color="#ABB738" />
+                      </Box>
+                      <Box>
+                        <Typography
+                          variant="body2"
+                          sx={{ color: "#666", fontSize: "13px" }}
+                        >
+                          Account Status
+                        </Typography>
+                        <Typography
+                          variant="body1"
+                          sx={{ color: "#ABB738", fontWeight: 600 }}
+                        >
+                          Active & Compliant
+                        </Typography>
+                      </Box>
+                    </Box>
+                  </Box>
+                  <Box sx={{ p: 3 }}>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        py: 1.5,
+                        borderBottom: "1px solid #f0f0f0",
+                      }}
+                    >
+                      <Typography variant="body2" sx={{ color: "#666" }}>
+                        Next Pickup
+                      </Typography>
+                      <Typography
+                        variant="body2"
+                        sx={{ color: "#1a2744", fontWeight: 600 }}
+                      >
+                        Oct 30, 2025
+                      </Typography>
+                    </Box>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        py: 1.5,
+                        borderBottom: "1px solid #f0f0f0",
+                      }}
+                    >
+                      <Typography variant="body2" sx={{ color: "#666" }}>
+                        Active Services
+                      </Typography>
+                      <Typography
+                        variant="body2"
+                        sx={{ color: "#1a2744", fontWeight: 600 }}
+                      >
+                        3 Services
+                      </Typography>
+                    </Box>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        py: 1.5,
+                      }}
+                    >
+                      <Typography variant="body2" sx={{ color: "#666" }}>
+                        Current Balance
+                      </Typography>
+                      <Typography
+                        variant="body2"
+                        sx={{ color: "#1a2744", fontWeight: 600 }}
+                      >
+                        $0.00
+                      </Typography>
+                    </Box>
+                  </Box>
+                </Card>
+              </motion.div>
             </Grid>
           </Grid>
         </Container>
+      </Box>
 
-
-        {/* Services Section with Animation */}
-        <Container sx={{ mt: 10 }}>
-          <Typography variant="h5" sx={{ mt: 4, textAlign: "center", fontWeight: "bold", color: "#003366" }}>
-            Biomedical Waste Management Services
-          </Typography>
-          <Grid container spacing={3} sx={{ mt: 3 }}>
-            {services.map((service, index) => (
-              <Grid item xs={12} sm={6} key={index}>
-                <motion.div whileHover={{ scale: 1.05 }}>
-                  <Card sx={{ textAlign: "center", boxShadow: 3, p: 3, '&:hover': { transform: "scale(1.00)", boxShadow: "5px 6px 16px rgb(44, 56, 233)", } }}>
-                    <CardActionArea component="a" href={`https://biomedwaste.com/services/`} target="_blank" rel="noopener noreferrer">
-                      {service.icon}
-                      <Typography variant="h6" sx={{ mt: 2, fontWeight: "bold", color: "#003366" }}>
-                        {service.title}
-                      </Typography>
-                    </CardActionArea>
+      {/* Medical Waste Disposal Across Canada Section */}
+      <Box
+        sx={{
+          py: { xs: 5, md: 8 },
+          background: "#ffffff",
+        }}
+      >
+        <Container maxWidth="lg">
+          <Box sx={{ textAlign: "center", mb: { xs: 4, md: 6 } }}>
+            <Typography
+              variant="h4"
+              sx={{
+                fontWeight: 700,
+                color: "#0D2477",
+                mb: 1,
+                fontSize: { xs: "1.4rem", md: "2rem" },
+                display: "inline-block",
+                position: "relative",
+                "&::after": {
+                  content: '""',
+                  position: "absolute",
+                  bottom: -6,
+                  left: 0,
+                  right: 0,
+                  height: "4px",
+                  // backgroundColor: "#D9DE38",
+                },
+              }}
+            >
+              Medical Waste Disposal Across Canada
+            </Typography>
+            <Typography
+              variant="body1"
+              sx={{
+                color: "#1A1A1A",
+                mt: 2,
+                maxWidth: 750,
+                mx: "auto",
+                px: { xs: 1, md: 0 },
+                fontSize: { xs: "0.85rem", md: "0.95rem" },
+                fontWeight: "bold"
+              }}
+            >
+              Comprehensive solutions for safe handling, disposal, and management of biomedical waste
+            </Typography>
+          </Box>
+          <Grid container spacing={{ xs: 2, md: 3 }} justifyContent="center">
+            {wasteDisposalCards.map((item, index) => (
+              <Grid item xs={6} sm={6} md={3} key={index}>
+                <motion.div whileHover={{ scale: 1.02 }}>
+                  <Card
+                    sx={{
+                      backgroundColor: "#ffffff",
+                      border: "3px solid #D9DE38",
+                      borderRadius: "20px",
+                      p: { xs: 2.5, md: 3.5 },
+                      textAlign: "center",
+                      minHeight: { xs: 150, md: 180 },
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      boxShadow: "none",
+                    }}
+                  >
+                    <Box
+                      sx={{
+                        width: 55,
+                        height: 55,
+                        borderRadius: "50%",
+                        backgroundColor: "rgba(171, 183, 56, 0.2)",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        mb: 2,
+                      }}
+                    >
+                      {item.icon}
+                    </Box>
+                    <Typography
+                      variant="body1"
+                      sx={{ color: "#1A1A1A", fontWeight: 700, lineHeight: 1.4, fontSize: { xs: "0.85rem", md: "0.95rem" } }}
+                    >
+                      {item.title}
+                    </Typography>
+                    <Typography
+                      variant="body1"
+                      sx={{ color: "#1A1A1A", fontWeight: 700, lineHeight: 1.4, fontSize: { xs: "0.85rem", md: "0.95rem" } }}
+                    >
+                      {item.subtitle}
+                    </Typography>
                   </Card>
                 </motion.div>
               </Grid>
             ))}
           </Grid>
         </Container>
+      </Box>
 
-        <Modal
-          open={formOpen}
-          onClose={handleFormClose}
-          aria-labelledby="complaint-form-title"
-          aria-describedby="complaint-form-description"
-        >
-          <form onSubmit={handleFormSubmit}>
-            <Box
-              sx={{
-                position: "absolute",
-                top: "50%",
-                left: "50%",
-                transform: "translate(-50%, -50%)",
-                width: "90%",
-                maxWidth: 500,
-                bgcolor: "background.paper",
-                boxShadow: 24,
-                p: 4,
-                borderRadius: 3,
-                outline: "none",
-              }}
-            >
-              {/* Modal Title */}
-              <Typography
-                id="complaint-form-title"
-                variant="h5"
-                component="h2"
-                sx={{
-                  mb: 3,
-                  textAlign: "center",
-                  fontWeight: "bold",
-                  color: "primary.main",
-                }}
-              >
-                File a Complaint
-              </Typography>
-              {/* Phone Input */}
-              <PhoneInput
-                label="Contact"
-                name="contactNumber"
-                defaultCountry="ca"
-                placeholder="Enter your phone number"
-                value={formData.contactNumber || ""}
-                onChange={(value) =>
-                  setFormData((prev) => ({
-                    ...prev,
-                    contactNumber: value,
-                  }))
-                }
-                style={{
-                  width: "95%",
-                  marginBottom: "16px",
-                  padding: "12px",
-                  borderRadius: "8px",
-                  border: "1px solid #ccc",
-                }}
-              />
-
-              {/* Complaint Description */}
-              <TextField
-                fullWidth
-                multiline
-                rows={4}
-                label="Description of Problem"
-                name="description"
-                variant="outlined"
-                sx={{
-                  mb: 3,
-                  "& .MuiOutlinedInput-root": {
-                    borderRadius: "8px",
-                  },
-                }}
-                value={formData.description || ""}
-                onChange={handleInputChange}
-              />
-
-              {/* File Upload */}
-              <Button
-                variant="outlined"
-                component="label"
-                fullWidth
-                sx={{
-                  mb: 3,
-                  borderRadius: "8px",
-                  borderColor: "primary.main",
-                  textTransform: "none",
-                }}
-              >
-                Upload Attachment (Optional)
-                <input hidden accept="image/*" type="file" multiple onChange={handleFileChange} />
-              </Button>
-              <Grid item xs={12}>
-                <div
-                  style={{
-                    display: "flex",
-                    gap: "10px",
-                    flexWrap: "wrap",
-                    justifyContent: "center",
-                    alignItems: "center",
-                  }}
-                >
-                  {formData.photos.map((photo, index) => (
-                    <div
-                      key={index}
-                      style={{
-                        position: "relative",
-                        display: "flex",
-                        flexDirection: "column",
-                        alignItems: "center",
-                      }}
-                    >
-                      <img
-                        src={photo.preview}
-                        alt={`Preview ${index}`}
-                        style={{
-                          width: "100px",
-                          height: "100px",
-                          objectFit: "cover",
-                          borderRadius: "8px",
-                        }}
-                      />
-                      <button
-                        onClick={() => handleRemoveImage(index)}
-                        style={{
-                          position: "absolute",
-                          top: "-5px",
-                          right: "-5px",
-                          background: "red",
-                          color: "white",
-                          border: "none",
-                          borderRadius: "50%",
-                          cursor: "pointer",
-                        }}
-                      >
-                        &times;
-                      </button>
-                    </div>
-                  ))}
-                </div>
-              </Grid>
-              {/* Action Buttons */}
-              <Box sx={{ textAlign: "center", display: "flex", gap: 2 }}>
-                <Button
-                  variant="contained"
-                  sx={{
-                    flex: 1,
-                    borderRadius: "8px",
-                    textTransform: "none",
-                    backgroundColor: "primary.main",
-                    "&:hover": { backgroundColor: "primary.dark" },
-                  }}
-                  onClick={handleFormSubmit}
-                >
-                  Submit
-                </Button>
-                <Button
-                  variant="outlined"
-                  sx={{
-                    flex: 1,
-                    borderRadius: "8px",
-                    textTransform: "none",
-                    borderColor: "grey.500",
-                  }}
-                  onClick={handleFormClose}
-                >
-                  Cancel
-                </Button>
-              </Box>
-            </Box>
-          </form>
-        </Modal>
-        <Button
-          onClick={() => navigate("/blogs")}
-          variant="outlined"
-          sx={{
-            mt: 2,
-            ml: 2,
-            color: "white",
-            borderColor: "white",
-            "&:hover": { backgroundColor: "#A9AC2B", color: "white", fontSize: "bold" },
-          }}
-        >
-          Read a blog
-        </Button>
-
-        <Box sx={{ mt: 8, py: 4, background: "rgb(4, 23, 65)", borderRadius: 2 }}>
-          <Container sx={{ mt: 6, mb: 6, textAlign: "center" }}>
-            <Typography variant="h4" sx={{ mb: 4, fontWeight: "bold", color: "#fff" }}>
-              About Us
-            </Typography>
-            <Typography variant="body1" sx={{ mb: 3, color: "#fff" }}>
-              Properly packaging waste is essential to safeguarding health, ensuring regulatory compliance, and protecting the environment.
-              This portal provides the tools and knowledge you need to adopt effective packaging practices that promote safety and sustainability.
-            </Typography>
-            <Swiper
-              modules={[Pagination, Navigation]}
-              pagination={{ clickable: true }}
-              navigation
-              spaceBetween={20}
-              slidesPerView={1}
-              breakpoints={{
-                768: { slidesPerView: 2 },
-                1024: { slidesPerView: 3 },
-              }}
-            >
-              {slides.map((item, index) => (
-                <SwiperSlide key={index}>
-                  <Card sx={{ textAlign: "center", cursor: "pointer", boxShadow: 3, p: 2, borderRadius: 20, '&:hover': { transform: "scale(1.00)", boxShadow: "5px 6px 16px rgb(44, 56, 233)", } }}>
-                    <CardContent>
-                      <Typography variant="h6" sx={{ fontWeight: "bold", color: "#003366" }}>
-                        {item.title}
-                      </Typography>
-                      <Typography variant="body2" sx={{ mt: 3, color: "#003366" }}>
-                        {item.description}
-                      </Typography>
-                    </CardContent>
-                  </Card>
-                </SwiperSlide>
-              ))}
-            </Swiper>
-
-            <div className="swiper-pagination">
-
-              <style>
-                {`
-    .swiper-pagination {
-      position: absolute;
-      bottom: -30px; /* Adjust to move dots lower */
-      left: 50%;
-      transform: translateX(-50%);
-    }
-    .swiper-pagination-bullet {
-      width: 20px;
-      height: 20px;
-      left: 577px;
-      position: relative;
-      background-color: #fff;
-    }
-    .swiper-pagination-bullet-active {
-      background-color: #fff;
-      transform: scale(1.3);
-    }
-    .swiper-button-prev, .swiper-button-next {
-      color: #fff;
-      width: 40px;
-      height: 40px;
-    }
-    .swiper-button-prev {
-      left: -50px;
-    }
-    .swiper-button-next {
-      right: -50px;
-    }
-  `}
-              </style></div>
-          </Container>
-        </Box>
-        <Container sx={{ mt: 8, textAlign: "center" }}>
+      {/* About Us Section */}
+      <Box sx={{ py: { xs: 5, md: 8 }, backgroundColor: "#f8f9fa" }}>
+        <Container maxWidth="lg">
           <Typography
             variant="h4"
             sx={{
-              mb: 10,
               textAlign: "center",
-              fontWeight: "bold",
-              color: "#003366",
+              fontWeight: 700,
+              color: "#1a2744",
+              mb: 2,
+              fontSize: { xs: "1.5rem", md: "2.125rem" },
+            }}
+          >
+            About Us
+          </Typography>
+          <Typography
+            variant="body1"
+            sx={{
+              textAlign: "center",
+              color: "#666",
+              mb: { xs: 4, md: 6 },
+              maxWidth: 800,
+              mx: "auto",
+              px: { xs: 2, md: 0 },
+              fontSize: { xs: "0.9rem", md: "1rem" },
+            }}
+          >
+            Biomed serves as a leader in biomedical waste management solutions. Our key healthcare facilities and medical practices across Canada trust us for safe, compliant and environmentally responsible disposal of biomedical waste, including sharps, pharmaceuticals, anatomical, and cytotoxic waste.
+          </Typography>
+          <Grid container spacing={4} justifyContent="center">
+            <Grid item xs={12} sm={6} md={3}>
+              <motion.div whileHover={{ scale: 1.05 }}>
+                <Card
+                  sx={{
+                    textAlign: "center",
+                    p: 3,
+                    borderRadius: "12px",
+                    boxShadow: "0 4px 20px rgba(0,0,0,0.08)",
+                    height: "100%",
+                  }}
+                >
+                  <FaShieldAlt size={40} color="#ABB738" />
+                  <Typography
+                    variant="h6"
+                    sx={{ mt: 2, fontWeight: 600, color: "#1a2744" }}
+                  >
+                    Legal Compliance
+                  </Typography>
+                  <Typography variant="body2" sx={{ mt: 1, color: "#666" }}>
+                    Ensuring full regulatory compliance with Canadian healthcare waste disposal laws.
+                  </Typography>
+                </Card>
+              </motion.div>
+            </Grid>
+            <Grid item xs={12} sm={6} md={3}>
+              <motion.div whileHover={{ scale: 1.05 }}>
+                <Card
+                  sx={{
+                    textAlign: "center",
+                    p: 3,
+                    borderRadius: "12px",
+                    boxShadow: "0 4px 20px rgba(0,0,0,0.08)",
+                    height: "100%",
+                  }}
+                >
+                  <FaHandshake size={40} color="#ABB738" />
+                  <Typography
+                    variant="h6"
+                    sx={{ mt: 2, fontWeight: 600, color: "#1a2744" }}
+                  >
+                    Public Trust
+                  </Typography>
+                  <Typography variant="body2" sx={{ mt: 1, color: "#666" }}>
+                    Building confidence through transparent and ethical waste management practices.
+                  </Typography>
+                </Card>
+              </motion.div>
+            </Grid>
+          </Grid>
+        </Container>
+      </Box>
+
+      {/* Services We Offer Section */}
+      <Box sx={{ py: { xs: 5, md: 8 }, backgroundColor: "#ffffff" }}>
+        <Container maxWidth="lg">
+          <Typography
+            variant="h4"
+            sx={{
+              textAlign: "center",
+              fontWeight: 700,
+              color: "#1a2744",
+              mb: 2,
+              fontSize: { xs: "1.5rem", md: "2.125rem" },
             }}
           >
             Services We Offer
           </Typography>
-          <Grid container spacing={4} >
-            {/* Services Section */}
-
-            <Grid container spacing={4}>
-              {[
-                {
-                  title: "Biomedical Waste Disposal",
-                  description: "We process all types of biohazardous waste, ensuring safe and compliant disposal.",
-                  icon: <FaRecycle size={40} color="#003366" />,
-                  link: "https://www.biomedwaste.com/",
-                },
-                {
-                  title: "Sharps Container Management",
-                  description: "Comprehensive management solutions for sharps containers in medical facilities.",
-                  icon: <FaSyringe size={40} color="#003366" />,
-                  link: "https://biomedwaste.com/services/secure-a-sharp-service-program/",
-                },
-                {
-                  title: "Pharmaceutical Waste Recovery",
-                  description: "Specialized recovery and disposal of expired or unused pharmaceuticals.",
-                  icon: <FaHospital size={40} color="#003366" />,
-                  link: "https://biomedwaste.com/product-category/recovery/",
-                },
-                {
-                  title: "Customizable Pickup Schedules",
-                  description: "Flexible scheduling to suit your waste collection needs. For booking a pickup, fill out a short form from our website.",
-                  icon: <FaTruck size={40} color="#003366" />,
-                  link: "https://biomedwaste.com/book-a-pickup/",
-                },
-                {
-                  title: "Compliance and Reporting Assistance",
-                  description: "Expert support in meeting regulatory compliance and reporting requirements.",
-                  icon: <FaClipboardCheck size={40} color="#003366" />,
-                  link: "https://biomedwaste.com/contact/",
-                },
-                {
-                  title: "Secure-A-Sharp® Service Program",
-                  description: "The Secure-A-Sharp® line of sharps containers, secure needle boxes and accessories are designed to reduce the risk of needle stick injuries in public and private spaces.",
-                  icon: <FaSyringe size={40} color="#003366" />,
-                  link: "https://biomedwaste.com/services/secure-a-sharp-service-program/",
-                },
-                {
-                  title: "Cytotoxic Waste Disposal",
-                  description: "Safe and efficient handling of cytotoxic and hazardous medical waste.",
-                  icon: <GiNuclearWaste size={40} color="#003366" />,
-                  link: "https://www.biomedwaste.com/",
-                },
-                {
-                  title: "Anatomical Waste Disposal",
-                  description: "Ethical and secure disposal of anatomical waste with utmost care.",
-                  icon: <FaPrescriptionBottleMedical size={40} color="#003366" />,
-                  link: "https://biomedwaste.com/product-category/recovery/",
-                },
-                {
-                  title: "Terra™ Program",
-                  description: "Simple, cost-effective sharps management for clinical settings, prioritizing sustainability.",
-                  icon: <FaRecycle size={40} color="#003366" />,
-                  link: "https://biomedwaste.com/product-category/terra/",
-                },
-              ].map((item, index) => (
-                <Grid item xs={12} md={4} key={index}>
-                  <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} style={{ height: "100%" }}>
-                    <a href={item.link} target="_blank" rel="noopener noreferrer" style={{ textDecoration: "none" }}>
-                      <Card sx={{ textAlign: "center", boxShadow: 3, borderRadius: 2, overflow: "hidden", cursor: "pointer", '&:hover': { transform: "scale(1.00)", boxShadow: "5px 6px 16px rgb(44, 56, 233)", } }}>
-                        <CardContent>
-                          <div style={{ marginBottom: "16px" }}>{item.icon}</div>
-                          <Typography variant="h6" sx={{ fontWeight: "bold", color: "#003366" }}>
-                            {item.title}
-                          </Typography>
-                          <Typography variant="body2" sx={{ mt: 2, color: "#555" }}>
-                            {item.description}
-                          </Typography>
-                        </CardContent>
-                      </Card>
-                    </a>
-                  </motion.div>
-                </Grid>
-              ))}
-            </Grid>
-            {/* Animated Image Section */}
-          </Grid>
-        </Container>
-
-      </Box>
-      {/* Proper Waste Packaging Section */}
-      <Box sx={{ mt: 8, py: 4, background: "rgb(172, 214, 72)", borderRadius: 2 }}>
-        <Container sx={{ mt: 6, mb: 6 }}>
-          <Typography variant="h4" sx={{ mb: 4, textAlign: "center", fontWeight: "bold", color: "#092d74" }}>
-            The Critical Role of Proper Waste Packaging
-          </Typography>
-          <Typography variant="body1" sx={{ textAlign: "center", mb: 4, color: "#092d74" }}>
-            Properly packaging waste is essential to safeguarding health, ensuring regulatory compliance, and protecting the environment.
-            This portal provides the tools and knowledge you need to adopt effective packaging practices that promote safety and sustainability.
-          </Typography>
-          <Swiper
-            modules={[Pagination, Navigation]}
-            pagination={{ clickable: true }}
-            navigation
-            spaceBetween={20}
-            slidesPerView={1}
-            breakpoints={{
-              768: { slidesPerView: 2 },
-              1024: { slidesPerView: 3 },
+          <Typography
+            variant="body1"
+            sx={{
+              textAlign: "center",
+              color: "#666",
+              mb: { xs: 4, md: 6 },
+              maxWidth: 600,
+              mx: "auto",
+              px: { xs: 2, md: 0 },
             }}
           >
-            {criticalRoleSlides.map((item, index) => (
+            Comprehensive biomedical waste management solutions for your facility
+          </Typography>
+          <Grid container spacing={3}>
+            {servicesData.map((service, index) => (
+              <Grid item xs={12} sm={6} md={4} key={index}>
+                <motion.div whileHover={{ scale: 1.03 }} style={{ height: "100%" }}>
+                  <Card
+                    component="a"
+                    href={service.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    sx={{
+                      textDecoration: "none",
+                      display: "block",
+                      height: "100%",
+                      p: 3,
+                      borderRadius: "12px",
+                      boxShadow: "0 4px 20px rgba(0,0,0,0.08)",
+                      transition: "all 0.3s ease",
+                      "&:hover": {
+                        boxShadow: "0 8px 30px rgba(26,39,68,0.15)",
+                      },
+                    }}
+                  >
+                    <Box sx={{ display: "flex", alignItems: "flex-start", gap: 2 }}>
+                      <Box
+                        sx={{
+                          minWidth: 60,
+                          height: 60,
+                          borderRadius: "12px",
+                          backgroundColor: "#f0f4f8",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                        }}
+                      >
+                        {service.icon}
+                      </Box>
+                      <Box>
+                        <Typography
+                          variant="h6"
+                          sx={{ fontWeight: 600, color: "#1a2744", mb: 1 }}
+                        >
+                          {service.title}
+                        </Typography>
+                        <Typography variant="body2" sx={{ color: "#666" }}>
+                          {service.description}
+                        </Typography>
+                      </Box>
+                    </Box>
+                  </Card>
+                </motion.div>
+              </Grid>
+            ))}
+          </Grid>
+        </Container>
+      </Box>
+
+      {/* Critical Role of Proper Waste Packaging Section */}
+      <Box sx={{ py: { xs: 5, md: 8 }, backgroundColor: "#D9DE38" }}>
+        <Container maxWidth="lg">
+          <Typography
+            variant="h4"
+            sx={{
+              textAlign: "center",
+              fontWeight: 700,
+              color: "#1a2744",
+              mb: 2,
+              fontSize: { xs: "1.3rem", md: "2.125rem" },
+              px: { xs: 2, md: 0 },
+            }}
+          >
+            The Critical Role of Proper Waste Packaging
+          </Typography>
+          <Typography
+            variant="body1"
+            sx={{
+              textAlign: "center",
+              color: "#1a2744",
+              mb: { xs: 4, md: 6 },
+              maxWidth: 700,
+              mx: "auto",
+              opacity: 0.9,
+              px: { xs: 2, md: 0 },
+            }}
+          >
+            Properly packaging waste is essential to safeguarding health, ensuring regulatory compliance, and protecting the environment.
+          </Typography>
+          <Grid container spacing={3}>
+            {criticalRoleItems.map((item, index) => (
+              <Grid item xs={12} sm={6} key={index}>
+                <motion.div whileHover={{ x: 5 }}>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      alignItems: "flex-start",
+                      gap: 2,
+                      p: 2,
+                      backgroundColor: "rgba(255,255,255,0.3)",
+                      borderRadius: "12px",
+                    }}
+                  >
+                    <Box
+                      sx={{
+                        minWidth: 40,
+                        height: 40,
+                        borderRadius: "50%",
+                        backgroundColor: "#1a2744",
+                        color: "#ffffff",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        fontWeight: 700,
+                      }}
+                    >
+                      {item.number}
+                    </Box>
+                    <Box>
+                      <Typography
+                        variant="h6"
+                        sx={{ fontWeight: 600, color: "#1a2744", mb: 0.5 }}
+                      >
+                        {item.title}
+                      </Typography>
+                      <Typography variant="body2" sx={{ color: "#1a2744", opacity: 0.8 }}>
+                        {item.description}
+                      </Typography>
+                    </Box>
+                  </Box>
+                </motion.div>
+              </Grid>
+            ))}
+          </Grid>
+        </Container>
+      </Box>
+
+      {/* Trusted by Industry Leaders Section */}
+      <Box sx={{ py: { xs: 5, md: 8 }, backgroundColor: "#ffffff" }}>
+        <Container maxWidth="lg">
+          <Typography
+            variant="h4"
+            sx={{
+              textAlign: "center",
+              fontWeight: 700,
+              color: "#1a2744",
+              mb: { xs: 4, md: 6 },
+              fontSize: { xs: "1.5rem", md: "2.125rem" },
+            }}
+          >
+            Trusted by Industry Leaders
+          </Typography>
+          <Swiper
+            modules={[Autoplay, Navigation]}
+            autoplay={{ delay: 3000, disableOnInteraction: false }}
+            navigation
+            spaceBetween={30}
+            slidesPerView={1}
+            breakpoints={{
+              640: { slidesPerView: 2 },
+              768: { slidesPerView: 3 },
+              1024: { slidesPerView: 4 },
+            }}
+            style={{ paddingBottom: "40px" }}
+          >
+            {partnerLogos.map((partner, index) => (
               <SwiperSlide key={index}>
-                <Card sx={{ textAlign: "center", boxShadow: 3, p: 2, borderRadius: 20, '&:hover': { transform: "scale(1.00)", boxShadow: "5px 6px 16px rgb(59, 143, 4)", } }}>
-                  <CardContent>
-                    <Typography variant="h6" sx={{ fontWeight: "bold", color: "#003366" }}>
-                      {item.title}
-                    </Typography>
-                    <Typography variant="body2" sx={{ mt: 3, color: "#003366" }}>
-                      {item.description}
-                    </Typography>
-                  </CardContent>
-                </Card>
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    height: 100,
+                    backgroundColor: "#f8f9fa",
+                    borderRadius: "12px",
+                    p: 2,
+                  }}
+                >
+                  <Typography
+                    variant="body1"
+                    sx={{ color: "#666", fontWeight: 500 }}
+                  >
+                    {partner.name}
+                  </Typography>
+                </Box>
               </SwiperSlide>
             ))}
           </Swiper>
-
-          <div className="swiper-pagination-second">
-
-            <style>
-              {`
-    .swiper-pagination {
-      position: absolute;
-    }
-    .swiper-pagination-bullet {
-      width: 20px;
-      height: 20px;
-      left: 577px;
-      position: relative;
-      background-color: #306be3;
-    }
-    .swiper-pagination-bullet-active {
-      background-color: #306be3;
-      transform: scale(1.3);
-    }
-    .swiper-button-prev, .swiper-button-next {
-      color: #306be3;
-      width: 40px;
-      height: 40px;
-    }
-    .swiper-button-prev {
-      left: -50px !important;
-    }
-    .swiper-button-next {
-      right: -50px;
-    }
-  `}
-            </style></div>
         </Container>
       </Box>
 
-      {/* Testimonials Section */}
-      <Container sx={{ mt: 6, mb: 6 }}>
-        <Typography variant="h4" sx={{ mb: 4, textAlign: "center", fontWeight: "bold", color: "#003366" }}>
-          Trusted by Industry Leaders
-        </Typography>
-        <FeedbackSlider />
-      </Container>
-      <CallToAction />
       {/* Footer */}
-      <Box sx={{ backgroundColor: "#333", color: "#fff", textAlign: "center", py: 4 }}>
-        <Typography variant="body2">
-          © 2025 Biomed Waste Recovery and Disposal Ltd. All rights reserved.
-        </Typography>
+      <Box sx={{ backgroundColor: "#1a2744", py: { xs: 4, md: 6 } }}>
+        <Container maxWidth="lg">
+          <Grid container spacing={{ xs: 3, md: 4 }}>
+            <Grid item xs={12} sm={6} md={4}>
+              <Typography
+                variant="h6"
+                sx={{ color: "#ffffff", fontWeight: 700, mb: 2, fontSize: { xs: "1rem", md: "1.25rem" } }}
+              >
+                Biomed Recovery & Disposal Ltd.
+              </Typography>
+              <Typography variant="body2" sx={{ color: "rgba(255,255,255,0.7)", mb: 2 }}>
+                Western Canada's trusted leader in biomedical waste management since 1992.
+              </Typography>
+            </Grid>
+            <Grid item xs={6} sm={6} md={4}>
+              <Typography
+                variant="h6"
+                sx={{ color: "#ffffff", fontWeight: 600, mb: 2, fontSize: { xs: "1rem", md: "1.25rem" } }}
+              >
+                Quick Links
+              </Typography>
+              <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
+                <Link href="https://biomedwaste.com/about/" target="_blank" sx={{ color: "rgba(255,255,255,0.7)", textDecoration: "none", "&:hover": { color: "#D9DE38" }, fontSize: { xs: "0.85rem", md: "0.875rem" } }}>
+                  About Us
+                </Link>
+                <Link href="https://biomedwaste.com/services/" target="_blank" sx={{ color: "rgba(255,255,255,0.7)", textDecoration: "none", "&:hover": { color: "#D9DE38" }, fontSize: { xs: "0.85rem", md: "0.875rem" } }}>
+                  Services
+                </Link>
+                <Link href="https://biomedwaste.com/contact/" target="_blank" sx={{ color: "rgba(255,255,255,0.7)", textDecoration: "none", "&:hover": { color: "#D9DE38" }, fontSize: { xs: "0.85rem", md: "0.875rem" } }}>
+                  Contact
+                </Link>
+              </Box>
+            </Grid>
+            <Grid item xs={6} sm={12} md={4}>
+              <Typography
+                variant="h6"
+                sx={{ color: "#ffffff", fontWeight: 600, mb: 2, fontSize: { xs: "1rem", md: "1.25rem" } }}
+              >
+                Contact Us
+              </Typography>
+              <Typography variant="body2" sx={{ color: "rgba(255,255,255,0.7)", mb: 1, fontSize: { xs: "0.8rem", md: "0.875rem" } }}>
+                Saskatchewan, Canada
+              </Typography>
+              <Typography variant="body2" sx={{ color: "rgba(255,255,255,0.7)", mb: 1, fontSize: { xs: "0.8rem", md: "0.875rem" } }}>
+                Phone: 1-800-361-5865
+              </Typography>
+              <Typography variant="body2" sx={{ color: "rgba(255,255,255,0.7)", fontSize: { xs: "0.8rem", md: "0.875rem" } }}>
+                Email: info@biomedwaste.com
+              </Typography>
+            </Grid>
+          </Grid>
+          <Box
+            sx={{
+              borderTop: "1px solid rgba(255,255,255,0.1)",
+              mt: 4,
+              pt: 4,
+              textAlign: "center",
+            }}
+          >
+            <Typography variant="body2" sx={{ color: "rgba(255,255,255,0.5)" }}>
+              © 2025 Biomed Recovery and Disposal Ltd. All rights reserved.
+            </Typography>
+          </Box>
+        </Container>
       </Box>
+
+      {/* Complaint Modal */}
+      <Modal
+        open={formOpen}
+        onClose={handleFormClose}
+        aria-labelledby="complaint-form-title"
+        aria-describedby="complaint-form-description"
+      >
+        <form onSubmit={handleFormSubmit}>
+          <Box
+            sx={{
+              position: "absolute",
+              top: "50%",
+              left: "50%",
+              transform: "translate(-50%, -50%)",
+              width: "90%",
+              maxWidth: 500,
+              bgcolor: "background.paper",
+              boxShadow: 24,
+              p: 4,
+              borderRadius: 3,
+              outline: "none",
+            }}
+          >
+            <Typography
+              id="complaint-form-title"
+              variant="h5"
+              component="h2"
+              sx={{
+                mb: 3,
+                textAlign: "center",
+                fontWeight: "bold",
+                color: "#1a2744",
+              }}
+            >
+              File a Complaint
+            </Typography>
+            {error && (
+              <Alert severity="error" sx={{ mb: 2 }}>
+                {error}
+              </Alert>
+            )}
+            <PhoneInput
+              label="Contact"
+              name="contactNumber"
+              defaultCountry="ca"
+              placeholder="Enter your phone number"
+              value={formData.contactNumber || ""}
+              onChange={(value) =>
+                setFormData((prev) => ({
+                  ...prev,
+                  contactNumber: value,
+                }))
+              }
+              style={{
+                width: "95%",
+                marginBottom: "16px",
+                padding: "12px",
+                borderRadius: "8px",
+                border: "1px solid #ccc",
+              }}
+            />
+            <TextField
+              fullWidth
+              multiline
+              rows={4}
+              label="Description of Problem"
+              name="description"
+              variant="outlined"
+              sx={{
+                mb: 3,
+                "& .MuiOutlinedInput-root": {
+                  borderRadius: "8px",
+                },
+              }}
+              value={formData.description || ""}
+              onChange={handleInputChange}
+            />
+            <Button
+              variant="outlined"
+              component="label"
+              fullWidth
+              sx={{
+                mb: 3,
+                borderRadius: "8px",
+                borderColor: "#1a2744",
+                color: "#1a2744",
+                textTransform: "none",
+              }}
+            >
+              Upload Attachment (Optional)
+              <input hidden accept="image/*" type="file" multiple onChange={handleFileChange} />
+            </Button>
+            <Grid item xs={12}>
+              <div
+                style={{
+                  display: "flex",
+                  gap: "10px",
+                  flexWrap: "wrap",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                {formData.photos.map((photo, index) => (
+                  <div
+                    key={index}
+                    style={{
+                      position: "relative",
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "center",
+                    }}
+                  >
+                    <img
+                      src={photo.preview}
+                      alt={`Preview ${index}`}
+                      style={{
+                        width: "100px",
+                        height: "100px",
+                        objectFit: "cover",
+                        borderRadius: "8px",
+                      }}
+                    />
+                    <button
+                      onClick={() => handleRemoveImage(index)}
+                      style={{
+                        position: "absolute",
+                        top: "-5px",
+                        right: "-5px",
+                        background: "red",
+                        color: "white",
+                        border: "none",
+                        borderRadius: "50%",
+                        cursor: "pointer",
+                      }}
+                    >
+                      &times;
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </Grid>
+            <Box sx={{ textAlign: "center", display: "flex", gap: 2 }}>
+              <Button
+                variant="contained"
+                sx={{
+                  flex: 1,
+                  borderRadius: "8px",
+                  textTransform: "none",
+                  backgroundColor: "#D9DE38",
+                  color: "#1a2744",
+                  fontWeight: 600,
+                  "&:hover": { backgroundColor: "#c5ca32" },
+                }}
+                onClick={handleFormSubmit}
+                disabled={isSubmitting}
+              >
+                {isSubmitting ? <CircularProgress size={24} /> : "Submit"}
+              </Button>
+              <Button
+                variant="outlined"
+                sx={{
+                  flex: 1,
+                  borderRadius: "8px",
+                  textTransform: "none",
+                  borderColor: "#1a2744",
+                  color: "#1a2744",
+                }}
+                onClick={handleFormClose}
+              >
+                Cancel
+              </Button>
+            </Box>
+          </Box>
+        </form>
+      </Modal>
+
       {/* Snackbar for Feedback */}
       <Snackbar
         open={snackbar.open}
@@ -948,7 +1140,7 @@ function Dashboard() {
           {snackbar.message}
         </Alert>
       </Snackbar>
-    </Box >
+    </Box>
   );
 }
 

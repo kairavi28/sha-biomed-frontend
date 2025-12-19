@@ -1,5 +1,5 @@
 import React from "react";
-import ReactDOM from "react-dom";
+import { createRoot } from "react-dom/client";
 import { PublicClientApplication } from "@azure/msal-browser";
 import { MsalProvider } from "@azure/msal-react";
 import { BrowserRouter } from "react-router-dom";
@@ -20,16 +20,17 @@ const msalConfig = {
 };
 
 const msalInstance = new PublicClientApplication(msalConfig);
+const container = document.getElementById("root");
+const root = createRoot(container);
 
 // Initialize before rendering
 msalInstance.initialize().then(() => {
-  ReactDOM.render(
+  root.render(
     <MsalProvider instance={msalInstance}>
       <BrowserRouter>
-      <ScrollToTop />
-      <App />
+        <ScrollToTop />
+        <App />
       </BrowserRouter>
-    </MsalProvider>,
-    document.getElementById("root")
+    </MsalProvider>
   );
 });
