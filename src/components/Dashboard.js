@@ -85,11 +85,11 @@ const servicesData = [
 ];
 
 const criticalRoleItems = [
-  { number: "1", title: "Regulatory Compliance", description: "Following guidelines ensures safety, ethical responsibility, and legal compliance." },
-  { number: "2", title: "Environmental Responsibility", description: "Safe disposal prevents harm to nature, protecting soil, water, and wildlife." },
-  { number: "3", title: "Protection of Healthcare Workers", description: "Proper packaging prevents exposure, ensuring safety and accountability." },
-  { number: "4", title: "Preventing Disease Transmission", description: "Secure waste packaging stops infections, protecting workers and communities." },
-  { number: "5", title: "Protecting Human Dignity", description: "Ethical handling of anatomical waste respects patients and families." },
+  { title: "Environmental Responsibility", description: "Safe disposal protects harm to nature, promoting eco-friendly solutions." },
+  { title: "Regulatory Compliance", description: "Following guidelines ensures safety, ethical responsibility, and legal compliance." },
+  { title: "Community Well-Being", description: "Safe waste handling builds trust, protects lives, and upholds dignity." },
+  { title: "Protection of Healthcare Workers", description: "Proper packaging reduces exposure, ensuring safety and accountability." },
+  { title: "Preventing Disease Transmission", description: "Secure waste packaging stops infectious, protecting workers and communities." },
 ];
 
 const partnerLogos = [
@@ -866,16 +866,16 @@ function Dashboard() {
       </Box>
 
       {/* Critical Role of Proper Waste Packaging Section */}
-      <Box sx={{ py: { xs: 5, md: 8 }, backgroundColor: "#D9DE38" }}>
+      <Box sx={{ py: { xs: 5, md: 8 }, backgroundColor: "#EAED97" }}>
         <Container maxWidth="xl" sx={{ px: { xs: 2, md: 6 } }}>
           <Typography
             variant="h4"
             sx={{
               textAlign: "center",
               fontWeight: 700,
-              color: "#1a2744",
+              color: "#0D2477",
               mb: 2,
-              fontSize: { xs: "1.3rem", md: "2.125rem" },
+              fontSize: { xs: "1.5rem", md: "2.25rem" },
               px: { xs: 2, md: 0 },
             }}
           >
@@ -886,60 +886,65 @@ function Dashboard() {
             sx={{
               textAlign: "center",
               color: "#1a2744",
-              mb: { xs: 4, md: 6 },
+              mb: { xs: 4, md: 5 },
               maxWidth: 700,
               mx: "auto",
-              opacity: 0.9,
+              fontSize: { xs: "0.9rem", md: "1rem" },
               px: { xs: 2, md: 0 },
             }}
           >
-            Properly packaging waste is essential to safeguarding health, ensuring regulatory compliance, and protecting the environment.
+            Ensuring safe, compliant, and responsible disposal of medical waste through proper packaging practices
           </Typography>
-          <Grid container spacing={3}>
+          <Box sx={{ display: "flex", flexDirection: "column", gap: 2, maxWidth: 800, mx: "auto" }}>
             {criticalRoleItems.map((item, index) => (
-              <Grid item xs={12} sm={6} key={index}>
-                <motion.div whileHover={{ x: 5 }}>
+              <motion.div key={index} whileHover={{ x: 5 }}>
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "flex-start",
+                    gap: 2,
+                    p: { xs: 2.5, md: 3 },
+                    backgroundColor: "#ffffff",
+                    borderRadius: "12px",
+                    boxShadow: "0 2px 8px rgba(0,0,0,0.04)",
+                  }}
+                >
                   <Box
                     sx={{
+                      minWidth: 24,
+                      height: 24,
                       display: "flex",
-                      alignItems: "flex-start",
-                      gap: 2,
-                      p: 2,
-                      backgroundColor: "rgba(255,255,255,0.3)",
-                      borderRadius: "12px",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      mt: 0.5,
                     }}
                   >
                     <Box
+                      component="span"
                       sx={{
-                        minWidth: 40,
-                        height: 40,
-                        borderRadius: "50%",
-                        backgroundColor: "#1a2744",
-                        color: "#ffffff",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        fontWeight: 700,
+                        width: 0,
+                        height: 0,
+                        borderTop: "8px solid transparent",
+                        borderBottom: "8px solid transparent",
+                        borderLeft: "12px solid #ABB738",
                       }}
-                    >
-                      {item.number}
-                    </Box>
-                    <Box>
-                      <Typography
-                        variant="h6"
-                        sx={{ fontWeight: 600, color: "#1a2744", mb: 0.5 }}
-                      >
-                        {item.title}
-                      </Typography>
-                      <Typography variant="body2" sx={{ color: "#1a2744", opacity: 0.8 }}>
-                        {item.description}
-                      </Typography>
-                    </Box>
+                    />
                   </Box>
-                </motion.div>
-              </Grid>
+                  <Box>
+                    <Typography
+                      variant="h6"
+                      sx={{ fontWeight: 600, color: "#0D2477", mb: 0.5, fontSize: { xs: "1rem", md: "1.1rem" } }}
+                    >
+                      {item.title}
+                    </Typography>
+                    <Typography variant="body2" sx={{ color: "#666", fontSize: { xs: "0.85rem", md: "0.9rem" } }}>
+                      {item.description}
+                    </Typography>
+                  </Box>
+                </Box>
+              </motion.div>
             ))}
-          </Grid>
+          </Box>
         </Container>
       </Box>
 
