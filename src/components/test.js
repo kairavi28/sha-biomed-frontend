@@ -15,8 +15,7 @@ import {
   Alert,
 } from "@mui/material";
 import { motion } from "framer-motion";
-import { FaRecycle, FaSyringe, FaPills, FaTruck, FaShieldAlt, FaLeaf, FaHandshake, FaBoxOpen } from "react-icons/fa";
-import { GiNuclearWaste } from "react-icons/gi";
+import { FaRecycle, FaTruck, FaLeaf, FaBoxOpen } from "react-icons/fa";
 import { MdLocalHospital, MdScience, MdCheckCircle, MdWaterDrop, MdVerifiedUser } from "react-icons/md";
 import axios from "axios";
 import { FaPrescriptionBottleMedical } from "react-icons/fa6";
@@ -30,10 +29,10 @@ import { Navigation, Autoplay } from "swiper/modules";
 const API_BASE_URL = process.env.REACT_APP_API_URL || "https://biomedwaste.net/api";
 
 const wasteDisposalCards = [
-  { title: "Biomedical", subtitle: "Waste Disposal", icon: <FaRecycle size={36} color="#D9DE38" /> },
-  { title: "Container", subtitle: "Waste Disposal", icon: <MdWaterDrop size={36} color="#D9DE38" /> },
-  { title: "Anatomical", subtitle: "Waste Disposal", icon: <MdVerifiedUser size={36} color="#D9DE38" /> },
-  { title: "Pharmaceutical", subtitle: "Waste Services", icon: <FaBoxOpen size={36} color="#D9DE38" /> },
+  { title: "Biomedical", subtitle: "Waste Disposal", icon: <FaRecycle size={36} color="#ABB738" /> },
+  { title: "Container", subtitle: "Waste Disposal", icon: <MdWaterDrop size={36} color="#ABB738" /> },
+  { title: "Anatomical", subtitle: "Waste Disposal", icon: <MdVerifiedUser size={36} color="#ABB738" /> },
+  { title: "Pharmaceutical", subtitle: "Waste Services", icon: <FaBoxOpen size={36} color="#ABB738" /> },
 ];
 
 const servicesData = [
@@ -291,7 +290,7 @@ function Dashboard() {
           backgroundSize: "cover",
           backgroundPosition: "center",
           mt: { xs: "100px", md: "110px" },
-          py: { xs: 10, md: 12 },
+          py: { xs: 6, md: 8 },
           px: { xs: 2, md: 4 },
           "&::before": {
             content: '""',
@@ -359,7 +358,7 @@ function Dashboard() {
                     borderRadius: "24px",
                     textTransform: "none",
                     "&:hover": {
-                      backgroundColor: "#D9DE38",
+                      backgroundColor: "#c5ca32",
                     },
                   }}
                 >
@@ -499,9 +498,9 @@ function Dashboard() {
       </Box>
 
       {/* Medical Waste Disposal Across Canada Section */}
-      <Box
-        sx={{
-          py: { xs: 5, md: 8 },
+      <Box 
+        sx={{ 
+          py: { xs: 5, md: 8 }, 
           background: "#ffffff",
         }}
       >
@@ -516,12 +515,7 @@ function Dashboard() {
                 fontSize: { xs: "1.4rem", md: "2rem" },
                 display: "inline-block",
                 position: "relative",
-                "&::after": {
-                  content: '""',
-                  position: "absolute",
-                  height: "4px",
-                  // backgroundColor: "#D9DE38",
-                },
+                fontStyle: "italic",
               }}
             >
               Medical Waste Disposal Across Canada
@@ -529,16 +523,15 @@ function Dashboard() {
             <Typography
               variant="body1"
               sx={{
-                color: "#1A1A1A",
-                mt: 2,
-                maxWidth: 750,
+                color: "#666666",
+                mt: 4,
+                maxWidth: 550,
                 mx: "auto",
-                px: { xs: 1, md: 0 },
-                fontSize:  { xs: "0.9rem", md: "1.0rem" },
-                fontWeight: "bold"
+                px: { xs: 2, md: 0 },
+                fontSize: { xs: "0.85rem", md: "0.95rem" },
               }}
             >
-              Comprehensive solutions for safe handling, disposal, and management of biomedical waste
+              Comprehensive and safe biomedical handling, disposal, and management of biomedical waste
             </Typography>
           </Box>
           <Grid container spacing={{ xs: 2, md: 3 }} justifyContent="center">
@@ -576,13 +569,13 @@ function Dashboard() {
                     </Box>
                     <Typography
                       variant="body1"
-                      sx={{ color: "#1A1A1A", fontWeight: 700, lineHeight: 1.4, fontSize: { xs: "0.9rem", md: "1.0rem" } }}
+                      sx={{ color: "#1a2744", fontWeight: 700, lineHeight: 1.2, fontSize: { xs: "0.9rem", md: "1rem" } }}
                     >
                       {item.title}
                     </Typography>
                     <Typography
-                      variant="body1"
-                      sx={{ color: "#1A1A1A", fontWeight: 700, lineHeight: 1.4, fontSize: { xs: "0.9rem", md: "1.0rem" } }}
+                      variant="body2"
+                      sx={{ color: "#1a2744", fontWeight: 500, fontSize: { xs: "0.85rem", md: "0.9rem" } }}
                     >
                       {item.subtitle}
                     </Typography>
@@ -595,26 +588,19 @@ function Dashboard() {
       </Box>
 
       {/* About Us Section */}
-      <Box sx={{ py: { xs: 10, md: 12 }, backgroundColor: "#f8f9fa" }}>
+      <Box sx={{ py: { xs: 5, md: 8 }, backgroundColor: "#f8f9fa" }}>
         <Container maxWidth="xl" sx={{ px: { xs: 2, md: 6 } }}>
-          <Box sx={{ textAlign: "center", mb: 3 }}>
+          <Box sx={{ textAlign: "center", mb: 2 }}>
             <Typography
               variant="h4"
               sx={{
                 fontWeight: 700,
                 color: "#0D2477",
+                mb: 1,
                 fontSize: { xs: "1.5rem", md: "2.125rem" },
                 display: "inline-block",
                 position: "relative",
-                "&::after": {
-                  content: '""',
-                  position: "absolute",
-                  bottom: -8,
-                  left: "50%",
-                  transform: "translateX(-50%)",
-                  width: "60px",
-                  color: "#0D2477",
-                },
+                fontStyle: "italic",
               }}
             >
               About Us
@@ -624,18 +610,19 @@ function Dashboard() {
             variant="body1"
             sx={{
               textAlign: "center",
-              color: "#1A1A1A",
+              color: "#666",
               mb: { xs: 4, md: 6 },
               maxWidth: 800,
               mx: "auto",
               px: { xs: 2, md: 0 },
-              fontSize:  { xs: "1rem", md: "1.1rem" },
-              lineHeight: 1.7
+              fontSize: { xs: "0.9rem", md: "1rem" },
+              lineHeight: 1.8,
+              mt: 4,
             }}
           >
             Biomed Invex is a leader in biomedical waste management solutions. We help healthcare facilities across Canada maintain the highest standards of safety and regulatory compliance. Proper waste packaging isn't just a regulatory obligation—it's essential for protecting healthcare workers, patients, and the environment.
           </Typography>
-
+          
           {/* First row - 3 cards */}
           <Grid container spacing={3} justifyContent="center">
             <Grid item xs={12} sm={6} md={4}>
@@ -643,11 +630,10 @@ function Dashboard() {
                 <Card
                   sx={{
                     textAlign: "center",
-                    border: "1px solid #D9D9D9",
-                    p: { xs: 2, md: 3 },
+                    p: { xs: 3, md: 4 },
                     borderRadius: "12px",
                     boxShadow: "0 2px 12px rgba(0,0,0,0.06)",
-                    height: "70%",
+                    height: "100%",
                     backgroundColor: "#ffffff",
                   }}
                 >
@@ -657,7 +643,7 @@ function Dashboard() {
                   >
                     Worker Safety
                   </Typography>
-                  <Typography variant="body2" sx={{ color: "#1A1A1A", lineHeight: 1.6, fontSize: { xs: "0.9rem", md: "1.0rem" } }}>
+                  <Typography variant="body2" sx={{ color: "#666", lineHeight: 1.6, fontSize: { xs: "0.85rem", md: "0.9rem" } }}>
                     Proper packaging limits exposure, ensuring safety and accountability in healthcare.
                   </Typography>
                 </Card>
@@ -668,11 +654,10 @@ function Dashboard() {
                 <Card
                   sx={{
                     textAlign: "center",
-                    border: "1px solid #D9D9D9",
-                    p: { xs: 2, md: 3 },
+                    p: { xs: 3, md: 4 },
                     borderRadius: "12px",
                     boxShadow: "0 2px 12px rgba(0,0,0,0.06)",
-                    height: "70%",
+                    height: "100%",
                     backgroundColor: "#ffffff",
                   }}
                 >
@@ -682,7 +667,7 @@ function Dashboard() {
                   >
                     Infection Control
                   </Typography>
-                  <Typography variant="body2" sx={{ color: "#1A1A1A", lineHeight: 1.6, fontSize: { xs: "0.9rem", md: "1.0rem" } }}>
+                  <Typography variant="body2" sx={{ color: "#666", lineHeight: 1.6, fontSize: { xs: "0.85rem", md: "0.9rem" } }}>
                     Secure waste containment prevents disease spread, protecting workers and communities.
                   </Typography>
                 </Card>
@@ -693,11 +678,10 @@ function Dashboard() {
                 <Card
                   sx={{
                     textAlign: "center",
-                    border: "1px solid #D9D9D9",
-                    p: { xs: 2, md: 3 },
+                    p: { xs: 3, md: 4 },
                     borderRadius: "12px",
                     boxShadow: "0 2px 12px rgba(0,0,0,0.06)",
-                    height: "70%",
+                    height: "100%",
                     backgroundColor: "#ffffff",
                   }}
                 >
@@ -707,26 +691,25 @@ function Dashboard() {
                   >
                     Eco Protection
                   </Typography>
-                  <Typography variant="body2" sx={{ color: "#1A1A1A", lineHeight: 1.6, fontSize: { xs: "0.9rem", md: "1.0rem" } }}>
+                  <Typography variant="body2" sx={{ color: "#666", lineHeight: 1.6, fontSize: { xs: "0.85rem", md: "0.9rem" } }}>
                     Responsible disposal safeguards soil, water, wildlife, and promotes sustainability.
                   </Typography>
                 </Card>
               </motion.div>
             </Grid>
           </Grid>
-
+          
           {/* Second row - 2 cards centered */}
-          <Grid container spacing={3} justifyContent="center" sx={{ mt: 2.0 }}>
+          <Grid container spacing={3} justifyContent="center" sx={{ mt: 3 }}>
             <Grid item xs={12} sm={6} md={4}>
               <motion.div whileHover={{ scale: 1.02 }} style={{ height: "100%", position: "relative", zIndex: 1 }}>
                 <Card
                   sx={{
                     textAlign: "center",
-                    border: "1px solid #D9D9D9",
-                    p: { xs: 2, md: 3 },
+                    p: { xs: 3, md: 4 },
                     borderRadius: "12px",
                     boxShadow: "0 2px 12px rgba(0,0,0,0.06)",
-                    height: "70%",
+                    height: "100%",
                     backgroundColor: "#ffffff",
                   }}
                 >
@@ -736,7 +719,7 @@ function Dashboard() {
                   >
                     Legal Compliance
                   </Typography>
-                  <Typography variant="body2" sx={{ color: "#1A1A1A", lineHeight: 1.6, fontSize: { xs: "0.9rem", md: "1.0rem" } }}>
+                  <Typography variant="body2" sx={{ color: "#666", lineHeight: 1.6, fontSize: { xs: "0.85rem", md: "0.9rem" } }}>
                     Adhering to guidelines ensures public safety, ethical duty, and prevents penalties.
                   </Typography>
                 </Card>
@@ -747,11 +730,10 @@ function Dashboard() {
                 <Card
                   sx={{
                     textAlign: "center",
-                    border: "1px solid #D9D9D9",
-                    p: { xs: 2, md: 3 },
+                    p: { xs: 3, md: 4 },
                     borderRadius: "12px",
                     boxShadow: "0 2px 12px rgba(0,0,0,0.06)",
-                    height: "70%",
+                    height: "100%",
                     backgroundColor: "#ffffff",
                   }}
                 >
@@ -761,7 +743,7 @@ function Dashboard() {
                   >
                     Public Trust
                   </Typography>
-                  <Typography variant="body2" sx={{ color: "#1A1A1A", lineHeight: 1.6, fontSize: { xs: "0.9rem", md: "1.0rem" }}}>
+                  <Typography variant="body2" sx={{ color: "#666", lineHeight: 1.6, fontSize: { xs: "0.85rem", md: "0.9rem" } }}>
                     Safe waste handling protects communities, upholds dignity, and fosters confidence.
                   </Typography>
                 </Card>
@@ -788,14 +770,12 @@ function Dashboard() {
                 fontSize: { xs: "1.4rem", md: "2rem" },
                 display: "inline-block",
                 position: "relative",
-                "&::after": {
-                  content: '""',
-                  position: "absolute",
-                },
+                fontStyle: "italic",
               }}
             >
               Services We Offer
             </Typography>
+          </Box>
           <Typography
             variant="body1"
             sx={{
@@ -803,16 +783,14 @@ function Dashboard() {
               color: "#1A1A1A",
               maxWidth: 750,
               mx: "auto",
-              mt: 2,
               px: { xs: 1, md: 0 },
-              fontSize:  { xs: "0.9rem", md: "1.0rem" },
+              fontSize: { xs: "0.85rem", md: "0.95rem" },
               fontWeight: "bold",
               mb: { xs: 4, md: 6 },
             }}
           >
             Comprehensive biomedical waste management solutions tailored for your facility's needs
           </Typography>
-          </Box>
           <Grid container spacing={3}>
             {servicesData.map((service, index) => (
               <Grid item xs={12} sm={6} md={4} key={index}>
@@ -851,8 +829,8 @@ function Dashboard() {
                       variant="body2"
                       sx={{
                         color: "#1A1A1A",
-                        fontSize: { xs: "0.9rem", md: "1.0rem" },
-                        lineHeight: 1.6,
+                        fontSize: { xs: "0.85rem", md: "0.9rem" },
+                        lineHeight: 1.7,
                       }}
                     >
                       {service.description}
@@ -877,6 +855,7 @@ function Dashboard() {
               mb: 2,
               fontSize: { xs: "1.3rem", md: "2.125rem" },
               px: { xs: 2, md: 0 },
+              fontStyle: "italic",
             }}
           >
             The Critical Role of Proper Waste Packaging

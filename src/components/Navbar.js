@@ -159,7 +159,7 @@ const Navbar = () => {
   const mobileDrawer = (
     <Box sx={{ width: 280 }}>
       <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", p: 2, borderBottom: "1px solid #e5e7eb" }}>
-        <img src={logo} alt="Biomed Logo" style={{ height: "40px", width: "auto" }} />
+        <img src={logo} alt="Biomed Logo" style={{ height: "55px", width: "auto" }} />
         <IconButton onClick={handleMobileDrawerToggle}>
           <Close />
         </IconButton>
@@ -408,7 +408,7 @@ const Navbar = () => {
               component="img"
               src={logo}
               alt="Biomed Logo"
-              sx={{ height: { xs: "40px", md: "50px" }, width: "auto" }}
+              sx={{ height: { xs: "55px", md: "75px" }, width: "auto" }}
             />
           </Box>
 
