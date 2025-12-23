@@ -882,20 +882,21 @@ function Dashboard() {
             The Critical Role of Proper Waste Packaging
           </Typography>
           <Typography
-            variant="body1"
-            sx={{
-              textAlign: "center",
-              color: "#1a2744",
-              mb: { xs: 4, md: 5 },
-              maxWidth: 700,
-              mx: "auto",
-              fontSize: { xs: "0.9rem", md: "1rem" },
-              px: { xs: 2, md: 0 },
-            }}
+             variant="body1"
+              sx={{
+                textAlign: "center",
+                color: "#1A1A1A",
+                mt: 2,
+                maxWidth: 600,
+                mx: "auto",
+                px: { xs: 1, md: 0 },
+                fontSize:  { xs: "0.9rem", md: "1.0rem" },
+                fontWeight: "bold"
+              }}
           >
             Ensuring safe, compliant, and responsible disposal of medical waste through proper packaging practices
           </Typography>
-          <Box sx={{ display: "flex", flexDirection: "column", gap: 2, maxWidth: 800, mx: "auto" }}>
+          <Box sx={{ display: "flex", mt:3 ,flexDirection: "column", gap: 2, maxWidth: 800, mx: "auto" }}>
             {criticalRoleItems.map((item, index) => (
               <motion.div key={index} whileHover={{ x: 5 }}>
                 <Box
