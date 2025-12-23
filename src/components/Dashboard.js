@@ -22,6 +22,8 @@ import axios from "axios";
 import { FaPrescriptionBottleMedical } from "react-icons/fa6";
 import "react-international-phone/style.css";
 import FeedbackSlider from "./FeedbackSlider";
+import Footer from "./Footer";
+import ComplaintModal from "./ComplaintModal";
 
 const API_BASE_URL = process.env.REACT_APP_API_URL || "https://biomedwaste.net/api";
 
@@ -98,6 +100,7 @@ const partnerLogos = [
 function Dashboard() {
   const [userData, setUserData] = useState(null);
   const [formOpen, setFormOpen] = useState(false);
+  const [complaintModalOpen, setComplaintModalOpen] = useState(false);
   const handleFormClose = () => {
     setFormOpen(false);
     setError("");
@@ -345,19 +348,20 @@ function Dashboard() {
               <Box sx={{ display: "flex", gap: 2, flexWrap: "wrap" }}>
                 <Button
                   variant="contained"
-                  onClick={() => setFormOpen(true)}
                   sx={{
-                    backgroundColor: "#D9DE38",
+                    background: "#D9DE38",
                     color: "#1a2744",
                     fontWeight: 600,
                     px: 3,
-                    py: 1.2,
-                    borderRadius: "24px",
+                    py: 1,
+                    borderRadius: "25px",
                     textTransform: "none",
+                    fontSize: "0.9rem",
                     "&:hover": {
-                      backgroundColor: "#D9DE38",
+                      background: "#c5ca2e",
                     },
                   }}
+                  onClick={() => setComplaintModalOpen(true)}
                 >
                   File a Complaint
                 </Button>
@@ -945,7 +949,7 @@ function Dashboard() {
         </Container>
       </Box>
 
-     {/* Trusted by Industry Leaders Section */}
+      {/* Trusted by Industry Leaders Section */}
       <Box sx={{ py: { xs: 6, md: 10 }, backgroundColor: "#ffffff" }}>
         <Container maxWidth="xl" sx={{ px: { xs: 3, md: 8 } }}>
           <Typography
@@ -966,247 +970,19 @@ function Dashboard() {
       </Box>
 
       {/* Footer */}
-      <Box sx={{ backgroundColor: "#1a2744", py: { xs: 4, md: 6 } }}>
-        <Container maxWidth="xl" sx={{ px: { xs: 2, md: 6 } }}>
-          <Grid container spacing={{ xs: 3, md: 4 }}>
-            <Grid item xs={12} sm={6} md={4}>
-              <Typography
-                variant="h6"
-                sx={{ color: "#ffffff", fontWeight: 700, mb: 2, fontSize: { xs: "1rem", md: "1.25rem" } }}
-              >
-                Biomed Recovery & Disposal Ltd.
-              </Typography>
-              <Typography variant="body2" sx={{ color: "rgba(255,255,255,0.7)", mb: 2 }}>
-                Western Canada's trusted leader in biomedical waste management since 1992.
-              </Typography>
-            </Grid>
-            <Grid item xs={6} sm={6} md={4}>
-              <Typography
-                variant="h6"
-                sx={{ color: "#ffffff", fontWeight: 600, mb: 2, fontSize: { xs: "1rem", md: "1.25rem" } }}
-              >
-                Quick Links
-              </Typography>
-              <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
-                <Link href="https://biomedwaste.com/about/" target="_blank" sx={{ color: "rgba(255,255,255,0.7)", textDecoration: "none", "&:hover": { color: "#D9DE38" }, fontSize: { xs: "0.85rem", md: "0.875rem" } }}>
-                  About Us
-                </Link>
-                <Link href="https://biomedwaste.com/services/" target="_blank" sx={{ color: "rgba(255,255,255,0.7)", textDecoration: "none", "&:hover": { color: "#D9DE38" }, fontSize: { xs: "0.85rem", md: "0.875rem" } }}>
-                  Services
-                </Link>
-                <Link href="https://biomedwaste.com/contact/" target="_blank" sx={{ color: "rgba(255,255,255,0.7)", textDecoration: "none", "&:hover": { color: "#D9DE38" }, fontSize: { xs: "0.85rem", md: "0.875rem" } }}>
-                  Contact
-                </Link>
-              </Box>
-            </Grid>
-            <Grid item xs={6} sm={12} md={4}>
-              <Typography
-                variant="h6"
-                sx={{ color: "#ffffff", fontWeight: 600, mb: 2, fontSize: { xs: "1rem", md: "1.25rem" } }}
-              >
-                Contact Us
-              </Typography>
-              <Typography variant="body2" sx={{ color: "rgba(255,255,255,0.7)", mb: 1, fontSize: { xs: "0.8rem", md: "0.875rem" } }}>
-                Saskatchewan, Canada
-              </Typography>
-              <Typography variant="body2" sx={{ color: "rgba(255,255,255,0.7)", mb: 1, fontSize: { xs: "0.8rem", md: "0.875rem" } }}>
-                Phone: 1-800-361-5865
-              </Typography>
-              <Typography variant="body2" sx={{ color: "rgba(255,255,255,0.7)", fontSize: { xs: "0.8rem", md: "0.875rem" } }}>
-                Email: info@biomedwaste.com
-              </Typography>
-            </Grid>
-          </Grid>
-          <Box
-            sx={{
-              borderTop: "1px solid rgba(255,255,255,0.1)",
-              mt: 4,
-              pt: 4,
-              textAlign: "center",
-            }}
-          >
-            <Typography variant="body2" sx={{ color: "rgba(255,255,255,0.5)" }}>
-              © 2025 Biomed Recovery and Disposal Ltd. All rights reserved.
-            </Typography>
-          </Box>
-        </Container>
-      </Box>
+      <Footer />
 
       {/* Complaint Modal */}
-      <Modal
-        open={formOpen}
-        onClose={handleFormClose}
-        aria-labelledby="complaint-form-title"
-        aria-describedby="complaint-form-description"
-      >
-        <form onSubmit={handleFormSubmit}>
-          <Box
-            sx={{
-              position: "absolute",
-              top: "50%",
-              left: "50%",
-              transform: "translate(-50%, -50%)",
-              width: "90%",
-              maxWidth: 500,
-              bgcolor: "background.paper",
-              boxShadow: 24,
-              p: 4,
-              borderRadius: 3,
-              outline: "none",
-            }}
-          >
-            <Typography
-              id="complaint-form-title"
-              variant="h5"
-              component="h2"
-              sx={{
-                mb: 3,
-                textAlign: "center",
-                fontWeight: "bold",
-                color: "#1a2744",
-              }}
-            >
-              File a Complaint
-            </Typography>
-            {error && (
-              <Alert severity="error" sx={{ mb: 2 }}>
-                {error}
-              </Alert>
-            )}
-            <PhoneInput
-              label="Contact"
-              name="contactNumber"
-              defaultCountry="ca"
-              placeholder="Enter your phone number"
-              value={formData.contactNumber || ""}
-              onChange={(value) =>
-                setFormData((prev) => ({
-                  ...prev,
-                  contactNumber: value,
-                }))
-              }
-              style={{
-                width: "95%",
-                marginBottom: "16px",
-                padding: "12px",
-                borderRadius: "8px",
-                border: "1px solid #ccc",
-              }}
-            />
-            <TextField
-              fullWidth
-              multiline
-              rows={4}
-              label="Description of Problem"
-              name="description"
-              variant="outlined"
-              sx={{
-                mb: 3,
-                "& .MuiOutlinedInput-root": {
-                  borderRadius: "8px",
-                },
-              }}
-              value={formData.description || ""}
-              onChange={handleInputChange}
-            />
-            <Button
-              variant="outlined"
-              component="label"
-              fullWidth
-              sx={{
-                mb: 3,
-                borderRadius: "8px",
-                borderColor: "#1a2744",
-                color: "#1a2744",
-                textTransform: "none",
-              }}
-            >
-              Upload Attachment (Optional)
-              <input hidden accept="image/*" type="file" multiple onChange={handleFileChange} />
-            </Button>
-            <Grid item xs={12}>
-              <div
-                style={{
-                  display: "flex",
-                  gap: "10px",
-                  flexWrap: "wrap",
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-              >
-                {formData.photos.map((photo, index) => (
-                  <div
-                    key={index}
-                    style={{
-                      position: "relative",
-                      display: "flex",
-                      flexDirection: "column",
-                      alignItems: "center",
-                    }}
-                  >
-                    <img
-                      src={photo.preview}
-                      alt={`Preview ${index}`}
-                      style={{
-                        width: "100px",
-                        height: "100px",
-                        objectFit: "cover",
-                        borderRadius: "8px",
-                      }}
-                    />
-                    <button
-                      onClick={() => handleRemoveImage(index)}
-                      style={{
-                        position: "absolute",
-                        top: "-5px",
-                        right: "-5px",
-                        background: "red",
-                        color: "white",
-                        border: "none",
-                        borderRadius: "50%",
-                        cursor: "pointer",
-                      }}
-                    >
-                      &times;
-                    </button>
-                  </div>
-                ))}
-              </div>
-            </Grid>
-            <Box sx={{ textAlign: "center", display: "flex", gap: 2 }}>
-              <Button
-                variant="contained"
-                sx={{
-                  flex: 1,
-                  borderRadius: "8px",
-                  textTransform: "none",
-                  backgroundColor: "#D9DE38",
-                  color: "#1a2744",
-                  fontWeight: 600,
-                  "&:hover": { backgroundColor: "#c5ca32" },
-                }}
-                onClick={handleFormSubmit}
-                disabled={isSubmitting}
-              >
-                {isSubmitting ? <CircularProgress size={24} /> : "Submit"}
-              </Button>
-              <Button
-                variant="outlined"
-                sx={{
-                  flex: 1,
-                  borderRadius: "8px",
-                  textTransform: "none",
-                  borderColor: "#1a2744",
-                  color: "#1a2744",
-                }}
-                onClick={handleFormClose}
-              >
-                Cancel
-              </Button>
-            </Box>
-          </Box>
-        </form>
-      </Modal>
+      <ComplaintModal
+        open={complaintModalOpen}
+        onClose={() => setComplaintModalOpen(false)}
+        onSuccess={(message) => {
+          setSnackbar({ open: true, message, severity: "success" });
+        }}
+        onError={(message) => {
+          setSnackbar({ open: true, message, severity: "error" });
+        }}
+      />
 
       {/* Snackbar for Feedback */}
       <Snackbar
