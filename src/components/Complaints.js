@@ -290,7 +290,7 @@ function Complaints() {
                             sx={{
                                 color: "#fff",
                                 fontWeight: 700,
-                                fontSize: { xs: "1.75rem", sm: "2rem", md: "2.5rem" },
+                                fontSize: { xs: "1.75rem", sm: "1.7rem", md: "2.2rem" },
                                 mb: 2,
                             }}
                         >

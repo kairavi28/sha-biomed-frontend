@@ -102,7 +102,7 @@ function InstructionPage() {
                                     fontWeight: 700,
                                     color: "#fff",
                                     mb: 2,
-                                    fontSize: { xs: "1.75rem", sm: "2rem", md: "2.25rem" }
+                                    fontSize: { xs: "1.75rem", sm: "1.7rem", md: "2.2rem"  }
                                 }}
                             >
                                 Waste Packaging Guide
