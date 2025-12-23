@@ -21,11 +21,7 @@ import { MdLocalHospital, MdScience, MdCheckCircle, MdWaterDrop, MdVerifiedUser 
 import axios from "axios";
 import { FaPrescriptionBottleMedical } from "react-icons/fa6";
 import "react-international-phone/style.css";
-import { Swiper, SwiperSlide } from "swiper/react";
-import "swiper/css";
-import "swiper/css/pagination";
-import "swiper/css/navigation";
-import { Navigation, Autoplay } from "swiper/modules";
+import FeedbackSlider from "./FeedbackSlider";
 
 const API_BASE_URL = process.env.REACT_APP_API_URL || "https://biomedwaste.net/api";
 
@@ -534,7 +530,7 @@ function Dashboard() {
                 maxWidth: 750,
                 mx: "auto",
                 px: { xs: 1, md: 0 },
-                fontSize:  { xs: "0.9rem", md: "1.0rem" },
+                fontSize: { xs: "0.9rem", md: "1.0rem" },
                 fontWeight: "bold"
               }}
             >
@@ -629,7 +625,7 @@ function Dashboard() {
               maxWidth: 800,
               mx: "auto",
               px: { xs: 2, md: 0 },
-              fontSize:  { xs: "1rem", md: "1.1rem" },
+              fontSize: { xs: "1rem", md: "1.1rem" },
               lineHeight: 1.7
             }}
           >
@@ -761,7 +757,7 @@ function Dashboard() {
                   >
                     Public Trust
                   </Typography>
-                  <Typography variant="body2" sx={{ color: "#1A1A1A", lineHeight: 1.6, fontSize: { xs: "0.9rem", md: "1.0rem" }}}>
+                  <Typography variant="body2" sx={{ color: "#1A1A1A", lineHeight: 1.6, fontSize: { xs: "0.9rem", md: "1.0rem" } }}>
                     Safe waste handling protects communities, upholds dignity, and fosters confidence.
                   </Typography>
                 </Card>
@@ -796,22 +792,22 @@ function Dashboard() {
             >
               Services We Offer
             </Typography>
-          <Typography
-            variant="body1"
-            sx={{
-              textAlign: "center",
-              color: "#1A1A1A",
-              maxWidth: 750,
-              mx: "auto",
-              mt: 2,
-              px: { xs: 1, md: 0 },
-              fontSize:  { xs: "0.9rem", md: "1.0rem" },
-              fontWeight: "bold",
-              mb: { xs: 4, md: 6 },
-            }}
-          >
-            Comprehensive biomedical waste management solutions tailored for your facility's needs
-          </Typography>
+            <Typography
+              variant="body1"
+              sx={{
+                textAlign: "center",
+                color: "#1A1A1A",
+                maxWidth: 750,
+                mx: "auto",
+                mt: 2,
+                px: { xs: 1, md: 0 },
+                fontSize: { xs: "0.9rem", md: "1.0rem" },
+                fontWeight: "bold",
+                mb: { xs: 4, md: 6 },
+              }}
+            >
+              Comprehensive biomedical waste management solutions tailored for your facility's needs
+            </Typography>
           </Box>
           <Grid container spacing={3}>
             {servicesData.map((service, index) => (
@@ -882,21 +878,21 @@ function Dashboard() {
             The Critical Role of Proper Waste Packaging
           </Typography>
           <Typography
-             variant="body1"
-              sx={{
-                textAlign: "center",
-                color: "#1A1A1A",
-                mt: 2,
-                maxWidth: 600,
-                mx: "auto",
-                px: { xs: 1, md: 0 },
-                fontSize:  { xs: "0.9rem", md: "1.0rem" },
-                fontWeight: "bold"
-              }}
+            variant="body1"
+            sx={{
+              textAlign: "center",
+              color: "#1A1A1A",
+              mt: 2,
+              maxWidth: 600,
+              mx: "auto",
+              px: { xs: 1, md: 0 },
+              fontSize: { xs: "0.9rem", md: "1.0rem" },
+              fontWeight: "bold"
+            }}
           >
             Ensuring safe, compliant, and responsible disposal of medical waste through proper packaging practices
           </Typography>
-          <Box sx={{ display: "flex", mt:3 ,flexDirection: "column", gap: 2, maxWidth: 800, mx: "auto" }}>
+          <Box sx={{ display: "flex", mt: 3, flexDirection: "column", gap: 2, maxWidth: 800, mx: "auto" }}>
             {criticalRoleItems.map((item, index) => (
               <motion.div key={index} whileHover={{ x: 5 }}>
                 <Box
@@ -949,14 +945,15 @@ function Dashboard() {
         </Container>
       </Box>
 
-      {/* Trusted by Industry Leaders Section */}
-      <Box sx={{ py: { xs: 5, md: 8 }, backgroundColor: "#ffffff" }}>
-        <Container maxWidth="xl" sx={{ px: { xs: 2, md: 6 } }}>
+     {/* Trusted by Industry Leaders Section */}
+      <Box sx={{ py: { xs: 6, md: 10 }, backgroundColor: "#ffffff" }}>
+        <Container maxWidth="xl" sx={{ px: { xs: 3, md: 8 } }}>
           <Typography
             variant="h4"
             sx={{
               textAlign: "center",
               fontWeight: 700,
+              fontStyle: "bold",
               color: "#1a2744",
               mb: { xs: 4, md: 6 },
               fontSize: { xs: "1.5rem", md: "2.125rem" },
@@ -964,42 +961,7 @@ function Dashboard() {
           >
             Trusted by Industry Leaders
           </Typography>
-          <Swiper
-            modules={[Autoplay, Navigation]}
-            autoplay={{ delay: 3000, disableOnInteraction: false }}
-            navigation
-            spaceBetween={30}
-            slidesPerView={1}
-            breakpoints={{
-              640: { slidesPerView: 2 },
-              768: { slidesPerView: 3 },
-              1024: { slidesPerView: 4 },
-            }}
-            style={{ paddingBottom: "40px" }}
-          >
-            {partnerLogos.map((partner, index) => (
-              <SwiperSlide key={index}>
-                <Box
-                  sx={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    height: 100,
-                    backgroundColor: "#f8f9fa",
-                    borderRadius: "12px",
-                    p: 2,
-                  }}
-                >
-                  <Typography
-                    variant="body1"
-                    sx={{ color: "#666", fontWeight: 500 }}
-                  >
-                    {partner.name}
-                  </Typography>
-                </Box>
-              </SwiperSlide>
-            ))}
-          </Swiper>
+          <FeedbackSlider />
         </Container>
       </Box>
 
