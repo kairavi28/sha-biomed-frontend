@@ -27,8 +27,6 @@ import {
   ListItemIcon,
   ListItemText,
   Collapse,
-  useMediaQuery,
-  useTheme,
 } from "@mui/material";
 import { AccountCircle, Logout, Person, Search, ShoppingCart, Phone, Email, KeyboardArrowDown, Menu as MenuIcon, Close, ExpandLess, ExpandMore } from "@mui/icons-material";
 import CloseIcon from '@mui/icons-material/Close';
@@ -40,8 +38,6 @@ import FileCopyIcon from '@mui/icons-material/FileCopy';
 
 const Navbar = () => {
   const navigate = useNavigate();
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const API_BASE_URL = process.env.REACT_APP_API_URL || "https://biomedwaste.net/api";
   const location = useLocation();
   const [anchorEl, setAnchorEl] = useState(null);
@@ -298,11 +294,14 @@ const Navbar = () => {
         position="fixed"
         sx={{
           top: 0,
+          left: 0,
+          right: 0,
           width: '100%',
           backgroundColor: "#ffffff",
           color: "#1a2744",
           boxShadow: "0 2px 4px rgba(0,0,0,0.08)",
           transition: "all 0.3s ease-in-out",
+          overflow: "visible",
         }}
         id="navbar"
       >
@@ -312,7 +311,7 @@ const Navbar = () => {
             backgroundColor: "#ffffff",
             borderBottom: "1px solid #e5e7eb",
             py: 1,
-            px: { xs: 2, md: 4 },
+            px: { xs: 2, sm: 2, md: 3, lg: 4, xl: 5 },
             display: { xs: "none", md: "block" },
           }}
         >
@@ -321,9 +320,8 @@ const Navbar = () => {
               display: "flex",
               justifyContent: "flex-end",
               alignItems: "center",
-              gap: 3,
-              maxWidth: "1200px",
-              mx: "auto",
+              gap: { md: 3, lg: 4, xl: 5 },
+              width: "100%",
             }}
           >
             <Box
@@ -379,49 +377,50 @@ const Navbar = () => {
             display: "flex",
             justifyContent: "space-between",
             alignItems: "center",
-            px: { xs: 2, md: 4 },
+            px: { xs: 2, sm: 2, md: 2, lg: 3, xl: 4 },
             py: 1,
-            maxWidth: "1200px",
-            mx: "auto",
             width: "100%",
+            minWidth: 0,
           }}
         >
-          {/* Mobile Hamburger Menu */}
-          <IconButton
-            onClick={handleMobileDrawerToggle}
-            aria-label="Open navigation menu"
-            sx={{
-              display: { xs: "flex", md: "none" },
-              color: "#1a2744",
-            }}
-          >
-            <MenuIcon />
-          </IconButton>
+          {/* Left Section - Mobile Menu, Logo, and Navigation Links */}
+          <Box sx={{ display: "flex", alignItems: "center", gap: { xs: 1, md: 1, lg: 2 }, flexShrink: 1, minWidth: 0, overflow: "hidden" }}>
+            {/* Mobile Hamburger Menu */}
+            <IconButton
+              onClick={handleMobileDrawerToggle}
+              aria-label="Open navigation menu"
+              sx={{
+                display: { xs: "flex", md: "none" },
+                color: "#1a2744",
+              }}
+            >
+              <MenuIcon />
+            </IconButton>
 
-          {/* Logo */}
-          <Box
-            component="div"
-            sx={{ cursor: "pointer", display: "flex", alignItems: "center" }}
-            onClick={() => navigate("/home")}
-          >
+            {/* Logo */}
             <Box
-              component="img"
-              src={logo}
-              alt="Biomed Logo"
-              sx={{ height: { xs: "55px", md: "75px" }, width: "auto" }}
-            />
-          </Box>
+              component="div"
+              sx={{ cursor: "pointer", display: "flex", alignItems: "center", flexShrink: 0 }}
+              onClick={() => navigate("/home")}
+            >
+              <Box
+                component="img"
+                src={logo}
+                alt="Biomed Logo"
+                sx={{ height: { xs: "50px", md: "60px", lg: "70px" }, width: "auto" }}
+              />
+            </Box>
 
-          {/* Navigation Links - Desktop Only */}
-          <Box sx={{ display: { xs: "none", md: "flex" }, alignItems: "center", gap: 1 }}>
+            {/* Navigation Links - Desktop Only */}
+            <Box sx={{ display: { xs: "none", md: "flex" }, alignItems: "center", gap: { md: 0.5, lg: 1, xl: 2 } }}>
             <Button
               onClick={() => navigate("/services")}
               sx={{
                 color: isActive("/services") ? "#D9DE38" : "#1a2744",
                 fontWeight: 500,
                 textTransform: "none",
-                fontSize: "15px",
-                px: 2,
+                fontSize: { md: "14px", lg: "15px" },
+                px: { md: 1, lg: 1.5 },
                 "&:hover": {
                   backgroundColor: "transparent",
                   color: "#D9DE38",
@@ -436,8 +435,8 @@ const Navbar = () => {
                 color: isActive("/instruction") ? "#D9DE38" : "#1a2744",
                 fontWeight: 500,
                 textTransform: "none",
-                fontSize: "15px",
-                px: 2,
+                fontSize: { md: "14px", lg: "15px" },
+                px: { md: 1, lg: 1.5 },
                 "&:hover": {
                   backgroundColor: "transparent",
                   color: "#D9DE38",
@@ -453,8 +452,8 @@ const Navbar = () => {
                 color: isActive("/waybill") || isActive("/invoice") || isActive("/cod") ? "#D9DE38" : "#1a2744",
                 fontWeight: 500,
                 textTransform: "none",
-                fontSize: "15px",
-                px: 2,
+                fontSize: { md: "14px", lg: "15px" },
+                px: { md: 1, lg: 1.5 },
                 "&:hover": {
                   backgroundColor: "transparent",
                   color: "#D9DE38",
@@ -543,35 +542,40 @@ const Navbar = () => {
                 <Typography variant="inherit">Certificate of Destruction</Typography>
               </MenuItem>
             </Menu>
+            </Box>
           </Box>
 
           {/* Right Side: Quote Button, Search, Cart, Profile */}
-          <Box sx={{ display: "flex", alignItems: "center", gap: { xs: 0.5, md: 1 } }}>
-            {/* Desktop Only - Quote Button */}
+          <Box sx={{ display: "flex", alignItems: "center", gap: { xs: 0.5, md: 0.5, lg: 1 }, flexShrink: 0, ml: "auto", mr: { xs: 3, md: 6, lg: 6 } }}>
+            {/* Request Free Quote Button - Desktop Only */}
             <Button
               onClick={handleModalOpen}
               variant="contained"
               sx={{
-                display: { xs: "none", md: "flex" },
+                display: { xs: "none", md: "inline-flex" },
                 backgroundColor: "#D9DE38",
                 color: "#1a2744",
                 fontWeight: 600,
                 textTransform: "none",
                 borderRadius: "24px",
-                px: 3,
-                py: 1,
+                px: { md: 1.5, lg: 2.5 },
+                py: 0.8,
+                fontSize: { md: "0.8rem", lg: "0.875rem" },
+                whiteSpace: "nowrap",
                 "&:hover": {
                   backgroundColor: "#c5ca32",
                 },
               }}
             >
-              Request Free Quote
+              Get Quote
             </Button>
-            {/* Desktop Only - Search */}
+            {/* Search Icon - Large Desktop Only */}
             <IconButton
+              size="medium"
               sx={{
-                display: { xs: "none", md: "flex" },
+                display: { xs: "none", lg: "inline-flex" },
                 color: "#1a2744",
+                p: { xs: 0.8, md: 0.8, lg: 1.2 },
                 "&:hover": {
                   color: "#D9DE38",
                 },
@@ -579,10 +583,13 @@ const Navbar = () => {
             >
               <Search />
             </IconButton>
-            {/* Mobile & Desktop - Cart */}
+            {/* Shopping Cart Icon */}
             <IconButton
+              size="medium"
               sx={{
+                display: "inline-flex",
                 color: "#1a2744",
+                p: { xs: 0.8, md: 0.8, lg: 1.2 },
                 "&:hover": {
                   color: "#D9DE38",
                 },
@@ -590,12 +597,14 @@ const Navbar = () => {
             >
               <ShoppingCart />
             </IconButton>
-            {/* Desktop Only - Profile */}
+            {/* Profile Icon */}
             <IconButton
+              size="medium"
               onClick={handleMenuOpen}
               sx={{
-                display: { xs: "none", md: "flex" },
+                display: "inline-flex",
                 color: "#1a2744",
+                p: { xs: 0.8, md: 0.8, lg: 1.2 },
                 "&:hover": {
                   color: "#D9DE38",
                 },
@@ -612,7 +621,7 @@ const Navbar = () => {
                 "& .MuiPaper-root": {
                   borderRadius: "8px",
                   boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
-                  minWidth: "160px",
+                  minWidth: "160px"
                 },
               }}
             >
@@ -621,7 +630,7 @@ const Navbar = () => {
                   handleMenuClose();
                   navigate("/profile");
                 }}
-                sx={{ display: "flex", gap: 1, py: 1.5 }}
+                sx={{ display: "flex", gap: 2, py: 3.0 }}
               >
                 <Person fontSize="small" />
                 <Typography variant="inherit">Profile</Typography>
@@ -639,7 +648,7 @@ const Navbar = () => {
                     alert("There was an error logging out.");
                   }
                 }}
-                sx={{ display: "flex", gap: 1, py: 1.5 }}
+                sx={{ display: "flex", gap: 2, py: 3.0 }}
               >
                 <Logout fontSize="small" />
                 <Typography variant="inherit">Logout</Typography>
