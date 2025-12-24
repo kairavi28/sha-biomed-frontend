@@ -105,6 +105,8 @@ const InvoiceList = () => {
 
     if (selectedFacilities.length > 0) {
       fetchInvoices();
+      const interval = setInterval(fetchInvoices, 30 * 1000);
+      return () => clearInterval(interval);
     }
   }, [selectedFacilities]);
 

@@ -95,6 +95,8 @@ const WaybillList = () => {
             }
         };
         fetchWaybills();
+        const interval = setInterval(fetchWaybills, 30 * 1000);
+        return () => clearInterval(interval);
     }, [selectedFacilities]);
 
     const handlePreviewOpen = (waybill) => {
