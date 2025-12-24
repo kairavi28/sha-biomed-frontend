@@ -6,7 +6,7 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import SignInCard from './SignInCard';
 import Content from './Content';
-import logo from '../assets/images/logo.png';
+import logo from "../assets/images/white-logo.png"
 
 const theme = createTheme({
   palette: {
@@ -46,7 +46,7 @@ export default function SignInSide() {
               right: 0,
               width: '100%',
               height: '40%',
-              backgroundImage: 'url(/logo.png)',
+              backgroundImage: 'url(/white-logo.png)',
               backgroundSize: 'contain',
               backgroundPosition: 'bottom right',
               backgroundRepeat: 'no-repeat',
@@ -56,19 +56,6 @@ export default function SignInSide() {
           
           <Box sx={{ pt: 6, pb: 3, textAlign: 'center', zIndex: 1 }}>
             <img src={logo} alt="Biomed Logo" style={{ width: '160px', height: 'auto' }} />
-            <Typography
-              variant="caption"
-              sx={{
-                color: '#ABB738',
-                display: 'block',
-                mt: 0.5,
-                fontStyle: 'italic',
-                letterSpacing: 1,
-                fontSize: '0.75rem',
-              }}
-            >
-              The Biohazard Professionals
-            </Typography>
           </Box>
           
           <Box sx={{ width: '100%', px: 2, zIndex: 1, flex: 1 }}>
@@ -92,15 +79,32 @@ export default function SignInSide() {
         <Box
           sx={{
             flex: 1,
+            position: "relative",
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            backgroundColor: '#1a2744',
+            backgroundImage: "url('/sign-bg.jpeg')",
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            backgroundColor: "#0D2477",
             padding: 6,
             minHeight: '100vh',
+            "&::before": {
+              content: '""',
+              position: "absolute",
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              backgroundColor: "#0D2477",
+              opacity: 0.85,
+              zIndex: 1,
+            },
           }}
         >
-          <Content />
+          <Box sx={{ position: 'relative', zIndex: 2 }}>
+            <Content />
+          </Box>
         </Box>
 
         <Box

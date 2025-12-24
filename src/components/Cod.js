@@ -2,9 +2,6 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import {
   Box,
-  Card,
-  CardContent,
-  CardHeader,
   Typography,
   Table,
   TableHead,
@@ -21,28 +18,32 @@ import {
   DialogTitle,
   CircularProgress,
   Container,
-  Grid,
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
 } from "@mui/material";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import DownloadIcon from "@mui/icons-material/Download";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import DescriptionOutlinedIcon from "@mui/icons-material/DescriptionOutlined";
 import { Viewer, Worker } from "@react-pdf-viewer/core";
 import "@react-pdf-viewer/core/lib/styles/index.css";
-import { PersonPinCircle } from "@mui/icons-material";
+import Footer from "./Footer";
+import { motion } from "framer-motion";
 
 function COD() {
   const [cods, setCods] = useState({});
   const [openPreview, setOpenPreview] = useState(false);
-  const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [currentCod, setCurrentCod] = useState(null);
   const [selectedFacilities, setSelectedFacilities] = useState([]);
+  const [expandedFacility, setExpandedFacility] = useState(null);
   const API_BASE_URL = process.env.REACT_APP_API_URL || "https://biomedwaste.net/api";
 
   useEffect(() => {
     const fetchUserData = async () => {
       const currentUserSession = JSON.parse(sessionStorage.getItem("userData"));
-      console.log('current user', currentUserSession);
-      const currentUserId = currentUserSession.id ? currentUserSession.id : currentUserSession._id;
+      const currentUserId = currentUserSession?.id ? currentUserSession.id : currentUserSession?._id;
       if (!currentUserId) {
         console.error("User ID is undefined");
         setLoading(false);
@@ -55,8 +56,10 @@ function COD() {
           .filter(facility => facility.approved)
           .map(facility => facility.name);
 
-        setUserData(response.data);
         setSelectedFacilities(approvedFacilities);
+        if (approvedFacilities.length > 0) {
+          setExpandedFacility(approvedFacilities[0]);
+        }
         setLoading(false);
       } catch (err) {
         console.error("Error fetching user data:", err);
@@ -67,7 +70,7 @@ function COD() {
     fetchUserData();
     const interval = setInterval(fetchUserData, 3 * 60 * 1000);
     return () => clearInterval(interval);
-  }, []);
+  }, [API_BASE_URL]);
 
   useEffect(() => {
     const fetchCods = async () => {
@@ -95,7 +98,7 @@ function COD() {
     if (selectedFacilities.length > 0) {
       fetchCods();
     }
-  }, [selectedFacilities]);
+  }, [selectedFacilities, API_BASE_URL]);
 
   const handlePreviewOpen = (cod) => {
     setCurrentCod(cod);
@@ -106,132 +109,204 @@ function COD() {
     setOpenPreview(false);
   };
 
+  const handleAccordionChange = (facility) => (event, isExpanded) => {
+    setExpandedFacility(isExpanded ? facility : null);
+  };
+
   if (loading) {
     return (
-      <Box display="flex" justifyContent="center" alignItems="center" height="100vh" sx={{ background: "#f3f4f6" }}>
+      <Box display="flex" justifyContent="center" alignItems="center" height="100vh" sx={{ background: "#f5f5f5" }}>
         <CircularProgress />
       </Box>
     );
   }
 
   return (
-    <Box
-      sx={{
-        background: "linear-gradient(to right, #e2edf0, #dee9f7)",
-        minHeight: "100vh",
-        py: 5,
-        display: "flex",
-        flexDirection: "column",
-      }}
-    >
-      <Container maxWidth="lg"  sx={{ py: 10 }}>
-        {selectedFacilities.length === 0 ? (
-          <Card sx={{ maxWidth: 900, mx: "auto", mt: 4, p: 2, textAlign: "center", boxShadow: 3 }}>
-            <PersonPinCircle sx={{ fontSize: 50, color: "#092C74", mb: 2 }} />
-            <Typography variant="h4" sx={{ fontWeight: "bold", color: "#092C74", mb: 1 }}>
+    <Box sx={{ backgroundColor: "#f5f5f5", minHeight: "100vh", display: "flex", flexDirection: "column" }}>
+      <Container maxWidth="lg" sx={{ pt: { xs: 14, md: 16 }, pb: 6, flex: 1 }}>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+        >
+          <Paper 
+            elevation={0} 
+            sx={{ 
+              p: { xs: 3, md: 5 }, 
+              borderRadius: 2,
+              border: '1px solid #e0e0e0',
+              backgroundColor: '#fff'
+            }}
+          >
+            <Typography 
+              variant="h4" 
+              fontWeight="bold" 
+              color="#0D2477" 
+              mb={4}
+              sx={{ fontSize: { xs: '1.5rem', md: '2rem' } }}
+            >
               Certificate of Destruction
             </Typography>
-            <Typography variant="body1" sx={{ mb: 3 }}>
-              No facility has been selected. Please navigate to your profile section to add facilities.
-            </Typography>
-            <Button
-              variant="contained"
-              sx={{
-                backgroundColor: "#092C74",
-                "&:hover": { backgroundColor: "#051a4d" },
-                textTransform: "none",
-                px: 4,
-              }}
-              href="/profile"
-            >
-              Go to Profile
-            </Button>
-          </Card>
-        ) : (
-          <Card sx={{ maxWidth: 900, mx: "auto", mt: 4, p: 2, boxShadow: 3 }}>
-            <CardHeader
-              title={
-                <Typography variant="h5" color="#092C74" sx={{ fontWeight: "bold" }}>
-                  Certificate of Destruction
-                </Typography>
-              }
-            />
-            {selectedFacilities.map((facility) => (
-              <Box key={facility} sx={{ mb: 3 }}>
 
-                <CardHeader
-                  title={
-                    <Typography variant="h6" color="#092C74" sx={{ fontWeight: "bold" }}>
-                      {facility}
-                    </Typography>
-                  }
-                />
-                <CardContent>
-                  <TableContainer component={Paper} sx={{ boxShadow: 2 }}>
-                    <Table>
-                      <TableHead>
-                        <TableRow sx={{ backgroundColor: "#f5f5f5" }}>
-                          <TableCell>
-                            <strong>File Name</strong>
-                          </TableCell>
-                          <TableCell>
-                            <strong>Preview</strong>
-                          </TableCell>
-                          <TableCell>
-                            <strong>Download</strong>
-                          </TableCell>
-                          <TableCell>
-                            <strong>Uploaded At</strong>
-                          </TableCell>
-                        </TableRow>
-                      </TableHead>
-                      <TableBody>
-                        {cods[facility] && cods[facility].length > 0 ? (
-                          cods[facility].map((cod) => (
-                            <TableRow key={cod._id} hover>
-                              <TableCell>{cod.fileName || "N/A"}</TableCell>
-                              <TableCell>
-                                <IconButton color="primary" onClick={() => handlePreviewOpen(cod)}>
-                                  <VisibilityIcon />
-                                </IconButton>
+            {selectedFacilities.length === 0 ? (
+              <Box sx={{ textAlign: 'center', py: 6 }}>
+                <DescriptionOutlinedIcon sx={{ fontSize: 60, color: '#bdbdbd', mb: 2 }} />
+                <Typography variant="h6" color="text.secondary" mb={2}>
+                  No facility has been selected
+                </Typography>
+                <Typography variant="body2" color="text.secondary" mb={3}>
+                  Please navigate to your profile section to add facilities.
+                </Typography>
+                <Button
+                  variant="contained"
+                  sx={{
+                    backgroundColor: "#0D2477",
+                    "&:hover": { backgroundColor: "#1a3a8f" },
+                    textTransform: "none",
+                    px: 4,
+                    py: 1,
+                    borderRadius: 2,
+                  }}
+                  href="/profile"
+                >
+                  Go to Profile
+                </Button>
+              </Box>
+            ) : (
+              <>
+                {selectedFacilities.map((facility) => (
+                  <Accordion 
+                    key={facility}
+                    expanded={expandedFacility === facility}
+                    onChange={handleAccordionChange(facility)}
+                    elevation={0}
+                    sx={{ 
+                      border: 'none',
+                      '&:before': { display: 'none' },
+                      mb: 2,
+                    }}
+                  >
+                    <AccordionSummary
+                      expandIcon={<ExpandMoreIcon sx={{ color: '#0D2477' }} />}
+                      sx={{
+                        px: 0,
+                        '& .MuiAccordionSummary-content': {
+                          margin: 0,
+                        }
+                      }}
+                    >
+                      <Typography 
+                        variant="subtitle1" 
+                        fontWeight="500" 
+                        color="#0D2477"
+                      >
+                        {facility}
+                      </Typography>
+                    </AccordionSummary>
+                    <AccordionDetails sx={{ px: 0 }}>
+                      <TableContainer 
+                        component={Paper} 
+                        elevation={0}
+                        sx={{ 
+                          border: '1px solid #e0e0e0',
+                          borderRadius: 1,
+                        }}
+                      >
+                        <Table>
+                          <TableHead>
+                            <TableRow sx={{ backgroundColor: "#fafafa" }}>
+                              <TableCell sx={{ fontWeight: 600, color: '#0D2477', py: 2 }}>
+                                File Name
                               </TableCell>
-                              <TableCell>
-                                <IconButton
-                                  color="success"
-                                  component="a"
-                                  href={`${API_BASE_URL}/cod/${cod.fileName}`}
-                                  download
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                >
-                                  <DownloadIcon />
-                                </IconButton>
+                              <TableCell align="center" sx={{ fontWeight: 600, color: '#0D2477', py: 2 }}>
+                                Preview
                               </TableCell>
-                              <TableCell>
-                                {cod.uploadedAt ? new Date(cod.uploadedAt).toLocaleString() : "N/A"}
+                              <TableCell align="center" sx={{ fontWeight: 600, color: '#0D2477', py: 2 }}>
+                                Download
+                              </TableCell>
+                              <TableCell align="right" sx={{ fontWeight: 600, color: '#0D2477', py: 2 }}>
+                                Uploaded At
                               </TableCell>
                             </TableRow>
-                          ))
-                        ) : (
-                          <TableRow>
-                            <TableCell colSpan={4} align="center">
-                              No CODs available.
-                            </TableCell>
-                          </TableRow>
-                        )}
-                      </TableBody>
-                    </Table>
-                  </TableContainer>
-                </CardContent>
-              </Box>
-            ))}
-          </Card>
-        )}
+                          </TableHead>
+                          <TableBody>
+                            {cods[facility] && cods[facility].length > 0 ? (
+                              cods[facility].map((cod) => (
+                                <TableRow 
+                                  key={cod._id} 
+                                  sx={{ 
+                                    '&:hover': { backgroundColor: '#fafafa' },
+                                    '&:last-child td': { borderBottom: 0 }
+                                  }}
+                                >
+                                  <TableCell sx={{ py: 2.5 }}>
+                                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+                                      <DescriptionOutlinedIcon sx={{ color: '#9e9e9e', fontSize: 20 }} />
+                                      <Typography variant="body2" color="text.primary">
+                                        {cod.fileName || "N/A"}
+                                      </Typography>
+                                    </Box>
+                                  </TableCell>
+                                  <TableCell align="center" sx={{ py: 2.5 }}>
+                                    <IconButton 
+                                      onClick={() => handlePreviewOpen(cod)}
+                                      sx={{ 
+                                        color: '#0D2477',
+                                        '&:hover': { backgroundColor: 'rgba(13, 36, 119, 0.08)' }
+                                      }}
+                                    >
+                                      <VisibilityIcon fontSize="small" />
+                                    </IconButton>
+                                  </TableCell>
+                                  <TableCell align="center" sx={{ py: 2.5 }}>
+                                    <IconButton
+                                      component="a"
+                                      href={`${API_BASE_URL}/cod/${cod.fileName}`}
+                                      download
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      sx={{ 
+                                        color: '#4caf50',
+                                        '&:hover': { backgroundColor: 'rgba(76, 175, 80, 0.08)' }
+                                      }}
+                                    >
+                                      <DownloadIcon fontSize="small" />
+                                    </IconButton>
+                                  </TableCell>
+                                  <TableCell align="right" sx={{ py: 2.5 }}>
+                                    <Typography variant="body2" color="text.secondary">
+                                      {cod.uploadedAt ? new Date(cod.uploadedAt).toLocaleString() : "N/A"}
+                                    </Typography>
+                                  </TableCell>
+                                </TableRow>
+                              ))
+                            ) : (
+                              <TableRow>
+                                <TableCell colSpan={4} align="center" sx={{ py: 4 }}>
+                                  <Typography variant="body2" color="text.secondary">
+                                    No certificates available for this facility.
+                                  </Typography>
+                                </TableCell>
+                              </TableRow>
+                            )}
+                          </TableBody>
+                        </Table>
+                      </TableContainer>
+                    </AccordionDetails>
+                  </Accordion>
+                ))}
+              </>
+            )}
+          </Paper>
+        </motion.div>
       </Container>
 
-      {/* PDF Preview Dialog */}
+      <Footer />
+
       <Dialog open={openPreview} onClose={handlePreviewClose} maxWidth="md" fullWidth>
-        <DialogTitle>Certificate of Destruction</DialogTitle>
+        <DialogTitle sx={{ color: '#0D2477', fontWeight: 600 }}>
+          Certificate of Destruction
+        </DialogTitle>
         <DialogContent sx={{ display: "flex", justifyContent: "center", alignItems: "center", height: "80vh" }}>
           {currentCod && (
             <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.min.js">
@@ -240,11 +315,19 @@ function COD() {
           )}
         </DialogContent>
         <DialogActions>
-          <Button onClick={handlePreviewClose}>Close</Button>
+          <Button 
+            onClick={handlePreviewClose}
+            sx={{ 
+              color: '#0D2477',
+              textTransform: 'none',
+            }}
+          >
+            Close
+          </Button>
         </DialogActions>
       </Dialog>
     </Box>
   );
-};
+}
 
 export default COD;

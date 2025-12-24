@@ -5,7 +5,7 @@ import Typography from '@mui/material/Typography';
 import CheckIcon from '@mui/icons-material/Check';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh';
-import logo from '../assets/images/logo.png';
+import logo from '../assets/images/white-logo.png';
 
 const items = [
   {
@@ -40,19 +40,7 @@ export default function Content() {
       }}
     >
       <Box sx={{ mb: 2 }}>
-        <img src={logo} alt="Biomed Logo" style={{ width: '220px', height: 'auto' }} />
-        <Typography
-          variant="caption"
-          sx={{
-            color: '#ffffff',
-            display: 'block',
-            mt: 0.5,
-            fontStyle: 'italic',
-            letterSpacing: 1,
-          }}
-        >
-          The Biohazard Professionals
-        </Typography>
+        <img src={logo} alt="Biomed Logo" style={{ width: '160px', height: 'auto' }} />
       </Box>
       
       {items.map((item, index) => (

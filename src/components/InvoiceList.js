@@ -32,7 +32,8 @@ import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import Footer from "./Footer";
 
-const API_BASE_URL = process.env.REACT_APP_API_URL || "https://biomedwaste.net/api";
+const API_BASE_URL =
+  process.env.REACT_APP_API_URL || "https://biomedwaste.net/api";
 
 const InvoiceList = () => {
   const navigate = useNavigate();
@@ -58,10 +59,12 @@ const InvoiceList = () => {
       }
 
       try {
-        const response = await axios.get(`${API_BASE_URL}/user/${currentUserId}`);
+        const response = await axios.get(
+          `${API_BASE_URL}/user/${currentUserId}`,
+        );
         const approvedFacilities = response.data?.facilities
-          .filter(facility => facility.approved)
-          .map(facility => facility.name);
+          .filter((facility) => facility.approved)
+          .map((facility) => facility.name);
 
         setUserData(response.data);
         setSelectedFacilities(approvedFacilities);
@@ -83,7 +86,9 @@ const InvoiceList = () => {
         const invoicesData = {};
         const fetchPromises = selectedFacilities.map(async (facility) => {
           try {
-            const response = await axios.get(`${API_BASE_URL}/invoice/${facility}`);
+            const response = await axios.get(
+              `${API_BASE_URL}/invoice/${facility}`,
+            );
             invoicesData[facility] = response.data.length ? response.data : [];
           } catch (error) {
             console.error(`Error fetching invoices for ${facility}:`, error);
@@ -103,8 +108,16 @@ const InvoiceList = () => {
     }
   }, [selectedFacilities]);
 
-  const totalAmountDue = Object.values(invoices).flat().reduce((acc, invoice) => acc + (invoice.balanceDue || 0), 0);
-  const totalAmountPaid = Object.values(invoices).flat().reduce((acc, invoice) => acc + (invoice.totalAmt || 0) - (invoice.balanceDue || 0), 0);
+  const totalAmountDue = Object.values(invoices)
+    .flat()
+    .reduce((acc, invoice) => acc + (invoice.balanceDue || 0), 0);
+  const totalAmountPaid = Object.values(invoices)
+    .flat()
+    .reduce(
+      (acc, invoice) =>
+        acc + (invoice.totalAmt || 0) - (invoice.balanceDue || 0),
+      0,
+    );
 
   const handlePreviewOpen = (invoice) => {
     setCurrentInvoice(invoice);
@@ -117,15 +130,31 @@ const InvoiceList = () => {
 
   if (loading) {
     return (
-      <Box display="flex" justifyContent="center" alignItems="center" height="100vh" sx={{ background: "#f5f5f5" }}>
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        height="100vh"
+        sx={{ background: "#f5f5f5" }}
+      >
         <CircularProgress sx={{ color: "#0D2477" }} />
       </Box>
     );
   }
 
   return (
-    <Box sx={{ display: "flex", flexDirection: "column", minHeight: "100vh", background: "#f5f5f5" }}>
-      <Container maxWidth="lg" sx={{ pt: { xs: 14, md: 18 }, pb: { xs: 6, md: 8 }, flex: 1 }}>
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        minHeight: "100vh",
+        background: "#f5f5f5",
+      }}
+    >
+      <Container
+        maxWidth="lg"
+        sx={{ pt: { xs: 14, md: 18 }, pb: { xs: 6, md: 8 }, flex: 1 }}
+      >
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -142,12 +171,21 @@ const InvoiceList = () => {
           >
             {selectedFacilities.length === 0 ? (
               <Box sx={{ textAlign: "center", py: 6 }}>
-                <PersonPinCircle sx={{ fontSize: 60, color: "#0D2477", mb: 2 }} />
-                <Typography variant="h6" sx={{ fontWeight: 600, color: "#1a2744", mb: 1 }}>
+                <PersonPinCircle
+                  sx={{ fontSize: 60, color: "#0D2477", mb: 2 }}
+                />
+                <Typography
+                  variant="h6"
+                  sx={{ fontWeight: 600, color: "#1a2744", mb: 1 }}
+                >
                   No Facilities Selected
                 </Typography>
-                <Typography variant="body2" sx={{ color: "#666", mb: 3, maxWidth: 400, mx: "auto" }}>
-                  No facility has been selected. Please navigate to your profile section to add facilities.
+                <Typography
+                  variant="body2"
+                  sx={{ color: "#666", mb: 3, maxWidth: 400, mx: "auto" }}
+                >
+                  No facility has been selected. Please navigate to your profile
+                  section to add facilities.
                 </Typography>
                 <Button
                   variant="contained"
@@ -173,7 +211,7 @@ const InvoiceList = () => {
                     fontWeight: 700,
                     color: "#0D2477",
                     mb: 3,
-                    fontSize: { xs: "1.5rem", md: "1.75rem" }
+                    fontSize: { xs: "1.5rem", md: "1.75rem" },
                   }}
                 >
                   Invoice Summary
@@ -194,7 +232,10 @@ const InvoiceList = () => {
                           border: "1px solid #D6E8FF",
                         }}
                       >
-                        <Typography variant="body2" sx={{ color: "#5A6B7F", mb: 0.5 }}>
+                        <Typography
+                          variant="body2"
+                          sx={{ color: "#5A6B7F", mb: 0.5 }}
+                        >
                           Total Amount Due:
                         </Typography>
                         <Typography
@@ -202,7 +243,7 @@ const InvoiceList = () => {
                           sx={{
                             fontWeight: 700,
                             color: "#0D2477",
-                            fontSize: { xs: "1.5rem", md: "2rem" }
+                            fontSize: { xs: "1.5rem", md: "2rem" },
                           }}
                         >
                           ${totalAmountDue.toFixed(2)}
@@ -224,7 +265,10 @@ const InvoiceList = () => {
                           border: "1px solid #C8E6C9",
                         }}
                       >
-                        <Typography variant="body2" sx={{ color: "#5A7F5E", mb: 0.5 }}>
+                        <Typography
+                          variant="body2"
+                          sx={{ color: "#5A7F5E", mb: 0.5 }}
+                        >
                           Total Amount Paid:
                         </Typography>
                         <Typography
@@ -232,7 +276,7 @@ const InvoiceList = () => {
                           sx={{
                             fontWeight: 700,
                             color: "#2E7D32",
-                            fontSize: { xs: "1.5rem", md: "2rem" }
+                            fontSize: { xs: "1.5rem", md: "2rem" },
                           }}
                         >
                           ${totalAmountPaid.toFixed(2)}
@@ -261,8 +305,14 @@ const InvoiceList = () => {
                   >
                     <InfoOutlinedIcon sx={{ color: "#666", fontSize: 20 }} />
                     <Typography variant="body2" sx={{ color: "#555" }}>
-                      <Box component="span" sx={{ fontWeight: 600, color: "#333" }}>Notice:</Box>{" "}
-                      Invoices are updated every 3 minutes. If you do not see your latest invoice, please wait or contact support.
+                      <Box
+                        component="span"
+                        sx={{ fontWeight: 600, color: "#333" }}
+                      >
+                        Notice:
+                      </Box>{" "}
+                      Invoices are updated every 3 minutes. If you do not see
+                      your latest invoice, please wait or contact support.
                     </Typography>
                   </Box>
                 </motion.div>
@@ -272,16 +322,19 @@ const InvoiceList = () => {
                     key={facility}
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.4, delay: 0.4 + facilityIndex * 0.1 }}
+                    transition={{
+                      duration: 0.4,
+                      delay: 0.4 + facilityIndex * 0.1,
+                    }}
                   >
                     <Box sx={{ mb: 4 }}>
                       <Typography
                         variant="body1"
                         sx={{
                           fontWeight: 500,
-                          color: "#0D2477",
+                          color: "#1a2744",
                           mb: 2,
-                          fontSize: { xs: "0.95rem", md: "1rem" }
+                          fontSize: { xs: "0.95rem", md: "1rem" },
                         }}
                       >
                         Invoices of {facility}
@@ -290,24 +343,82 @@ const InvoiceList = () => {
                       <TableContainer sx={{ overflowX: "auto" }}>
                         <Table sx={{ minWidth: { xs: 600, md: "auto" } }}>
                           <TableHead>
-                            <TableRow sx={{ borderBottom: "2px solid #e0e0e0" }}>
-                              <TableCell sx={{ fontWeight: 600, color: "#0D2477", fontSize: "0.9rem", py: 2 }}>
+                            <TableRow
+                              sx={{ borderBottom: "2px solid #e0e0e0" }}
+                            >
+                              <TableCell
+                                sx={{
+                                  fontWeight: 600,
+                                  color: "#0D2477",
+                                  fontSize: "0.9rem",
+                                  py: 2,
+                                }}
+                              >
                                 Invoice Number
                               </TableCell>
-                              <TableCell sx={{ fontWeight: 600, color: "#0D2477", fontSize: "0.9rem", py: 2 }}>
+                              <TableCell
+                                sx={{
+                                  fontWeight: 600,
+                                  color: "#0D2477",
+                                  fontSize: "0.9rem",
+                                  py: 2,
+                                }}
+                              >
                                 Total Amount
                               </TableCell>
-                              <TableCell align="center" sx={{ fontWeight: 600, color: "#0D2477", fontSize: "0.9rem", py: 2 }}>
+                              <TableCell
+                                align="center"
+                                sx={{
+                                  fontWeight: 600,
+                                  color: "#0D2477",
+                                  fontSize: "0.9rem",
+                                  py: 2,
+                                }}
+                              >
                                 Preview
                               </TableCell>
-                              <TableCell align="center" sx={{ fontWeight: 600, color: "#0D2477", fontSize: "0.9rem", py: 2 }}>
+                              <TableCell
+                                align="center"
+                                sx={{
+                                  fontWeight: 600,
+                                  color: "#0D2477",
+                                  fontSize: "0.9rem",
+                                  py: 2,
+                                }}
+                              >
                                 Download
                               </TableCell>
-                              <TableCell sx={{ fontWeight: 600, color: "#0D2477", fontSize: "0.9rem", py: 2 }}>
+                              <TableCell
+                                sx={{
+                                  fontWeight: 600,
+                                  color: "#0D2477",
+                                  fontSize: "0.9rem",
+                                  py: 2,
+                                }}
+                              >
                                 Balance Due
                               </TableCell>
-                              <TableCell align="right" sx={{ fontWeight: 600, color: "#0D2477", fontSize: "0.9rem", py: 2 }}>
+                              <TableCell
+                                align="right"
+                                sx={{
+                                  fontWeight: 600,
+                                  color: "#0D2477",
+                                  fontSize: "0.9rem",
+                                  py: 2,
+                                }}
+                              >
                                 Uploaded At
+                              </TableCell>
+                              <TableCell
+                                align="center"
+                                sx={{
+                                  fontWeight: 600,
+                                  color: "#0D2477",
+                                  fontSize: "0.9rem",
+                                  py: 2,
+                                }}
+                              >
+                                Action
                               </TableCell>
                             </TableRow>
                           </TableHead>
@@ -322,15 +433,32 @@ const InvoiceList = () => {
                                   }}
                                 >
                                   <TableCell sx={{ py: 2.5 }}>
-                                    <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
-                                      <DescriptionOutlinedIcon sx={{ color: "#999", fontSize: 20 }} />
-                                      <Typography variant="body2" sx={{ color: "#1a2744", fontWeight: 500 }}>
+                                    <Box
+                                      sx={{
+                                        display: "flex",
+                                        alignItems: "center",
+                                        gap: 1.5,
+                                      }}
+                                    >
+                                      <DescriptionOutlinedIcon
+                                        sx={{ color: "#999", fontSize: 20 }}
+                                      />
+                                      <Typography
+                                        variant="body2"
+                                        sx={{
+                                          color: "#1a2744",
+                                          fontWeight: 500,
+                                        }}
+                                      >
                                         {invoice.fileName || "N/A"}
                                       </Typography>
                                     </Box>
                                   </TableCell>
                                   <TableCell sx={{ py: 2.5 }}>
-                                    <Typography variant="body2" sx={{ color: "#1a2744" }}>
+                                    <Typography
+                                      variant="body2"
+                                      sx={{ color: "#1a2744" }}
+                                    >
                                       ${invoice.totalAmt?.toFixed(2) || "N/A"}
                                     </Typography>
                                   </TableCell>
@@ -339,7 +467,10 @@ const InvoiceList = () => {
                                       onClick={() => handlePreviewOpen(invoice)}
                                       sx={{
                                         color: "#0D2477",
-                                        "&:hover": { backgroundColor: "rgba(13, 36, 119, 0.08)" }
+                                        "&:hover": {
+                                          backgroundColor:
+                                            "rgba(13, 36, 119, 0.08)",
+                                        },
                                       }}
                                     >
                                       <VisibilityIcon sx={{ fontSize: 22 }} />
@@ -347,35 +478,82 @@ const InvoiceList = () => {
                                   </TableCell>
                                   <TableCell align="center" sx={{ py: 2.5 }}>
                                     <IconButton
-                                      component="a"
-                                      href={`${API_BASE_URL}/invoices/${invoice.fileName}`}
-                                      download
-                                      target="_blank"
-                                      rel="noopener noreferrer"
+                                      onClick={() => {
+                                        const link = document.createElement('a');
+                                        link.href = `${API_BASE_URL}/invoices/${invoice.fileName}`;
+                                        link.target = '_blank';
+                                        link.rel = 'noopener noreferrer';
+                                        link.click();
+                                      }}
                                       sx={{
                                         color: "#2E7D32",
-                                        "&:hover": { backgroundColor: "rgba(46, 125, 50, 0.08)" }
+                                        "&:hover": {
+                                          backgroundColor:
+                                            "rgba(46, 125, 50, 0.08)",
+                                        },
                                       }}
                                     >
                                       <DownloadIcon sx={{ fontSize: 22 }} />
                                     </IconButton>
                                   </TableCell>
                                   <TableCell sx={{ py: 2.5 }}>
-                                    <Typography variant="body2" sx={{ color: "#1a2744" }}>
+                                    <Typography
+                                      variant="body2"
+                                      sx={{ color: "#1a2744" }}
+                                    >
                                       ${invoice.balanceDue?.toFixed(2) || "N/A"}
                                     </Typography>
                                   </TableCell>
                                   <TableCell align="right" sx={{ py: 2.5 }}>
-                                    <Typography variant="body2" sx={{ color: "#666" }}>
-                                      {invoice.uploadedAt ? new Date(invoice.uploadedAt).toLocaleString() : "N/A"}
+                                    <Typography
+                                      variant="body2"
+                                      sx={{ color: "#666" }}
+                                    >
+                                      {invoice.uploadedAt
+                                        ? new Date(
+                                            invoice.uploadedAt,
+                                          ).toLocaleString()
+                                        : "N/A"}
                                     </Typography>
+                                  </TableCell>
+                                  <TableCell align="center" sx={{ py: 2.5 }}>
+                                    <Button
+                                      variant="outlined"
+                                      size="small"
+                                      onClick={() => {
+                                        setDisputeInvoice({ ...invoice, facility });
+                                        setOpenDispute(true);
+                                      }}
+                                      sx={{
+                                        color: "#d32f2f",
+                                        borderColor: "#d32f2f",
+                                        textTransform: "none",
+                                        fontSize: "0.75rem",
+                                        px: 2,
+                                        py: 0.5,
+                                        borderRadius: 2,
+                                        "&:hover": {
+                                          borderColor: "#b71c1c",
+                                          backgroundColor: "rgba(211, 47, 47, 0.04)",
+                                        },
+                                      }}
+                                    >
+                                      Dispute
+                                    </Button>
                                   </TableCell>
                                 </TableRow>
                               ))
                             ) : (
                               <TableRow>
-                                <TableCell colSpan={6} align="center" sx={{ py: 4 }}>
-                                  <Typography variant="body2" color="textSecondary">
+                                <TableCell
+                                  colSpan={7}
+                                  align="center"
+                                  sx={{ py: 4 }}
+                                >
+                                  <Typography
+                                    variant="body2"
+                                    color="textSecondary"
+                                  >
                                     No invoices available.
                                   </Typography>
                                 </TableCell>
@@ -402,7 +580,13 @@ const InvoiceList = () => {
                     },
                   }}
                 >
-                  <DialogTitle sx={{ fontWeight: 'bold', color: '#d32f2f', borderBottom: '1px solid #eee' }}>
+                  <DialogTitle
+                    sx={{
+                      fontWeight: "bold",
+                      color: "#d32f2f",
+                      borderBottom: "1px solid #eee",
+                    }}
+                  >
                     File a Dispute
                   </DialogTitle>
 
@@ -417,8 +601,13 @@ const InvoiceList = () => {
                     </Box>
 
                     <Box>
-                      <Typography variant="subtitle2" color="text.secondary" gutterBottom>
-                        Reason for Dispute <span style={{ color: "red" }}>*</span>
+                      <Typography
+                        variant="subtitle2"
+                        color="text.secondary"
+                        gutterBottom
+                      >
+                        Reason for Dispute{" "}
+                        <span style={{ color: "red" }}>*</span>
                       </Typography>
                       <TextField
                         multiline
@@ -436,7 +625,9 @@ const InvoiceList = () => {
                     </Box>
                   </DialogContent>
 
-                  <DialogActions sx={{ mt: 2, borderTop: '1px solid #eee', pt: 2 }}>
+                  <DialogActions
+                    sx={{ mt: 2, borderTop: "1px solid #eee", pt: 2 }}
+                  >
                     <Button
                       onClick={() => setOpenDispute(false)}
                       variant="outlined"
@@ -453,13 +644,17 @@ const InvoiceList = () => {
                         try {
                           const disputePayload = {
                             customerId: userData?._id,
-                            customerName: userData?.firstname + " " + userData?.lastname,
+                            customerName:
+                              userData?.firstname + " " + userData?.lastname,
                             facility: disputeInvoice?.facility,
                             invoiceNumber: disputeInvoice?.fileName,
                             disputeDescription: disputeReason,
                             disputeDate: new Date().toISOString(),
                           };
-                          await axios.post(`${API_BASE_URL}/invoice/dispute`, disputePayload);
+                          await axios.post(
+                            `${API_BASE_URL}/invoice/dispute`,
+                            disputePayload,
+                          );
 
                           alert("Dispute filed successfully.");
                           setOpenDispute(false);
@@ -476,19 +671,54 @@ const InvoiceList = () => {
                   </DialogActions>
                 </Dialog>
 
-                <Dialog open={openPreview} onClose={handlePreviewClose} maxWidth="md" fullWidth>
-                  <DialogTitle sx={{ fontWeight: 600, color: "#1a2744" }}>Invoice Preview</DialogTitle>
-                  <DialogContent sx={{ display: "flex", justifyContent: "center", alignItems: "center", height: "80vh" }}>
+                <Dialog
+                  open={openPreview}
+                  onClose={handlePreviewClose}
+                  maxWidth="md"
+                  fullWidth
+                >
+                  <DialogTitle sx={{ fontWeight: 600, color: "#1a2744" }}>
+                    Invoice Preview
+                  </DialogTitle>
+                  <DialogContent
+                    sx={{
+                      display: "flex",
+                      flexDirection: "column",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      height: "80vh",
+                    }}
+                  >
                     {currentInvoice && (
-                      <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.min.js">
-                        <Viewer fileUrl={`${API_BASE_URL}/invoices/${currentInvoice.fileName}`} />
-                      </Worker>
+                      <>
+                        <Worker workerUrl="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js">
+                          <Box sx={{ width: '100%', height: '100%' }}>
+                            <Viewer
+                              fileUrl={`${API_BASE_URL}/invoices/${currentInvoice.fileName}`}
+                              onDocumentLoadError={(error) => {
+                                console.error('PDF load error:', error);
+                              }}
+                            />
+                          </Box>
+                        </Worker>
+                        <Button
+                          variant="text"
+                          sx={{ mt: 2, color: '#0D2477' }}
+                          onClick={() => window.open(`${API_BASE_URL}/invoices/${currentInvoice.fileName}`, '_blank')}
+                        >
+                          Open in New Tab
+                        </Button>
+                      </>
                     )}
                   </DialogContent>
                   <DialogActions>
                     <Button
                       onClick={handlePreviewClose}
-                      sx={{ color: "#0D2477", fontWeight: 600, textTransform: "none" }}
+                      sx={{
+                        color: "#0D2477",
+                        fontWeight: 600,
+                        textTransform: "none",
+                      }}
                     >
                       Close
                     </Button>

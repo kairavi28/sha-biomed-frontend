@@ -958,7 +958,7 @@ function Dashboard() {
               textAlign: "center",
               fontWeight: 700,
               fontStyle: "bold",
-              color: "#1a2744",
+              color: "#0D2477",
               mb: { xs: 4, md: 6 },
               fontSize: { xs: "1.5rem", md: "2.125rem" },
             }}
