@@ -258,7 +258,7 @@ const WaybillList = () => {
                                                                     <TableCell align="center" sx={{ py: 2.5 }}>
                                                                         <IconButton
                                                                             component="a"
-                                                                            href={`${API_BASE_URL}/waybills/${waybill.fileName}`}
+                                                                            href={`${API_BASE_URL}/waybill/file/${waybill.fileName}`}
                                                                             download
                                                                             target="_blank"
                                                                             rel="noopener noreferrer"
@@ -302,7 +302,7 @@ const WaybillList = () => {
                     <DialogContent sx={{ display: "flex", justifyContent: "center", alignItems: "center", height: "80vh" }}>
                         {currentWaybill && (
                             <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.min.js">
-                                <Viewer fileUrl={`${API_BASE_URL}/waybills/${currentWaybill.fileName}`} />
+                                <Viewer fileUrl={`${API_BASE_URL}/waybill/file/${currentWaybill.fileName}`} />
                             </Worker>
                         )}
                     </DialogContent>
