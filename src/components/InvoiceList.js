@@ -480,7 +480,7 @@ const InvoiceList = () => {
                                     <IconButton
                                       onClick={() => {
                                         const link = document.createElement('a');
-                                        link.href = `${API_BASE_URL}/invoices/${invoice.fileName}`;
+                                        link.href = `${API_BASE_URL}/invoice/file/${invoice.fileName}`;
                                         link.target = '_blank';
                                         link.rel = 'noopener noreferrer';
                                         link.click();
@@ -694,7 +694,7 @@ const InvoiceList = () => {
                         <Worker workerUrl="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js">
                           <Box sx={{ width: '100%', height: '100%' }}>
                             <Viewer
-                              fileUrl={`${API_BASE_URL}/invoices/${currentInvoice.fileName}`}
+                              fileUrl={`${API_BASE_URL}/invoice/file/${currentInvoice.fileName}`}
                               onDocumentLoadError={(error) => {
                                 console.error('PDF load error:', error);
                               }}
@@ -704,7 +704,7 @@ const InvoiceList = () => {
                         <Button
                           variant="text"
                           sx={{ mt: 2, color: '#0D2477' }}
-                          onClick={() => window.open(`${API_BASE_URL}/invoices/${currentInvoice.fileName}`, '_blank')}
+                          onClick={() => window.open(`${API_BASE_URL}/invoice/file/${currentInvoice.fileName}`, '_blank')}
                         >
                           Open in New Tab
                         </Button>
