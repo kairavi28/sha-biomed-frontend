@@ -58,6 +58,15 @@ function ProfilePage() {
     setSnackbar({ ...snackbar, open: false });
   };
 
+  const getAvatarUrl = (avatarData) => {
+    if (!avatarData) return null;
+    if (typeof avatarData === 'string') return avatarData;
+    if (avatarData.base64 && avatarData.contentType) {
+      return `data:${avatarData.contentType};base64,${avatarData.base64}`;
+    }
+    return null;
+  };
+
   useEffect(() => {
     const approvedFacilities = sessionStorage.getItem('facilityApproved');
     if (approvedFacilities) {
@@ -81,6 +90,13 @@ function ProfilePage() {
       try {
         const response = await axios.get(`${API_BASE_URL}/user/${userId}`);
         setUserData(response.data);
+        
+        const serverAvatarUrl = getAvatarUrl(response.data?.avatar);
+        if (serverAvatarUrl) {
+          setLocalAvatarPreview(serverAvatarUrl);
+          localStorage.setItem(`avatar_${userId}`, serverAvatarUrl);
+        }
+        
         if (response.data?.facilities) {
           const approvedFacilities = response.data.facilities
             .filter(facility => facility.approved)
@@ -219,6 +235,12 @@ function ProfilePage() {
       const updatedResponse = await axios.get(`${API_BASE_URL}/user/${userId}`);
       setUserData(updatedResponse.data);
       setImageFile(null);
+      
+      const serverAvatarUrl = getAvatarUrl(updatedResponse.data?.avatar);
+      if (serverAvatarUrl) {
+        setLocalAvatarPreview(serverAvatarUrl);
+        localStorage.setItem(`avatar_${userId}`, serverAvatarUrl);
+      }
 
       const approvedFacilities = updatedResponse.data?.facilities
         .filter(facility => facility.approved)
@@ -342,7 +364,7 @@ function ProfilePage() {
               <Grid item xs={12} md={3} sx={{ textAlign: { xs: 'center', md: 'left' } }}>
                 <Box sx={{ position: 'relative', display: 'inline-block' }}>
                   <Avatar 
-                    src={localAvatarPreview || userData?.avatar} 
+                    src={localAvatarPreview || getAvatarUrl(userData?.avatar)} 
                     sx={{ 
                       width: { xs: 150, md: 180 }, 
                       height: { xs: 150, md: 180 }, 
@@ -350,7 +372,7 @@ function ProfilePage() {
                       border: '4px solid #f0f0f0'
                     }}
                   >
-                    {!localAvatarPreview && !userData?.avatar && (
+                    {!localAvatarPreview && !getAvatarUrl(userData?.avatar) && (
                       <PersonIcon sx={{ fontSize: { xs: 80, md: 100 }, color: '#bdbdbd' }} />
                     )}
                   </Avatar>

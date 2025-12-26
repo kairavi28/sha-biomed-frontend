@@ -20,6 +20,7 @@ import {
   CircularProgress,
   Container,
   Grid,
+  Chip,
 } from "@mui/material";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import DownloadIcon from "@mui/icons-material/Download";
@@ -46,6 +47,7 @@ const InvoiceList = () => {
   const [openDispute, setOpenDispute] = useState(false);
   const [disputeInvoice, setDisputeInvoice] = useState(null);
   const [disputeReason, setDisputeReason] = useState("");
+  const [disputedInvoices, setDisputedInvoices] = useState([]);
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -109,6 +111,26 @@ const InvoiceList = () => {
       return () => clearInterval(interval);
     }
   }, [selectedFacilities]);
+
+  useEffect(() => {
+    const fetchDisputes = async () => {
+      const currentUserSession = JSON.parse(sessionStorage.getItem("userData"));
+      const currentUserId = currentUserSession?.id || currentUserSession?._id;
+      if (!currentUserId) return;
+      
+      try {
+        const response = await axios.get(`${API_BASE_URL}/dispute/customer/${currentUserId}`);
+        const disputedInvoiceNumbers = response.data.map(d => d.invoiceNumber);
+        setDisputedInvoices(disputedInvoiceNumbers);
+      } catch (error) {
+        console.error("Error fetching disputes:", error);
+      }
+    };
+
+    fetchDisputes();
+    const interval = setInterval(fetchDisputes, 30 * 1000);
+    return () => clearInterval(interval);
+  }, []);
 
   const totalAmountDue = Object.values(invoices)
     .flat()
@@ -422,6 +444,17 @@ const InvoiceList = () => {
                               >
                                 Action
                               </TableCell>
+                              <TableCell
+                                align="center"
+                                sx={{
+                                  fontWeight: 600,
+                                  color: "#0D2477",
+                                  fontSize: "0.9rem",
+                                  py: 2,
+                                }}
+                              >
+                                Status
+                              </TableCell>
                             </TableRow>
                           </TableHead>
                           <TableBody>
@@ -480,12 +513,22 @@ const InvoiceList = () => {
                                   </TableCell>
                                   <TableCell align="center" sx={{ py: 2.5 }}>
                                     <IconButton
-                                      onClick={() => {
-                                        const link = document.createElement('a');
-                                        link.href = `${API_BASE_URL}/invoice/file/${invoice.fileName}`;
-                                        link.target = '_blank';
-                                        link.rel = 'noopener noreferrer';
-                                        link.click();
+                                      onClick={async () => {
+                                        try {
+                                          const response = await fetch(`${API_BASE_URL}/invoice/file/${invoice.fileName}`);
+                                          const blob = await response.blob();
+                                          const url = window.URL.createObjectURL(blob);
+                                          const link = document.createElement('a');
+                                          link.href = url;
+                                          link.download = invoice.fileName;
+                                          document.body.appendChild(link);
+                                          link.click();
+                                          document.body.removeChild(link);
+                                          window.URL.revokeObjectURL(url);
+                                        } catch (error) {
+                                          console.error('Download failed:', error);
+                                          alert('Failed to download file. Please try again.');
+                                        }
                                       }}
                                       sx={{
                                         color: "#2E7D32",
@@ -543,12 +586,37 @@ const InvoiceList = () => {
                                       Dispute
                                     </Button>
                                   </TableCell>
+                                  <TableCell align="center" sx={{ py: 2.5 }}>
+                                    {disputedInvoices.includes(invoice.fileName) ? (
+                                      <Chip
+                                        label="Disputed"
+                                        size="small"
+                                        sx={{
+                                          backgroundColor: "#FFF3E0",
+                                          color: "#E65100",
+                                          fontWeight: 600,
+                                          fontSize: "0.7rem",
+                                        }}
+                                      />
+                                    ) : (
+                                      <Chip
+                                        label="Active"
+                                        size="small"
+                                        sx={{
+                                          backgroundColor: "#E8F5E9",
+                                          color: "#2E7D32",
+                                          fontWeight: 600,
+                                          fontSize: "0.7rem",
+                                        }}
+                                      />
+                                    )}
+                                  </TableCell>
                                 </TableRow>
                               ))
                             ) : (
                               <TableRow>
                                 <TableCell
-                                  colSpan={7}
+                                  colSpan={8}
                                   align="center"
                                   sx={{ py: 4 }}
                                 >
@@ -657,7 +725,7 @@ const InvoiceList = () => {
                             `${API_BASE_URL}/invoice/dispute`,
                             disputePayload,
                           );
-
+                          setDisputedInvoices(prev => [...prev, disputeInvoice?.fileName]);
                           alert("Dispute filed successfully.");
                           setOpenDispute(false);
                           setDisputeReason("");
