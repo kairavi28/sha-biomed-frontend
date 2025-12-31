@@ -10,7 +10,6 @@ import {
 } from "@mui/material";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import WarningAmberIcon from "@mui/icons-material/WarningAmber";
-import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import InventoryIcon from "@mui/icons-material/Inventory";
 import VerifiedUserIcon from "@mui/icons-material/VerifiedUser";
 import SecurityIcon from "@mui/icons-material/Security";
@@ -18,6 +17,7 @@ import LocalShippingIcon from "@mui/icons-material/LocalShipping";
 import { motion } from "framer-motion";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import SellOutlinedIcon from "@mui/icons-material/SellOutlined";
+import DownloadIcon from "@mui/icons-material/Download";
 import Footer from "./Footer";
 
 const heroFeatures = [
@@ -102,7 +102,7 @@ function InstructionPage() {
                                     fontWeight: 700,
                                     color: "#fff",
                                     mb: 2,
-                                    fontSize: { xs: "1.75rem", sm: "1.7rem", md: "2.2rem"  }
+                                    fontSize: { xs: "1.75rem", sm: "1.7rem", md: "2.2rem" }
                                 }}
                             >
                                 Waste Packaging Guide
@@ -121,15 +121,19 @@ function InstructionPage() {
                             </Typography>
                             <Button
                                 variant="contained"
+                                component="a"
+                                href="/waste-packaging-guide.pdf"
+                                download="waste-packaging-guide.pdf"
+                                startIcon={<DownloadIcon />}
                                 sx={{
                                     backgroundColor: "#D9DE38",
                                     color: "#1a2744",
-                                    fontWeight: 600,
-                                    px: 3,
-                                    py: 1,
+                                    fontWeight: 700,
+                                    px: 4,
+                                    py: 1.2,
                                     borderRadius: "25px",
                                     textTransform: "none",
-                                    fontSize: "0.9rem",
+                                    fontSize: "1rem",
                                     "&:hover": {
                                         backgroundColor: "#c5ca2e",
                                     },
@@ -145,8 +149,8 @@ function InstructionPage() {
                                         <motion.div
                                             initial={{ opacity: 0, y: 30, scale: 0.95 }}
                                             animate={{ opacity: 1, y: 0, scale: 1 }}
-                                            transition={{ 
-                                                duration: 0.6, 
+                                            transition={{
+                                                duration: 0.6,
                                                 delay: 0.3 + index * 0.15,
                                                 ease: "easeOut"
                                             }}
@@ -164,9 +168,9 @@ function InstructionPage() {
                                                     flexDirection: { xs: "row", md: "column" },
                                                     alignItems: { xs: "center", md: "flex-start" },
                                                     gap: { xs: 2, md: 0 },
-                                                    mt: { 
-                                                        xs: 0, 
-                                                        md: index % 2 === 1 ? 3 : 0 
+                                                    mt: {
+                                                        xs: 0,
+                                                        md: index % 2 === 1 ? 3 : 0
                                                     },
                                                 }}
                                             >
@@ -388,40 +392,32 @@ function InstructionPage() {
                                         </Box>
 
                                         {/* Video Placeholder */}
+                                       {/* YouTube Video */}
                                         <Box
                                             sx={{
                                                 width: "100%",
-                                                height: { xs: 150, md: 180 },
-                                                backgroundColor: "#1a2744",
                                                 borderRadius: 2,
-                                                display: "flex",
-                                                alignItems: "center",
-                                                justifyContent: "center",
-                                                mb: 2,
-                                                position: "relative",
                                                 overflow: "hidden",
+                                                mb: 2,
+                                                "& iframe": {
+                                                    borderRadius: "8px",
+                                                },
                                             }}
                                         >
-                                            <Box
-                                                sx={{
-                                                    width: 50,
-                                                    height: 50,
-                                                    borderRadius: "50%",
-                                                    backgroundColor: "rgba(255,255,255,0.2)",
-                                                    display: "flex",
-                                                    alignItems: "center",
-                                                    justifyContent: "center",
-                                                    cursor: "pointer",
-                                                    "&:hover": {
-                                                        backgroundColor: "rgba(255,255,255,0.3)",
+                                            <YouTube
+                                                videoId={product.videoId}
+                                                opts={{
+                                                    width: "100%",
+                                                    height: "180",
+                                                    playerVars: {
+                                                        autoplay: 0,
+                                                        modestbranding: 1,
+                                                        rel: 0,
                                                     },
                                                 }}
-                                            >
-                                                <PlayArrowIcon sx={{ color: "#fff", fontSize: 30 }} />
-                                            </Box>
+                                                style={{ width: "100%" }}
+                                            />
                                         </Box>
-
-                                        {/* Warning Box */}
                                         {/* Warning Box */}
                                         <Box
                                             sx={{

@@ -35,8 +35,8 @@ const categories = [
 ];
 
 const initialProducts = [
-    { id: 1, name: "Biohazard Temporary Tattoo", sku: "PCTT1", description: "Promotional biohazard temporary tattoo", price: 0.52, category: "Promotional Products", image: "https://biomedwaste.com/wp-content/uploads/2019/07/ACTT1-001b.png" },
-    { id: 2, name: "Biomed Blue Ball Cap", sku: "PBBC1", description: "Promotional Biomed branded blue ball cap", price: 15.33, category: "Promotional Products", image: "https://biomedwaste.com/wp-content/uploads/2019/07/ABBC1-004b.png" },
+    { id: 1, name: "Biohazard Temporary Tattoo", sku: "PCTT1", description: "Promotional biohazard temporary tattoo", price: null, category: "Promotional Products", image: "https://biomedwaste.com/wp-content/uploads/2019/07/ACTT1-001b.png" },
+    { id: 2, name: "Biomed Blue Ball Cap", sku: "PBBC1", description: "Promotional Biomed branded blue ball cap", price: null, category: "Promotional Products", image: "https://biomedwaste.com/wp-content/uploads/2019/07/ABBC1-004b.png" },
     { id: 3, name: "1-Litre Needle Drop-Box", sku: "SMDB1", description: "Compact needle drop-box for secure disposal", price: null, category: "Secure-A-Sharp®", image: "https://biomedwaste.com/wp-content/uploads/2018/11/8.5-inches-2.png" },
     { id: 4, name: "5-Litre Needle Drop-Box", sku: "SMDB5", description: "Mid-size needle drop-box for public areas", price: null, category: "Secure-A-Sharp®", image: "https://biomedwaste.com/wp-content/uploads/2018/11/SMDB5-1.png" },
     { id: 5, name: "72-Litre Needle Drop Box", sku: "SYDB72", description: "Large capacity needle drop box", price: null, category: "Secure-A-Sharp®", image: "https://biomedwaste.com/wp-content/uploads/2018/11/SYDB72a.png" },
