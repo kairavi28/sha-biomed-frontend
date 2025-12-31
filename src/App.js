@@ -22,6 +22,8 @@ import { PrivacyProvider, usePrivacy } from './components/PrivacyContext';
 import PrivacyPopup from './components/PrivacyPopup';
 import BusinessInfoForm from "./components/BusinessInfoForm";
 import RequestProduct from "./components/RequestProduct";
+import QuoteCart from "./components/QuoteCart";
+import { QuoteCartProvider } from "./context/QuoteCartContext";
 
 function RouteGuard() {
   const location = useLocation();
@@ -54,30 +56,33 @@ function App() {
   }, []);
 
   return (
-    <PrivacyProvider>
-      <RouteGuard />
-      <PrivacyPopup />
-      <Routes>
-        <Route path="/" element={<SignInSide />} />
-        <Route path="/sign-up" element={<SignUp />} />
-        <Route path="/auth/callback" element={<AuthCallback />} />
-        <Route element={<LayoutWithNavbar />}>
-          <Route path="/home" element={<Dashboard />} />
-          <Route path="/services" element={<Complaints />} />
-          <Route path="/instruction" element={<InstructionPage />} />
-          <Route path="/blogs" element={<BlogPage />} />
-          <Route path="/blog" element={<Blog />} />
-          <Route path="/profile" element={<ProfilePage />} />
-          <Route path="/invoice" element={<InvoiceList />} />
-          <Route path="/waybill" element={<WaybillList />} />
-          <Route path="/slider" element={<FeedbackSlider />} />
-          <Route path="/cod" element={<Cod />} />
-          <Route path="/Business" element={<BusinessInfoForm/>} />
-          <Route path="/calltoaction" element={<CallToAction />} />
-          <Route path="/request-products" element={<RequestProduct />} />
-        </Route>
-      </Routes>
-    </PrivacyProvider>
+    <QuoteCartProvider>
+      <PrivacyProvider>
+        <RouteGuard />
+        <PrivacyPopup />
+        <Routes>
+          <Route path="/" element={<SignInSide />} />
+          <Route path="/sign-up" element={<SignUp />} />
+          <Route path="/auth/callback" element={<AuthCallback />} />
+          <Route element={<LayoutWithNavbar />}>
+            <Route path="/home" element={<Dashboard />} />
+            <Route path="/services" element={<Complaints />} />
+            <Route path="/instruction" element={<InstructionPage />} />
+            <Route path="/blogs" element={<BlogPage />} />
+            <Route path="/blog" element={<Blog />} />
+            <Route path="/profile" element={<ProfilePage />} />
+            <Route path="/invoice" element={<InvoiceList />} />
+            <Route path="/waybill" element={<WaybillList />} />
+            <Route path="/slider" element={<FeedbackSlider />} />
+            <Route path="/cod" element={<Cod />} />
+            <Route path="/Business" element={<BusinessInfoForm/>} />
+            <Route path="/calltoaction" element={<CallToAction />} />
+            <Route path="/request-products" element={<RequestProduct />} />
+            <Route path="/cart" element={<QuoteCart />} />
+          </Route>
+        </Routes>
+      </PrivacyProvider>
+    </QuoteCartProvider>
   );
 }
 

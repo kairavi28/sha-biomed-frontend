@@ -27,17 +27,24 @@ import {
   ListItemIcon,
   ListItemText,
   Collapse,
+  useMediaQuery,
+  useTheme,
+  Badge,
 } from "@mui/material";
-import { AccountCircle, Logout, Person, Search, ShoppingCart, Phone, Email, KeyboardArrowDown, Menu as MenuIcon, Close, ExpandLess, ExpandMore } from "@mui/icons-material";
+import { AccountCircle, Logout, Person, ShoppingCart, Phone, Email, KeyboardArrowDown, Menu as MenuIcon, Close, ExpandLess, ExpandMore } from "@mui/icons-material";
 import CloseIcon from '@mui/icons-material/Close';
 import { useNavigate, useLocation } from "react-router-dom";
 import logo from "../assets/images/logo.png";
 import axios from "axios";
 import ReceiptIcon from '@mui/icons-material/Receipt';
 import FileCopyIcon from '@mui/icons-material/FileCopy';
+import { useQuoteCart } from "../context/QuoteCartContext";
 
 const Navbar = () => {
+  const { getCartCount } = useQuoteCart();
   const navigate = useNavigate();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const API_BASE_URL = process.env.REACT_APP_API_URL || "https://biomedwaste.net/api";
   const location = useLocation();
   const [anchorEl, setAnchorEl] = useState(null);
@@ -377,7 +384,7 @@ const Navbar = () => {
             display: "flex",
             justifyContent: "space-between",
             alignItems: "center",
-            px: { xs: 2, sm: 2, md: 2, lg: 3, xl: 4 },
+            px: { xs: 1.6, sm: 1.6, md: 1.6, lg: 2.7, xl: 3.7 },
             py: 1,
             width: "100%",
             minWidth: 0,
@@ -545,8 +552,8 @@ const Navbar = () => {
             </Box>
           </Box>
 
-          {/* Right Side: Quote Button, Search, Cart, Profile */}
-          <Box sx={{ display: "flex", alignItems: "center", gap: { xs: 0.5, md: 0.5, lg: 1 }, flexShrink: 0, ml: "auto", mr: { xs: 3, md: 6, lg: 6 } }}>
+          {/* Right Side: Quote Button, Cart, Profile */}
+          <Box sx={{ display: "flex", alignItems: "center", gap: { xs: 0.5, md: 0.5, lg: 1 }, flexShrink: 0, ml: "auto", mr: { xs: 1.5, md: 2.5, lg: 3.5 } }}>
             {/* Request Free Quote Button - Desktop Only */}
             <Button
               onClick={handleModalOpen}
@@ -569,33 +576,33 @@ const Navbar = () => {
             >
               Get Quote
             </Button>
-            {/* Search Icon - Large Desktop Only */}
-            <IconButton
-              size="medium"
-              sx={{
-                display: { xs: "none", lg: "inline-flex" },
-                color: "#1a2744",
-                p: { xs: 0.8, md: 0.8, lg: 1.2 },
-                "&:hover": {
-                  color: "#D9DE38",
-                },
-              }}
-            >
-              <Search />
-            </IconButton>
             {/* Shopping Cart Icon */}
             <IconButton
               size="medium"
+              onClick={() => navigate("/cart")}
               sx={{
                 display: "inline-flex",
                 color: "#1a2744",
-                p: { xs: 0.8, md: 0.8, lg: 1.2 },
+                p: { xs: 0.5, md: 0.5, lg: 1 },
                 "&:hover": {
                   color: "#D9DE38",
                 },
               }}
             >
-              <ShoppingCart />
+              <Badge
+                badgeContent={getCartCount()}
+                color="error"
+                sx={{
+                  "& .MuiBadge-badge": {
+                    backgroundColor: "#D9DE38",
+                    color: "#0D2477",
+                    fontWeight: 600,
+                    fontSize: "0.7rem",
+                  },
+                }}
+              >
+                <ShoppingCart />
+              </Badge>
             </IconButton>
             {/* Profile Icon */}
             <IconButton
@@ -604,7 +611,7 @@ const Navbar = () => {
               sx={{
                 display: "inline-flex",
                 color: "#1a2744",
-                p: { xs: 0.8, md: 0.8, lg: 1.2 },
+                p: { xs: 0.5, md: 0.5, lg: 1 },
                 "&:hover": {
                   color: "#D9DE38",
                 },
@@ -621,7 +628,7 @@ const Navbar = () => {
                 "& .MuiPaper-root": {
                   borderRadius: "8px",
                   boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
-                  minWidth: "160px"
+                  minWidth: "160px",
                 },
               }}
             >
@@ -630,7 +637,7 @@ const Navbar = () => {
                   handleMenuClose();
                   navigate("/profile");
                 }}
-                sx={{ display: "flex", gap: 2, py: 3.0 }}
+                sx={{ display: "flex", gap: 1, py: 1.5 }}
               >
                 <Person fontSize="small" />
                 <Typography variant="inherit">Profile</Typography>
@@ -648,7 +655,7 @@ const Navbar = () => {
                     alert("There was an error logging out.");
                   }
                 }}
-                sx={{ display: "flex", gap: 2, py: 3.0 }}
+                sx={{ display: "flex", gap: 1, py: 1.5 }}
               >
                 <Logout fontSize="small" />
                 <Typography variant="inherit">Logout</Typography>
