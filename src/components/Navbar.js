@@ -57,18 +57,21 @@ const Navbar = () => {
   const [formData, setFormData] = useState({
     firstname: "",
     lastname: "",
-    company: "",
+    facilityName: "",
+    facilityAddress: "",
     phone: "",
     email: "",
-    province: "Saskatchewan",
-    postalCode: "",
-    description: "",
+    preferredDate: "",
+    wasteType: "",
+    containerCount: "",
+    specialInstructions: "",
   });
   const [snackbar, setSnackbar] = useState({
     open: false,
     message: "",
     severity: "success",
   });
+  const [successDialogOpen, setSuccessDialogOpen] = useState(false);
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -114,33 +117,20 @@ const Navbar = () => {
   }, []);
 
   const handleSubmit = () => {
-    axios
-      .post(`${API_BASE_URL}/quote/add`, formData)
-      .then((res) => {
-        setSnackbar({
-          open: true,
-          message: "Quote request submitted successfully!",
-          severity: "success",
-        });
-        setOpenModal(false);
-        setFormData({
-          firstname: "",
-          lastname: "",
-          company: "",
-          phone: "",
-          email: "",
-          province: "",
-          postalCode: "",
-          description: "",
-        });
-      })
-      .catch((err) => {
-        setSnackbar({
-          open: true,
-          message: "Error submitting the request. Please try again.",
-          severity: "error",
-        });
-      });
+    setOpenModal(false);
+    setSuccessDialogOpen(true);
+    setFormData({
+      firstname: "",
+      lastname: "",
+      facilityName: "",
+      facilityAddress: "",
+      phone: "",
+      email: "",
+      preferredDate: "",
+      wasteType: "",
+      containerCount: "",
+      specialInstructions: "",
+    });
   };
 
   const isActive = (path) => location.pathname === path;
@@ -276,7 +266,7 @@ const Navbar = () => {
             },
           }}
         >
-          Request Free Quote
+          Book Pickup
         </Button>
       </Box>
       <Box sx={{ p: 2, pt: 0 }}>
@@ -384,7 +374,7 @@ const Navbar = () => {
             display: "flex",
             justifyContent: "space-between",
             alignItems: "center",
-            px: { xs: 1.6, sm: 1.6, md: 1.6, lg: 2.7, xl: 3.7 },
+            px: { xs: 2, sm: 2, md: 2, lg: 3, xl: 4 },
             py: 1,
             width: "100%",
             minWidth: 0,
@@ -552,9 +542,9 @@ const Navbar = () => {
             </Box>
           </Box>
 
-          {/* Right Side: Quote Button, Cart, Profile */}
-          <Box sx={{ display: "flex", alignItems: "center", gap: { xs: 0.5, md: 0.5, lg: 1 }, flexShrink: 0, ml: "auto", mr: { xs: 1.5, md: 2.5, lg: 3.5 } }}>
-            {/* Request Free Quote Button - Desktop Only */}
+          {/* Right Side: Book Pickup Button, Search, Cart, Profile */}
+          <Box sx={{ display: "flex", alignItems: "center", gap: { xs: 0.5, md: 0.5, lg: 1 }, flexShrink: 0, ml: "auto", mr: { xs: 1, md: 2, lg: 3 } }}>
+            {/* Book Pickup Button - Desktop Only */}
             <Button
               onClick={handleModalOpen}
               variant="contained"
@@ -574,7 +564,7 @@ const Navbar = () => {
                 },
               }}
             >
-              Get Quote
+              Book Pickup
             </Button>
             {/* Shopping Cart Icon */}
             <IconButton
@@ -707,7 +697,7 @@ const Navbar = () => {
         </DialogActions>
       </Dialog>
 
-      {/* Quote Request Modal */}
+      {/* Book Pickup Modal */}
       <Dialog
         open={openModal}
         onClose={handleModalClose}
@@ -731,7 +721,7 @@ const Navbar = () => {
             mb: 2,
           }}
         >
-          Request Free Quote
+          Book Pickup Request
         </DialogTitle>
         <DialogContent>
           <Box
@@ -743,31 +733,38 @@ const Navbar = () => {
               pt: 1,
             }}
           >
-            <TextField label="First Name" name="firstname" value={formData.firstname} onChange={handleChange} fullWidth variant="outlined" />
-            <TextField label="Last Name" name="lastname" value={formData.lastname} onChange={handleChange} fullWidth variant="outlined" />
-            <TextField label="Company" name="company" value={formData.company} onChange={handleChange} fullWidth variant="outlined" />
-            <TextField label="Phone" name="phone" value={formData.phone} onChange={handleChange} fullWidth variant="outlined" />
-            <TextField label="Email" name="email" value={formData.email} onChange={handleChange} fullWidth variant="outlined" />
+            <Box sx={{ display: "flex", gap: 2 }}>
+              <TextField label="First Name" name="firstname" value={formData.firstname} onChange={handleChange} fullWidth variant="outlined" />
+              <TextField label="Last Name" name="lastname" value={formData.lastname} onChange={handleChange} fullWidth variant="outlined" />
+            </Box>
+            <TextField label="Facility Name" name="facilityName" value={formData.facilityName} onChange={handleChange} fullWidth variant="outlined" />
+            <TextField label="Facility Address" name="facilityAddress" value={formData.facilityAddress} onChange={handleChange} fullWidth variant="outlined" />
+            <Box sx={{ display: "flex", gap: 2 }}>
+              <TextField label="Phone" name="phone" value={formData.phone} onChange={handleChange} fullWidth variant="outlined" />
+              <TextField label="Email" name="email" value={formData.email} onChange={handleChange} fullWidth variant="outlined" />
+            </Box>
+            <TextField 
+              label="Preferred Pickup Date" 
+              name="preferredDate" 
+              type="date"
+              value={formData.preferredDate} 
+              onChange={handleChange} 
+              fullWidth 
+              variant="outlined"
+              InputLabelProps={{ shrink: true }}
+            />
             <FormControl fullWidth>
-              <InputLabel>Province</InputLabel>
-              <Select name="province" value={formData.province} onChange={handleChange} variant="outlined" label="Province">
-                <DropdownItem value="Alberta">Alberta</DropdownItem>
-                <DropdownItem value="British Columbia">British Columbia</DropdownItem>
-                <DropdownItem value="Manitoba">Manitoba</DropdownItem>
-                <DropdownItem value="New Brunswick">New Brunswick</DropdownItem>
-                <DropdownItem value="Newfoundland and Labrador">Newfoundland and Labrador</DropdownItem>
-                <DropdownItem value="Nova Scotia">Nova Scotia</DropdownItem>
-                <DropdownItem value="Ontario">Ontario</DropdownItem>
-                <DropdownItem value="Prince Edward Island">Prince Edward Island</DropdownItem>
-                <DropdownItem value="Quebec">Quebec</DropdownItem>
-                <DropdownItem value="Saskatchewan">Saskatchewan</DropdownItem>
-                <DropdownItem value="Northwest Territories">Northwest Territories</DropdownItem>
-                <DropdownItem value="Nunavut">Nunavut</DropdownItem>
-                <DropdownItem value="Yukon">Yukon</DropdownItem>
+              <InputLabel>Waste Type</InputLabel>
+              <Select name="wasteType" value={formData.wasteType} onChange={handleChange} variant="outlined" label="Waste Type">
+                <DropdownItem value="General Waste">General Biomedical Waste</DropdownItem>
+                <DropdownItem value="Pharmaceutical Waste">Pharmaceutical Waste</DropdownItem>
+                <DropdownItem value="Anatomical Waste">Anatomical Waste</DropdownItem>
+                <DropdownItem value="Cytotoxic Waste">Cytotoxic Waste</DropdownItem>
+                <DropdownItem value="Mixed Waste">Mixed Waste</DropdownItem>
               </Select>
             </FormControl>
-            <TextField label="Postal Code" name="postalCode" value={formData.postalCode} onChange={handleChange} fullWidth variant="outlined" />
-            <TextField label="Tell us about your service needs" name="description" value={formData.description} onChange={handleChange} fullWidth multiline rows={4} variant="outlined" />
+            <TextField label="Number of Containers" name="containerCount" value={formData.containerCount} onChange={handleChange} fullWidth variant="outlined" type="number" />
+            <TextField label="Special Instructions (optional)" name="specialInstructions" value={formData.specialInstructions} onChange={handleChange} fullWidth multiline rows={3} variant="outlined" />
           </Box>
         </DialogContent>
         <DialogActions
@@ -806,7 +803,86 @@ const Navbar = () => {
               },
             }}
           >
-            Submit
+            Submit Request
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      {/* Success Confirmation Dialog */}
+      <Dialog
+        open={successDialogOpen}
+        onClose={() => setSuccessDialogOpen(false)}
+        maxWidth="xs"
+        fullWidth
+        sx={{
+          "& .MuiPaper-root": {
+            borderRadius: "16px",
+            textAlign: "center",
+            p: 2,
+          },
+        }}
+      >
+        <DialogContent sx={{ py: 4 }}>
+          <Box
+            sx={{
+              width: 80,
+              height: 80,
+              borderRadius: "50%",
+              backgroundColor: "#D9DE38",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              margin: "0 auto 24px",
+            }}
+          >
+            <Box
+              component="span"
+              sx={{
+                fontSize: "40px",
+                color: "#1a2744",
+              }}
+            >
+              ✓
+            </Box>
+          </Box>
+          <Typography
+            variant="h5"
+            sx={{
+              fontWeight: 700,
+              color: "#1a2744",
+              mb: 2,
+            }}
+          >
+            Request Submitted!
+          </Typography>
+          <Typography
+            variant="body1"
+            sx={{
+              color: "#666",
+              lineHeight: 1.6,
+            }}
+          >
+            Your pickup will be scheduled as soon as possible. You will be notified via email once confirmed.
+          </Typography>
+        </DialogContent>
+        <DialogActions sx={{ justifyContent: "center", pb: 3 }}>
+          <Button
+            onClick={() => setSuccessDialogOpen(false)}
+            variant="contained"
+            sx={{
+              backgroundColor: "#D9DE38",
+              color: "#1a2744",
+              fontWeight: 600,
+              textTransform: "none",
+              borderRadius: "24px",
+              px: 4,
+              py: 1,
+              "&:hover": {
+                backgroundColor: "#c5ca32",
+              },
+            }}
+          >
+            Got it
           </Button>
         </DialogActions>
       </Dialog>

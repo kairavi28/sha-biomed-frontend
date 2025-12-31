@@ -15,7 +15,6 @@ const BusinessInfoForm = () => {
         <a href="#" className="hover:underline">About Us</a>
         <a href="#" className="hover:underline">Services</a>
         <a href="#" className="hover:underline">Contact</a>
-        <a href="#" className="hover:underline">Schedule Pickup</a>
       </nav>
 
       {/* Hero */}

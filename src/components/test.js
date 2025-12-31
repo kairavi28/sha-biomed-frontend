@@ -343,7 +343,7 @@ function Dashboard() {
                   maxWidth: "450px",
                 }}
               >
-                Manage your biomedical waste services, schedule pickups, and access compliance documents all in one place.
+                Manage your biomedical waste services,and access compliance documents all in one place.
               </Typography>
               <Box sx={{ display: "flex", gap: 2, flexWrap: "wrap" }}>
                 <Button

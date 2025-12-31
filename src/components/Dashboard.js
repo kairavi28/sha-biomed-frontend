@@ -1,23 +1,18 @@
 import React, { useEffect, useState } from "react";
-import { PhoneInput } from "react-international-phone";
 import {
   Box,
   Typography,
   Container,
   Grid,
   Button,
-  TextField,
   CircularProgress,
-  Modal,
   Card,
   Snackbar,
-  Link,
   Alert,
 } from "@mui/material";
 import { motion } from "framer-motion";
-import { FaRecycle, FaSyringe, FaPills, FaTruck, FaShieldAlt, FaLeaf, FaHandshake, FaBoxOpen } from "react-icons/fa";
-import { GiNuclearWaste } from "react-icons/gi";
-import { MdLocalHospital, MdScience, MdCheckCircle, MdWaterDrop, MdVerifiedUser } from "react-icons/md";
+import { FaRecycle, FaTruck, FaLeaf, FaBoxOpen } from "react-icons/fa";
+import { MdLocalHospital, MdScience, MdCheckCircle, MdWaterDrop, MdVerifiedUser, MdLocalShipping, MdRecycling } from "react-icons/md";
 import axios from "axios";
 import { FaPrescriptionBottleMedical } from "react-icons/fa6";
 import "react-international-phone/style.css";
@@ -88,13 +83,6 @@ const criticalRoleItems = [
   { title: "Community Well-Being", description: "Safe waste handling builds trust, protects lives, and upholds dignity." },
   { title: "Protection of Healthcare Workers", description: "Proper packaging reduces exposure, ensuring safety and accountability." },
   { title: "Preventing Disease Transmission", description: "Secure waste packaging stops infectious, protecting workers and communities." },
-];
-
-const partnerLogos = [
-  { name: "Sask Health", logo: "https://via.placeholder.com/150x60?text=Sask+Health" },
-  { name: "Canadian Medical", logo: "https://via.placeholder.com/150x60?text=Canadian+Medical" },
-  { name: "Veterinary Association", logo: "https://via.placeholder.com/150x60?text=Vet+Association" },
-  { name: "Healthcare Standards", logo: "https://via.placeholder.com/150x60?text=Healthcare" },
 ];
 
 function Dashboard() {
@@ -343,7 +331,7 @@ function Dashboard() {
                   maxWidth: "450px",
                 }}
               >
-                Manage your biomedical waste services, schedule pickups, and access compliance documents all in one place.
+                Manage your biomedical waste services, and access compliance documents all in one place.
               </Typography>
               <Box sx={{ display: "flex", gap: 2, flexWrap: "wrap" }}>
                 <Button
@@ -405,91 +393,100 @@ function Dashboard() {
                     ml: { xs: 0, md: "auto" },
                   }}
                 >
-                  <Box sx={{ p: 3, borderBottom: "1px solid #e5e7eb" }}>
+                   <Box sx={{ p: 3, borderBottom: "1px solid #e5e7eb" }}>
                     <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
                       <Box
                         sx={{
                           width: 40,
                           height: 40,
                           borderRadius: "50%",
-                          backgroundColor: "rgba(171, 183, 56, 0.15)",
+                          backgroundColor: "rgba(13, 36, 119, 0.1)",
                           display: "flex",
                           alignItems: "center",
                           justifyContent: "center",
                         }}
                       >
-                        <MdCheckCircle size={24} color="#ABB738" />
+                        <MdCheckCircle size={24} color="#0D2477" />
                       </Box>
                       <Box>
                         <Typography
                           variant="body2"
                           sx={{ color: "#666", fontSize: "13px" }}
                         >
-                          Account Status
+                          Quick Actions
                         </Typography>
                         <Typography
                           variant="body1"
-                          sx={{ color: "#ABB738", fontWeight: 600 }}
+                          sx={{ color: "#0D2477", fontWeight: 600 }}
                         >
-                          Active & Compliant
+                          Get Started
                         </Typography>
                       </Box>
                     </Box>
                   </Box>
-                  <Box sx={{ p: 3 }}>
-                    <Box
+                  <Box sx={{ p: 2 }}>
+                    <Button
+                      fullWidth
+                      href="/request-products"
                       sx={{
-                        display: "flex",
-                        justifyContent: "space-between",
+                        justifyContent: "flex-start",
                         py: 1.5,
-                        borderBottom: "1px solid #f0f0f0",
+                        px: 2,
+                        mb: 1,
+                        borderRadius: "8px",
+                        textTransform: "none",
+                        color: "#1a2744",
+                        "&:hover": { backgroundColor: "rgba(13, 36, 119, 0.05)" },
                       }}
                     >
-                      <Typography variant="body2" sx={{ color: "#666" }}>
-                        Next Pickup
-                      </Typography>
-                      <Typography
-                        variant="body2"
-                        sx={{ color: "#1a2744", fontWeight: 600 }}
-                      >
-                        Oct 30, 2025
-                      </Typography>
-                    </Box>
-                    <Box
+                      <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+                        <Box sx={{ width: 32, height: 32, borderRadius: "6px", backgroundColor: "#D9DE38", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                          <MdLocalShipping size={18} color="#1a2744" />
+                        </Box>
+                        <Typography variant="body2" sx={{ fontWeight: 500 }}>Request Products</Typography>
+                      </Box>
+                    </Button>
+                    <Button
+                      fullWidth
+                      href="/instruction"
                       sx={{
-                        display: "flex",
-                        justifyContent: "space-between",
+                        justifyContent: "flex-start",
                         py: 1.5,
-                        borderBottom: "1px solid #f0f0f0",
+                        px: 2,
+                        mb: 1,
+                        borderRadius: "8px",
+                        textTransform: "none",
+                        color: "#1a2744",
+                        "&:hover": { backgroundColor: "rgba(13, 36, 119, 0.05)" },
                       }}
                     >
-                      <Typography variant="body2" sx={{ color: "#666" }}>
-                        Active Services
-                      </Typography>
-                      <Typography
-                        variant="body2"
-                        sx={{ color: "#1a2744", fontWeight: 600 }}
-                      >
-                        3 Services
-                      </Typography>
-                    </Box>
-                    <Box
+                      <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+                        <Box sx={{ width: 32, height: 32, borderRadius: "6px", backgroundColor: "#e3f2fd", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                          <MdRecycling size={18} color="#0D2477" />
+                        </Box>
+                        <Typography variant="body2" sx={{ fontWeight: 500 }}>Waste Packaging Guide</Typography>
+                      </Box>
+                    </Button>
+                    <Button
+                      fullWidth
+                      href="/cod"
                       sx={{
-                        display: "flex",
-                        justifyContent: "space-between",
+                        justifyContent: "flex-start",
                         py: 1.5,
+                        px: 2,
+                        borderRadius: "8px",
+                        textTransform: "none",
+                        color: "#1a2744",
+                        "&:hover": { backgroundColor: "rgba(13, 36, 119, 0.05)" },
                       }}
                     >
-                      <Typography variant="body2" sx={{ color: "#666" }}>
-                        Current Balance
-                      </Typography>
-                      <Typography
-                        variant="body2"
-                        sx={{ color: "#1a2744", fontWeight: 600 }}
-                      >
-                        $0.00
-                      </Typography>
-                    </Box>
+                      <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+                        <Box sx={{ width: 32, height: 32, borderRadius: "6px", backgroundColor: "#e8f5e9", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                          <MdCheckCircle size={18} color="#4caf50" />
+                        </Box>
+                        <Typography variant="body2" sx={{ fontWeight: 500 }}>View Certificates</Typography>
+                      </Box>
+                    </Button>
                   </Box>
                 </Card>
               </motion.div>
@@ -524,7 +521,7 @@ function Dashboard() {
                 },
               }}
             >
-              Medical Waste Disposal Across Canada
+              Medical Waste Disposal Across Saskatchewan
             </Typography>
             <Typography
               variant="body1"
@@ -633,7 +630,7 @@ function Dashboard() {
               lineHeight: 1.7
             }}
           >
-            Biomed Invex is a leader in biomedical waste management solutions. We help healthcare facilities across Canada maintain the highest standards of safety and regulatory compliance. Proper waste packaging isn't just a regulatory obligation—it's essential for protecting healthcare workers, patients, and the environment.
+            Invex is our digital platform designed for our customers, enabling healthcare facilities and partner businesses to efficiently manage their waste services. Through Invex, clients can access critical business services, maintain regulatory compliance, ensure proper waste segregation and packaging, and track their waste from pickup to disposal—helping protect healthcare workers, patients, and the environment.
           </Typography>
 
           {/* First row - 3 cards */}

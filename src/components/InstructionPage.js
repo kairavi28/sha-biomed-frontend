@@ -31,19 +31,19 @@ const steps = [
     {
         number: "1",
         title: "Choose the Right Container",
-        description: "Select a sturdy container suitable for the type of waste you are disposing of. Consider the container material and size.",
+        description: "Select the appropriate container for the type of waste being disposed of, considering the container’s material and size. If in doubt, download and refer to the waste segregation guide.",
         icon: <InventoryIcon sx={{ fontSize: 28, color: "#ccc" }} />
     },
     {
         number: "2",
         title: "Secure the Waste Properly",
-        description: "Wrap waste material in plastic or other suitable materials to prevent leakage. Ensure all items are securely packed for added protection.",
+        description: "Wrap waste material in liner to prevent leakage. Ensure all items are securely packed for added protection.",
         icon: <LockOutlinedIcon sx={{ fontSize: 28, color: "#ccc" }} />
     },
     {
         number: "3",
         title: "Label the Container",
-        description: "Clearly label containers with appropriate waste type, biohazard, biohazard label or contents and handling advice. Ensure all labels are securely attached.",
+        description: "Clearly label the top of each container with the appropriate waste-type barcode, ensuring all labels are securely attached.",
         icon: <SellOutlinedIcon sx={{ fontSize: 28, color: "#ccc" }} />
     },
 ];
