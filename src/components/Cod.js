@@ -78,7 +78,7 @@ function COD() {
         const codsData = {};
         const fetchPromises = selectedFacilities.map(async (facility) => {
           try {
-            const response = await axios.get(`${API_BASE_URL}/cod/${facility}`);
+            const response = await axios.get(`${API_BASE_URL}/cod/facility/${facility}`);
             codsData[facility] = response.data.length ? response.data : [];
           } catch (error) {
             console.error(`Error fetching CODs for ${facility}:`, error);
@@ -129,21 +129,23 @@ function COD() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
-          <Paper 
-            elevation={0} 
-            sx={{ 
-              p: { xs: 3, md: 5 }, 
+          <Paper
+            elevation={0}
+            sx={{
+              p: { xs: 3, md: 5 },
               borderRadius: 2,
               border: '1px solid #e0e0e0',
               backgroundColor: '#fff'
             }}
           >
-            <Typography 
-              variant="h4" 
-              fontWeight="bold" 
-              color="#0D2477" 
-              mb={4}
-              sx={{ fontSize: { xs: '1.5rem', md: '2rem' } }}
+            <Typography
+              variant="h4"
+              sx={{
+                fontWeight: 700,
+                color: "#0D2477",
+                mb: 3,
+                fontSize: { xs: "1.5rem", md: "1.75rem" },
+              }}
             >
               Certificate of Destruction
             </Typography>
@@ -175,12 +177,12 @@ function COD() {
             ) : (
               <>
                 {selectedFacilities.map((facility) => (
-                  <Accordion 
+                  <Accordion
                     key={facility}
                     expanded={expandedFacility === facility}
                     onChange={handleAccordionChange(facility)}
                     elevation={0}
-                    sx={{ 
+                    sx={{
                       border: 'none',
                       '&:before': { display: 'none' },
                       mb: 2,
@@ -195,19 +197,19 @@ function COD() {
                         }
                       }}
                     >
-                      <Typography 
-                        variant="subtitle1" 
-                        fontWeight="500" 
+                      <Typography
+                        variant="subtitle1"
+                        fontWeight="500"
                         color="#0D2477"
                       >
                         {facility}
                       </Typography>
                     </AccordionSummary>
                     <AccordionDetails sx={{ px: 0 }}>
-                      <TableContainer 
-                        component={Paper} 
+                      <TableContainer
+                        component={Paper}
                         elevation={0}
-                        sx={{ 
+                        sx={{
                           border: '1px solid #e0e0e0',
                           borderRadius: 1,
                         }}
@@ -232,9 +234,9 @@ function COD() {
                           <TableBody>
                             {cods[facility] && cods[facility].length > 0 ? (
                               cods[facility].map((cod) => (
-                                <TableRow 
-                                  key={cod._id} 
-                                  sx={{ 
+                                <TableRow
+                                  key={cod._id}
+                                  sx={{
                                     '&:hover': { backgroundColor: '#fafafa' },
                                     '&:last-child td': { borderBottom: 0 }
                                   }}
@@ -248,9 +250,9 @@ function COD() {
                                     </Box>
                                   </TableCell>
                                   <TableCell align="center" sx={{ py: 2.5 }}>
-                                    <IconButton 
+                                    <IconButton
                                       onClick={() => handlePreviewOpen(cod)}
-                                      sx={{ 
+                                      sx={{
                                         color: '#0D2477',
                                         '&:hover': { backgroundColor: 'rgba(13, 36, 119, 0.08)' }
                                       }}
@@ -261,11 +263,11 @@ function COD() {
                                   <TableCell align="center" sx={{ py: 2.5 }}>
                                     <IconButton
                                       component="a"
-                                      href={`${API_BASE_URL}/cod/${cod.fileName}`}
-                                      download
+                                      href={`${API_BASE_URL}/cod/download/${cod._id}`}
+                                      download={cod.fileName}
                                       target="_blank"
                                       rel="noopener noreferrer"
-                                      sx={{ 
+                                      sx={{
                                         color: '#4caf50',
                                         '&:hover': { backgroundColor: 'rgba(76, 175, 80, 0.08)' }
                                       }}
@@ -275,7 +277,7 @@ function COD() {
                                   </TableCell>
                                   <TableCell align="right" sx={{ py: 2.5 }}>
                                     <Typography variant="body2" color="text.secondary">
-                                      {cod.uploadedAt ? new Date(cod.uploadedAt).toLocaleString() : "N/A"}
+                                      {cod.createdAt ? new Date(cod.createdAt).toLocaleString() : "N/A"}
                                     </Typography>
                                   </TableCell>
                                 </TableRow>
@@ -310,14 +312,14 @@ function COD() {
         <DialogContent sx={{ display: "flex", justifyContent: "center", alignItems: "center", height: "80vh" }}>
           {currentCod && (
             <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.min.js">
-              <Viewer fileUrl={`${API_BASE_URL}/cod/${currentCod.fileName}`} />
+              <Viewer fileUrl={`${API_BASE_URL}/cod/download/${currentCod._id}`} />
             </Worker>
           )}
         </DialogContent>
         <DialogActions>
-          <Button 
+          <Button
             onClick={handlePreviewClose}
-            sx={{ 
+            sx={{
               color: '#0D2477',
               textTransform: 'none',
             }}
