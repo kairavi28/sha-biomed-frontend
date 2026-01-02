@@ -140,7 +140,6 @@ const QuoteCart = () => {
             //const nameParts = customerInfo.customerName.split(" ");
             // const firstname = nameParts[0] || "";
             // const lastname = nameParts.slice(1).join(" ") || "";
-
             const quoteData = {
                 customerName: customerInfo.customerName,
                 customerEmail: customerInfo.customerEmail,

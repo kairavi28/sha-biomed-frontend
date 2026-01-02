@@ -63,29 +63,28 @@ const StyledTextField = styled(TextField)(({ theme }) => ({
 export default function SignUp() {
   const API_BASE_URL = process.env.REACT_APP_API_URL || "https://biomedwaste.net/api";
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
-  const [firstNameError, setFirstNameError] = React.useState(false);
-  const [firstNameErrorMessage, setFirstNameErrorMessage] = React.useState('');
-  const [lastNameError, setLastNameError] = React.useState(false);
-  const [lastNameErrorMessage, setLastNameErrorMessage] = React.useState('');
-  const [emailError, setEmailError] = React.useState(false);
-  const [emailErrorMessage, setEmailErrorMessage] = React.useState('');
+  const [firstname, setFirstname] = useState('');
+  const [lastname, setLastname] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-  const [passwordError, setPasswordError] = React.useState(false);
-  const [passwordErrorMessage, setPasswordErrorMessage] = React.useState('');
+  const [firstNameError, setFirstNameError] = useState(false);
+  const [firstNameErrorMessage, setFirstNameErrorMessage] = useState('');
+  const [lastNameError, setLastNameError] = useState(false);
+  const [lastNameErrorMessage, setLastNameErrorMessage] = useState('');
+  const [emailError, setEmailError] = useState(false);
+  const [emailErrorMessage, setEmailErrorMessage] = useState('');
+  const [passwordError, setPasswordError] = useState(false);
+  const [passwordErrorMessage, setPasswordErrorMessage] = useState('');
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
   const [snackbarSeverity, setSnackbarSeverity] = useState('success');
   const navigate = useNavigate();
 
   const validateInputs = () => {
-    const email = document.getElementById('email');
-    const password = document.getElementById('password');
-    const firstname = document.getElementById('firstname');
-    const lastname = document.getElementById('lastname');
     let isValid = true;
 
-    if (!email.value || !/\S+@\S+\.\S+/.test(email.value)) {
+    if (!email || !/\S+@\S+\.\S+/.test(email)) {
       setEmailError(true);
       setEmailErrorMessage('Please enter a valid email address.');
       isValid = false;
@@ -94,7 +93,7 @@ export default function SignUp() {
       setEmailErrorMessage('');
     }
 
-    if (!password.value || password.value.length < 6) {
+    if (!password || password.length < 6) {
       setPasswordError(true);
       setPasswordErrorMessage('Password must be at least 6 characters long.');
       isValid = false;
@@ -103,7 +102,7 @@ export default function SignUp() {
       setPasswordErrorMessage('');
     }
 
-    if (!firstname.value) {
+    if (!firstname) {
       setFirstNameError(true);
       setFirstNameErrorMessage('First Name is Required');
       isValid = false;
@@ -112,7 +111,7 @@ export default function SignUp() {
       setFirstNameErrorMessage('');
     }
 
-    if (!lastname.value) {
+    if (!lastname) {
       setLastNameError(true);
       setLastNameErrorMessage('Last Name is Required');
       isValid = false;
@@ -124,26 +123,21 @@ export default function SignUp() {
     return isValid;
   };
 
-  const handlePasswordChange = (event) => {
-    setPassword(event.target.value);
-  };
-
   const togglePasswordVisibility = () => {
-    setShowPassword((prev) => !prev);
+    setShowPassword(!showPassword);
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    if (firstNameError || lastNameError || emailError || passwordError) {
+    if (!validateInputs()) {
       return;
     }
 
-    const data = new FormData(event.currentTarget);
     const formData = {
-      firstname: data.get('firstname'),
-      lastname: data.get('lastname'),
-      email: data.get('email'),
-      password: data.get('password'),
+      firstname,
+      lastname,
+      email,
+      password,
     };
 
     try {
@@ -179,7 +173,7 @@ export default function SignUp() {
     setSnackbarOpen(false);
   };
 
-  const SignUpForm = () => (
+  const signUpFormContent = (
     <Card variant="outlined">
       <Typography
         component="h1"
@@ -207,11 +201,13 @@ export default function SignUp() {
           </FormLabel>
           <StyledTextField
             required
-            autoComplete="firstname"
+            autoComplete="given-name"
             name="firstname"
             fullWidth
             id="firstname"
             placeholder="First name"
+            value={firstname}
+            onChange={(e) => setFirstname(e.target.value)}
             error={firstNameError}
             helperText={firstNameErrorMessage}
             size="small"
@@ -224,11 +220,13 @@ export default function SignUp() {
           </FormLabel>
           <StyledTextField
             required
-            autoComplete="lastname"
+            autoComplete="family-name"
             name="lastname"
             fullWidth
             id="lastname"
             placeholder="Last name"
+            value={lastname}
+            onChange={(e) => setLastname(e.target.value)}
             error={lastNameError}
             helperText={lastNameErrorMessage}
             size="small"
@@ -246,6 +244,8 @@ export default function SignUp() {
             placeholder="your@email.com"
             name="email"
             autoComplete="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             error={emailError}
             helperText={emailErrorMessage}
             size="small"
@@ -267,7 +267,7 @@ export default function SignUp() {
             error={passwordError}
             helperText={passwordErrorMessage}
             value={password}
-            onChange={handlePasswordChange}
+            onChange={(e) => setPassword(e.target.value)}
             size="small"
             InputProps={{
               endAdornment: (
@@ -295,7 +295,6 @@ export default function SignUp() {
           type="submit"
           fullWidth
           variant="contained"
-          onClick={validateInputs}
           sx={{
             mt: 1,
             py: 1.5,
@@ -342,6 +341,19 @@ export default function SignUp() {
             overflow: 'auto',
           }}
         >
+          <Box
+            sx={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              backgroundImage: "url('/sign-bg.jpeg')",
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
+              opacity: 0.3,
+            }}
+          />
           <Box sx={{ pt: 4, pb: 2, textAlign: 'center', zIndex: 1 }}>
             <img src={logo} alt="Biomed Logo" style={{ width: '140px', height: 'auto' }} />
             <Typography
@@ -360,7 +372,7 @@ export default function SignUp() {
           </Box>
 
           <Box sx={{ width: '100%', px: 2, zIndex: 1, pb: 4 }}>
-            <SignUpForm />
+            {signUpFormContent}
           </Box>
         </Box>
         <Snackbar open={snackbarOpen} autoHideDuration={6000} onClose={handleSnackbarClose}>
@@ -385,15 +397,32 @@ export default function SignUp() {
         <Box
           sx={{
             flex: 1,
+            position: 'relative',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            backgroundColor: '#1a2744',
+            backgroundImage: "url('/sign-bg.jpeg')",
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            backgroundColor: '#0D2477',
             padding: 6,
             minHeight: '100vh',
+            '&::before': {
+              content: '""',
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              backgroundColor: '#0D2477',
+              opacity: 0.85,
+              zIndex: 1,
+            },
           }}
         >
-          <Content />
+          <Box sx={{ position: 'relative', zIndex: 2 }}>
+            <Content />
+          </Box>
         </Box>
 
         <Box
@@ -408,7 +437,7 @@ export default function SignUp() {
             overflow: 'auto',
           }}
         >
-          <SignUpForm />
+          {signUpFormContent}
         </Box>
       </Box>
       <Snackbar open={snackbarOpen} autoHideDuration={6000} onClose={handleSnackbarClose}>
