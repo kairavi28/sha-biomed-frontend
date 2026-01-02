@@ -35,6 +35,7 @@ import { AccountCircle, Logout, Person, ShoppingCart, Phone, Email, KeyboardArro
 import CloseIcon from '@mui/icons-material/Close';
 import { useNavigate, useLocation } from "react-router-dom";
 import logo from "../assets/images/logo.png";
+import axios from "axios";
 import ReceiptIcon from '@mui/icons-material/Receipt';
 import FileCopyIcon from '@mui/icons-material/FileCopy';
 import { useQuoteCart } from "../context/QuoteCartContext";
@@ -43,7 +44,8 @@ const Navbar = () => {
   const { getCartCount } = useQuoteCart();
   const navigate = useNavigate();
   const theme = useTheme();
-  //const API_BASE_URL = process.env.REACT_APP_API_URL || "https://biomedwaste.net/api";
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+  const API_BASE_URL = process.env.REACT_APP_API_URL || "https://biomedwaste.net/api";
   const location = useLocation();
   const [anchorEl, setAnchorEl] = useState(null);
   const [open, setOpen] = useState(false);
@@ -70,6 +72,7 @@ const Navbar = () => {
     severity: "success",
   });
   const [successDialogOpen, setSuccessDialogOpen] = useState(false);
+  const [availableFacilities, setAvailableFacilities] = useState([]);
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -89,7 +92,36 @@ const Navbar = () => {
   const handleResourceMenuOpen = (event) => setAnchorElResources(event.currentTarget);
   const handleResourceMenuClose = () => setAnchorElResources(null);
 
-  const handleModalOpen = () => setOpenModal(true);
+  const handleModalOpen = async () => {
+    const userSession = JSON.parse(sessionStorage.getItem("userData"));
+    const userId = userSession?.id || userSession?._id;
+    
+    if (userId) {
+      try {
+        const response = await axios.get(`${API_BASE_URL}/user/${userId}`);
+        const user = response.data;
+        const firstName = user?.firstname ? user.firstname.charAt(0).toUpperCase() + user.firstname.slice(1).toLowerCase() : "";
+        const lastName = user?.lastname ? user.lastname.charAt(0).toUpperCase() + user.lastname.slice(1).toLowerCase() : "";
+        
+        const approvedFacilities = user.facilities
+          ?.filter(f => f.approved)
+          ?.map(f => f.name) || [];
+        setAvailableFacilities(approvedFacilities);
+        
+        setFormData(prev => ({
+          ...prev,
+          firstname: firstName,
+          lastname: lastName,
+          email: user?.email || "",
+          phone: user?.phone || "",
+          facilityName: approvedFacilities[0] || "",
+        }));
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
+    }
+    setOpenModal(true);
+  };
   const handleModalClose = () => setOpenModal(false);
 
   const handleChange = (e) => {
@@ -735,7 +767,21 @@ const Navbar = () => {
               <TextField label="First Name" name="firstname" value={formData.firstname} onChange={handleChange} fullWidth variant="outlined" />
               <TextField label="Last Name" name="lastname" value={formData.lastname} onChange={handleChange} fullWidth variant="outlined" />
             </Box>
-            <TextField label="Facility Name" name="facilityName" value={formData.facilityName} onChange={handleChange} fullWidth variant="outlined" />
+            <FormControl fullWidth variant="outlined">
+              <InputLabel>Facility Name</InputLabel>
+              <Select
+                name="facilityName"
+                value={formData.facilityName}
+                onChange={handleChange}
+                label="Facility Name"
+              >
+                {availableFacilities.map((facility) => (
+                  <DropdownItem key={facility} value={facility}>
+                    {facility}
+                  </DropdownItem>
+                ))}
+              </Select>
+            </FormControl>
             <TextField label="Facility Address" name="facilityAddress" value={formData.facilityAddress} onChange={handleChange} fullWidth variant="outlined" />
             <Box sx={{ display: "flex", gap: 2 }}>
               <TextField label="Phone" name="phone" value={formData.phone} onChange={handleChange} fullWidth variant="outlined" />
@@ -754,14 +800,14 @@ const Navbar = () => {
             <FormControl fullWidth>
               <InputLabel>Waste Type</InputLabel>
               <Select name="wasteType" value={formData.wasteType} onChange={handleChange} variant="outlined" label="Waste Type">
-                <DropdownItem value="General Waste">General Biomedical Waste</DropdownItem>
+                <DropdownItem value="Biomedical Waste">Biomedical Waste</DropdownItem>
+                <DropdownItem value="Sharps">Sharps</DropdownItem>
                 <DropdownItem value="Pharmaceutical Waste">Pharmaceutical Waste</DropdownItem>
                 <DropdownItem value="Anatomical Waste">Anatomical Waste</DropdownItem>
                 <DropdownItem value="Cytotoxic Waste">Cytotoxic Waste</DropdownItem>
                 <DropdownItem value="Mixed Waste">Mixed Waste</DropdownItem>
               </Select>
             </FormControl>
-            <TextField label="Number of Containers" name="containerCount" value={formData.containerCount} onChange={handleChange} fullWidth variant="outlined" type="number" />
             <TextField label="Special Instructions (optional)" name="specialInstructions" value={formData.specialInstructions} onChange={handleChange} fullWidth multiline rows={3} variant="outlined" />
           </Box>
         </DialogContent>
