@@ -19,6 +19,7 @@ import "react-international-phone/style.css";
 import FeedbackSlider from "./FeedbackSlider";
 import Footer from "./Footer";
 import ComplaintModal from "./ComplaintModal";
+import { Link as RouterLink } from "react-router-dom";
 
 const API_BASE_URL = process.env.REACT_APP_API_URL || "https://biomedwaste.net/api";
 
@@ -427,7 +428,8 @@ function Dashboard() {
                   <Box sx={{ p: 2 }}>
                     <Button
                       fullWidth
-                      href="/request-products"
+                      component={RouterLink}
+                      to="/request-products"
                       sx={{
                         justifyContent: "flex-start",
                         py: 1.5,
@@ -448,7 +450,8 @@ function Dashboard() {
                     </Button>
                     <Button
                       fullWidth
-                      href="/instruction"
+                      component={RouterLink}
+                      to="/instruction"
                       sx={{
                         justifyContent: "flex-start",
                         py: 1.5,
@@ -469,7 +472,8 @@ function Dashboard() {
                     </Button>
                     <Button
                       fullWidth
-                      href="/cod"
+                      component={RouterLink}
+                      to="/cod"
                       sx={{
                         justifyContent: "flex-start",
                         py: 1.5,

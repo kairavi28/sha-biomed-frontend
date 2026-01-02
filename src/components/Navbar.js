@@ -35,7 +35,6 @@ import { AccountCircle, Logout, Person, ShoppingCart, Phone, Email, KeyboardArro
 import CloseIcon from '@mui/icons-material/Close';
 import { useNavigate, useLocation } from "react-router-dom";
 import logo from "../assets/images/logo.png";
-import axios from "axios";
 import ReceiptIcon from '@mui/icons-material/Receipt';
 import FileCopyIcon from '@mui/icons-material/FileCopy';
 import { useQuoteCart } from "../context/QuoteCartContext";
@@ -44,8 +43,7 @@ const Navbar = () => {
   const { getCartCount } = useQuoteCart();
   const navigate = useNavigate();
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
-  const API_BASE_URL = process.env.REACT_APP_API_URL || "https://biomedwaste.net/api";
+  //const API_BASE_URL = process.env.REACT_APP_API_URL || "https://biomedwaste.net/api";
   const location = useLocation();
   const [anchorEl, setAnchorEl] = useState(null);
   const [open, setOpen] = useState(false);
