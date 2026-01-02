@@ -6,7 +6,7 @@ import InstagramIcon from "@mui/icons-material/Instagram";
 import XIcon from "@mui/icons-material/X";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import YouTubeIcon from "@mui/icons-material/YouTube";
-import biomedLogo from "../assets/images/logo.png";
+import biomedLogo from "../assets/images/white-logo.png";
 
 function Footer() {
     return (

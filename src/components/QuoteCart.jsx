@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
     Box,
     Typography,
@@ -15,6 +15,7 @@ import {
     Divider,
     TextField,
     CircularProgress,
+    Autocomplete,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddIcon from "@mui/icons-material/Add";
@@ -24,7 +25,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { useQuoteCart } from "../context/QuoteCartContext";
-import { quotesAPI } from "../api";
+import api, { quotesAPI } from "../api";
 import Footer from "./Footer";
 
 const QuoteCart = () => {
@@ -45,6 +46,7 @@ const QuoteCart = () => {
     });
     const [submitDialogOpen, setSubmitDialogOpen] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [availableFacilities, setAvailableFacilities] = useState([]);
     const [customerInfo, setCustomerInfo] = useState({
         customerName: "",
         customerEmail: "",
@@ -52,6 +54,64 @@ const QuoteCart = () => {
         facilityName: "",
         notes: "",
     });
+
+    const userSession = JSON.parse(sessionStorage.getItem("userData"));
+    const userId = userSession?.id ? userSession.id : userSession?._id;
+    const capitalizeFirstLetter = (str) => {
+        if (!str) return "";
+        return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+    };
+
+    const formatName = (firstname, lastname) => {
+        const first = capitalizeFirstLetter(firstname);
+        const last = capitalizeFirstLetter(lastname);
+        return `${first} ${last}`.trim();
+    };
+
+    useEffect(() => {
+        const fetchUserData = async () => {
+            if (!userId) return;
+            try {
+                const response = await api.get(`/user/${userId}`);
+                const userData = response.data;
+
+                const approvedFacilities = userData.facilities
+                    ?.filter(f => f.approved)
+                    ?.map(f => f.name) || [];
+
+                setCustomerInfo({
+                    customerName: formatName(userData.firstname, userData.lastname),
+                    customerEmail: userData.email || "",
+                    customerPhone: userData.phone || "",
+                    facilityName: approvedFacilities[0] || "",
+                    notes: "",
+                });
+
+                setAvailableFacilities(approvedFacilities);
+            } catch (error) {
+                console.error("Error loading user data:", error);
+                if (userSession) {
+                    let name = userSession.name || "";
+                    if (!name && (userSession.firstname || userSession.lastname)) {
+                        name = formatName(userSession.firstname, userSession.lastname);
+                    } else if (name) {
+                        const parts = name.split(" ");
+                        name = parts.map(part => capitalizeFirstLetter(part)).join(" ");
+                    }
+                    const email = userSession.username || userSession.email || "";
+                    setCustomerInfo({
+                        customerName: name,
+                        customerEmail: email,
+                        customerPhone: "",
+                        facilityName: "",
+                        notes: "",
+                    });
+                }
+            }
+        };
+
+        fetchUserData();
+    }, [userId]);
 
     const handleSnackbarClose = () => {
         setSnackbar({ ...snackbar, open: false });
@@ -77,8 +137,16 @@ const QuoteCart = () => {
     const handleConfirmSubmit = async () => {
         setIsSubmitting(true);
         try {
+            //const nameParts = customerInfo.customerName.split(" ");
+            // const firstname = nameParts[0] || "";
+            // const lastname = nameParts.slice(1).join(" ") || "";
+
             const quoteData = {
-                ...customerInfo,
+                customerName: customerInfo.customerName,
+                customerEmail: customerInfo.customerEmail,
+                customerPhone: customerInfo.customerPhone,
+                facilityName: customerInfo.facilityName,
+                notes: customerInfo.notes,
                 items: cartItems.map((item) => ({
                     productId: item.id,
                     name: item.name,
@@ -376,7 +444,7 @@ const QuoteCart = () => {
                                 </Typography>
                             </Box>
                             <Divider sx={{ mb: 2 }} />
-                            {/* <Box
+                            <Box
                                 sx={{
                                     display: "flex",
                                     justifyContent: "space-between",
@@ -413,7 +481,7 @@ const QuoteCart = () => {
                                         ? `$${getCartTotal().toFixed(2)}+`
                                         : `$${getCartTotal().toFixed(2)}`}
                                 </Typography>
-                            </Box> */}
+                            </Box>
                             <Box
                                 sx={{
                                     p: 2,
@@ -428,7 +496,7 @@ const QuoteCart = () => {
                                     sx={{ color: "#1565c0", textAlign: "center" }}
                                 >
                                     Products and services in your cart will be submitted as a quote request.
-                                    Our sales representative will contact you in regards to your request.
+                                    Our sales representative will contact you with accurate pricing for your facility.
                                 </Typography>
                             </Box>
                             <Box
@@ -527,13 +595,20 @@ const QuoteCart = () => {
                                 onChange={handleInputChange}
                                 size="small"
                             />
-                            <TextField
+                            <Autocomplete
                                 fullWidth
-                                label="Facility Name"
-                                name="facilityName"
-                                value={customerInfo.facilityName}
-                                onChange={handleInputChange}
-                                size="small"
+                                options={availableFacilities}
+                                value={customerInfo.facilityName || null}
+                                onChange={(event, newValue) => {
+                                    setCustomerInfo((prev) => ({ ...prev, facilityName: newValue || "" }));
+                                }}
+                                renderInput={(params) => (
+                                    <TextField
+                                        {...params}
+                                        label="Facility Name"
+                                        size="small"
+                                    />
+                                )}
                             />
                         </Box>
                         <TextField
@@ -643,7 +718,6 @@ const QuoteCart = () => {
                     {snackbar.message}
                 </Alert>
             </Snackbar>
-
             <Footer />
         </Box>
     );
