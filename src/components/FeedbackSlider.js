@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useRef } from "react";
 import Slider from "react-slick";
-import { Box, Card, CardContent, Typography } from "@mui/material";
+import { Box, Card, CardContent, Typography, IconButton } from "@mui/material";
+import { ChevronLeft, ChevronRight } from "@mui/icons-material";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import image1 from "../assets/images/University_of_Saskatchewan_Logo.jpg";
@@ -15,38 +16,33 @@ import image9 from "../assets/images/Shoppers-Drug-Mart-Logo.png";
 import image10 from "../assets/images/Saskatoon_Co-op_Logo.png";
 
 const slides = [
-  { title: "University of Saskatchewan", image: image1 },
-  { title: "University of Regina", image: image2 },
-  { title: "Northwest College", image: image3 },
-  { title: "Prince Albert Grand Council", image: image4 },
-  { title: "Suncrest College", image: image5 },
-  { title: "Saskatchewan Cancer Agency", image: image6 },
-  { title: "Indigenous Services Canada", image: image7 },
-  { title: "Neighbourly Pharmacy", image: image8 },
-  { title: "Shoppers Drug Mart", image: image9 },
-  { title: "Co-op Pharmacy", image: image10 },
+  { title: "Saskatchewan Cancer Agency", industry: "Healthcare", image: image6 },
+  { title: "University of Saskatchewan", industry: "Education", image: image1 },
+  { title: "Prince Albert Grand Council", industry: "First Nations", image: image4 },
+  { title: "Shoppers Drug Mart", industry: "Pharmacy", image: image9 },
+  { title: "University of Regina", industry: "Education", image: image2 },
+  { title: "Northwest College", industry: "Education", image: image3 },
+  { title: "Suncrest College", industry: "Education", image: image5 },
+  { title: "Indigenous Services Canada", industry: "Government", image: image7 },
+  { title: "Neighbourly Pharmacy", industry: "Pharmacy", image: image8 },
+  { title: "Saskatoon Co-op", industry: "Retail", image: image10 },
 ];
 
 const FeedbackSlider = () => {
+  const sliderRef = useRef(null);
+
   const settings = {
-    dots: true,
+    dots: false,
     infinite: true,
     speed: 500,
-    slidesToShow: 5,
+    slidesToShow: 4,
     slidesToScroll: 1,
     autoplay: true,
-    autoplaySpeed: 3000,
+    autoplaySpeed: 4000,
     pauseOnHover: true,
     arrows: false,
     centerMode: false,
     responsive: [
-      { 
-        breakpoint: 1536, 
-        settings: { 
-          slidesToShow: 4,
-          slidesToScroll: 1,
-        } 
-      },
       { 
         breakpoint: 1200, 
         settings: { 
@@ -71,65 +67,93 @@ const FeedbackSlider = () => {
     ],
   };
 
+  const handlePrev = () => {
+    sliderRef.current?.slickPrev();
+  };
+
+  const handleNext = () => {
+    sliderRef.current?.slickNext();
+  };
+
   return (
     <Box
       sx={{
-        px: { xs: 1, sm: 2, md: 4, lg: 6, xl: 8 },
-        pb: 0,
-        "& .slick-slide": {
-          px: { xs: 0.5, md: 1, lg: 1.5 },
-        },
-        "& .slick-list": {
-          pb: 0,
-          mb: 0,
-        },
-        "& .slick-dots": {
-          position: "relative",
-          bottom: 30,
-          mt: -30,
-          "& li": {
-            margin: "0 3px",
-          },
-          "& li button:before": {
-            fontSize: "10px",
-            color: "#1a2744",
-          },
-          "& li.slick-active button:before": {
-            color: "#D9DE38",
-          },
-        },
+        position: "relative",
+        px: { xs: 5, md: 6 },
       }}
     >
-      <Slider {...settings}>
+      <IconButton
+        onClick={handlePrev}
+        sx={{
+          position: "absolute",
+          left: { xs: -5, md: -10 },
+          top: "50%",
+          transform: "translateY(-50%)",
+          backgroundColor: "#0D2477",
+          border: "3px solid #0D2477",
+          color: "#ffffff",
+          width: { xs: 40, md: 48 },
+          height: { xs: 40, md: 48 },
+          zIndex: 10,
+          "&:hover": {
+            backgroundColor: "#1a3a8f",
+          },
+        }}
+      >
+        <ChevronLeft sx={{ fontSize: { xs: 24, md: 28 } }} />
+      </IconButton>
+
+      <IconButton
+        onClick={handleNext}
+        sx={{
+          position: "absolute",
+          right: { xs: -5, md: -10 },
+          top: "50%",
+          transform: "translateY(-50%)",
+          backgroundColor: "#0D2477",
+          border: "3px solid #0D2477",
+          color: "#ffffff",
+          width: { xs: 40, md: 48 },
+          height: { xs: 40, md: 48 },
+          zIndex: 10,
+          "&:hover": {
+            backgroundColor: "#1a3a8f",
+          },
+        }}
+      >
+        <ChevronRight sx={{ fontSize: { xs: 24, md: 28 } }} />
+      </IconButton>
+
+      <Slider ref={sliderRef} {...settings}>
         {slides.map((item, index) => (
-          <Box key={index} sx={{ px: { xs: 0.5, md: 1 } }}>
+          <Box key={index} sx={{ px: { xs: 1, md: 2 } }}>
             <Card
               sx={{
                 textAlign: "center",
                 borderRadius: 3,
-                boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
-                p: { xs: 1.5, sm: 2, lg: 2.5 },
+                boxShadow: "0 4px 16px rgba(0,0,0,0.1)",
+                p: { xs: 2, md: 3 },
                 mx: "auto",
-                maxWidth: { xs: 280, sm: 260, lg: 280, xl: 300 },
-                height: { xs: 220, sm: 240, lg: 260, xl: 280 },
+                backgroundColor: "#ffffff",
+                height: { xs: 220, md: 260 },
                 display: "flex",
                 flexDirection: "column",
                 transition: "transform 0.3s ease, box-shadow 0.3s ease",
                 "&:hover": {
                   transform: "translateY(-5px)",
-                  boxShadow: "0 8px 24px rgba(0,0,0,0.15)",
+                  boxShadow: "0 8px 24px rgba(0,0,0,0.2)",
                 },
               }}
             >
               <Box
                 sx={{
                   width: "100%",
-                  height: { xs: 120, sm: 140, lg: 160, xl: 180 },
+                  height: { xs: 100, md: 130 },
                   overflow: "hidden",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
-                  mb: 1,
+                  mb: 2,
                 }}
               >
                 <Box
@@ -137,11 +161,10 @@ const FeedbackSlider = () => {
                   src={item.image}
                   alt={item.title}
                   sx={{
-                    maxWidth: "100%",
+                    maxWidth: "80%",
                     maxHeight: "100%",
                     objectFit: "contain",
                     objectPosition: "center",
-                    transition: "transform 0.3s ease",
                   }}
                 />
               </Box>
@@ -152,21 +175,32 @@ const FeedbackSlider = () => {
                   justifyContent: "center",
                   alignItems: "center",
                   flex: 1,
-                  p: { xs: 1, sm: 1.5, lg: 2 },
-                  "&:last-child": { pb: { xs: 1, sm: 1.5, lg: 2 } },
+                  p: 1,
+                  "&:last-child": { pb: 1 },
                 }}
               >
                 <Typography
                   variant="body1"
                   sx={{ 
                     fontWeight: 600, 
-                    color: "#1a2744", 
-                    fontSize: { xs: "0.85rem", sm: "0.95rem", lg: "1rem", xl: "1.1rem" },
+                    color: "#0D2477", 
+                    fontSize: { xs: "0.9rem", md: "1rem" },
                     lineHeight: 1.3,
                     textAlign: "center",
+                    mb: 0.5,
                   }}
                 >
                   {item.title}
+                </Typography>
+                <Typography
+                  variant="body2"
+                  sx={{ 
+                    color: "#666666", 
+                    fontSize: { xs: "0.8rem", md: "0.875rem" },
+                    textAlign: "center",
+                  }}
+                >
+                  {item.industry}
                 </Typography>
               </CardContent>
             </Card>

@@ -393,7 +393,7 @@ function Dashboard() {
                     ml: { xs: 0, md: "auto" },
                   }}
                 >
-                   <Box sx={{ p: 3, borderBottom: "1px solid #e5e7eb" }}>
+                  <Box sx={{ p: 3, borderBottom: "1px solid #e5e7eb" }}>
                     <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
                       <Box
                         sx={{
@@ -949,23 +949,49 @@ function Dashboard() {
       {/* Trusted by Industry Leaders Section */}
       <Box sx={{ py: { xs: 6, md: 10 }, backgroundColor: "#ffffff" }}>
         <Container maxWidth="xl" sx={{ px: { xs: 3, md: 8 } }}>
-          <Typography
-            variant="h4"
-            sx={{
-              textAlign: "center",
-              fontWeight: 700,
-              fontStyle: "bold",
-              color: "#0D2477",
-              mb: { xs: 4, md: 6 },
-              fontSize: { xs: "1.5rem", md: "2.125rem" },
-            }}
-          >
-            Trusted by Industry Leaders
-          </Typography>
+          <Box sx={{ textAlign: "center", mb: { xs: 4, md: 6 } }}>
+            <Typography
+              variant="h4"
+              sx={{
+                textAlign: "center",
+                fontWeight: 700,
+                color: "#0D2477",
+                mb: 2,
+                fontSize: { xs: "1.5rem", md: "2.25rem" },
+                px: { xs: 2, md: 0 },
+                "&::after": {
+                  content: '""',
+                  position: "absolute",
+                  bottom: "-8px",
+                  left: "50%",
+                  transform: "translateX(-50%)",
+                  width: "60%",
+                  height: "3px",
+                  borderRadius: "2px",
+                },
+              }}
+            >
+              Trusted by Industry Leaders
+            </Typography>
+            <Typography
+              variant="body1"
+              sx={{
+                textAlign: "center",
+                color: "#1A1A1A",
+                mt: 2,
+                maxWidth: 600,
+                mx: "auto",
+                px: { xs: 1, md: 0 },
+                fontSize: { xs: "0.9rem", md: "1.0rem" },
+                fontWeight: "bold"
+              }}
+            >
+              Partnering with healthcare and industry leaders across Canada
+            </Typography>
+          </Box>
           <FeedbackSlider />
         </Container>
       </Box>
-
       {/* Footer */}
       <Footer />
 
