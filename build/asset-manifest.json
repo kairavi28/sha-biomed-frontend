@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/static/css/main.34727dec.css",
-    "main.js": "/static/js/main.3790bd66.js",
+    "main.js": "/static/js/main.ae17de1a.js",
     "static/media/University_of_Regina_Logo.jpg": "/static/media/University_of_Regina_Logo.73213379fa843e1fe77f.jpg",
     "static/media/white-logo.png": "/static/media/white-logo.fde0a62287231c4e5975.png",
     "static/media/Saskatoon_Co-op_Logo.png": "/static/media/Saskatoon_Co-op_Logo.f67a55851a48cc2f2ad9.png",
@@ -17,10 +17,10 @@
     "static/media/slick.woff": "/static/media/slick.295183786cd8a1389865.woff",
     "index.html": "/index.html",
     "main.34727dec.css.map": "/static/css/main.34727dec.css.map",
-    "main.3790bd66.js.map": "/static/js/main.3790bd66.js.map"
+    "main.ae17de1a.js.map": "/static/js/main.ae17de1a.js.map"
   },
   "entrypoints": [
     "static/css/main.34727dec.css",
-    "static/js/main.3790bd66.js"
+    "static/js/main.ae17de1a.js"
   ]
 }

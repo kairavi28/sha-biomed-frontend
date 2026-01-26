@@ -146,21 +146,33 @@ const Navbar = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const handleSubmit = () => {
-    setOpenModal(false);
-    setSuccessDialogOpen(true);
-    setFormData({
-      firstname: "",
-      lastname: "",
-      facilityName: "",
-      facilityAddress: "",
-      phone: "",
-      email: "",
-      preferredDate: "",
-      wasteType: "",
-      containerCount: "",
-      specialInstructions: "",
-    });
+  const handleSubmit = async () => {
+    try {
+      console.log('hey!!!!');
+      await axios.post(`${API_BASE_URL}/pickup/book`, formData);
+      setOpenModal(false);
+      setSuccessDialogOpen(true);
+      setFormData({
+        firstname: "",
+        lastname: "",
+        facilityName: "",
+        facilityAddress: "",
+        phone: "",
+        email: "",
+        preferredDate: "",
+        wasteType: "",
+        containerCount: "",
+        specialInstructions: "",
+      });
+      console.log("here's the form data: ", formData);
+    } catch (error) {
+      console.error("Error booking pickup:", error);
+      setSnackbar({
+        open: true,
+        message: error.response?.data?.message || "Failed to submit pickup request. Please try again.",
+        severity: "error",
+      });
+    }
   };
 
   const isActive = (path) => location.pathname === path;
@@ -808,6 +820,7 @@ const Navbar = () => {
                 <DropdownItem value="Mixed Waste">Mixed Waste</DropdownItem>
               </Select>
             </FormControl>
+            <TextField label="Number of Containers" name="containerCount" value={formData.containerCount} onChange={handleChange} fullWidth variant="outlined" type="number" />
             <TextField label="Special Instructions (optional)" name="specialInstructions" value={formData.specialInstructions} onChange={handleChange} fullWidth multiline rows={3} variant="outlined" />
           </Box>
         </DialogContent>
