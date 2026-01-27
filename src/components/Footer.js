@@ -1,9 +1,7 @@
 import React from "react";
+import { Link as RouterLink } from "react-router-dom";
 import { Box, Container, Grid, Typography, Link } from "@mui/material";
 import PhoneIcon from "@mui/icons-material/Phone";
-import FacebookIcon from "@mui/icons-material/Facebook";
-import InstagramIcon from "@mui/icons-material/Instagram";
-import XIcon from "@mui/icons-material/X";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import YouTubeIcon from "@mui/icons-material/YouTube";
 import biomedLogo from "../assets/images/white-logo.png";
@@ -42,17 +40,17 @@ function Footer() {
                             support@biomedwaste.com
                         </Link>
                         <Box sx={{ display: "flex", gap: 1.5 }}>
-                            <Link href="https://ca.linkedin.com/company/biomed-recovery-disposal-ltd" sx={{ color: "#fff", "&:hover": { color: "#D9DE38" } }}><LinkedInIcon sx={{ fontSize: 22 }} /></Link>
-                            <Link href="https://www.youtube.com/@Biomed-Recovery-and-Disposal" sx={{ color: "#fff", "&:hover": { color: "#D9DE38" } }}><YouTubeIcon sx={{ fontSize: 22 }} /></Link>
+                            <Link href="https://ca.linkedin.com/company/biomed-recovery-disposal-ltd" target="_blank" rel="noopener noreferrer" sx={{ color: "#fff", "&:hover": { color: "#D9DE38" } }}><LinkedInIcon sx={{ fontSize: 22 }} /></Link>
+                            <Link href="https://www.youtube.com/@Biomed-Recovery-and-Disposal" target="_blank" rel="noopener noreferrer" sx={{ color: "#fff", "&:hover": { color: "#D9DE38" } }}><YouTubeIcon sx={{ fontSize: 22 }} /></Link>
                         </Box>
                     </Grid>
 
                     <Grid item xs={12} sm={6} md={4} sx={{ display: "flex", flexDirection: "column", alignItems: { xs: "flex-start", md: "center" } }}>
                         <Box>
-                            <Link href="/services" sx={{ color: "#fff", textDecoration: "underline", display: "block", mb: 2, fontSize: "0.9rem", fontWeight: 500 }}>
+                            <Link component={RouterLink} to="/services" sx={{ color: "#fff", textDecoration: "underline", display: "block", mb: 2, fontSize: "0.9rem", fontWeight: 500 }}>
                                 Complaint Services
                             </Link>
-                            <Link href="/instruction" sx={{ color: "#fff", textDecoration: "underline", display: "block", mb: 2, fontSize: "0.9rem", fontWeight: 500 }}>
+                            <Link component={RouterLink} to="/instruction" sx={{ color: "#fff", textDecoration: "underline", display: "block", mb: 2, fontSize: "0.9rem", fontWeight: 500 }}>
                                 Waste Packing Guide
                             </Link>
                         </Box>
