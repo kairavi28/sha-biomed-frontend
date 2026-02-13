@@ -73,11 +73,15 @@ function Complaints() {
     });
 
     const productTypes = [
-        "Sharps Container",
-        "Biohazard Bag",
-        "Pharmaceutical Waste Container",
-        "Chemotherapy Container",
-        "Pathological Waste Container",
+        "Carson Sharps Container(s)",
+        "Needle Drop-Box(s)",
+        "Terra Container(s)",
+        "Red Anatomical Pail(s)",
+        "Blue Plastic Drum(s)",
+        "Yello Biohazard Pail(s)",
+        "While Glass Only Pail(s)",
+        "Biobox Fibreboard Container(s)",
+        "Lid(s)",
         "Other"
     ];
 

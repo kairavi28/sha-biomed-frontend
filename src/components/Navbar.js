@@ -308,7 +308,7 @@ const Navbar = () => {
             },
           }}
         >
-          Book Pickup
+          Request Pickup
         </Button>
       </Box>
       <Box sx={{ p: 2, pt: 0 }}>
@@ -606,7 +606,7 @@ const Navbar = () => {
                 },
               }}
             >
-              Book Pickup
+              Request Pickup
             </Button>
             {/* Shopping Cart Icon */}
             <IconButton
@@ -763,7 +763,7 @@ const Navbar = () => {
             mb: 2,
           }}
         >
-          Book Pickup Request
+          Request Pickup 
         </DialogTitle>
         <DialogContent>
           <Box
