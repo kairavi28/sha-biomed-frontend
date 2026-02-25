@@ -24,6 +24,7 @@ import BusinessInfoForm from "./components/BusinessInfoForm";
 import RequestProduct from "./components/RequestProduct";
 import QuoteCart from "./components/QuoteCart";
 import { QuoteCartProvider } from "./context/QuoteCartContext";
+import ResetPassword from "./components/ResetPassword";
 
 function RouteGuard() {
   const location = useLocation();
@@ -92,6 +93,7 @@ function App() {
           <Route path="/" element={<PublicRoute><SignInSide /></PublicRoute>} />
           <Route path="/sign-up" element={<PublicRoute><SignUp /></PublicRoute>} />
           <Route path="/auth/callback" element={<AuthCallback />} />
+          <Route path="/reset-password/:token" element={<ResetPassword />} />
           <Route element={<ProtectedRoute />}>
             <Route element={<LayoutWithNavbar />}>
               <Route path="/home" element={<Dashboard />} />

@@ -50,6 +50,7 @@ const InvoiceList = () => {
   const [disputeInvoice, setDisputeInvoice] = useState(null);
   const [disputeReason, setDisputeReason] = useState("");
   const [disputedInvoices, setDisputedInvoices] = useState([]);
+  const [disputeLoading, setDisputeLoading] = useState(false);
   const [snackbar, setSnackbar] = useState({ open: false, message: "", severity: "success" });
 
   useEffect(() => {
@@ -120,9 +121,9 @@ const InvoiceList = () => {
       const currentUserSession = JSON.parse(sessionStorage.getItem("userData"));
       const currentUserId = currentUserSession?.id || currentUserSession?._id;
       if (!currentUserId) return;
-      
+
       try {
-        const response = await axios.get(`${API_BASE_URL}/disputes/customer/${currentUserId}`);
+        const response = await axios.get(`${API_BASE_URL}/dispute/customer/${currentUserId}`);
         const activeDisputes = response.data.filter(d => d.status !== 'resolved' && d.status !== 'rejected');
         const activeDisputedInvoiceNumbers = activeDisputes.map(d => d.invoiceNumber);
         setDisputedInvoices(activeDisputedInvoiceNumbers);
@@ -720,6 +721,7 @@ const InvoiceList = () => {
                       color="error"
                       sx={{ textTransform: "none", borderRadius: 2 }}
                       onClick={async () => {
+                        setDisputeLoading(true);
                         try {
                           const disputePayload = {
                             customerId: userData?._id,
@@ -742,11 +744,13 @@ const InvoiceList = () => {
                         } catch (err) {
                           console.error("Error filing dispute:", err);
                           setSnackbar({ open: true, message: "Failed to file dispute. Please try again.", severity: "error" });
+                        } finally {
+                          setDisputeLoading(false);
                         }
                       }}
-                      disabled={!disputeReason.trim()}
+                      disabled={!disputeReason.trim() || disputeLoading}
                     >
-                      Submit Dispute
+                      {disputeLoading ? <CircularProgress size={20} sx={{ color: '#fff' }} /> : 'Submit Dispute'}
                     </Button>
                   </DialogActions>
                 </Dialog>
