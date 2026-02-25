@@ -53,7 +53,7 @@ function Complaints() {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [userData, setUserData] = useState(null);
     const currentUserSession = JSON.parse(sessionStorage.getItem("userData"));
-
+    
     const [formData, setFormData] = useState({
         productType: "",
         description: "",
@@ -73,15 +73,11 @@ function Complaints() {
     });
 
     const productTypes = [
-        "Carson Sharps Container(s)",
-        "Needle Drop-Box(s)",
-        "Terra Container(s)",
-        "Red Anatomical Pail(s)",
-        "Blue Plastic Drum(s)",
-        "Yello Biohazard Pail(s)",
-        "While Glass Only Pail(s)",
-        "Biobox Fibreboard Container(s)",
-        "Lid(s)",
+        "Sharps Container",
+        "Biohazard Bag",
+        "Pharmaceutical Waste Container",
+        "Chemotherapy Container",
+        "Pathological Waste Container",
         "Other"
     ];
 
@@ -119,7 +115,7 @@ function Complaints() {
                     );
 
                     setIssues(filteredComplaints);
-
+                    
                     const pending = filteredComplaints.filter(c => c.status === 'pending').length;
                     const resolved = filteredComplaints.filter(c => c.status === 'resolved').length;
                     setStats({
@@ -144,7 +140,7 @@ function Complaints() {
 
     const handleFormSubmit = async (event) => {
         event.preventDefault();
-
+        
         if (!formData.productType || !formData.description) {
             setSnackbar({
                 open: true,
@@ -157,6 +153,19 @@ function Complaints() {
         const formDataToSubmit = new FormData();
         formDataToSubmit.append("productType", formData.productType);
         formDataToSubmit.append("description", formData.description);
+
+        if (currentUserSession) {
+            const email = currentUserSession.username || currentUserSession.email || "";
+            const name = currentUserSession.name || `${currentUserSession.firstname || ""} ${currentUserSession.lastname || ""}`.trim();
+            formDataToSubmit.append("email", email);
+            formDataToSubmit.append("customerName", name);
+        }
+        if (userData?.facilities) {
+            const facilityNames = userData.facilities
+                .filter(f => f.approved)
+                .map(f => f.name);
+            formDataToSubmit.append("facilities", facilityNames.join(", "));
+        }
 
         if (formData.photos && formData.photos.length > 0) {
             formData.photos.forEach((photo, index) => {
@@ -275,9 +284,8 @@ function Complaints() {
             {/* Hero Section */}
             <Box
                 sx={{
-                    background: "#0D2477",
-                    mt: { xs: "100px", md: "110px" },
-                    py: { xs: 10, md: 12 },
+                    background: "#1a2744",
+                    py: { xs: 8, md: 12 },
                     px: { xs: 2, md: 4 },
                 }}
             >
@@ -294,7 +302,7 @@ function Complaints() {
                             sx={{
                                 color: "#fff",
                                 fontWeight: 700,
-                                fontSize: { xs: "1.75rem", sm: "1.7rem", md: "2.2rem" },
+                                fontSize: { xs: "1.75rem", sm: "2rem", md: "2.5rem" },
                                 mb: 2,
                             }}
                         >
@@ -334,7 +342,7 @@ function Complaints() {
                 </Container>
             </Box>
 
-              {/* Stats Section */}
+            {/* Stats Section */}
             <Container maxWidth="lg" sx={{ mt: { xs: 3, sm: 4, md: 5 }, px: { xs: 2, sm: 3, md: 4 } }}>
                 <Paper
                     elevation={3}
@@ -556,7 +564,7 @@ function Complaints() {
                                         Click to upload photos
                                     </Typography>
                                 </Box>
-
+                                
                                 {formData.photos && formData.photos.length > 0 && (
                                     <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1, mt: 2 }}>
                                         {formData.photos.map((photo, index) => (

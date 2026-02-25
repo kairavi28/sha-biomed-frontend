@@ -81,7 +81,7 @@ function ProfilePage() {
       });
       sessionStorage.removeItem('facilityApproved');
     }
-
+    
     const savedAvatar = localStorage.getItem(`avatar_${userId}`);
     if (savedAvatar) {
       setLocalAvatarPreview(savedAvatar);
@@ -93,13 +93,13 @@ function ProfilePage() {
       try {
         const response = await axios.get(`${API_BASE_URL}/user/${userId}`);
         setUserData(response.data);
-
+        
         const serverAvatarUrl = getAvatarUrl(response.data?.avatar);
         if (serverAvatarUrl) {
           setLocalAvatarPreview(serverAvatarUrl);
           localStorage.setItem(`avatar_${userId}`, serverAvatarUrl);
         }
-
+        
         if (response.data?.facilities) {
           const approvedFacilities = response.data.facilities
             .filter(facility => facility.approved)
@@ -171,7 +171,7 @@ function ProfilePage() {
       setImageFile(file);
       const previewUrl = URL.createObjectURL(file);
       setLocalAvatarPreview(previewUrl);
-
+      
       const reader = new FileReader();
       reader.onloadend = () => {
         localStorage.setItem(`avatar_${userId}`, reader.result);
@@ -262,7 +262,7 @@ function ProfilePage() {
       const updatedResponse = await axios.get(`${API_BASE_URL}/user/${userId}`);
       setUserData(updatedResponse.data);
       setImageFile(null);
-
+      
       const serverAvatarUrl = getAvatarUrl(updatedResponse.data?.avatar);
       if (serverAvatarUrl) {
         setLocalAvatarPreview(serverAvatarUrl);
@@ -322,19 +322,19 @@ function ProfilePage() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
-          <Paper
-            elevation={0}
-            sx={{
-              p: { xs: 3, md: 5 },
+          <Paper 
+            elevation={0} 
+            sx={{ 
+              p: { xs: 3, md: 5 }, 
               borderRadius: 2,
               border: '1px solid #e0e0e0',
               mb: 4
             }}
           >
-            <Typography
-              variant="h5"
-              fontWeight="bold"
-              color="#0D2477"
+            <Typography 
+              variant="h5" 
+              fontWeight="bold" 
+              color="#0D2477" 
               mb={4}
               sx={{ fontSize: { xs: '1.25rem', md: '1.5rem' } }}
             >
@@ -346,11 +346,11 @@ function ProfilePage() {
             )}
 
             {pendingFacilities.length > 0 && (
-              <Box
-                sx={{
-                  mb: 4,
-                  p: 2.5,
-                  backgroundColor: '#FFF8E1',
+              <Box 
+                sx={{ 
+                  mb: 4, 
+                  p: 2.5, 
+                  backgroundColor: '#FFF8E1', 
                   borderRadius: 2,
                   border: '1px solid #FFE082',
                   display: 'flex',
@@ -390,11 +390,11 @@ function ProfilePage() {
             <Grid container spacing={4} alignItems="flex-start">
               <Grid item xs={12} md={3} sx={{ textAlign: { xs: 'center', md: 'left' } }}>
                 <Box sx={{ position: 'relative', display: 'inline-block' }}>
-                  <Avatar
-                    src={localAvatarPreview || getAvatarUrl(userData?.avatar)}
-                    sx={{
-                      width: { xs: 150, md: 180 },
-                      height: { xs: 150, md: 180 },
+                  <Avatar 
+                    src={localAvatarPreview || getAvatarUrl(userData?.avatar)} 
+                    sx={{ 
+                      width: { xs: 150, md: 180 }, 
+                      height: { xs: 150, md: 180 }, 
                       backgroundColor: '#e0e0e0',
                       border: '4px solid #f0f0f0'
                     }}
@@ -405,15 +405,15 @@ function ProfilePage() {
                   </Avatar>
                   {isEditing && (
                     <>
-                      <input
-                        type="file"
+                      <input 
+                        type="file" 
                         ref={fileInputRef}
                         style={{ display: 'none' }}
-                        onChange={handleImageChange}
-                        accept="image/*"
+                        onChange={handleImageChange} 
+                        accept="image/*" 
                       />
-                      <IconButton
-                        color="primary"
+                      <IconButton 
+                        color="primary" 
                         onClick={() => fileInputRef.current?.click()}
                         sx={{
                           position: 'absolute',
@@ -559,10 +559,10 @@ function ProfilePage() {
                         }}
                       />
                     ) : (
-                      <Box
-                        sx={{
-                          display: 'flex',
-                          flexWrap: 'wrap',
+                      <Box 
+                        sx={{ 
+                          display: 'flex', 
+                          flexWrap: 'wrap', 
                           gap: 1,
                           p: 1.5,
                           backgroundColor: '#fafafa',
@@ -597,8 +597,8 @@ function ProfilePage() {
                   </Grid>
                   <Grid item xs={12} sx={{ mt: 2 }}>
                     {!isEditing ? (
-                      <Button
-                        variant="outlined"
+                      <Button 
+                        variant="outlined" 
                         onClick={handleEditProfile}
                         sx={{
                           borderColor: '#0D2477',
@@ -618,8 +618,8 @@ function ProfilePage() {
                       </Button>
                     ) : (
                       <Box sx={{ display: 'flex', gap: 2 }}>
-                        <Button
-                          variant="contained"
+                        <Button 
+                          variant="contained" 
                           onClick={handleSave}
                           sx={{
                             backgroundColor: '#0D2477',
@@ -635,8 +635,8 @@ function ProfilePage() {
                         >
                           Save Changes
                         </Button>
-                        <Button
-                          variant="outlined"
+                        <Button 
+                          variant="outlined" 
                           onClick={() => setIsEditing(false)}
                           sx={{
                             borderColor: '#666',
