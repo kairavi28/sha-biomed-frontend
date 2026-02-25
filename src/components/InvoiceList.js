@@ -21,6 +21,8 @@ import {
   Container,
   Grid,
   Chip,
+  Snackbar,
+  Alert,
 } from "@mui/material";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import DownloadIcon from "@mui/icons-material/Download";
@@ -48,6 +50,7 @@ const InvoiceList = () => {
   const [disputeInvoice, setDisputeInvoice] = useState(null);
   const [disputeReason, setDisputeReason] = useState("");
   const [disputedInvoices, setDisputedInvoices] = useState([]);
+  const [snackbar, setSnackbar] = useState({ open: false, message: "", severity: "success" });
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -119,9 +122,10 @@ const InvoiceList = () => {
       if (!currentUserId) return;
       
       try {
-        const response = await axios.get(`${API_BASE_URL}/dispute/customer/${currentUserId}`);
-        const disputedInvoiceNumbers = response.data.map(d => d.invoiceNumber);
-        setDisputedInvoices(disputedInvoiceNumbers);
+        const response = await axios.get(`${API_BASE_URL}/disputes/customer/${currentUserId}`);
+        const activeDisputes = response.data.filter(d => d.status !== 'resolved' && d.status !== 'rejected');
+        const activeDisputedInvoiceNumbers = activeDisputes.map(d => d.invoiceNumber);
+        setDisputedInvoices(activeDisputedInvoiceNumbers);
       } catch (error) {
         console.error("Error fetching disputes:", error);
       }
@@ -527,7 +531,7 @@ const InvoiceList = () => {
                                           window.URL.revokeObjectURL(url);
                                         } catch (error) {
                                           console.error('Download failed:', error);
-                                          alert('Failed to download file. Please try again.');
+                                          setSnackbar({ open: true, message: "Failed to download file. Please try again.", severity: "error" });
                                         }
                                       }}
                                       sx={{
@@ -565,13 +569,14 @@ const InvoiceList = () => {
                                     <Button
                                       variant="outlined"
                                       size="small"
+                                      disabled={disputedInvoices.includes(invoice.fileName)}
                                       onClick={() => {
                                         setDisputeInvoice({ ...invoice, facility });
                                         setOpenDispute(true);
                                       }}
                                       sx={{
-                                        color: "#d32f2f",
-                                        borderColor: "#d32f2f",
+                                        color: disputedInvoices.includes(invoice.fileName) ? "#999" : "#d32f2f",
+                                        borderColor: disputedInvoices.includes(invoice.fileName) ? "#ccc" : "#d32f2f",
                                         textTransform: "none",
                                         fontSize: "0.75rem",
                                         px: 2,
@@ -581,9 +586,13 @@ const InvoiceList = () => {
                                           borderColor: "#b71c1c",
                                           backgroundColor: "rgba(211, 47, 47, 0.04)",
                                         },
+                                        "&.Mui-disabled": {
+                                          color: "#999",
+                                          borderColor: "#ddd",
+                                        },
                                       }}
                                     >
-                                      Dispute
+                                      {disputedInvoices.includes(invoice.fileName) ? "Under Review" : "Dispute"}
                                     </Button>
                                   </TableCell>
                                   <TableCell align="center" sx={{ py: 2.5 }}>
@@ -725,13 +734,14 @@ const InvoiceList = () => {
                             `${API_BASE_URL}/invoice/dispute`,
                             disputePayload,
                           );
+
                           setDisputedInvoices(prev => [...prev, disputeInvoice?.fileName]);
-                          alert("Dispute filed successfully.");
+                          setSnackbar({ open: true, message: "Dispute filed successfully!", severity: "success" });
                           setOpenDispute(false);
                           setDisputeReason("");
                         } catch (err) {
                           console.error("Error filing dispute:", err);
-                          alert("Failed to file dispute. Please try again.");
+                          setSnackbar({ open: true, message: "Failed to file dispute. Please try again.", severity: "error" });
                         }
                       }}
                       disabled={!disputeReason.trim()}
@@ -799,6 +809,22 @@ const InvoiceList = () => {
           </Paper>
         </motion.div>
       </Container>
+
+      <Snackbar
+        open={snackbar.open}
+        autoHideDuration={4000}
+        onClose={() => setSnackbar({ ...snackbar, open: false })}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+      >
+        <Alert
+          onClose={() => setSnackbar({ ...snackbar, open: false })}
+          severity={snackbar.severity}
+          variant="filled"
+          sx={{ width: "100%" }}
+        >
+          {snackbar.message}
+        </Alert>
+      </Snackbar>
 
       <Footer />
     </Box>
