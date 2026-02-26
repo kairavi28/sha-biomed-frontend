@@ -1,8 +1,7 @@
 import React, { useEffect } from "react";
-import { Routes, Route, useLocation, Outlet, Navigate } from "react-router-dom";
+import { Routes, Route, useLocation, Navigate, Outlet } from "react-router-dom";
 import "./App.css";
 
-// Pages & Components
 import SignInSide from "./sign-up/SignInSide";
 import SignUp from "./sign-up/SignUp";
 import Navbar from "./components/Navbar";
@@ -67,15 +66,6 @@ function PublicRoute({ children }) {
   return children;
 }
 
-function LayoutWithNavbar() {
-  return (
-    <>
-      <Navbar />
-      <Outlet />
-    </>
-  );
-}
-
 function App() {
   useEffect(() => {
     if (window.location.hostname === "www.biomedwaste.net") {
@@ -95,23 +85,23 @@ function App() {
           <Route path="/auth/callback" element={<AuthCallback />} />
           <Route path="/reset-password/:token" element={<ResetPassword />} />
           <Route element={<ProtectedRoute />}>
-            <Route element={<LayoutWithNavbar />}>
-              <Route path="/home" element={<Dashboard />} />
-              <Route path="/services" element={<Complaints />} />
-              <Route path="/instruction" element={<InstructionPage />} />
-              <Route path="/blogs" element={<BlogPage />} />
-              <Route path="/blog" element={<Blog />} />
-              <Route path="/profile" element={<ProfilePage />} />
-              <Route path="/invoice" element={<InvoiceList />} />
-              <Route path="/waybill" element={<WaybillList />} />
-              <Route path="/slider" element={<FeedbackSlider />} />
-              <Route path="/cod" element={<Cod />} />
-              <Route path="/Business" element={<BusinessInfoForm />} />
-              <Route path="/calltoaction" element={<CallToAction />} />
-              <Route path="/request-products" element={<RequestProduct />} />
-              <Route path="/cart" element={<QuoteCart />} />
-            </Route>
+            <Route path="/home" element={<Dashboard />} />
+            <Route path="/services" element={<Complaints />} />
+            <Route path="/complaints" element={<Complaints />} />
+            <Route path="/instruction" element={<InstructionPage />} />
+            <Route path="/blogs" element={<BlogPage />} />
+            <Route path="/blog" element={<Blog />} />
+            <Route path="/profile" element={<ProfilePage />} />
+            <Route path="/invoice" element={<InvoiceList />} />
+            <Route path="/waybill" element={<WaybillList />} />
+            <Route path="/slider" element={<FeedbackSlider />} />
+            <Route path="/cod" element={<Cod />} />
+            <Route path="/Business" element={<BusinessInfoForm/>} />
+            <Route path="/calltoaction" element={<CallToAction />} />
+            <Route path="/request-products" element={<RequestProduct />} />
+            <Route path="/cart" element={<QuoteCart />} />
           </Route>
+          <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </PrivacyProvider>
     </QuoteCartProvider>
