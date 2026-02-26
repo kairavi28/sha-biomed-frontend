@@ -53,7 +53,7 @@ function Complaints() {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [userData, setUserData] = useState(null);
     const currentUserSession = JSON.parse(sessionStorage.getItem("userData"));
-
+    
     const [formData, setFormData] = useState({
         productType: "",
         description: "",
@@ -73,15 +73,11 @@ function Complaints() {
     });
 
     const productTypes = [
-        "Carson Sharps Container(s)",
-        "Needle Drop-Box(s)",
-        "Terra Container(s)",
-        "Red Anatomical Pail(s)",
-        "Blue Plastic Drum(s)",
-        "Yello Biohazard Pail(s)",
-        "While Glass Only Pail(s)",
-        "Biobox Fibreboard Container(s)",
-        "Lid(s)",
+        "Sharps Container",
+        "Biohazard Bag",
+        "Pharmaceutical Waste Container",
+        "Chemotherapy Container",
+        "Pathological Waste Container",
         "Other"
     ];
 
@@ -190,6 +186,11 @@ function Complaints() {
                 message: "Issue has been successfully submitted!",
                 severity: "success",
             });
+            formData.photos.forEach((photo) => {
+                if (photo?.preview && photo.preview.startsWith('blob:')) {
+                    URL.revokeObjectURL(photo.preview);
+                }
+            });
             setFormData({ productType: "", description: "", photos: [] });
             localStorage.removeItem("formData");
         } catch (error) {
@@ -207,40 +208,35 @@ function Complaints() {
         const { name, value } = event.target;
         setFormData((prev) => {
             const updatedForm = { ...prev, [name]: value };
-            localStorage.setItem("formData", JSON.stringify(updatedForm));
+            try {
+                localStorage.setItem("formData", JSON.stringify({ productType: updatedForm.productType, description: updatedForm.description }));
+            } catch (e) {
+                localStorage.removeItem("formData");
+            }
             return updatedForm;
         });
     };
 
     const handleFileChange = (event) => {
         const files = Array.from(event.target.files);
-        const previews = files.map((file) => {
-            const reader = new FileReader();
-            reader.readAsDataURL(file);
-            return new Promise((resolve) => {
-                reader.onloadend = () => resolve({ file, preview: reader.result });
-            });
-        });
-
-        Promise.all(previews).then((uploadedImages) => {
-            setFormData((prev) => {
-                const updatedForm = {
-                    ...prev,
-                    photos: [...(prev.photos || []), ...uploadedImages],
-                };
-                localStorage.setItem("formData", JSON.stringify(updatedForm));
-                return updatedForm;
-            });
-        });
+        const newPhotos = files.map((file) => ({
+            file,
+            preview: URL.createObjectURL(file),
+        }));
+        setFormData((prev) => ({
+            ...prev,
+            photos: [...(prev.photos || []), ...newPhotos],
+        }));
     };
 
     const handleRemoveImage = (index) => {
         setFormData((prev) => {
             const updatedPhotos = [...prev.photos];
-            updatedPhotos.splice(index, 1);
-            const updatedForm = { ...prev, photos: updatedPhotos };
-            localStorage.setItem("formData", JSON.stringify(updatedForm));
-            return updatedForm;
+            const removed = updatedPhotos.splice(index, 1);
+            if (removed[0]?.preview && removed[0].preview.startsWith('blob:')) {
+                URL.revokeObjectURL(removed[0].preview);
+            }
+            return { ...prev, photos: updatedPhotos };
         });
     };
 
@@ -263,12 +259,16 @@ function Complaints() {
     };
 
     useEffect(() => {
-        const savedFormData = JSON.parse(localStorage.getItem("formData"));
-        if (savedFormData) {
-            setFormData(savedFormData);
+        try {
+            const savedFormData = JSON.parse(localStorage.getItem("formData"));
+            if (savedFormData) {
+                setFormData({ productType: savedFormData.productType || "", description: savedFormData.description || "", photos: [] });
+            }
+        } catch (e) {
+            localStorage.removeItem("formData");
         }
     }, []);
-    
+
     if (loading) {
         return (
             <Box
@@ -288,9 +288,8 @@ function Complaints() {
             {/* Hero Section */}
             <Box
                 sx={{
-                    background: "#0D2477",
-                    mt: { xs: "100px", md: "110px" },
-                    py: { xs: 10, md: 12 },
+                    background: "#1a2744",
+                    py: { xs: 8, md: 12 },
                     px: { xs: 2, md: 4 },
                 }}
             >
@@ -307,7 +306,7 @@ function Complaints() {
                             sx={{
                                 color: "#fff",
                                 fontWeight: 700,
-                                fontSize: { xs: "1.75rem", sm: "1.7rem", md: "2.2rem" },
+                                fontSize: { xs: "1.75rem", sm: "2rem", md: "2.5rem" },
                                 mb: 2,
                             }}
                         >
@@ -347,7 +346,7 @@ function Complaints() {
                 </Container>
             </Box>
 
-              {/* Stats Section */}
+            {/* Stats Section */}
             <Container maxWidth="lg" sx={{ mt: { xs: 3, sm: 4, md: 5 }, px: { xs: 2, sm: 3, md: 4 } }}>
                 <Paper
                     elevation={3}
@@ -569,7 +568,7 @@ function Complaints() {
                                         Click to upload photos
                                     </Typography>
                                 </Box>
-
+                                
                                 {formData.photos && formData.photos.length > 0 && (
                                     <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1, mt: 2 }}>
                                         {formData.photos.map((photo, index) => (
