@@ -753,7 +753,7 @@ function ProfilePage() {
                 fontWeight="bold" 
                 color="#0D2477"
               >
-                Product Issues
+                Product Issues 
               </Typography>
             </Box>
             <Typography variant="body2" color="text.secondary" mb={3}>

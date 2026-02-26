@@ -80,7 +80,24 @@ export default function SignInCard() {
         headers: { "Content-Type": "application/json" },
       });
 
-      sessionStorage.setItem("userData", JSON.stringify(responseObj.data.user));
+      const user = responseObj.data.user;
+      const userWithId = {
+        ...user,
+        id: user._id || user.id,
+      };
+      sessionStorage.setItem("userData", JSON.stringify(userWithId));
+
+      try {
+        const location = await getUserLocation();
+        await axios.post(`${API_BASE_URL}/user/location`, {
+          userId: userWithId.id,
+          userEmail: userWithId.email,
+          ...location,
+        });
+      } catch (locError) {
+        console.warn('Could not fetch user location:', locError.message);
+      }
+      
       navigate("/home");
     } catch (error) {
       console.error("Login Failed:", error);
