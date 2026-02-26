@@ -53,7 +53,7 @@ function Complaints() {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [userData, setUserData] = useState(null);
     const currentUserSession = JSON.parse(sessionStorage.getItem("userData"));
-    
+
     const [formData, setFormData] = useState({
         productType: "",
         description: "",
@@ -73,11 +73,15 @@ function Complaints() {
     });
 
     const productTypes = [
-        "Sharps Container",
-        "Biohazard Bag",
-        "Pharmaceutical Waste Container",
-        "Chemotherapy Container",
-        "Pathological Waste Container",
+        "Carson Sharps Container(s)",
+        "Needle Drop-Box(s)",
+        "Terra Container(s)",
+        "Red Anatomical Pail(s)",
+        "Blue Plastic Drum(s)",
+        "Yello Biohazard Pail(s)",
+        "While Glass Only Pail(s)",
+        "Biobox Fibreboard Container(s)",
+        "Lid(s)",
         "Other"
     ];
 
@@ -115,7 +119,7 @@ function Complaints() {
                     );
 
                     setIssues(filteredComplaints);
-                    
+
                     const pending = filteredComplaints.filter(c => c.status === 'pending').length;
                     const resolved = filteredComplaints.filter(c => c.status === 'resolved').length;
                     setStats({
@@ -140,7 +144,7 @@ function Complaints() {
 
     const handleFormSubmit = async (event) => {
         event.preventDefault();
-        
+
         if (!formData.productType || !formData.description) {
             setSnackbar({
                 open: true,
@@ -359,10 +363,10 @@ function Complaints() {
                 >
                     <Grid container spacing={{ xs: 2, sm: 2, md: 3 }} justifyContent="center">
                         <Grid item xs={12} sm={4}>
-                            <Box sx={{ 
-                                display: "flex", 
-                                alignItems: "center", 
-                                justifyContent: { xs: "flex-start", md: "flex-start" }, 
+                            <Box sx={{
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: { xs: "flex-start", md: "flex-start" },
                                 gap: { xs: 2, md: 2 },
                             }}>
                                 <Box
@@ -390,10 +394,10 @@ function Complaints() {
                             </Box>
                         </Grid>
                         <Grid item xs={12} sm={4}>
-                            <Box sx={{ 
-                                display: "flex", 
-                                alignItems: "center", 
-                                justifyContent: { xs: "flex-start", md: "flex-start" }, 
+                            <Box sx={{
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: { xs: "flex-start", md: "flex-start" },
                                 gap: { xs: 2, md: 2 },
                             }}>
                                 <Box
@@ -421,10 +425,10 @@ function Complaints() {
                             </Box>
                         </Grid>
                         <Grid item xs={12} sm={4}>
-                            <Box sx={{ 
-                                display: "flex", 
-                                alignItems: "center", 
-                                justifyContent: { xs: "flex-start", md: "flex-start" }, 
+                            <Box sx={{
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: { xs: "flex-start", md: "flex-start" },
                                 gap: { xs: 2, md: 2 },
                             }}>
                                 <Box
@@ -568,7 +572,7 @@ function Complaints() {
                                         Click to upload photos
                                     </Typography>
                                 </Box>
-                                
+
                                 {formData.photos && formData.photos.length > 0 && (
                                     <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1, mt: 2 }}>
                                         {formData.photos.map((photo, index) => (
