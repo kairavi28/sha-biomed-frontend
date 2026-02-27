@@ -292,8 +292,9 @@ function Complaints() {
             {/* Hero Section */}
             <Box
                 sx={{
-                    background: "#1a2744",
-                    py: { xs: 8, md: 12 },
+                    background: "#0D2477",
+                    mt: { xs: "100px", md: "110px" },
+                    py: { xs: 10, md: 12 },
                     px: { xs: 2, md: 4 },
                 }}
             >
@@ -310,7 +311,7 @@ function Complaints() {
                             sx={{
                                 color: "#fff",
                                 fontWeight: 700,
-                                fontSize: { xs: "1.75rem", sm: "2rem", md: "2.5rem" },
+                                fontSize: { xs: "1.75rem", sm: "1.7rem", md: "2.2rem" },
                                 mb: 2,
                             }}
                         >
