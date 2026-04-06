@@ -86,18 +86,6 @@ export default function SignInCard() {
         id: user._id || user.id,
       };
       sessionStorage.setItem("userData", JSON.stringify(userWithId));
-
-      try {
-        const location = await getUserLocation();
-        await axios.post(`${API_BASE_URL}/user/location`, {
-          userId: userWithId.id,
-          userEmail: userWithId.email,
-          ...location,
-        });
-      } catch (locError) {
-        console.warn('Could not fetch user location:', locError.message);
-      }
-      
       navigate("/home");
     } catch (error) {
       console.error("Login Failed:", error);
@@ -133,27 +121,7 @@ export default function SignInCard() {
     }
 
     return isValid;
-  };
-
-  const getUserLocation = () => {
-    return new Promise((resolve, reject) => {
-      if (!navigator.geolocation) {
-        return reject(new Error('Geolocation is not supported'));
-      }
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          resolve({
-            latitude: position.coords.latitude,
-            longitude: position.coords.longitude,
-          });
-        },
-        (error) => {
-          reject(error);
-        }
-      );
-    });
-  };
-
+  };
   const handleSubmit = async (event) => {
     event.preventDefault();
     if (emailError || passwordError) return;
@@ -169,18 +137,6 @@ export default function SignInCard() {
         headers: { 'Content-Type': 'application/json' },
       });
       sessionStorage.setItem('userData', JSON.stringify(response.data));
-
-      try {
-        const location = await getUserLocation();
-        await axios.post(`${API_BASE_URL}/user/location`, {
-          userId: response.data.id,
-          userEmail: response.data.email,
-          ...location,
-        });
-      } catch (locError) {
-        console.warn('Could not fetch user location:', locError.message);
-      }
-
       navigate('/home');
     } catch (error) {
       const { status, data } = error.response || {};
@@ -266,7 +222,7 @@ export default function SignInCard() {
             required
             fullWidth
             name="password"
-            placeholder="••••••"
+            placeholder="â€¢â€¢â€¢â€¢â€¢â€¢"
             type={showPassword ? 'text' : 'password'}
             id="password"
             autoComplete="current-password"
@@ -374,3 +330,7 @@ export default function SignInCard() {
     </Card>
   );
 }
+
+
+
+
