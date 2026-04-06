@@ -15,17 +15,21 @@ import "react-international-phone/style.css";
 
 const API_BASE_URL = process.env.REACT_APP_API_URL || "https://biomedwaste.net/api";
 
+const EMPTY_FORM = {
+    contactNumber: "",
+    description: "",
+    photos: [],
+};
+
 function ComplaintModal({ open, onClose, onSuccess, onError }) {
     const [error, setError] = useState("");
     const [isSubmitting, setIsSubmitting] = useState(false);
-    const [formData, setFormData] = useState({
-        contactNumber: "",
-        description: "",
-        photos: [],
-    });
+    const [formData, setFormData] = useState(EMPTY_FORM);
 
     const handleClose = () => {
         setError("");
+        setIsSubmitting(false);
+        setFormData(EMPTY_FORM);
         onClose();
     };
 
@@ -49,6 +53,7 @@ function ComplaintModal({ open, onClose, onSuccess, onError }) {
 
     const handleFormSubmit = async (event) => {
         event.preventDefault();
+        setError("");
         setIsSubmitting(true);
 
         if (!formData.contactNumber || !formData.description) {
@@ -65,11 +70,6 @@ function ComplaintModal({ open, onClose, onSuccess, onError }) {
             formDataToSend.append("firstname", userData.firstname || "");
             formDataToSend.append("lastname", userData.lastname || "");
             formDataToSend.append("email", userData.email || "");
-
-            const facilityNames = (userData.facilities || [])
-                .map(f => f.name)
-                .join(", ");
-            formDataToSend.append("facilities", facilityNames);
 
             formDataToSend.append("contactNumber", formData.contactNumber);
             formDataToSend.append("description", formData.description);
@@ -88,11 +88,15 @@ function ComplaintModal({ open, onClose, onSuccess, onError }) {
                 onSuccess("New complaint submitted successfully!");
             }
 
-            setFormData({ contactNumber: "", description: "", photos: [] });
             handleClose();
         } catch (err) {
+            const message =
+                err?.response?.data?.message ||
+                err?.response?.data?.error ||
+                "Error submitting the request. Please try again.";
+            setError(message);
             if (onError) {
-                onError("Error submitting the request. Please try again.");
+                onError(message);
             }
         } finally {
             setIsSubmitting(false);
@@ -259,6 +263,7 @@ function ComplaintModal({ open, onClose, onSuccess, onError }) {
                     </Grid>
                     <Box sx={{ textAlign: "center", display: "flex", gap: 2, mt: 2 }}>
                         <Button
+                            type="submit"
                             variant="contained"
                             sx={{
                                 flex: 1,
@@ -269,7 +274,6 @@ function ComplaintModal({ open, onClose, onSuccess, onError }) {
                                 fontWeight: 600,
                                 "&:hover": { backgroundColor: "#c5ca32" },
                             }}
-                            onClick={handleFormSubmit}
                             disabled={isSubmitting}
                         >
                             {isSubmitting ? <CircularProgress size={24} /> : "Submit"}
