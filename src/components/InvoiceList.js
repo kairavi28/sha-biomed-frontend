@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useCallback, useMemo, useState, useEffect } from "react";
 import axios from "axios";
 import {
   Box,
@@ -23,6 +23,7 @@ import {
   Chip,
   Snackbar,
   Alert,
+  Divider,
 } from "@mui/material";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import DownloadIcon from "@mui/icons-material/Download";
@@ -49,13 +50,95 @@ const InvoiceList = () => {
   const [openDispute, setOpenDispute] = useState(false);
   const [disputeInvoice, setDisputeInvoice] = useState(null);
   const [disputeReason, setDisputeReason] = useState("");
-  const [disputedInvoices, setDisputedInvoices] = useState([]);
+  const [disputes, setDisputes] = useState([]);
+  const [openDisputeDetails, setOpenDisputeDetails] = useState(false);
+  const [selectedDispute, setSelectedDispute] = useState(null);
+  const [openSupportingDoc, setOpenSupportingDoc] = useState(false);
+  const [supportingDocUrl, setSupportingDocUrl] = useState("");
+  const [supportingDocMeta, setSupportingDocMeta] = useState(null);
   const [disputeLoading, setDisputeLoading] = useState(false);
   const [snackbar, setSnackbar] = useState({ open: false, message: "", severity: "success" });
 
+  const getCurrentUserIdFromSession = () => {
+    const raw = sessionStorage.getItem("userData");
+    if (!raw) return null;
+    try {
+      const parsed = JSON.parse(raw);
+      return parsed?.id || parsed?._id || null;
+    } catch {
+      return null;
+    }
+  };
+
+  const disputeStatusColor = (status) => {
+    if (status === "resolved") return "success";
+    if (status === "rejected") return "error";
+    if (status === "reviewing") return "warning";
+    return "default";
+  };
+
+  const supportingDocDisplayName = (meta) =>
+    meta?.originalName || meta?.fileName || meta?.filename || "Supporting Document";
+
+  const supportingDocMimeType = (meta) => meta?.mimeType || meta?.contentType || "";
+
+  const buildSupportingDocUrl = (dispute) => {
+    const id = dispute?._id || dispute?.id;
+    if (!id) return "";
+    return `${API_BASE_URL}/dispute/${encodeURIComponent(id)}/supporting-document`;
+  };
+
+  const canViewSupportingDoc = (dispute) => Boolean(dispute?.supportingDocument && buildSupportingDocUrl(dispute));
+
+  const disputeStatusByInvoiceNumber = useMemo(() => {
+    const byInvoice = new Map();
+
+    for (const dispute of disputes || []) {
+      const invoiceNumber = dispute?.invoiceNumber;
+      if (!invoiceNumber) continue;
+
+      const current = byInvoice.get(invoiceNumber);
+      const currentTime = current
+        ? new Date(current?.resolvedAt || current?.disputeDate || 0).getTime()
+        : -Infinity;
+      const candidateTime = new Date(dispute?.resolvedAt || dispute?.disputeDate || 0).getTime();
+
+      if (!current || candidateTime >= currentTime) {
+        byInvoice.set(invoiceNumber, dispute?.status || "pending");
+      }
+    }
+
+    return Object.fromEntries(byInvoice.entries());
+  }, [disputes]);
+
+  const fetchDisputes = useCallback(async () => {
+    const currentUserId = getCurrentUserIdFromSession();
+    if (!currentUserId) return;
+
+    try {
+      const response = await axios.get(`${API_BASE_URL}/dispute/customer/${currentUserId}`);
+      const fetched = Array.isArray(response.data) ? response.data : [];
+      setDisputes(fetched);
+    } catch (error) {
+      console.error("Error fetching disputes:", error);
+    }
+  }, []);
+
   useEffect(() => {
     const fetchUserData = async () => {
-      const currentUserSession = JSON.parse(sessionStorage.getItem("userData"));
+      const raw = sessionStorage.getItem("userData");
+      if (!raw) {
+        setLoading(false);
+        return;
+      }
+
+      let currentUserSession = null;
+      try {
+        currentUserSession = JSON.parse(raw);
+      } catch {
+        setLoading(false);
+        return;
+      }
       const currentUserId = currentUserSession?.id || currentUserSession?._id;
 
       if (!currentUserId) {
@@ -110,32 +193,47 @@ const InvoiceList = () => {
     };
 
     if (selectedFacilities.length > 0) {
+      // Avoid refreshing while user is actively reviewing a PDF/doc in a dialog.
+      if (openPreview || openSupportingDoc) return;
+
       fetchInvoices();
-      const interval = setInterval(fetchInvoices, 30 * 1000);
+      const interval = setInterval(fetchInvoices, 2 * 60 * 1000);
       return () => clearInterval(interval);
     }
-  }, [selectedFacilities]);
+  }, [selectedFacilities, openPreview, openSupportingDoc]);
 
   useEffect(() => {
-    const fetchDisputes = async () => {
-      const currentUserSession = JSON.parse(sessionStorage.getItem("userData"));
-      const currentUserId = currentUserSession?.id || currentUserSession?._id;
-      if (!currentUserId) return;
-
-      try {
-        const response = await axios.get(`${API_BASE_URL}/dispute/customer/${currentUserId}`);
-        const activeDisputes = response.data.filter(d => d.status !== 'resolved' && d.status !== 'rejected');
-        const activeDisputedInvoiceNumbers = activeDisputes.map(d => d.invoiceNumber);
-        setDisputedInvoices(activeDisputedInvoiceNumbers);
-      } catch (error) {
-        console.error("Error fetching disputes:", error);
-      }
-    };
+    // Avoid refreshing while user is actively reviewing a PDF/doc in a dialog.
+    if (openPreview || openSupportingDoc) return;
 
     fetchDisputes();
-    const interval = setInterval(fetchDisputes, 30 * 1000);
+    const interval = setInterval(fetchDisputes, 2 * 60 * 1000);
     return () => clearInterval(interval);
-  }, []);
+  }, [fetchDisputes, openPreview, openSupportingDoc]);
+
+  const openDisputeDetailsDialog = (dispute) => {
+    setSelectedDispute(dispute);
+    setOpenDisputeDetails(true);
+  };
+
+  const closeDisputeDetailsDialog = () => {
+    setOpenDisputeDetails(false);
+    setSelectedDispute(null);
+  };
+
+  const openSupportingDocDialog = (dispute) => {
+    const url = buildSupportingDocUrl(dispute);
+    if (!url) return;
+    setSupportingDocUrl(url);
+    setSupportingDocMeta(dispute?.supportingDocument || null);
+    setOpenSupportingDoc(true);
+  };
+
+  const closeSupportingDocDialog = () => {
+    setOpenSupportingDoc(false);
+    setSupportingDocUrl("");
+    setSupportingDocMeta(null);
+  };
 
   const totalAmountDue = Object.values(invoices)
     .flat()
@@ -343,6 +441,92 @@ const InvoiceList = () => {
                       Invoices are updated every 3 minutes. If you do not see
                       your latest invoice, please wait or contact support.
                     </Typography>
+                  </Box>
+                </motion.div>
+
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.4, delay: 0.35 }}
+                >
+                  <Box
+                    sx={{
+                      mb: 4,
+                      p: 2.5,
+                      borderRadius: 2,
+                      border: "1px solid #E0E0E0",
+                      background: "#fff",
+                    }}
+                  >
+                    <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 2 }}>
+                      <Typography sx={{ fontWeight: 700, color: "#0D2477" }}>
+                        Invoice Disputes
+                      </Typography>
+                      <Chip
+                        label={`${(disputes || []).length} total`}
+                        size="small"
+                        variant="outlined"
+                        sx={{ borderColor: "#0D2477", color: "#0D2477" }}
+                      />
+                    </Box>
+
+                    <Divider sx={{ my: 1.5 }} />
+
+                    {(disputes || []).length === 0 ? (
+                      <Typography variant="body2" sx={{ color: "#666" }}>
+                        No disputes filed yet.
+                      </Typography>
+                    ) : (
+                      <Box sx={{ display: "flex", flexDirection: "column", gap: 1.25 }}>
+                        {disputes.slice(0, 5).map((d) => (
+                          <Box
+                            key={d?._id || `${d?.invoiceNumber}-${d?.disputeDate}`}
+                            sx={{
+                              display: "flex",
+                              alignItems: "center",
+                              justifyContent: "space-between",
+                              gap: 2,
+                              p: 1.5,
+                              borderRadius: 1.5,
+                              background: "#FAFAFA",
+                              border: "1px solid #EEE",
+                            }}
+                          >
+                            <Box sx={{ minWidth: 0 }}>
+                              <Typography sx={{ fontWeight: 700, color: "#1a2744" }} noWrap>
+                                Invoice #{d?.invoiceNumber || "N/A"}
+                              </Typography>
+                              <Typography variant="body2" sx={{ color: "#666" }} noWrap>
+                                {d?.facility || "N/A"}
+                              </Typography>
+                            </Box>
+
+                            <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                              <Chip
+                                label={(d?.status || "pending").toUpperCase()}
+                                size="small"
+                                color={disputeStatusColor(d?.status)}
+                                variant={d?.status === "pending" ? "outlined" : "filled"}
+                              />
+                              <Button
+                                variant="outlined"
+                                size="small"
+                                sx={{ textTransform: "none", borderColor: "#0D2477", color: "#0D2477" }}
+                                onClick={() => openDisputeDetailsDialog(d)}
+                              >
+                                View
+                              </Button>
+                            </Box>
+                          </Box>
+                        ))}
+
+                        {(disputes || []).length > 5 ? (
+                          <Typography variant="caption" sx={{ color: "#666" }}>
+                            Showing latest 5 disputes.
+                          </Typography>
+                        ) : null}
+                      </Box>
+                    )}
                   </Box>
                 </motion.div>
 
@@ -567,17 +751,28 @@ const InvoiceList = () => {
                                     </Typography>
                                   </TableCell>
                                   <TableCell align="center" sx={{ py: 2.5 }}>
+                                    {(() => {
+                                      const disputeStatus = disputeStatusByInvoiceNumber[invoice.fileName];
+                                      const isUnderReview = disputeStatus === "pending" || disputeStatus === "reviewing";
+                                      const isResolved = disputeStatus === "resolved";
+                                      const disableDispute = isUnderReview || isResolved;
+
+                                      const label = isResolved ? "Resolved" : isUnderReview ? "Under Review" : "Dispute";
+                                      const color = disableDispute ? "#999" : "#d32f2f";
+                                      const borderColor = disableDispute ? "#ccc" : "#d32f2f";
+
+                                      return (
                                     <Button
                                       variant="outlined"
                                       size="small"
-                                      disabled={disputedInvoices.includes(invoice.fileName)}
+                                      disabled={disableDispute}
                                       onClick={() => {
                                         setDisputeInvoice({ ...invoice, facility });
                                         setOpenDispute(true);
                                       }}
                                       sx={{
-                                        color: disputedInvoices.includes(invoice.fileName) ? "#999" : "#d32f2f",
-                                        borderColor: disputedInvoices.includes(invoice.fileName) ? "#ccc" : "#d32f2f",
+                                        color,
+                                        borderColor,
                                         textTransform: "none",
                                         fontSize: "0.75rem",
                                         px: 2,
@@ -593,22 +788,48 @@ const InvoiceList = () => {
                                         },
                                       }}
                                     >
-                                      {disputedInvoices.includes(invoice.fileName) ? "Under Review" : "Dispute"}
+                                      {label}
                                     </Button>
+                                      );
+                                    })()}
                                   </TableCell>
                                   <TableCell align="center" sx={{ py: 2.5 }}>
-                                    {disputedInvoices.includes(invoice.fileName) ? (
-                                      <Chip
-                                        label="Disputed"
-                                        size="small"
-                                        sx={{
-                                          backgroundColor: "#FFF3E0",
-                                          color: "#E65100",
+                                    {(() => {
+                                      const disputeStatus = disputeStatusByInvoiceNumber[invoice.fileName];
+                                      const isUnderReview = disputeStatus === "pending" || disputeStatus === "reviewing";
+                                      const isResolved = disputeStatus === "resolved";
+
+                                      if (isResolved) {
+                                        return (
+                                          <Chip
+                                            label="Resolved"
+                                            size="small"
+                                            sx={{
+                                              backgroundColor: "#E8F5E9",
+                                              color: "#2E7D32",
+                                              fontWeight: 600,
+                                              fontSize: "0.7rem",
+                                            }}
+                                          />
+                                        );
+                                      }
+
+                                      if (isUnderReview) {
+                                        return (
+                                          <Chip
+                                            label="Under Review"
+                                            size="small"
+                                            sx={{
+                                              backgroundColor: "#FFF3E0",
+                                              color: "#E65100",
                                           fontWeight: 600,
                                           fontSize: "0.7rem",
                                         }}
                                       />
-                                    ) : (
+                                        );
+                                      }
+
+                                      return (
                                       <Chip
                                         label="Active"
                                         size="small"
@@ -619,7 +840,8 @@ const InvoiceList = () => {
                                           fontSize: "0.7rem",
                                         }}
                                       />
-                                    )}
+                                      );
+                                    })()}
                                   </TableCell>
                                 </TableRow>
                               ))
@@ -737,7 +959,7 @@ const InvoiceList = () => {
                             disputePayload,
                           );
 
-                          setDisputedInvoices(prev => [...prev, disputeInvoice?.fileName]);
+                          await fetchDisputes();
                           setSnackbar({ open: true, message: "Dispute filed successfully!", severity: "success" });
                           setOpenDispute(false);
                           setDisputeReason("");
@@ -751,6 +973,158 @@ const InvoiceList = () => {
                       disabled={!disputeReason.trim() || disputeLoading}
                     >
                       {disputeLoading ? <CircularProgress size={20} sx={{ color: '#fff' }} /> : 'Submit Dispute'}
+                    </Button>
+                </DialogActions>
+                </Dialog>
+
+                <Dialog
+                  open={openDisputeDetails}
+                  onClose={closeDisputeDetailsDialog}
+                  maxWidth="sm"
+                  fullWidth
+                >
+                  <DialogTitle sx={{ fontWeight: 700, color: "#1a2744" }}>
+                    Dispute Details
+                  </DialogTitle>
+                  <DialogContent sx={{ pt: 1.5 }}>
+                    {selectedDispute ? (
+                      <>
+                        <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 2, mb: 2 }}>
+                          <Typography sx={{ fontWeight: 800, color: "#0D2477" }}>
+                            Invoice #{selectedDispute?.invoiceNumber || "N/A"}
+                          </Typography>
+                          <Chip
+                            label={(selectedDispute?.status || "pending").toUpperCase()}
+                            size="small"
+                            color={disputeStatusColor(selectedDispute?.status)}
+                            variant={selectedDispute?.status === "pending" ? "outlined" : "filled"}
+                          />
+                        </Box>
+
+                        <Typography variant="body2" sx={{ color: "#666", mb: 1 }}>
+                          Facility:{" "}
+                          <Box component="span" sx={{ fontWeight: 700, color: "#333" }}>
+                            {selectedDispute?.facility || "N/A"}
+                          </Box>
+                        </Typography>
+
+                        <Typography variant="body2" sx={{ color: "#666", mb: 2, whiteSpace: "pre-wrap" }}>
+                          <Box component="span" sx={{ fontWeight: 700, color: "#333" }}>
+                            Dispute:
+                          </Box>{" "}
+                          {selectedDispute?.disputeDescription || "N/A"}
+                        </Typography>
+
+                        {selectedDispute?.resolution ? (
+                          <Typography variant="body2" sx={{ color: "#666", mb: 2, whiteSpace: "pre-wrap" }}>
+                            <Box component="span" sx={{ fontWeight: 700, color: "#333" }}>
+                              Resolution:
+                            </Box>{" "}
+                            {selectedDispute.resolution}
+                          </Typography>
+                        ) : null}
+
+                        {canViewSupportingDoc(selectedDispute) ? (
+                          <Button
+                            variant="contained"
+                            sx={{
+                              textTransform: "none",
+                              backgroundColor: "#0D2477",
+                              "&:hover": { backgroundColor: "#092058" },
+                            }}
+                            onClick={() => openSupportingDocDialog(selectedDispute)}
+                          >
+                            View Supporting Document
+                          </Button>
+                        ) : (
+                          <Alert severity="info">No supporting document attached yet.</Alert>
+                        )}
+                      </>
+                    ) : (
+                      <Typography color="text.secondary">No dispute selected.</Typography>
+                    )}
+                  </DialogContent>
+                  <DialogActions>
+                    <Button
+                      onClick={closeDisputeDetailsDialog}
+                      sx={{ color: "#0D2477", fontWeight: 600, textTransform: "none" }}
+                    >
+                      Close
+                    </Button>
+                  </DialogActions>
+                </Dialog>
+
+                <Dialog
+                  open={openSupportingDoc}
+                  onClose={closeSupportingDocDialog}
+                  maxWidth="md"
+                  fullWidth
+                >
+                  <DialogTitle sx={{ fontWeight: 700, color: "#1a2744" }}>
+                    {supportingDocDisplayName(supportingDocMeta)}
+                  </DialogTitle>
+                  <DialogContent
+                    sx={{
+                      display: "flex",
+                      flexDirection: "column",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      height: "80vh",
+                    }}
+                  >
+                    {supportingDocUrl ? (
+                      (() => {
+                        const mime = supportingDocMimeType(supportingDocMeta);
+                        if (mime.startsWith("image/")) {
+                          return (
+                            <Box sx={{ width: "100%", height: "100%", overflow: "auto" }}>
+                              <img
+                                src={supportingDocUrl}
+                                alt={supportingDocDisplayName(supportingDocMeta)}
+                                style={{ maxWidth: "100%", maxHeight: "100%", display: "block", margin: "0 auto" }}
+                              />
+                            </Box>
+                          );
+                        }
+
+                        if (mime === "application/pdf" || mime.endsWith("/pdf")) {
+                          return (
+                            <Worker workerUrl="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js">
+                              <Box sx={{ width: "100%", height: "100%" }}>
+                                <Viewer fileUrl={supportingDocUrl} />
+                              </Box>
+                            </Worker>
+                          );
+                        }
+
+                        return (
+                          <Box sx={{ textAlign: "center" }}>
+                            <Typography sx={{ color: "#666", mb: 2 }}>
+                              This file type can’t be previewed here.
+                            </Typography>
+                          </Box>
+                        );
+                      })()
+                    ) : (
+                      <Typography color="text.secondary">No document URL available.</Typography>
+                    )}
+
+                    {supportingDocUrl ? (
+                      <Button
+                        variant="text"
+                        sx={{ mt: 2, color: "#0D2477", textTransform: "none" }}
+                        onClick={() => window.open(supportingDocUrl, "_blank", "noopener,noreferrer")}
+                      >
+                        Open in New Tab
+                      </Button>
+                    ) : null}
+                  </DialogContent>
+                  <DialogActions>
+                    <Button
+                      onClick={closeSupportingDocDialog}
+                      sx={{ color: "#0D2477", fontWeight: 600, textTransform: "none" }}
+                    >
+                      Close
                     </Button>
                   </DialogActions>
                 </Dialog>
