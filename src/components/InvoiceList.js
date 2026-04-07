@@ -1100,7 +1100,7 @@ const InvoiceList = () => {
                         return (
                           <Box sx={{ textAlign: "center" }}>
                             <Typography sx={{ color: "#666", mb: 2 }}>
-                              This file type can’t be previewed here.
+                              This file type can't be previewed here.
                             </Typography>
                           </Box>
                         );

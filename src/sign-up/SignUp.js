@@ -260,7 +260,7 @@ export default function SignUp() {
             required
             fullWidth
             name="password"
-            placeholder="••••••"
+            placeholder="Enter password"
             type={showPassword ? 'text' : 'password'}
             id="password"
             autoComplete="new-password"

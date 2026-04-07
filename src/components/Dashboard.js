@@ -634,7 +634,7 @@ function Dashboard() {
               lineHeight: 1.7
             }}
           >
-            Invex is our digital platform designed for our customers, enabling healthcare facilities and partner businesses to efficiently manage their waste services. Through Invex, clients can access critical business services, maintain regulatory compliance, ensure proper waste segregation and packaging, and track their waste from pickup to disposal—helping protect healthcare workers, patients, and the environment.
+            Invex is our digital platform designed for our customers, enabling healthcare facilities and partner businesses to efficiently manage their waste services. Through Invex, clients can access critical business services, maintain regulatory compliance, ensure proper waste segregation and packaging, and track their waste from pickup to disposal - helping protect healthcare workers, patients, and the environment.
           </Typography>
 
           {/* First row - 3 cards */}

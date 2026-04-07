@@ -31,7 +31,7 @@ const steps = [
     {
         number: "1",
         title: "Choose the Right Container",
-        description: "Select the appropriate container for the type of waste being disposed of, considering the container’s material and size. If in doubt, download and refer to the waste segregation guide.",
+        description: "Select the appropriate container for the type of waste being disposed of, considering the container's material and size. If in doubt, download and refer to the waste segregation guide.",
         icon: <InventoryIcon sx={{ fontSize: 28, color: "#ccc" }} />
     },
     {

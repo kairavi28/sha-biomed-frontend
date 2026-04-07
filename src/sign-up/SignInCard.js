@@ -222,7 +222,7 @@ export default function SignInCard() {
             required
             fullWidth
             name="password"
-            placeholder="â€¢â€¢â€¢â€¢â€¢â€¢"
+            placeholder="Enter password"
             type={showPassword ? 'text' : 'password'}
             id="password"
             autoComplete="current-password"
