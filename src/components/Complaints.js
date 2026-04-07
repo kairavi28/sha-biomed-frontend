@@ -617,35 +617,63 @@ function Complaints() {
                                 )}
                             </Grid>
                             <Grid item xs={12}>
-                                <Button
-                                    type="submit"
-                                    fullWidth
-                                    variant="contained"
-                                    disabled={isSubmitting}
+                                <Box
                                     sx={{
-                                        background: "#D9DE38",
-                                        color: "#1a2744",
-                                        fontWeight: 600,
-                                        py: 1.5,
-                                        borderRadius: "25px",
-                                        textTransform: "none",
-                                        fontSize: "1rem",
-                                        "&:hover": {
-                                            background: "#c5ca2e",
-                                        },
-                                        "&:disabled": {
-                                            background: "#e0e0e0",
-                                        },
+                                        display: "flex",
+                                        gap: 2,
+                                        flexDirection: { xs: "column", sm: "row" },
                                     }}
                                 >
-                                    {isSubmitting ? (
-                                        <CircularProgress size={24} sx={{ color: "#1a2744" }} />
-                                    ) : (
-                                        <>
-                                            File a Complaint <ChevronRightIcon sx={{ ml: 0.5 }} />
-                                        </>
-                                    )}
-                                </Button>
+                                    <Button
+                                        type="submit"
+                                        fullWidth
+                                        variant="contained"
+                                        disabled={isSubmitting}
+                                        sx={{
+                                            background: "#D9DE38",
+                                            color: "#1a2744",
+                                            fontWeight: 600,
+                                            py: 1.5,
+                                            borderRadius: "25px",
+                                            textTransform: "none",
+                                            fontSize: "1rem",
+                                            "&:hover": {
+                                                background: "#c5ca2e",
+                                            },
+                                            "&:disabled": {
+                                                background: "#e0e0e0",
+                                            },
+                                        }}
+                                    >
+                                        {isSubmitting ? (
+                                            <CircularProgress size={24} sx={{ color: "#1a2744" }} />
+                                        ) : (
+                                            <>
+                                                Submit Issue <ChevronRightIcon sx={{ ml: 0.5 }} />
+                                            </>
+                                        )}
+                                    </Button>
+                                    <Button
+                                        type="button"
+                                        fullWidth
+                                        variant="outlined"
+                                        onClick={() => setComplaintModalOpen(true)}
+                                        sx={{
+                                            borderRadius: "25px",
+                                            textTransform: "none",
+                                            fontSize: "1rem",
+                                            fontWeight: 600,
+                                            borderColor: "#1a2744",
+                                            color: "#1a2744",
+                                            "&:hover": {
+                                                borderColor: "#0D2477",
+                                                background: "rgba(13, 36, 119, 0.06)",
+                                            },
+                                        }}
+                                    >
+                                        File a Complaint
+                                    </Button>
+                                </Box>
                             </Grid>
                         </Grid>
                     </form>
