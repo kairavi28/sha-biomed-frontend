@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Biomed Invex Portal — User Guide</title>
+    <style>
+      @page { size: A4; margin: 22mm 18mm; }
+      html, body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif; color: #111; }
+      body { font-size: 11.5pt; line-height: 1.55; }
+      h1, h2, h3 { color: #0D2477; margin: 18px 0 8px; }
+      h1 { font-size: 22pt; margin-top: 0; }
+      h2 { font-size: 14.5pt; border-bottom: 1px solid #e6e6e6; padding-bottom: 6px; }
+      h3 { font-size: 12.5pt; }
+      p { margin: 10px 0; }
+      ul, ol { margin: 8px 0 10px 22px; }
+      li { margin: 3px 0; }
+      hr { border: 0; border-top: 1px solid #e6e6e6; margin: 18px 0; }
+      code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace; font-size: 10.5pt; background: #f6f7fb; padding: 1px 4px; border-radius: 4px; }
+
+      .cover { page-break-after: always; margin-top: 40mm; }
+      .cover-title { font-size: 28pt; font-weight: 800; color: #0D2477; margin: 0 0 10px; }
+      .cover-subtitle { font-size: 13pt; color: #333; margin: 0 0 12px; }
+      .cover-meta { font-size: 10.5pt; color: #666; }
+
+      .toc { list-style: none; margin-left: 0; padding-left: 0; }
+      .toc li { margin: 6px 0; }
+      .toc a { color: #111; text-decoration: none; }
+      .toc a:hover { text-decoration: underline; }
+      .toc-sub { margin-left: 18px; color: #444; }
+
+      .footer-note { color: #666; font-size: 10pt; margin-top: 18px; }
+    </style>
+  </head>
+  <body>
+    <section class="cover">
+      <div class="cover-title">Biomed Invex Portal — User Guide</div>
+      <div class="cover-subtitle">Customer Portal and Admin Panel usage</div>
+      <div class="cover-meta">Generated: April 8, 2026</div>
+      <div class="footer-note">Portal: biomedwaste.net</div>
+    </section>
+
+    <h2 id="table-of-contents">Table of Contents</h2>
+<ul class="toc">
+<li><a href="#1-what-this-portal-is">1) What this portal is</a></li>
+<li><a href="#2-accessing-the-customer-portal">2) Accessing the Customer Portal</a></li>
+<li class="toc-sub"><a href="#21-supported-browsers">2.1 Supported browsers</a></li>
+<li class="toc-sub"><a href="#22-how-to-open-the-portal">2.2 How to open the portal</a></li>
+<li class="toc-sub"><a href="#23-login">2.3 Login</a></li>
+<li class="toc-sub"><a href="#24-logout">2.4 Logout</a></li>
+<li><a href="#3-navigation-overview-customer-portal">3) Navigation overview (Customer Portal)</a></li>
+<li><a href="#4-complaints-customer-portal">4) Complaints (Customer Portal)</a></li>
+<li class="toc-sub"><a href="#41-file-a-complaint">4.1 File a complaint</a></li>
+<li class="toc-sub"><a href="#42-what-happens-after-submitting">4.2 What happens after submitting</a></li>
+<li class="toc-sub"><a href="#43-if-attachments-dont-show-later">4.3 If attachments don’t show later</a></li>
+<li><a href="#5-invoices-customer-portal">5) Invoices (Customer Portal)</a></li>
+<li class="toc-sub"><a href="#51-view-invoices">5.1 View invoices</a></li>
+<li class="toc-sub"><a href="#52-preview-an-invoice-pdf">5.2 Preview an invoice PDF</a></li>
+<li class="toc-sub"><a href="#53-download-an-invoice">5.3 Download an invoice</a></li>
+<li class="toc-sub"><a href="#54-invoice-dispute-lifecycle-what-the-buttons-mean">5.4 Invoice dispute lifecycle (what the buttons mean)</a></li>
+<li class="toc-sub"><a href="#55-file-a-dispute">5.5 File a dispute</a></li>
+<li class="toc-sub"><a href="#56-viewing-resolution-supporting-document-when-resolved">5.6 Viewing resolution + supporting document (when resolved)</a></li>
+<li class="toc-sub"><a href="#57-auto-refresh-behavior">5.7 Auto-refresh behavior</a></li>
+<li><a href="#6-profile-customer-portal">6) Profile (Customer Portal)</a></li>
+<li class="toc-sub"><a href="#61-what-the-profile-is-for">6.1 What the profile is for</a></li>
+<li class="toc-sub"><a href="#62-if-you-dont-see-expected-data">6.2 If you don’t see expected data</a></li>
+<li><a href="#7-admin-panel-workflow-high-level">7) Admin Panel workflow (High-level)</a></li>
+<li class="toc-sub"><a href="#71-invoice-disputes-in-admin-panel">7.1 Invoice disputes in Admin Panel</a></li>
+<li class="toc-sub"><a href="#72-client-complaints-in-admin-panel">7.2 Client complaints in Admin Panel</a></li>
+<li><a href="#8-troubleshooting-customer-portal">8) Troubleshooting (Customer Portal)</a></li>
+<li class="toc-sub"><a href="#81-url-not-found-when-typing-a-link-like-services-in-the-address-bar">8.1 “URL not found” when typing a link like `/services` in the address bar</a></li>
+<li class="toc-sub"><a href="#82-under-review-never-changes-to-resolved">8.2 “Under Review” never changes to “Resolved”</a></li>
+<li class="toc-sub"><a href="#83-supporting-document-wont-open">8.3 Supporting document won’t open</a></li>
+<li class="toc-sub"><a href="#84-upload-issues-complaintdispute-attachments">8.4 Upload issues (complaint/dispute attachments)</a></li>
+<li><a href="#9-best-practices-for-smooth-usage">9) Best practices (for smooth usage)</a></li>
+<li><a href="#10-quick-how-do-i-index">10) Quick “How do I…?” index</a></li>
+</ul>
+    <h1 id="biomed-invex-portal-biomedwastenet-user-guide">Biomed Invex Portal (biomedwaste.net) — User Guide</h1>
+<h2 id="1-what-this-portal-is">1) What this portal is</h2>
+<ul>
+<li><strong>Customer Portal (<code>sha-biomed-frontend</code>)</strong>: where customers log in, view invoices, request services, submit complaints, and file invoice disputes.</li>
+<li><strong>Admin Panel (<code>sha-biomed</code>)</strong>: internal team workspace to review disputes/complaints, upload supporting documents, and resolve items.</li>
+</ul>
+<hr />
+<h2 id="2-accessing-the-customer-portal">2) Accessing the Customer Portal</h2>
+<h3 id="21-supported-browsers">2.1 Supported browsers</h3>
+<ul>
+<li>Chrome, Edge, Safari, Firefox (latest versions recommended).</li>
+</ul>
+<h3 id="22-how-to-open-the-portal">2.2 How to open the portal</h3>
+<ul>
+<li>Open: <code>https://biomedwaste.net/</code></li>
+<li>If you type a direct link (example: <code>/services</code>) in the address bar and see “URL not found”, that is a server routing issue. The portal is designed to support direct links once Apache routing is configured.</li>
+</ul>
+<h3 id="23-login">2.3 Login</h3>
+<ol>
+<li>Click the sign-in option.</li>
+<li>Complete authentication (Microsoft login, if configured).</li>
+<li>After login, you’ll be redirected into the portal.</li>
+</ol>
+<h3 id="24-logout">2.4 Logout</h3>
+<ul>
+<li>Use the logout option in the navigation menu (if available).</li>
+<li>Close the browser tab after logout for shared computers.</li>
+</ul>
+<hr />
+<h2 id="3-navigation-overview-customer-portal">3) Navigation overview (Customer Portal)</h2>
+<p>
+Common pages you may see in the top navigation:
+</p>
+<ul>
+<li><strong>Home/Dashboard</strong>: quick entry points to key actions.</li>
+<li><strong>Services / Complaints</strong>: submit and review service complaints.</li>
+<li><strong>Invoices</strong>: view invoices, preview PDFs, download, and dispute invoices.</li>
+<li><strong>Profile</strong>: view your account details and assigned service locations (if applicable).</li>
+<li>Other pages (blogs, instructions, etc.) depending on what your account has enabled.</li>
+</ul>
+<hr />
+<h2 id="4-complaints-customer-portal">4) Complaints (Customer Portal)</h2>
+<h3 id="41-file-a-complaint">4.1 File a complaint</h3>
+<ol>
+<li>Open <strong>Services / Complaints</strong>.</li>
+<li>Click <strong>File a Complaint</strong>.</li>
+<li>Enter:</li>
+</ol>
+<ul>
+<li><strong>Contact number</strong> (required)</li>
+<li><strong>Description</strong> (required)</li>
+</ul>
+<ol>
+<li>Optional:</li>
+</ol>
+<ul>
+<li>Upload up to the allowed number of images/attachments (only image types accepted if configured).</li>
+</ul>
+<ol>
+<li>Click <strong>Submit</strong>.</li>
+<li>You should see a success message.</li>
+</ol>
+<h3 id="42-what-happens-after-submitting">4.2 What happens after submitting</h3>
+<ul>
+<li>The complaint is recorded in the system and appears in the admin-side queue.</li>
+<li>If email notifications are enabled on the backend, the internal team is notified.</li>
+</ul>
+<h3 id="43-if-attachments-dont-show-later">4.3 If attachments don’t show later</h3>
+<ul>
+<li>Attachments must be supported end-to-end:</li>
+<li>Customer app upload → backend storage → admin rendering endpoints.</li>
+<li>If you can upload but can’t view later, it usually means the admin/customer display logic needs to be updated to match the backend storage format.</li>
+</ul>
+<hr />
+<h2 id="5-invoices-customer-portal">5) Invoices (Customer Portal)</h2>
+<h3 id="51-view-invoices">5.1 View invoices</h3>
+<ol>
+<li>Open <strong>Invoices</strong>.</li>
+<li>Invoices typically group by your available service locations (if applicable).</li>
+<li>For each invoice row you may see:</li>
+</ol>
+<ul>
+<li><strong>Preview</strong> (view PDF in-app)</li>
+<li><strong>Download</strong></li>
+<li><strong>Dispute / Under Review / Resolved</strong> (action status)</li>
+</ul>
+<h3 id="52-preview-an-invoice-pdf">5.2 Preview an invoice PDF</h3>
+<ol>
+<li>Click <strong>Preview</strong> (eye icon or “View”).</li>
+<li>A PDF viewer opens in a dialog.</li>
+<li>If you want a separate tab: click <strong>Open in New Tab</strong> (if shown).</li>
+</ol>
+<h3 id="53-download-an-invoice">5.3 Download an invoice</h3>
+<ul>
+<li>Click the download icon.</li>
+<li>If download fails:</li>
+<li>Try again</li>
+<li>Check pop-up blockers</li>
+<li>Try a different browser</li>
+</ul>
+<h3 id="54-invoice-dispute-lifecycle-what-the-buttons-mean">5.4 Invoice dispute lifecycle (what the buttons mean)</h3>
+<ul>
+<li><strong>Dispute</strong>: no active dispute exists for that invoice (you can submit one).</li>
+<li><strong>Under Review</strong>: a dispute exists and is pending/reviewing (cannot submit another dispute for the same invoice while it’s active).</li>
+<li><strong>Resolved</strong>: the dispute was resolved (read the resolution notes and view any supporting document provided).</li>
+</ul>
+<h3 id="55-file-a-dispute">5.5 File a dispute</h3>
+<ol>
+<li>In <strong>Invoices</strong>, find the invoice row.</li>
+<li>Click <strong>Dispute</strong>.</li>
+<li>Enter the <strong>Reason for Dispute</strong> (required).</li>
+<li>Submit.</li>
+</ol>
+<p>
+What you should see immediately after submitting:
+</p>
+<ul>
+<li>The invoice row status changes to <strong>Under Review</strong> (no manual refresh required).</li>
+</ul>
+<h3 id="56-viewing-resolution-supporting-document-when-resolved">5.6 Viewing resolution + supporting document (when resolved)</h3>
+<ol>
+<li>In <strong>Invoices</strong>, open the <strong>Invoice Disputes</strong> section.</li>
+<li>Click <strong>View</strong> on the dispute.</li>
+<li>If the admin attached a supporting document:</li>
+</ol>
+<ul>
+<li>Click <strong>View Supporting Document</strong></li>
+<li>PDFs/images should preview in-app</li>
+<li>Other file types open via “Open in New Tab”</li>
+</ul>
+<h3 id="57-auto-refresh-behavior">5.7 Auto-refresh behavior</h3>
+<ul>
+<li>The invoices/disputes list auto-refreshes on a schedule (configured to <strong>every 2 minutes</strong>).</li>
+<li>If you are actively reviewing an open invoice PDF or supporting document, auto-refresh pauses to avoid interrupting your review.</li>
+</ul>
+<hr />
+<h2 id="6-profile-customer-portal">6) Profile (Customer Portal)</h2>
+<h3 id="61-what-the-profile-is-for">6.1 What the profile is for</h3>
+<ul>
+<li>Confirm your name/email details.</li>
+<li>Review your assigned service locations (if displayed).</li>
+<li>Some pages may depend on your assigned locations to show data correctly.</li>
+</ul>
+<h3 id="62-if-you-dont-see-expected-data">6.2 If you don’t see expected data</h3>
+<ul>
+<li>If no approved/assigned locations exist, invoices and service data may appear empty.</li>
+<li>Contact support to confirm your account is linked correctly.</li>
+</ul>
+<hr />
+<h2 id="7-admin-panel-workflow-high-level">7) Admin Panel workflow (High-level)</h2>
+<h3 id="71-invoice-disputes-in-admin-panel">7.1 Invoice disputes in Admin Panel</h3>
+<p>
+Typical admin flow:
+</p>
+<ol>
+<li>Open <strong>Invoice Disputes</strong> in admin panel.</li>
+<li>Review the dispute details.</li>
+<li>Upload a <strong>Supporting Document</strong> (this is required before resolving, if configured).</li>
+<li>Add resolution notes.</li>
+<li>Mark dispute <strong>Resolved</strong>.</li>
+</ol>
+<p>
+Result in Customer Portal:
+</p>
+<ul>
+<li>Customer sees status change to <strong>Resolved</strong></li>
+<li>Customer can view the uploaded supporting document</li>
+</ul>
+<h3 id="72-client-complaints-in-admin-panel">7.2 Client complaints in Admin Panel</h3>
+<ol>
+<li>Open the complaints list.</li>
+<li>View complaint text and images.</li>
+<li>Respond/track status as needed.</li>
+</ol>
+<hr />
+<h2 id="8-troubleshooting-customer-portal">8) Troubleshooting (Customer Portal)</h2>
+<h3 id="81-url-not-found-when-typing-a-link-like-services-in-the-address-bar">8.1 “URL not found” when typing a link like <code>/services</code> in the address bar</h3>
+<p>
+Cause:
+</p>
+<ul>
+<li>Web server is not rewriting client-side routes to <code>index.html</code>.</li>
+</ul>
+<p>
+Fix (server-side):
+</p>
+<ul>
+<li>Apache needs SPA rewrite rules so <code>/services</code> loads the React app.</li>
+</ul>
+<h3 id="82-under-review-never-changes-to-resolved">8.2 “Under Review” never changes to “Resolved”</h3>
+<ul>
+<li>Resolution is done from the Admin Panel.</li>
+<li>If it was resolved but not showing:</li>
+<li>Wait for auto-refresh (2 minutes), or</li>
+<li>Reopen the Invoices page, or</li>
+<li>Ensure the backend dispute list endpoint returns updated status.</li>
+</ul>
+<h3 id="83-supporting-document-wont-open">8.3 Supporting document won’t open</h3>
+<ul>
+<li>If it’s a PDF/image, it should preview.</li>
+<li>If it’s Word/other formats, use <strong>Open in New Tab</strong> (download/view externally).</li>
+<li>If it 404s, confirm the admin upload saved successfully and the backend serves <code>GET /api/dispute/:id/supporting-document</code>.</li>
+</ul>
+<h3 id="84-upload-issues-complaintdispute-attachments">8.4 Upload issues (complaint/dispute attachments)</h3>
+<ul>
+<li>File size/type restrictions may block uploads.</li>
+<li>Try:</li>
+<li>smaller file</li>
+<li>supported format (PDF/PNG/JPG, etc., depending on the endpoint)</li>
+</ul>
+<hr />
+<h2 id="9-best-practices-for-smooth-usage">9) Best practices (for smooth usage)</h2>
+<ul>
+<li>Use the built-in buttons instead of retyping URLs when possible.</li>
+<li>Don’t keep multiple invoice preview dialogs open at once.</li>
+<li>For disputes: add clear, specific descriptions (invoice #, date, issue type, amount, line item).</li>
+</ul>
+<hr />
+<h2 id="10-quick-how-do-i-index">10) Quick “How do I…?” index</h2>
+<ul>
+<li><strong>View invoice PDF</strong> → Invoices → Preview</li>
+<li><strong>Download invoice</strong> → Invoices → Download icon</li>
+<li><strong>Dispute invoice</strong> → Invoices → Dispute → Submit reason</li>
+<li><strong>Check dispute status</strong> → Invoices → Invoice Disputes → View</li>
+<li><strong>View supporting document</strong> → Dispute Details → View Supporting Document</li>
+<li><strong>File complaint</strong> → Services/Complaints → File a Complaint → Submit</li>
+</ul>
+  </body>
+</html>

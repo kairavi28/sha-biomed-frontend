@@ -1,0 +1,1289 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [4 0 R 6 0 R 8 0 R 10 0 R 12 0 R 14 0 R 16 0 R 18 0 R] /Count 8 >>
+endobj
+3 0 obj
+<< /Length 295 >>
+stream
+BT
+/F1 20.00 Tf
+0 0.14 0.46 rg
+54 781.89 Td
+(Biomed Invex Portal - User Guide) Tj
+ET
+BT
+/F1 10.75 Tf
+0 0 0 rg
+54 754.89 Td
+(Customer Portal and Admin Panel usage) Tj
+ET
+BT
+/F1 10.75 Tf
+0 0 0 rg
+54 739.30 Td
+(Generated: April 8, 2026) Tj
+ET
+0.9 w
+0.85 0.85 0.85 RG
+54 717.715 m 541.28 717.715 l S
+endstream
+endobj
+4 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595.28 841.89] /Resources << /Font << /F1 1 0 R >> >> /Contents 3 0 R >>
+endobj
+5 0 obj
+<< /Length 2531 >>
+stream
+BT
+/F1 20.00 Tf
+0 0.14 0.46 rg
+54 781.89 Td
+(Table of Contents) Tj
+ET
+BT
+/F1 10.75 Tf
+0 0 0 rg
+54 754.89 Td
+(- 1\) What this portal is) Tj
+ET
+BT
+/F1 10.75 Tf
+0 0 0 rg
+54 739.30 Td
+(- 2\) Accessing the Customer Portal) Tj
+ET
+BT
+/F1 10.75 Tf
+0 0 0 rg
+54 723.72 Td
+(- 2.1 Supported browsers) Tj
+ET
+BT
+/F1 10.75 Tf
+0 0 0 rg
+54 708.13 Td
+(- 2.2 How to open the portal) Tj
+ET
+BT
+/F1 10.75 Tf
+0 0 0 rg
+54 692.54 Td
+(- 2.3 Login) Tj
+ET
+BT
+/F1 10.75 Tf
+0 0 0 rg
+54 676.95 Td
+(- 2.4 Logout) Tj
+ET
+BT
+/F1 10.75 Tf
+0 0 0 rg
+54 661.37 Td
+(- 3\) Navigation overview \(Customer Portal\)) Tj
+ET
+BT
+/F1 10.75 Tf
+0 0 0 rg
+54 645.78 Td
+(- 4\) Complaints \(Customer Portal\)) Tj
+ET
+BT
+/F1 10.75 Tf
+0 0 0 rg
+54 630.19 Td
+(- 4.1 File a complaint) Tj
+ET
+BT
+/F1 10.75 Tf
+0 0 0 rg
+54 614.60 Td
+(- 4.2 What happens after submitting) Tj
+ET
+BT
+/F1 10.75 Tf
+0 0 0 rg
+54 599.02 Td
+(- 4.3 If attachments don't show later) Tj
+ET
+BT
+/F1 10.75 Tf
+0 0 0 rg
+54 583.43 Td
+(- 5\) Invoices \(Customer Portal\)) Tj
+ET
+BT
+/F1 10.75 Tf
+0 0 0 rg
+54 567.84 Td
+(- 5.1 View invoices) Tj
+ET
+BT
+/F1 10.75 Tf
+0 0 0 rg
+54 552.25 Td
+(- 5.2 Preview an invoice PDF) Tj
+ET
+BT
+/F1 10.75 Tf
+0 0 0 rg
+54 536.67 Td
+(- 5.3 Download an invoice) Tj
+ET
+BT
+/F1 10.75 Tf
+0 0 0 rg
+54 521.08 Td
+(- 5.4 Invoice dispute lifecycle \(what the buttons mean\)) Tj
+ET
+BT
+/F1 10.75 Tf
+0 0 0 rg
+54 505.49 Td
+(- 5.5 File a dispute) Tj
+ET
+BT
+/F1 10.75 Tf
+0 0 0 rg
+54 489.90 Td
+(- 5.6 Viewing resolution + supporting document \(when resolved\)) Tj
+ET
+BT
+/F1 10.75 Tf
+0 0 0 rg
+54 474.32 Td
+(- 5.7 Auto-refresh behavior) Tj
+ET
+BT
+/F1 10.75 Tf
+0 0 0 rg
+54 458.73 Td
+(- 6\) Profile \(Customer Portal\)) Tj
+ET
+BT
+/F1 10.75 Tf
+0 0 0 rg
+54 443.14 Td
+(- 6.1 What the profile is for) Tj
+ET
+BT
+/F1 10.75 Tf
+0 0 0 rg
+54 427.55 Td
+(- 6.2 If you don't see expected data) Tj
+ET
+BT
+/F1 10.75 Tf
+0 0 0 rg
+54 411.97 Td
+(- 7\) Admin Panel workflow \(High-level\)) Tj
+ET
+BT
+/F1 10.75 Tf
+0 0 0 rg
+54 396.38 Td
+(- 7.1 Invoice disputes in Admin Panel) Tj
+ET
+BT
+/F1 10.75 Tf
+0 0 0 rg
+54 380.79 Td
+(- 7.2 Client complaints in Admin Panel) Tj
+ET
+BT
+/F1 10.75 Tf
+0 0 0 rg
+54 365.20 Td
+(- 8\) Troubleshooting \(Customer Portal\)) Tj
+ET
+BT
+/F1 10.75 Tf
+0 0 0 rg
+54 349.62 Td
+(- 8.1 "URL not found" when typing a link like `/services` in the address bar) Tj
+ET
+BT
+/F1 10.75 Tf
+0 0 0 rg
+54 334.03 Td
+(- 8.2 "Under Review" never changes to "Resolved") Tj
+ET
+BT
+/F1 10.75 Tf
+0 0 0 rg
+54 318.44 Td
+(- 8.3 Supporting document won't open) Tj
+ET
+BT
+/F1 10.75 Tf
+0 0 0 rg
+54 302.85 Td
+(- 8.4 Upload issues \(complaint/dispute attachments\)) Tj
+ET
+endstream
+endobj
+6 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595.28 841.89] /Resources << /Font << /F1 1 0 R >> >> /Contents 5 0 R >>
+endobj
+7 0 obj
+<< /Length 167 >>
+stream
+BT
+/F1 10.75 Tf
+0 0 0 rg
+54 781.89 Td
+(- 9\) Best practices \(for smooth usage\)) Tj
+ET
+BT
+/F1 10.75 Tf
+0 0 0 rg
+54 766.30 Td
+(- 10\) Quick "How do I…?" index) Tj
+ET
+endstream
+endobj
+8 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595.28 841.89] /Resources << /Font << /F1 1 0 R >> >> /Contents 7 0 R >>
+endobj
+9 0 obj
+<< /Length 3125 >>
+stream
+BT
+/F1 20.00 Tf
+0 0.14 0.46 rg
+54 781.89 Td
+(Biomed Invex Portal \(biomedwaste.net\) -) Tj
+ET
+BT
+/F1 20.00 Tf
+0 0.14 0.46 rg
+54 754.89 Td
+(User Guide) Tj
+ET
+BT
+/F1 14.50 Tf
+0 0.14 0.46 rg
+54 727.89 Td
+(1\) What this portal is) Tj
+ET
+BT
+/F1 10.75 Tf
+0 0 0 rg
+54 708.31 Td
+(- **Customer Portal \(`sha-biomed-frontend`\)**: where customers log in, view) Tj
+ET
+BT
+/F1 10.75 Tf
+0 0 0 rg
+54 692.73 Td
+(  invoices, request services, submit complaints, and file invoice disputes.) Tj
+ET
+BT
+/F1 10.75 Tf
+0 0 0 rg
+54 677.14 Td
+(- **Admin Panel \(`sha-biomed`\)**: internal team workspace to review) Tj
+ET
+BT
+/F1 10.75 Tf
+0 0 0 rg
+54 661.55 Td
+(  disputes/complaints, upload supporting documents, and resolve items.) Tj
+ET
+0.9 w
+0.85 0.85 0.85 RG
+54 639.965 m 541.28 639.965 l S
+BT
+/F1 14.50 Tf
+0 0.14 0.46 rg
+54 645.97 Td
+(2\) Accessing the Customer Portal) Tj
+ET
+BT
+/F1 12.50 Tf
+0 0 0 rg
+54 626.39 Td
+(2.1 Supported browsers) Tj
+ET
+BT
+/F1 10.75 Tf
+0 0 0 rg
+54 609.51 Td
+(- Chrome, Edge, Safari, Firefox \(latest versions recommended\).) Tj
+ET
+BT
+/F1 12.50 Tf
+0 0 0 rg
+54 593.93 Td
+(2.2 How to open the portal) Tj
+ET
+BT
+/F1 10.75 Tf
+0 0 0 rg
+54 577.05 Td
+(- Open: `https://biomedwaste.net/`) Tj
+ET
+BT
+/F1 10.75 Tf
+0 0 0 rg
+54 561.47 Td
+(- If you type a direct link \(example: `/services`\) in the address bar and see) Tj
+ET
+BT
+/F1 10.75 Tf
+0 0 0 rg
+54 545.88 Td
+(  "URL not found", that is a server routing issue. The portal is designed to) Tj
+ET
+BT
+/F1 10.75 Tf
+0 0 0 rg
+54 530.29 Td
+(  support direct links once Apache routing is configured.) Tj
+ET
+BT
+/F1 12.50 Tf
+0 0 0 rg
+54 514.70 Td
+(2.3 Login) Tj
+ET
+BT
+/F1 10.75 Tf
+0 0 0 rg
+54 497.83 Td
+(1. Click the sign-in option.) Tj
+ET
+BT
+/F1 10.75 Tf
+0 0 0 rg
+54 482.24 Td
+(2. Complete authentication \(Microsoft login, if configured\).) Tj
+ET
+BT
+/F1 10.75 Tf
+0 0 0 rg
+54 466.65 Td
+(3. After login, you'll be redirected into the portal.) Tj
+ET
+BT
+/F1 12.50 Tf
+0 0 0 rg
+54 451.07 Td
+(2.4 Logout) Tj
+ET
+BT
+/F1 10.75 Tf
+0 0 0 rg
+54 434.19 Td
+(- Use the logout option in the navigation menu \(if available\).) Tj
+ET
+BT
+/F1 10.75 Tf
+0 0 0 rg
+54 418.60 Td
+(- Close the browser tab after logout for shared computers.) Tj
+ET
+0.9 w
+0.85 0.85 0.85 RG
+54 397.0150000000002 m 541.28 397.0150000000002 l S
+BT
+/F1 14.50 Tf
+0 0.14 0.46 rg
+54 403.02 Td
+(3\) Navigation overview \(Customer Portal\)) Tj
+ET
+BT
+/F1 10.75 Tf
+0 0 0 rg
+54 383.44 Td
+(Common pages you may see in the top navigation:) Tj
+ET
+BT
+/F1 10.75 Tf
+0 0 0 rg
+54 367.85 Td
+(- **Home/Dashboard**: quick entry points to key actions.) Tj
+ET
+BT
+/F1 10.75 Tf
+0 0 0 rg
+54 352.27 Td
+(- **Services / Complaints**: submit and review service complaints.) Tj
+ET
+BT
+/F1 10.75 Tf
+0 0 0 rg
+54 336.68 Td
+(- **Invoices**: view invoices, preview PDFs, download, and dispute invoices.) Tj
+ET
+BT
+/F1 10.75 Tf
+0 0 0 rg
+54 321.09 Td
+(- **Profile**: view your account details and assigned service locations \(if) Tj
+ET
+BT
+/F1 10.75 Tf
+0 0 0 rg
+54 305.50 Td
+(  applicable\).) Tj
+ET
+BT
+/F1 10.75 Tf
+0 0 0 rg
+54 289.92 Td
+(- Other pages \(blogs, instructions, etc.\) depending on what your account has) Tj
+ET
+BT
+/F1 10.75 Tf
+0 0 0 rg
+54 274.33 Td
+(  enabled.) Tj
+ET
+endstream
+endobj
+10 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595.28 841.89] /Resources << /Font << /F1 1 0 R >> >> /Contents 9 0 R >>
+endobj
+11 0 obj
+<< /Length 3011 >>
+stream
+0.9 w
+0.85 0.85 0.85 RG
+54 775.89 m 541.28 775.89 l S
+BT
+/F1 14.50 Tf
+0 0.14 0.46 rg
+54 781.89 Td
+(4\) Complaints \(Customer Portal\)) Tj
+ET
+BT
+/F1 12.50 Tf
+0 0 0 rg
+54 762.31 Td
+(4.1 File a complaint) Tj
+ET
+BT
+/F1 10.75 Tf
+0 0 0 rg
+54 745.44 Td
+(1. Open **Services / Complaints**.) Tj
+ET
+BT
+/F1 10.75 Tf
+0 0 0 rg
+54 729.85 Td
+(2. Click **File a Complaint**.) Tj
+ET
+BT
+/F1 10.75 Tf
+0 0 0 rg
+54 714.26 Td
+(3. Enter:) Tj
+ET
+BT
+/F1 10.75 Tf
+0 0 0 rg
+54 698.68 Td
+(- **Contact number** \(required\)) Tj
+ET
+BT
+/F1 10.75 Tf
+0 0 0 rg
+54 683.09 Td
+(- **Description** \(required\)) Tj
+ET
+BT
+/F1 10.75 Tf
+0 0 0 rg
+54 667.50 Td
+(1. Optional:) Tj
+ET
+BT
+/F1 10.75 Tf
+0 0 0 rg
+54 651.92 Td
+(- Upload up to the allowed number of images/attachments \(only image types) Tj
+ET
+BT
+/F1 10.75 Tf
+0 0 0 rg
+54 636.33 Td
+(  accepted if configured\).) Tj
+ET
+BT
+/F1 10.75 Tf
+0 0 0 rg
+54 620.74 Td
+(1. Click **Submit**.) Tj
+ET
+BT
+/F1 10.75 Tf
+0 0 0 rg
+54 605.15 Td
+(2. You should see a success message.) Tj
+ET
+BT
+/F1 12.50 Tf
+0 0 0 rg
+54 589.57 Td
+(4.2 What happens after submitting) Tj
+ET
+BT
+/F1 10.75 Tf
+0 0 0 rg
+54 572.69 Td
+(- The complaint is recorded in the system and appears in the admin-side queue.) Tj
+ET
+BT
+/F1 10.75 Tf
+0 0 0 rg
+54 557.10 Td
+(- If email notifications are enabled on the backend, the internal team is) Tj
+ET
+BT
+/F1 10.75 Tf
+0 0 0 rg
+54 541.52 Td
+(  notified.) Tj
+ET
+BT
+/F1 12.50 Tf
+0 0 0 rg
+54 525.93 Td
+(4.3 If attachments don't show later) Tj
+ET
+BT
+/F1 10.75 Tf
+0 0 0 rg
+54 509.05 Td
+(- Attachments must be supported end-to-end:) Tj
+ET
+BT
+/F1 10.75 Tf
+0 0 0 rg
+54 493.47 Td
+(- Customer app upload → backend storage → admin rendering endpoints.) Tj
+ET
+BT
+/F1 10.75 Tf
+0 0 0 rg
+54 477.88 Td
+(- If you can upload but can't view later, it usually means the admin/customer) Tj
+ET
+BT
+/F1 10.75 Tf
+0 0 0 rg
+54 462.29 Td
+(  display logic needs to be updated to match the backend storage format.) Tj
+ET
+0.9 w
+0.85 0.85 0.85 RG
+54 440.7025000000003 m 541.28 440.7025000000003 l S
+BT
+/F1 14.50 Tf
+0 0.14 0.46 rg
+54 446.70 Td
+(5\) Invoices \(Customer Portal\)) Tj
+ET
+BT
+/F1 12.50 Tf
+0 0 0 rg
+54 427.13 Td
+(5.1 View invoices) Tj
+ET
+BT
+/F1 10.75 Tf
+0 0 0 rg
+54 410.25 Td
+(1. Open **Invoices**.) Tj
+ET
+BT
+/F1 10.75 Tf
+0 0 0 rg
+54 394.67 Td
+(2. Invoices typically group by your available service locations \(if applicable\).) Tj
+ET
+BT
+/F1 10.75 Tf
+0 0 0 rg
+54 379.08 Td
+(3. For each invoice row you may see:) Tj
+ET
+BT
+/F1 10.75 Tf
+0 0 0 rg
+54 363.49 Td
+(- **Preview** \(view PDF in-app\)) Tj
+ET
+BT
+/F1 10.75 Tf
+0 0 0 rg
+54 347.90 Td
+(- **Download**) Tj
+ET
+BT
+/F1 10.75 Tf
+0 0 0 rg
+54 332.32 Td
+(- **Dispute / Under Review / Resolved** \(action status\)) Tj
+ET
+BT
+/F1 12.50 Tf
+0 0 0 rg
+54 316.73 Td
+(5.2 Preview an invoice PDF) Tj
+ET
+BT
+/F1 10.75 Tf
+0 0 0 rg
+54 299.85 Td
+(1. Click **Preview** \(eye icon or "View"\).) Tj
+ET
+BT
+/F1 10.75 Tf
+0 0 0 rg
+54 284.27 Td
+(2. A PDF viewer opens in a dialog.) Tj
+ET
+BT
+/F1 10.75 Tf
+0 0 0 rg
+54 268.68 Td
+(3. If you want a separate tab: click **Open in New Tab** \(if shown\).) Tj
+ET
+endstream
+endobj
+12 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595.28 841.89] /Resources << /Font << /F1 1 0 R >> >> /Contents 11 0 R >>
+endobj
+13 0 obj
+<< /Length 3278 >>
+stream
+BT
+/F1 12.50 Tf
+0 0 0 rg
+54 781.89 Td
+(5.3 Download an invoice) Tj
+ET
+BT
+/F1 10.75 Tf
+0 0 0 rg
+54 765.01 Td
+(- Click the download icon.) Tj
+ET
+BT
+/F1 10.75 Tf
+0 0 0 rg
+54 749.43 Td
+(- If download fails:) Tj
+ET
+BT
+/F1 10.75 Tf
+0 0 0 rg
+54 733.84 Td
+(- Try again) Tj
+ET
+BT
+/F1 10.75 Tf
+0 0 0 rg
+54 718.25 Td
+(- Check pop-up blockers) Tj
+ET
+BT
+/F1 10.75 Tf
+0 0 0 rg
+54 702.67 Td
+(- Try a different browser) Tj
+ET
+BT
+/F1 12.50 Tf
+0 0 0 rg
+54 687.08 Td
+(5.4 Invoice dispute lifecycle \(what the buttons mean\)) Tj
+ET
+BT
+/F1 10.75 Tf
+0 0 0 rg
+54 670.20 Td
+(- **Dispute**: no active dispute exists for that invoice \(you can submit one\).) Tj
+ET
+BT
+/F1 10.75 Tf
+0 0 0 rg
+54 654.62 Td
+(- **Under Review**: a dispute exists and is pending/reviewing \(cannot submit) Tj
+ET
+BT
+/F1 10.75 Tf
+0 0 0 rg
+54 639.03 Td
+(  another dispute for the same invoice while it's active\).) Tj
+ET
+BT
+/F1 10.75 Tf
+0 0 0 rg
+54 623.44 Td
+(- **Resolved**: the dispute was resolved \(read the resolution notes and view any) Tj
+ET
+BT
+/F1 10.75 Tf
+0 0 0 rg
+54 607.85 Td
+(  supporting document provided\).) Tj
+ET
+BT
+/F1 12.50 Tf
+0 0 0 rg
+54 592.27 Td
+(5.5 File a dispute) Tj
+ET
+BT
+/F1 10.75 Tf
+0 0 0 rg
+54 575.39 Td
+(1. In **Invoices**, find the invoice row.) Tj
+ET
+BT
+/F1 10.75 Tf
+0 0 0 rg
+54 559.80 Td
+(2. Click **Dispute**.) Tj
+ET
+BT
+/F1 10.75 Tf
+0 0 0 rg
+54 544.22 Td
+(3. Enter the **Reason for Dispute** \(required\).) Tj
+ET
+BT
+/F1 10.75 Tf
+0 0 0 rg
+54 528.63 Td
+(4. Submit.) Tj
+ET
+BT
+/F1 10.75 Tf
+0 0 0 rg
+54 513.04 Td
+(What you should see immediately after submitting:) Tj
+ET
+BT
+/F1 10.75 Tf
+0 0 0 rg
+54 497.45 Td
+(- The invoice row status changes to **Under Review** \(no manual refresh) Tj
+ET
+BT
+/F1 10.75 Tf
+0 0 0 rg
+54 481.87 Td
+(  required\).) Tj
+ET
+BT
+/F1 12.50 Tf
+0 0 0 rg
+54 466.28 Td
+(5.6 Viewing resolution + supporting document \(when resolved\)) Tj
+ET
+BT
+/F1 10.75 Tf
+0 0 0 rg
+54 449.40 Td
+(1. In **Invoices**, open the **Invoice Disputes** section.) Tj
+ET
+BT
+/F1 10.75 Tf
+0 0 0 rg
+54 433.82 Td
+(2. Click **View** on the dispute.) Tj
+ET
+BT
+/F1 10.75 Tf
+0 0 0 rg
+54 418.23 Td
+(3. If the admin attached a supporting document:) Tj
+ET
+BT
+/F1 10.75 Tf
+0 0 0 rg
+54 402.64 Td
+(- Click **View Supporting Document**) Tj
+ET
+BT
+/F1 10.75 Tf
+0 0 0 rg
+54 387.05 Td
+(- PDFs/images should preview in-app) Tj
+ET
+BT
+/F1 10.75 Tf
+0 0 0 rg
+54 371.47 Td
+(- Other file types open via "Open in New Tab") Tj
+ET
+BT
+/F1 12.50 Tf
+0 0 0 rg
+54 355.88 Td
+(5.7 Auto-refresh behavior) Tj
+ET
+BT
+/F1 10.75 Tf
+0 0 0 rg
+54 339.00 Td
+(- The invoices/disputes list auto-refreshes on a schedule \(configured to **every) Tj
+ET
+BT
+/F1 10.75 Tf
+0 0 0 rg
+54 323.42 Td
+(  2 minutes**\).) Tj
+ET
+BT
+/F1 10.75 Tf
+0 0 0 rg
+54 307.83 Td
+(- If you are actively reviewing an open invoice PDF or supporting document,) Tj
+ET
+BT
+/F1 10.75 Tf
+0 0 0 rg
+54 292.24 Td
+(  auto-refresh pauses to avoid interrupting your review.) Tj
+ET
+0.9 w
+0.85 0.85 0.85 RG
+54 270.6525000000006 m 541.28 270.6525000000006 l S
+BT
+/F1 14.50 Tf
+0 0.14 0.46 rg
+54 276.65 Td
+(6\) Profile \(Customer Portal\)) Tj
+ET
+BT
+/F1 12.50 Tf
+0 0 0 rg
+54 257.08 Td
+(6.1 What the profile is for) Tj
+ET
+BT
+/F1 10.75 Tf
+0 0 0 rg
+54 240.20 Td
+(- Confirm your name/email details.) Tj
+ET
+BT
+/F1 10.75 Tf
+0 0 0 rg
+54 224.62 Td
+(- Review your assigned service locations \(if displayed\).) Tj
+ET
+endstream
+endobj
+14 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595.28 841.89] /Resources << /Font << /F1 1 0 R >> >> /Contents 13 0 R >>
+endobj
+15 0 obj
+<< /Length 2926 >>
+stream
+BT
+/F1 10.75 Tf
+0 0 0 rg
+54 781.89 Td
+(- Some pages may depend on your assigned locations to show data correctly.) Tj
+ET
+BT
+/F1 12.50 Tf
+0 0 0 rg
+54 766.30 Td
+(6.2 If you don't see expected data) Tj
+ET
+BT
+/F1 10.75 Tf
+0 0 0 rg
+54 749.43 Td
+(- If no approved/assigned locations exist, invoices and service data may appear) Tj
+ET
+BT
+/F1 10.75 Tf
+0 0 0 rg
+54 733.84 Td
+(  empty.) Tj
+ET
+BT
+/F1 10.75 Tf
+0 0 0 rg
+54 718.25 Td
+(- Contact support to confirm your account is linked correctly.) Tj
+ET
+0.9 w
+0.85 0.85 0.85 RG
+54 696.6650000000001 m 541.28 696.6650000000001 l S
+BT
+/F1 14.50 Tf
+0 0.14 0.46 rg
+54 702.67 Td
+(7\) Admin Panel workflow \(High-level\)) Tj
+ET
+BT
+/F1 12.50 Tf
+0 0 0 rg
+54 683.09 Td
+(7.1 Invoice disputes in Admin Panel) Tj
+ET
+BT
+/F1 10.75 Tf
+0 0 0 rg
+54 666.22 Td
+(Typical admin flow:) Tj
+ET
+BT
+/F1 10.75 Tf
+0 0 0 rg
+54 650.63 Td
+(1. Open **Invoice Disputes** in admin panel.) Tj
+ET
+BT
+/F1 10.75 Tf
+0 0 0 rg
+54 635.04 Td
+(2. Review the dispute details.) Tj
+ET
+BT
+/F1 10.75 Tf
+0 0 0 rg
+54 619.45 Td
+(3. Upload a **Supporting Document** \(this is required before resolving, if) Tj
+ET
+BT
+/F1 10.75 Tf
+0 0 0 rg
+54 603.87 Td
+(  configured\).) Tj
+ET
+BT
+/F1 10.75 Tf
+0 0 0 rg
+54 588.28 Td
+(4. Add resolution notes.) Tj
+ET
+BT
+/F1 10.75 Tf
+0 0 0 rg
+54 572.69 Td
+(5. Mark dispute **Resolved**.) Tj
+ET
+BT
+/F1 10.75 Tf
+0 0 0 rg
+54 557.10 Td
+(Result in Customer Portal:) Tj
+ET
+BT
+/F1 10.75 Tf
+0 0 0 rg
+54 541.52 Td
+(- Customer sees status change to **Resolved**) Tj
+ET
+BT
+/F1 10.75 Tf
+0 0 0 rg
+54 525.93 Td
+(- Customer can view the uploaded supporting document) Tj
+ET
+BT
+/F1 12.50 Tf
+0 0 0 rg
+54 510.34 Td
+(7.2 Client complaints in Admin Panel) Tj
+ET
+BT
+/F1 10.75 Tf
+0 0 0 rg
+54 493.47 Td
+(1. Open the complaints list.) Tj
+ET
+BT
+/F1 10.75 Tf
+0 0 0 rg
+54 477.88 Td
+(2. View complaint text and images.) Tj
+ET
+BT
+/F1 10.75 Tf
+0 0 0 rg
+54 462.29 Td
+(3. Respond/track status as needed.) Tj
+ET
+0.9 w
+0.85 0.85 0.85 RG
+54 440.7025000000003 m 541.28 440.7025000000003 l S
+BT
+/F1 14.50 Tf
+0 0.14 0.46 rg
+54 446.70 Td
+(8\) Troubleshooting \(Customer Portal\)) Tj
+ET
+BT
+/F1 12.50 Tf
+0 0 0 rg
+54 427.13 Td
+(8.1 "URL not found" when typing a link like `/services` in the) Tj
+ET
+BT
+/F1 12.50 Tf
+0 0 0 rg
+54 410.25 Td
+(address bar) Tj
+ET
+BT
+/F1 10.75 Tf
+0 0 0 rg
+54 393.38 Td
+(Cause:) Tj
+ET
+BT
+/F1 10.75 Tf
+0 0 0 rg
+54 377.79 Td
+(- Web server is not rewriting client-side routes to `index.html`.) Tj
+ET
+BT
+/F1 10.75 Tf
+0 0 0 rg
+54 362.20 Td
+(Fix \(server-side\):) Tj
+ET
+BT
+/F1 10.75 Tf
+0 0 0 rg
+54 346.62 Td
+(- Apache needs SPA rewrite rules so `/services` loads the React app.) Tj
+ET
+BT
+/F1 12.50 Tf
+0 0 0 rg
+54 331.03 Td
+(8.2 "Under Review" never changes to "Resolved") Tj
+ET
+BT
+/F1 10.75 Tf
+0 0 0 rg
+54 314.15 Td
+(- Resolution is done from the Admin Panel.) Tj
+ET
+BT
+/F1 10.75 Tf
+0 0 0 rg
+54 298.57 Td
+(- If it was resolved but not showing:) Tj
+ET
+BT
+/F1 10.75 Tf
+0 0 0 rg
+54 282.98 Td
+(- Wait for auto-refresh \(2 minutes\), or) Tj
+ET
+endstream
+endobj
+16 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595.28 841.89] /Resources << /Font << /F1 1 0 R >> >> /Contents 15 0 R >>
+endobj
+17 0 obj
+<< /Length 2588 >>
+stream
+BT
+/F1 10.75 Tf
+0 0 0 rg
+54 781.89 Td
+(- Reopen the Invoices page, or) Tj
+ET
+BT
+/F1 10.75 Tf
+0 0 0 rg
+54 766.30 Td
+(- Ensure the backend dispute list endpoint returns updated status.) Tj
+ET
+BT
+/F1 12.50 Tf
+0 0 0 rg
+54 750.72 Td
+(8.3 Supporting document won't open) Tj
+ET
+BT
+/F1 10.75 Tf
+0 0 0 rg
+54 733.84 Td
+(- If it's a PDF/image, it should preview.) Tj
+ET
+BT
+/F1 10.75 Tf
+0 0 0 rg
+54 718.25 Td
+(- If it's Word/other formats, use **Open in New Tab** \(download/view) Tj
+ET
+BT
+/F1 10.75 Tf
+0 0 0 rg
+54 702.67 Td
+(  externally\).) Tj
+ET
+BT
+/F1 10.75 Tf
+0 0 0 rg
+54 687.08 Td
+(- If it 404s, confirm the admin upload saved successfully and the backend serves) Tj
+ET
+BT
+/F1 10.75 Tf
+0 0 0 rg
+54 671.49 Td
+(  `GET /api/dispute/:id/supporting-document`.) Tj
+ET
+BT
+/F1 12.50 Tf
+0 0 0 rg
+54 655.90 Td
+(8.4 Upload issues \(complaint/dispute attachments\)) Tj
+ET
+BT
+/F1 10.75 Tf
+0 0 0 rg
+54 639.03 Td
+(- File size/type restrictions may block uploads.) Tj
+ET
+BT
+/F1 10.75 Tf
+0 0 0 rg
+54 623.44 Td
+(- Try:) Tj
+ET
+BT
+/F1 10.75 Tf
+0 0 0 rg
+54 607.85 Td
+(- smaller file) Tj
+ET
+BT
+/F1 10.75 Tf
+0 0 0 rg
+54 592.27 Td
+(- supported format \(PDF/PNG/JPG, etc., depending on the endpoint\)) Tj
+ET
+0.9 w
+0.85 0.85 0.85 RG
+54 570.6775000000002 m 541.28 570.6775000000002 l S
+BT
+/F1 14.50 Tf
+0 0.14 0.46 rg
+54 576.68 Td
+(9\) Best practices \(for smooth usage\)) Tj
+ET
+BT
+/F1 10.75 Tf
+0 0 0 rg
+54 557.10 Td
+(- Use the built-in buttons instead of retyping URLs when possible.) Tj
+ET
+BT
+/F1 10.75 Tf
+0 0 0 rg
+54 541.52 Td
+(- Don't keep multiple invoice preview dialogs open at once.) Tj
+ET
+BT
+/F1 10.75 Tf
+0 0 0 rg
+54 525.93 Td
+(- For disputes: add clear, specific descriptions \(invoice #, date, issue type,) Tj
+ET
+BT
+/F1 10.75 Tf
+0 0 0 rg
+54 510.34 Td
+(  amount, line item\).) Tj
+ET
+0.9 w
+0.85 0.85 0.85 RG
+54 488.7525000000003 m 541.28 488.7525000000003 l S
+BT
+/F1 14.50 Tf
+0 0.14 0.46 rg
+54 494.75 Td
+(10\) Quick "How do I…?" index) Tj
+ET
+BT
+/F1 10.75 Tf
+0 0 0 rg
+54 475.18 Td
+(- **View invoice PDF** → Invoices → Preview) Tj
+ET
+BT
+/F1 10.75 Tf
+0 0 0 rg
+54 459.59 Td
+(- **Download invoice** → Invoices → Download icon) Tj
+ET
+BT
+/F1 10.75 Tf
+0 0 0 rg
+54 444.00 Td
+(- **Dispute invoice** → Invoices → Dispute → Submit reason) Tj
+ET
+BT
+/F1 10.75 Tf
+0 0 0 rg
+54 428.42 Td
+(- **Check dispute status** → Invoices → Invoice Disputes → View) Tj
+ET
+BT
+/F1 10.75 Tf
+0 0 0 rg
+54 412.83 Td
+(- **View supporting document** → Dispute Details → View Supporting Document) Tj
+ET
+BT
+/F1 10.75 Tf
+0 0 0 rg
+54 397.24 Td
+(- **File complaint** → Services/Complaints → File a Complaint → Submit) Tj
+ET
+endstream
+endobj
+18 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595.28 841.89] /Resources << /Font << /F1 1 0 R >> >> /Contents 17 0 R >>
+endobj
+19 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+xref
+0 20
+0000000000 65535 f 
+0000000009 00000 n 
+0000000079 00000 n 
+0000000183 00000 n 
+0000000529 00000 n 
+0000000661 00000 n 
+0000003244 00000 n 
+0000003376 00000 n 
+0000003594 00000 n 
+0000003726 00000 n 
+0000006903 00000 n 
+0000007036 00000 n 
+0000010100 00000 n 
+0000010234 00000 n 
+0000013565 00000 n 
+0000013699 00000 n 
+0000016678 00000 n 
+0000016812 00000 n 
+0000019453 00000 n 
+0000019587 00000 n 
+trailer
+<< /Size 20 /Root 19 0 R >>
+startxref
+19637
+%%EOF
